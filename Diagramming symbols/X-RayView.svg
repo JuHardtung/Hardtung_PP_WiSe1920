@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="0 0 614.37 305.64"
+   version="1.1"
+   sodipodi:docname="X-RayView.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata991">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>X-RayView</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview989"
+     showgrid="false"
+     inkscape:zoom="1.1719322"
+     inkscape:cx="281.97195"
+     inkscape:cy="162.68386"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <defs
+     id="defs906">
+    <style
+       id="style904">.cls-1,.cls-10,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8,.cls-9{fill:none;}.cls-1,.cls-10,.cls-2,.cls-3,.cls-4,.cls-5,.cls-6,.cls-7,.cls-8,.cls-9{stroke:#231f20;stroke-miterlimit:10;}.cls-2{fill:#898989;}.cls-10,.cls-2,.cls-3,.cls-4{stroke-width:2px;}.cls-3{fill:#fff;}.cls-5{stroke-dasharray:0.98 2.95;}.cls-6{stroke-dasharray:0.98 2.95;}.cls-7{stroke-dasharray:10.13 8.1;}.cls-8{stroke-dasharray:0.99 2.97 0.99 2.97;}.cls-9{stroke-dasharray:9.91 3.96 0.99 2.97 0.99 2.97;}.cls-10{stroke-linecap:round;}</style>
+  </defs>
+  <title
+     id="title908">X-RayView</title>
+  <line
+     class="cls-1"
+     x1="469.44"
+     y1="281.23"
+     x2="465.88"
+     y2="144.49"
+     id="line910" />
+  <polygon
+     class="cls-2"
+     points="465.88 144.49 319.9 283.39 611.87 283.39 465.88 144.49"
+     id="polygon912" />
+  <line
+     class="cls-1"
+     x1="464.69"
+     y1="281.23"
+     x2="465.95"
+     y2="146.99"
+     id="line914" />
+  <polygon
+     class="cls-2"
+     points="465.88 144.49 324.15 286.22 607.61 286.22 465.88 144.49"
+     id="polygon916" />
+  <circle
+     class="cls-3"
+     cx="465.32"
+     cy="252.73"
+     r="33.49"
+     id="circle918" />
+  <line
+     class="cls-4"
+     x1="463.12"
+     y1="286.22"
+     x2="468.66"
+     y2="286.22"
+     id="line920" />
+  <polyline
+     class="cls-4"
+     points="451.82 283.39 463.18 283.39 464.43 219.23"
+     id="polyline922" />
+  <polyline
+     class="cls-4"
+     points="478.82 283.39 468.66 283.39 468.61 283.39 467.35 219.23"
+     id="polyline924" />
+  <line
+     class="cls-1"
+     x1="464.43"
+     y1="219.23"
+     x2="464.44"
+     y2="218.73"
+     id="line926" />
+  <line
+     class="cls-5"
+     x1="464.49"
+     y1="215.78"
+     x2="465.84"
+     y2="146.46"
+     id="line928" />
+  <line
+     class="cls-1"
+     x1="465.87"
+     y1="144.99"
+     x2="465.88"
+     y2="144.49"
+     id="line930" />
+  <line
+     class="cls-1"
+     x1="467.35"
+     y1="219.23"
+     x2="467.34"
+     y2="218.73"
+     id="line932" />
+  <line
+     class="cls-6"
+     x1="467.28"
+     y1="215.78"
+     x2="465.92"
+     y2="146.46"
+     id="line934" />
+  <line
+     class="cls-1"
+     x1="465.89"
+     y1="144.99"
+     x2="465.88"
+     y2="144.49"
+     id="line936" />
+  <line
+     class="cls-4"
+     x1="463.12"
+     y1="280.83"
+     x2="468.55"
+     y2="280.83"
+     id="line938" />
+  <rect
+     class="cls-4"
+     x="1"
+     y="1"
+     width="283.46"
+     height="283.46"
+     id="rect940" />
+  <line
+     class="cls-1"
+     x1="1"
+     y1="284.46"
+     x2="4.54"
+     y2="280.93"
+     id="line942" />
+  <line
+     class="cls-7"
+     x1="10.26"
+     y1="275.2"
+     x2="278.06"
+     y2="7.4"
+     id="line944" />
+  <line
+     class="cls-1"
+     x1="280.93"
+     y1="4.54"
+     x2="284.46"
+     y2="1"
+     id="line946" />
+  <line
+     class="cls-1"
+     x1="1"
+     y1="1"
+     x2="4.54"
+     y2="4.54"
+     id="line948" />
+  <line
+     class="cls-7"
+     x1="10.26"
+     y1="10.26"
+     x2="278.06"
+     y2="278.06"
+     id="line950" />
+  <line
+     class="cls-1"
+     x1="280.93"
+     y1="280.93"
+     x2="284.46"
+     y2="284.46"
+     id="line952" />
+  <line
+     class="cls-1"
+     x1="1"
+     y1="142.73"
+     x2="6"
+     y2="142.73"
+     id="line954" />
+  <line
+     class="cls-8"
+     x1="9.96"
+     y1="142.73"
+     x2="16.4"
+     y2="142.73"
+     id="line956" />
+  <line
+     class="cls-9"
+     x1="17.89"
+     y1="142.73"
+     x2="277.98"
+     y2="142.73"
+     id="line958" />
+  <line
+     class="cls-1"
+     x1="279.46"
+     y1="142.73"
+     x2="284.46"
+     y2="142.73"
+     id="line960" />
+  <path
+     class="cls-10"
+     d="M35.87,191.35c40.44,2.25,64.22,36.14,59.37,59.37"
+     transform="translate(-1.83 -1.83)"
+     id="path962" />
+  <line
+     class="cls-10"
+     x1="93.4"
+     y1="248.88"
+     x2="99.99"
+     y2="235.49"
+     id="line964" />
+  <line
+     class="cls-10"
+     x1="93.4"
+     y1="248.88"
+     x2="85.54"
+     y2="235.82"
+     id="line966" />
+  <path
+     class="cls-10"
+     d="M254,191.35c-40.44,2.25-64.22,36.14-59.37,59.37"
+     transform="translate(-1.83 -1.83)"
+     id="path968" />
+  <line
+     class="cls-10"
+     x1="192.81"
+     y1="248.88"
+     x2="186.22"
+     y2="235.49"
+     id="line970" />
+  <line
+     class="cls-10"
+     x1="192.81"
+     y1="248.88"
+     x2="200.67"
+     y2="235.82"
+     id="line972" />
+  <path
+     class="cls-10"
+     d="M179.84,47.47c14.16,38,53.58,50.59,74.32,39.06"
+     transform="translate(-1.83 -1.83)"
+     id="path974" />
+  <line
+     class="cls-10"
+     x1="252.33"
+     y1="84.69"
+     x2="241.5"
+     y2="94.96"
+     id="line976" />
+  <line
+     class="cls-10"
+     x1="252.33"
+     y1="84.69"
+     x2="237.52"
+     y2="81.06"
+     id="line978" />
+  <path
+     class="cls-10"
+     d="M110.28,47.47C96.13,85.42,56.7,98.06,36,86.53"
+     transform="translate(-1.83 -1.83)"
+     id="path980" />
+  <line
+     class="cls-10"
+     x1="34.13"
+     y1="84.69"
+     x2="44.96"
+     y2="94.96"
+     id="line982" />
+  <line
+     class="cls-10"
+     x1="34.13"
+     y1="84.69"
+     x2="48.94"
+     y2="81.06"
+     id="line984" />
+  <line
+     class="cls-1"
+     x1="480.78"
+     y1="274.53"
+     x2="498.81"
+     y2="305.38"
+     id="line986" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:18.05285645px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.45132139"
+     x="450.41339"
+     y="320.29468"
+     id="text995"><tspan
+       sodipodi:role="line"
+       id="tspan993"
+       x="450.41339"
+       y="320.29468"
+       style="stroke-width:0.45132139">X-Ray View</tspan></text>
+  <rect
+     style="opacity:0.15500004;fill:none;stroke:#000000;stroke-width:92.08818817;stroke-miterlimit:4;stroke-dasharray:92.08818898, 184.17637795;stroke-dashoffset:0;stroke-opacity:0"
+     id="rect997"
+     width="89.59565"
+     height="12.799378"
+     x="451.39127"
+     y="275.77481" />
+</svg>

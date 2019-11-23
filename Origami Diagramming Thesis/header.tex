@@ -1,0 +1,62 @@
+
+\documentclass[11pt, a4paper, titlepage, oneside]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{import}
+
+%Fixing the broken graphicx package
+\makeatletter
+\def\set@curr@file#1{%
+  \begingroup
+    \escapechar\m@ne
+    \xdef\@curr@file{\expandafter\string\csname #1\endcsname}%
+  \endgroup
+}
+\def\quote@name#1{"\quote@@name#1\@gobble""}
+\def\quote@@name#1"{#1\quote@@name}
+\def\unquote@name#1{\quote@@name#1\@gobble"}
+\makeatother
+%package for graphics
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+%Hyperlinks Setup
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={blue!80!black},
+    citecolor={red!50!black},
+    urlcolor={blue!80!black}
+}
+
+
+%Per-section figure numbering
+\usepackage{chngcntr}
+\counterwithin{figure}{section}
+%Per-section table numbering
+\usepackage{chngcntr}
+\counterwithin{table}{section}
+
+%Bibliography
+\bibliographystyle{plain}
+
+%Glosssary
+%\usepackage{index}
+\usepackage[toc]{glossaries}
+\makenoidxglossaries
+\loadglsentries{glossary}
+
+%package for line spacing(onehalfspace, singlespace)
+\usepackage{setspace}
+
+%package for automated quotationmarks with \enquote
+\usepackage[babel, english=american]{csquotes}
+

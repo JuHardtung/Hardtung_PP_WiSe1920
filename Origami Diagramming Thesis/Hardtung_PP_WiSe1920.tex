@@ -1,0 +1,38 @@
+%\immediate\write18{makeindex Hardtung_PP_WiSe1920.nlo -s nomencl.ist -o Hardtung_PP_WiSe1920.nls} IF I WANT TO INDEX THE GLOSSARY
+\include{header}
+\graphicspath{ {./images/} }
+
+
+\begin{document}
+
+%===== PREAMBLE ====================
+\setcounter{page}{3}
+\pagenumbering{arabic}
+
+\include{chapter/titlepage}
+\onehalfspacing
+\tableofcontents
+
+
+%===== MAIN =======================
+\setcounter{page}{3}
+
+
+\setcounter{table}{1}
+\setcounter{figure}{1}
+	\include{chapter/chapter1}
+	
+\setcounter{table}{1}
+\setcounter{figure}{1}
+	\include{chapter/chapter2} 
+	
+	
+\singlespacing
+
+
+\printnoidxglossaries
+\listoffigures
+\listoftables
+\bibliography{literature}
+
+\end{document}

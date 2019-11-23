@@ -1,0 +1,206 @@
+%!TEX root = ../Hardtung_PP_WiSe1920.tex
+
+\section{Diagramming Notation}
+\label{sec:conventions}
+
+
+In order to define the concrete requirements of the planned diagramming program, all commonly used diagramming symbols and conventions have to be collected and categorized. After that groundwork a plan can be established on how to implement these findings in a desktop application.
+
+The very fundamentals of Origami diagramming were developed and proposed by Akira Yoshizawa in his book \emph{Atarashi Origami Geijutsu (New Origami Art)}\cite{Yoshizawa} in 1954, which introduced a system of folding notation. Yoshizawas diagramming system is still widely used today and most commonly known as the  \emph{Yoshizawa–Randlett system}.
+
+Despite its high popularity, different nuances and slight changes were made by different origami diagrammers.  To avoid further confusion, especially for beginners, american physicist and origami artist Robert J. Lang compiled notations that were in use by different folders and proposed a standard for all different folding sequences. In order to support his claims, Lang sent \enquote{a questionnaire to 25 diagrammers around the world}\cite{Lang} and tried to coherently argue in favour of, or against the various results.
+
+Langs efforts were made under the assumption, that \enquote{[...] unless there is pressing reason otherwise, we should use the standard notation developed by Yoshizawa} \cite{Lang}.\\
+
+To start off we have to define what exact components a diagram consists of. 
+Most importantly, there always is a visual representation of the paper in the current step. This representation should show all or most (see Section \ref{sec:generalRules}) on when to leave out things creases, flaps, edges and layers to accurately show how the actual paper model would look like.
+Secondly, there has to be a description of the actual folding sequence for one step. This description is comprised of a textual explanation and a visual display of the step with the diagramming symbols (Section \ref{sec:notation}). Both the verbal and the visual instructions should be able to stand for themselves, although that might not always be possible for complex steps. More detailed rules and specific terms for the verbal instructions are described on Section \ref{sec:generalRules}.
+
+\subsection{General diagramming rules}
+\label{sec:generalRules}
+
+\begin{itemize}
+	\item Be consistent (stick with one notation, e.g. DASH DOT DOT or DASH DOT for mountain folds)
+	\item edges = 1 point line; creases 1/2 point line; creases should not contact the edges that the creases end upon; DO touch edges that they go under
+	\item use right origami grammar
+	\item show one white and one colored side of the paper
+\end{itemize}
+
+\subsection{Diagramming Notation}
+\label{sec:notation}
+
+As there are quite a few simple and self-explanatory symbols, there will only be further explanations if there are any additional rules or things to keep in mind while using them.
+
+\subsubsection{Folds}
+\label{sec:folds}
+
+Starting with the very basics in Origami, you have to differentiate between the types of folds. Generally, there are 2 different types, namely the \gls{valleyFold} and \gls{mountainFold}, which are shown in Figure \ref{fig:valleyFold} and Figure \ref{fig:mountainFold} respectively. Additionally the so called \gls{x-rayLine} is shown in Figure \ref{fig:x-rayLine}. Even though it is not a real fold, it was added here to show the 3 different forms a line can be drawn in Origami diagrams.
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{ValleyFold}
+        \caption{Valley Fold}
+        \label{fig:valleyFold}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{MountainFold}
+        \caption{Mountain Fold}
+        \label{fig:mountainFold}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{X-RayLine}
+        \caption{X-Ray Line}
+        \label{fig:x-rayLine}
+    \end{subfigure}
+    \caption{Different Lines in Origami Diagramming}\label{fig:origamiLines}
+\end{figure*}
+
+Important for the displaying of lines is, that they don't start or end with a gap. This method ensures that there isn't any ambiguity on what reference points are needed for the fold.
+
+
+\subsubsection{Arrows}
+\label{sec:arrows}
+
+In order to show the folding steps unambiguously, there have to be arrows that indicate the direction the paper has to be folded. Showing only a valley or mountain fold leaves room for interpretation, which gets eliminated by the addition of these specific arrows. For origami diagramming there are two groups, the \gls{arrowsOfMotion} and \gls{arrowsOfAction}.
+While the arrows of motion describe where the paper is folded to, the arrows of action indicate an action perfomed on the paper itself.
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoMValleyFold_thick}
+        \caption{Valley Fold}
+        \label{fig:aomValleyFold}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoMMountainFold_thick}
+        \caption{Mountain Fold}
+        \label{fig:aomMountainFold}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoMTurnPaperOver_thick}
+        \caption{Turn the paper over}
+        \label{fig:aomTurnPaperOver}
+    \end{subfigure}
+    \caption{Arrows of Motion}
+    \label{fig:arrowsOfMotion}
+\end{figure*}
+
+
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoAPushHere_thick}
+        \caption{Push here}
+        \label{fig:aoaPushHere}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoAPullPaperOut_thick}
+        \caption{Pull the paper out}
+        \label{fig:aoaPullPaperOut}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{AoAInflateHere_thick}
+        \caption{Inflate here}
+        \label{fig:aoaInflateHere}
+    \end{subfigure}
+    \caption{Arrows of Action}
+    \label{fig:arrowsOfAction}
+\end{figure*}
+
+\newpage
+
+\subsubsection{Clarifying diagrams}
+
+\textbf{Leader}
+\begin{figure}[h]
+	\centering
+	\def\svgwidth{0.3\textwidth}
+	\import{./images/}{Leader.pdf_tex}
+	%\includegraphics[width=\textwidth]{leader_latexExport3}
+	\caption{Use a leader to give additional information if needed}
+	\label{fig:leader}
+\end{figure}\\
+%
+\textbf{Equal distances}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.3\textwidth]{EqualDistances}
+	\caption{Equal Distances}
+	\label{fig:equalDistances}
+\end{figure}\\
+%
+\textbf{Equal angles}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.3\textwidth]{EqualAngles}
+	\caption{Equal Angles}
+	\label{fig:equalAngles}
+\end{figure}\\
+%
+\textbf{Rotations }
+\begin{figure}[h]
+	\centering
+	\def\svgwidth{0.2\textwidth}
+	\import{./images/}{Rotation.pdf_tex}
+	\caption{Rotation Symbol}
+	\label{fig:rotation}
+\end{figure}\\
+\newpage
+%
+\textbf{X-Ray View}
+\begin{figure}[h]
+	\centering
+	\def\svgwidth{0.7\textwidth}
+	\import{./images/}{X-RayView.pdf_tex}
+	%\includegraphics[width=\textwidth]{leader_latexExport3}
+	\caption{The X-Ray View shows hidden layers}
+	\label{fig:x-rayView}
+\end{figure}\\
+%
+\textbf{Repetitions }
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{FoldOverAndOver}
+	\caption{Fold over and over}
+	\label{fig:foldOverAndOver}
+\end{figure}\\
+For complicated repetitions you should show the result of the first fold that is to be repeated.
+%
+\begin{figure}[h]
+	\centering
+	\def\svgwidth{0.3\textwidth}
+	\import{./images/}{RepeatBox.pdf_tex}
+	\caption{Repetition Box}
+	\label{fig:repeatBox}
+\end{figure}\\
+The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to be repeated and how many times.
+\newpage
+\textbf{Next view here}
+\begin{figure}[h]
+	\centering
+	\def\svgwidth{0.6\textwidth}
+	\import{./images/}{NextViewHere.pdf_tex}
+	\caption{Next View Here}
+	\label{fig:nextViewHere}
+\end{figure}\\
+%
+\textbf{Hold here}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{HoldHere}
+	\caption{Hold here + hold here and pull}
+	\label{fig:holdHere}
+\end{figure}\\
+
+
+
+
+
+
+
+
+
+
+
