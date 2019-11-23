@@ -20,21 +20,25 @@ Secondly, there has to be a description of the actual folding sequence for one s
 \label{sec:generalRules}
 
 \begin{itemize}
-	\item Be consistent (stick with one notation, e.g. DASH DOT DOT or DASH DOT for mountain folds)
+	\item Be consistent (stick with one notation, e.g. -..-..-.. or -.-.-.-. for mountain folds)
 	\item edges = 1 point line; creases 1/2 point line; creases should not contact the edges that the creases end upon; DO touch edges that they go under
 	\item use right origami grammar
 	\item show one white and one colored side of the paper
+	\item distort the model to show all the layers
+	\item enlarging the diagram with a circle or just by common sense with good diagrams
+	\item right numbering of steps 1,2,3,4 and 1a,1b,1c to explain hard steps (ony to elaborate on a single step)
 \end{itemize}
 
+\newpage
 \subsection{Diagramming Notation}
 \label{sec:notation}
 
-As there are quite a few simple and self-explanatory symbols, there will only be further explanations if there are any additional rules or things to keep in mind while using them.
+As there are quite a few simple and self-explanatory symbols, there will only be a further explanation if there are any additional rules or things to keep in mind while using them. Furthermore, on occasion Lang gives multiple valid symbols or ways to visualize a certain fold or folding sequence. The goal in these cases should be to give the user a choice on what method to use for a diagram. 
 
 \subsubsection{Folds}
 \label{sec:folds}
 
-Starting with the very basics in Origami, you have to differentiate between the types of folds. Generally, there are 2 different types, namely the \gls{valleyFold} and \gls{mountainFold}, which are shown in Figure \ref{fig:valleyFold} and Figure \ref{fig:mountainFold} respectively. Additionally the so called \gls{x-rayLine} is shown in Figure \ref{fig:x-rayLine}. Even though it is not a real fold, it was added here to show the 3 different forms a line can be drawn in Origami diagrams.
+Starting with the very basics in origami, you have to differentiate between the types of folds. Generally, there are 2 different types, namely the \gls{valleyFold} and \gls{mountainFold}, which are shown in Figure \ref{fig:valleyFold} and Figure \ref{fig:mountainFold} respectively. Additionally the so called \gls{x-rayLine} is shown in Figure \ref{fig:x-rayLine}. Even though it is not a real fold, it was added here to show the three different forms a line can be drawn in origami diagrams. In order to indicate what kind of fold the X-Ray line is representing, you should extend the line past the paper and use a valley fold or mountain fold line.
 
 \begin{figure*}[h]
     \centering
@@ -62,7 +66,7 @@ Important for the displaying of lines is, that they don't start or end with a ga
 \subsubsection{Arrows}
 \label{sec:arrows}
 
-In order to show the folding steps unambiguously, there have to be arrows that indicate the direction the paper has to be folded. Showing only a valley or mountain fold leaves room for interpretation, which gets eliminated by the addition of these specific arrows. For origami diagramming there are two groups, the \gls{arrowsOfMotion} and \gls{arrowsOfAction}.
+In order to show the folding steps unambiguously, there have to be arrows that indicate the direction the paper has to be folded. Showing only a valley or mountain fold leaves room for interpretation, which gets eliminated by the addition of these specific arrows. In origami diagramming there are two groups, the \gls{arrowsOfMotion} and \gls{arrowsOfAction}.
 While the arrows of motion describe where the paper is folded to, the arrows of action indicate an action perfomed on the paper itself.
 
 \begin{figure*}[h]
@@ -85,9 +89,23 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
     \caption{Arrows of Motion}
     \label{fig:arrowsOfMotion}
 \end{figure*}
-
-
-
+The unfolding arrow can either stand alone and signalize an unfolding action, or be combined with a valley/mountain fold and indicate a folding and unfolding procedure.
+\begin{figure*}[h]
+	\centering
+	\begin{subfigure}[b]{0.4\textwidth}
+		\includegraphics[width=\textwidth]{Unfold}
+		\caption{Unfold}
+		\label{fig:unfold}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.3\textwidth}
+		\includegraphics[width=\textwidth]{FoldAndUnfold}
+		\caption{Fold and unfold}
+		\label{fig:foldAndUnfold}
+	\end{subfigure}
+	\caption{Unfolding arrows}
+	\label{fig:unfoldingArrows}
+\end{figure*}
+%
 \begin{figure*}[h]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
@@ -118,7 +136,6 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
 	\centering
 	\def\svgwidth{0.3\textwidth}
 	\import{./images/}{Leader.pdf_tex}
-	%\includegraphics[width=\textwidth]{leader_latexExport3}
 	\caption{Use a leader to give additional information if needed}
 	\label{fig:leader}
 \end{figure}\\
@@ -154,7 +171,6 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
 	\centering
 	\def\svgwidth{0.7\textwidth}
 	\import{./images/}{X-RayView.pdf_tex}
-	%\includegraphics[width=\textwidth]{leader_latexExport3}
 	\caption{The X-Ray View shows hidden layers}
 	\label{fig:x-rayView}
 \end{figure}\\
@@ -193,6 +209,36 @@ The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to
 	\caption{Hold here + hold here and pull}
 	\label{fig:holdHere}
 \end{figure}\\
+
+\newpage
+\subsubsection{Folding Procedures}
+\textbf{Rabbit Ear}\\
+Lang gives two valid methods to visualize a \gls{rabbitEar}. While Figure \ref{fig:rabbitEarA} is technically the more correct format, method B (see Figure \ref{fig:rabbitEarB}) is also desireable, as it shows the overall motion of the paper.
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{RabbitEarA}
+        \caption{Rabbit Ear Method A}
+        \label{fig:rabbitEarA}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.52\textwidth}
+        \includegraphics[width=\textwidth]{RabbitEarB}
+        \caption{Rabbit Ear Method B}
+        \label{fig:rabbitEarB}
+    \end{subfigure}
+    \caption{Both methods to show a rabbit ear}
+    \label{fig:rabbitEarMethods}
+\end{figure*}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.8\textwidth]{RabbitEarResult}
+	\caption{Rabbit Ear Result}
+	\label{fig:rabbitEarResult}
+\end{figure}\\
+%
+\textbf{ReverseFolds}\\
+\textbf{Crimping and Pleating}\\
+\textbf{Sinks}\\
 
 
 
