@@ -7,5 +7,5 @@ public class Constants {
 		INPUT_LINE
 	};
 	
-	final public static double DEFAULT_PAPER_SIZE = 400;
+	final public static double DEFAULT_PAPER_SIZE = 600;
 }

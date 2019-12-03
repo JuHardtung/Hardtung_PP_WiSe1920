@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +14,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
@@ -36,6 +34,7 @@ public class MainScreen extends JPanel
 	//Affine transformation info
 	private Dimension preSize;
 	private AffineTransform affineTransform = new AffineTransform();
+
 	
 	
 	public MainScreen() {
@@ -83,7 +82,7 @@ public class MainScreen extends JPanel
     	   double y2 = diagram.lines.get(j).p1.y * (Constants.DEFAULT_PAPER_SIZE/2);
 
     	   //System.out.println("SIZE: " + diagram.lines.size());
-    	   System.out.println("X1: " + x1 + "Y1: " + y1 + " | X2: " + x2 + "Y2: " + y2);
+    	   //System.out.println("X1: " + x1 + "Y1: " + y1 + " | X2: " + x2 + "Y2: " + y2);
     	   g2d.draw(new Line2D.Double(x1, y1, x2, y2));
        }
 
@@ -132,10 +131,15 @@ public class MainScreen extends JPanel
     	}    	
     }
     
+    public void setDispGrid(boolean dispGrid) {
+    	this.displayGrid = dispGrid;
+    	//resetPickElements();
+    	repaint();
+    }
+    
     //update the AffineTransform
     private void updateAffineTransform(Graphics2D g2d) {
     	affineTransform.setToTranslation(getWidth()*0.5, getHeight()*0.5);
-    	System.out.println("width: " + getWidth() + "Height: " + getHeight());
         //affineTransform.setToTranslation(Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_PAPER_SIZE);
         g2d.transform(affineTransform);
     	

@@ -3,10 +3,12 @@ package origrammer;
 import java.util.ArrayList;
 
 import origrammer.geometry.OriLine;
+import origrammer.geometry.OriVertex;
 
 public class Diagram {
 	
 	public ArrayList<OriLine> lines = new ArrayList<>();
+	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	
 	public double size;
 	
