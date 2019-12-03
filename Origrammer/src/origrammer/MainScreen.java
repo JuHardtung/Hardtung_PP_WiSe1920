@@ -15,6 +15,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
@@ -38,6 +39,10 @@ public class MainScreen extends JPanel
 	
 	
 	public MainScreen() {
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		addMouseWheelListener(this);
+		addComponentListener(this);
 		
 		scale = 1.5;
 		setBackground(Color.white);
@@ -59,37 +64,63 @@ public class MainScreen extends JPanel
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+       Graphics2D g2d = (Graphics2D)g;        
+       updateAffineTransform(g2d);
+       
+       if (displayGrid) {
+    	   drawGrid(g2d);
+    	   }
+       
+       Diagram diagram = new Diagram(Constants.DEFAULT_PAPER_SIZE);
+       
+       g2d.setColor(Color.BLACK);
+       
+       for(int j=0; j<diagram.lines.size(); j++) {
+    	   double x1 = diagram.lines.get(j).p0.x * (Constants.DEFAULT_PAPER_SIZE/2);
+    	   double y1 = diagram.lines.get(j).p0.y * (Constants.DEFAULT_PAPER_SIZE/2);
+    	   double x2 = diagram.lines.get(j).p1.x * (Constants.DEFAULT_PAPER_SIZE/2);
+    	   double y2 = diagram.lines.get(j).p1.y * (Constants.DEFAULT_PAPER_SIZE/2);
+
+    	   //System.out.println("SIZE: " + diagram.lines.size());
+    	   System.out.println("X1: " + x1 + "Y1: " + y1 + " | X2: " + x2 + "Y2: " + y2);
+    	   g2d.draw(new Line2D.Double(x1, y1, x2, y2));
+       }
+
         
-        if(bufferImage == null) {
-        	bufferImage = createImage(getWidth(), getHeight());
-        	bufferGraphic = (Graphics2D) bufferImage.getGraphics();
-        	updateAffineTransform();
-        	preSize = getSize();
-        }
         
-        //init the AffineTransform of bufferGraphic
-        bufferGraphic.setTransform(new AffineTransform());
+//        if(bufferImage == null) {
+//        	bufferImage = createImage(getWidth(), getHeight());
+//        	bufferGraphic = (Graphics2D) bufferImage.getGraphics();
+//        	updateAffineTransform();
+//        	preSize = getSize();
+//        }
+//        
+//        //init the AffineTransform of bufferGraphic
+//        bufferGraphic.setTransform(new AffineTransform());
+//        
+//        //Clear the image buffer
+//        bufferGraphic.setColor(Color.WHITE);
+//        bufferGraphic.fillRect(0, 0, getWidth(), getHeight());
+//        
+//        //set the AffineTransform of buffer
+//        bufferGraphic.setTransform(affineTransform);
+//        
+//        Graphics2D g2d = bufferGraphic;
+//        //affineTransform.setToTranslation(400, 400);
+//        //Graphics2D g2d = (Graphics2D) g;
+//        
+
         
-        //Clear the image buffer
-        bufferGraphic.setColor(Color.WHITE);
-        bufferGraphic.fillRect(0, 0, getWidth(), getHeight());
+        //g2d.transform(affineTransform);
+
         
-        //set the AffineTransform of buffer
-        bufferGraphic.setTransform(affineTransform);
-        
-        Graphics2D g2d = bufferGraphic;
-        
-        //Graphics2D g2d = (Graphics2D) g;
-        
-        if(displayGrid) {
-        	drawGrid(g2d);
-        }
-        
-        doDrawing(g);
+        //doDrawing(g);
     }
     
     private void drawGrid(Graphics2D g2d) {
     	g2d.setColor(Color.LIGHT_GRAY);
+    	g2d.setStroke(Config.STROKE_GRID);
     	
     	int lineNum = Globals.gridDivNum;
     	double step = Origrammer.diagram.size / lineNum;
@@ -98,15 +129,20 @@ public class MainScreen extends JPanel
     									step * i - Origrammer.diagram.size / 2.0, Origrammer.diagram.size / 2.0));
     		g2d.draw(new Line2D.Double(-Origrammer.diagram.size / 2.0, step * i - Origrammer.diagram.size / 2.0,
     									Origrammer.diagram.size / 2.0, step * i - Origrammer.diagram.size / 2.0));
-    	}
+    	}    	
     }
     
     //update the AffineTransform
-    private void updateAffineTransform() {
-    	affineTransform.setToIdentity();
-    	affineTransform.translate(getWidth()*0.5, getHeight()*0.5);
-    	affineTransform.scale(scale, scale);
-    	affineTransform.translate(transX, transY);
+    private void updateAffineTransform(Graphics2D g2d) {
+    	affineTransform.setToTranslation(getWidth()*0.5, getHeight()*0.5);
+    	System.out.println("width: " + getWidth() + "Height: " + getHeight());
+        //affineTransform.setToTranslation(Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_PAPER_SIZE);
+        g2d.transform(affineTransform);
+    	
+//    	affineTransform.setToIdentity();
+//    	affineTransform.translate(getWidth()*0.5, getHeight()*0.5);
+//    	affineTransform.scale(scale, scale);
+//    	affineTransform.translate(400, 400);
     }
 
 	@Override

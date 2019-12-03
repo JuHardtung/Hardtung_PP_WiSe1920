@@ -20,7 +20,7 @@ public class MainFrame extends JFrame{
 		pack();
 		setVisible(true);
         setTitle("Origrammer Alpha v0.01");
-        this.setIconImage(new ImageIcon(getClass().getResource("/images/origrammer.gif")).getImage());
+        //this.setIconImage(new ImageIcon(getClass().getResource("/images/origrammer.gif")).getImage());
         //setSize(1010, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
