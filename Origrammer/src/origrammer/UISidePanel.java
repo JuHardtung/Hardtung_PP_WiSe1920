@@ -13,33 +13,39 @@ import java.text.DecimalFormat;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
-public class UIPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
-
-	JButton buttonTest = new JButton("Test");
-	
+public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 	
 	JFormattedTextField gridTextField;
 	
+	//Grid
 	JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
 	JButton gridHalfButton = new JButton(Origrammer.res.getString("UI_gridHalf"));
 	JButton gridDoubleButton = new JButton(Origrammer.res.getString("UI_gridDouble"));
 	JButton gridSetButton = new JButton(Origrammer.res.getString("UI_gridSet"));
+	
+	JCheckBox dispVerticesCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
 
 	MainScreen screen;
 
 	
 	
-	public UIPanel(MainScreen __screen) {
+	public UISidePanel(MainScreen __screen) {
 		this.screen = __screen;
 		setPreferredSize(new Dimension(200, 400));
 		setBackground(new Color(230, 230, 230));
 		
 		
+		dispVerticesCheckBox.addActionListener(this);
+		dispVerticesCheckBox.setSelected(true);
+		Globals.dispVertex = true;
 		
 		
 		//GRID ActionListener
@@ -47,6 +53,7 @@ public class UIPanel extends JPanel implements ActionListener, PropertyChangeLis
 		gridHalfButton.addActionListener(this);
 		gridDoubleButton.addActionListener(this);
 		gridSetButton.addActionListener(this);
+				
 				
 		//GRID Panel and positioning
 		JPanel gridPanel = new JPanel();
@@ -71,6 +78,19 @@ public class UIPanel extends JPanel implements ActionListener, PropertyChangeLis
 		gridPanel.setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
 		
 		add(gridPanel);
+		
+		
+		
+		//Buttons Panel
+		JPanel buttonsPanel = new JPanel();
+		
+		buttonsPanel.add(dispVerticesCheckBox);
+		
+		buttonsPanel.setLayout(new GridLayout(1, 1, 10, 2));
+		add(buttonsPanel);
+		
+		
+		
 		
 	}
 	
@@ -100,6 +120,9 @@ public class UIPanel extends JPanel implements ActionListener, PropertyChangeLis
 				gridTextField.setValue(Globals.gridDivNum);
 				screen.repaint();
 			}
+		} else if (e.getSource() == dispVerticesCheckBox) {
+			Globals.dispVertex = dispVerticesCheckBox.isSelected();
+			screen.repaint();
 		}
 	}
 

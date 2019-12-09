@@ -7,20 +7,24 @@ import javax.swing.JFrame;
 
 public class MainFrame extends JFrame{
 	MainScreen mainScreen;
-	public UIPanel uiPanel;
+	public UITopPanel uiTopPanel;
+	public UISidePanel uiSidePanel;
+
 	
 	MainFrame(){
 		mainScreen = new MainScreen();
 		
-		uiPanel = new UIPanel(mainScreen);
+		uiTopPanel = new UITopPanel(mainScreen);
+		uiSidePanel = new UISidePanel(mainScreen);
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(uiPanel, BorderLayout.WEST);
+		getContentPane().add(uiTopPanel, BorderLayout.NORTH);
+		getContentPane().add(uiSidePanel, BorderLayout.WEST);
 		getContentPane().add(mainScreen, BorderLayout.CENTER);
 		
 		pack();
 		setVisible(true);
         setTitle("Origrammer Alpha v0.01");
-        //this.setIconImage(new ImageIcon(getClass().getResource("/images/origrammer.gif")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getResource("/images/origrammer.gif")).getImage());
         //setSize(1010, 800);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
