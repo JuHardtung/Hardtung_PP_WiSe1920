@@ -46,5 +46,12 @@ public class OriLine {
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
 }

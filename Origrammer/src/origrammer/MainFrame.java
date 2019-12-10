@@ -4,6 +4,7 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class MainFrame extends JFrame{
 	MainScreen mainScreen;
@@ -15,7 +16,7 @@ public class MainFrame extends JFrame{
 		mainScreen = new MainScreen();
 		
 		uiTopPanel = new UITopPanel(mainScreen);
-		uiSidePanel = new UISidePanel(mainScreen);
+		uiSidePanel = new UISidePanel(mainScreen, uiTopPanel);
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(uiTopPanel, BorderLayout.NORTH);
 		getContentPane().add(uiSidePanel, BorderLayout.WEST);

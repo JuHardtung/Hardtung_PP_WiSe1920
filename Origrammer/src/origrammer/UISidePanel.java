@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
@@ -17,13 +18,19 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
-	
+		
 	JFormattedTextField gridTextField;
+	
+	JRadioButton selectionToolRButton = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
+	JRadioButton lineInputToolRButton = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
+	JRadioButton arrowInputToolRButton = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
+	ButtonGroup toolbarGroup;
 	
 	//Grid
 	JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
@@ -34,19 +41,30 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	JCheckBox dispVerticesCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
 
 	MainScreen screen;
+	UITopPanel uiTopPanel;
 
 	
 	
-	public UISidePanel(MainScreen __screen) {
+	public UISidePanel(MainScreen __screen, UITopPanel __uiTopPanel) {
 		this.screen = __screen;
+		this.uiTopPanel = __uiTopPanel;
 		setPreferredSize(new Dimension(200, 400));
 		setBackground(new Color(230, 230, 230));
+				
+		toolbarGroup = new ButtonGroup();
+		toolbarGroup.add(selectionToolRButton);
+		toolbarGroup.add(lineInputToolRButton);
+		toolbarGroup.add(arrowInputToolRButton);
 		
 		
 		dispVerticesCheckBox.addActionListener(this);
 		dispVerticesCheckBox.setSelected(true);
 		Globals.dispVertex = true;
 		
+		//TOOLBAR ActionListener
+		selectionToolRButton.addActionListener(this);
+		lineInputToolRButton.addActionListener(this);
+		arrowInputToolRButton.addActionListener(this);
 		
 		//GRID ActionListener
 		dispGridCheckBox.addActionListener(this);
@@ -55,6 +73,17 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		gridSetButton.addActionListener(this);
 				
 				
+		//TOOLBAR Panel and positioning
+		JPanel toolbarPanel = new JPanel();
+		
+		toolbarPanel.add(selectionToolRButton);
+		toolbarPanel.add(lineInputToolRButton);
+		toolbarPanel.add(arrowInputToolRButton);
+		toolbarPanel.setLayout(new GridLayout(5, 1, 10, 2));
+		add(toolbarPanel);
+		
+		
+		
 		//GRID Panel and positioning
 		JPanel gridPanel = new JPanel();
 		
@@ -97,7 +126,18 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == dispGridCheckBox) {
+		if (e.getSource() == selectionToolRButton) {
+			Globals.editMode = Constants.ToolbarMode.SELECTION_TOOL;
+			modeChanged();
+		} else if (e.getSource() == lineInputToolRButton) {
+			Globals.editMode = Constants.ToolbarMode.INPUT_LINE;
+			modeChanged();
+		} else if (e.getSource() == arrowInputToolRButton) {
+			Globals.editMode = Constants.ToolbarMode.INPUT_ARROW;
+			modeChanged();
+		}
+		
+		else if (e.getSource() == dispGridCheckBox) {
 			screen.setDispGrid(dispGridCheckBox.isSelected());
 		} else if (e.getSource() == gridSetButton) {
 			int customGrid = new Integer(gridTextField.getText());
@@ -125,7 +165,14 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			screen.repaint();
 		}
 	}
-
+	
+	
+	public void modeChanged() {
+		
+		uiTopPanel.modeChanged();
+		screen.modeChanged();
+		repaint();
+	}
 
 
 	@Override

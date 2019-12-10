@@ -18,19 +18,26 @@ import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
+import javafx.geometry.Bounds;
 import origrammer.geometry.*;
 
 public class MainScreen extends JPanel 
 		implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ComponentListener {
 	
 	
-	private Image bufferImage;
+	private BufferedImage bufferImage;
 	private Graphics2D bufferGraphic;
 	private Point2D preMousePoint;
 	private Point2D currentMouseDraggingPoint = null;
@@ -55,6 +62,12 @@ public class MainScreen extends JPanel
 	private ArrayList<Vector2d> crossPoints = new ArrayList<>();
 	
 	private Graphics2D g2d;
+	private JLabel arrowLabel;
+	
+	
+	JLabel tmpArrowLabel = new JLabel();
+	ImageIcon arrowImage = new ImageIcon("./images/origrammer.jpg");
+
 
 	
 	
@@ -67,17 +80,23 @@ public class MainScreen extends JPanel
 		scale = 1.5;
 		setBackground(Color.white);
 		setPreferredSize(new Dimension(800, 800));
+		setLayout(null);
 		
 		preSize = getSize();
+
 	}
 	
-    private void doDrawing(Graphics g) {
+    private void doDrawing(Graphics2D g2d) {
 
-        g2d = (Graphics2D) g;
-        g2d.drawString("Java 2D", 50, 50);
-        g2d.drawRect(0, 0, 800, 800);
-        g2d.setColor(Color.red);
-        g2d.drawLine(getWidth()/2, getHeight()/2, getWidth(), getHeight());
+//        g2d.drawString("Java 2D", 50, 50);
+//        g2d.drawRect(0, 0, 800, 800);
+//        g2d.setColor(Color.red);
+        
+    	arrowLabel = new JLabel(new ImageIcon("./images/origrammer.jpg"));
+    	arrowLabel.setSize(20, 20);
+    	arrowLabel.setBounds(-200, -200, 20, 20);
+        
+        add(arrowLabel);
         
     }
 
@@ -86,7 +105,7 @@ public class MainScreen extends JPanel
         super.paintComponent(g);
 
        g2d = (Graphics2D) g;        
-       updateAffineTransform(g2d);
+       updateAffineTransform(g2d);      
        
        if (displayGrid) {
     	   drawGrid(g2d);
@@ -95,6 +114,7 @@ public class MainScreen extends JPanel
        g2d.setStroke(Config.STROKE_VALLEY);
        g2d.setColor(Color.BLACK);
        for(OriLine line : Origrammer.diagram.lines) {
+    	   //render lines according to their LINE_TYPE
     	   switch(line.type) {
     	   		case OriLine.TYPE_VALLEY:
     	   			g2d.setColor(Config.LINE_COLOR_VALLEY);
@@ -114,9 +134,10 @@ public class MainScreen extends JPanel
     	   			break; 
     	   }
     	   
-    	   if ((Globals.editMode == Constants.EditMode.INPUT_LINE
+    	   //if line is selected during INPUT_LINE/SELECTION_TOOL mode, render GREEN
+    	   if ((Globals.editMode == Constants.ToolbarMode.INPUT_LINE
     			   && line.selected)
-    			   || (Globals.editMode == Constants.EditMode.SELECT_LINE
+    			   || (Globals.editMode == Constants.ToolbarMode.SELECTION_TOOL
     			   && line.selected)) {
     		   g2d.setColor(Config.LINE_COLOR_SELECTED);
     		   g2d.setStroke(Config.STROKE_SELECTED);
@@ -132,6 +153,42 @@ public class MainScreen extends JPanel
     	   
     	   g2d.draw(new Line2D.Double(line.p0.x, line.p0.y, line.p1.x, line.p1.y));
        }
+       
+       //render ARROWS according to their ARROW_TYPE
+       for (OriArrow arrow : Origrammer.diagram.arrows) {
+    	   ImageIcon arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   switch (arrow.type) {
+    	   		case OriArrow.TYPE_VALLEY:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   		case OriArrow.TYPE_MOUNTAIN:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   		case OriArrow.TYPE_TURN_OVER:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   		case OriArrow.TYPE_PUSH_HERE:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   		case OriArrow.TYPE_PULL_HERE:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   		case OriArrow.TYPE_INFLATE_HERE:
+    	   			arrowImage = new ImageIcon("./images/origrammer.jpg");
+    	   			break;
+    	   }
+    	   
+    	   arrowLabel = new JLabel(arrowImage);
+    	   arrowLabel.setBounds((int)arrow.xPos, (int)arrow.yPos, (int)arrow.width, (int)arrow.height);
+    	   
+    	   add(arrowLabel);
+    	   
+    	   
+       }
+       
+       
+       
+       
        
        int outlineVnum = tmpOutline.size();
        if (outlineVnum != 0) {
@@ -155,8 +212,8 @@ public class MainScreen extends JPanel
        
        
        //show all vertices if in EditMode ADD_VERTEX or DELETE_VERTEX mode or dispVertex is true
-       if(Globals.editMode == Constants.EditMode.ADD_VERTEX 
-    		   || Globals.editMode == Constants.EditMode.DELETE_VERTEX
+       if(Globals.editMode == Constants.ToolbarMode.ADD_VERTEX 
+    		   || Globals.editMode == Constants.ToolbarMode.DELETE_VERTEX
     		   || Globals.dispVertex) {
     	   g2d.setColor(Color.BLACK);
     	   double vertexDrawSize = 4.0;
@@ -250,40 +307,9 @@ public class MainScreen extends JPanel
     	   }
        }
        
-       
-
-        
-        
-//        if(bufferImage == null) {
-//        	bufferImage = createImage(getWidth(), getHeight());
-//        	updateAffineTransform();
-//        	preSize = getSize();
-//        }
-//        
-//        //init the AffineTransform of bufferGraphic
-//        bufferGraphic.setTransform(new AffineTransform());
-//        
-//        //Clear the image buffer
-//        bufferGraphic.setColor(Color.WHITE);
-//        bufferGraphic.fillRect(0, 0, getWidth(), getHeight());
-//        
-//        //set the AffineTransform of buffer
-//        bufferGraphic.setTransform(affineTransform);
-//        
-//        Graphics2D g2d = bufferGraphic;
-//        //affineTransform.setToTranslation(400, 400);
-//        //Graphics2D g2d = (Graphics2D) g;
-//        
-
-        
-        //g2d.transform(affineTransform);
-
-        
-        //doDrawing(g);
-       
        if (currentMouseDraggingPoint != null
-    		   && (Globals.editMode == Constants.EditMode.SELECT_LINE
-    		   || Globals.editMode == Constants.EditMode.CHANGE_LINE_TYPE)) {
+    		   && (Globals.editMode == Constants.ToolbarMode.SELECT_LINE
+    		   || Globals.editMode == Constants.ToolbarMode.CHANGE_LINE_TYPE)) {
     	   Point2D.Double sp = new Point2D.Double();
     	   Point2D.Double ep = new Point2D.Double();
     	   
@@ -300,6 +326,12 @@ public class MainScreen extends JPanel
 		} catch (NoninvertibleTransformException e) {
 			e.printStackTrace();
 		}
+       }
+       
+       //show coordinates of selected Vertex
+       if (selectedCandidateV != null ) {
+    	   g.setColor(Color.BLACK);
+    	   g.drawString("(" + selectedCandidateV.x + ", " + selectedCandidateV.y + ")", -250, -250);
        }
        
        
@@ -347,12 +379,8 @@ public class MainScreen extends JPanel
     	affineTransform.setToTranslation(getWidth()*0.5+transX, getHeight()*0.5+transY);
     	affineTransform.scale(scale, scale);
         //affineTransform.setToTranslation(Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_PAPER_SIZE);
-        g2d.transform(affineTransform);
-    	
-//    	affineTransform.setToIdentity();
-//    	affineTransform.translate(getWidth()*0.5, getHeight()*0.5);
-//    	affineTransform.scale(scale, scale);
-//    	affineTransform.translate(400, 400);
+    	g2d.transform(affineTransform);
+
     }
     
     
@@ -400,7 +428,7 @@ public class MainScreen extends JPanel
     	OriLine bestLine = null;
     	
     	for(OriLine line : Origrammer.diagram.lines) {
-    		if (Globals.editMode == Constants.EditMode.DELETE_LINE) {	
+    		if (Globals.editMode == Constants.ToolbarMode.DELETE_LINE) {	
     		}
     		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), line.p0, line.p1);
     		if (dist < minDistance) {
@@ -439,7 +467,7 @@ public class MainScreen extends JPanel
 			return;
 		}
 		
-		if(Globals.editMode == Constants.EditMode.NONE) {
+		if(Globals.editMode == Constants.ToolbarMode.NONE) {
 			return;
 		}
 		
@@ -450,11 +478,10 @@ public class MainScreen extends JPanel
 		} catch (Exception ex) {
 			return;
 		}
-		System.out.println("Mouse Position: " + clickPoint.toString());
+		//System.out.println("Mouse Position: " + clickPoint.toString());
 		
-		if (Globals.editMode == Constants.EditMode.INPUT_LINE) {
+		if (Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
 			if (Globals.lineEditMode == Constants.LineEditMode.INPUT_LINE) {
-				System.out.println("INPUT LINE + INPUT LINE");
 				Vector2d v = pickVertex(clickPoint);
 				
 				if(v == null) {
@@ -479,6 +506,27 @@ public class MainScreen extends JPanel
 				}
 				System.out.println("Nr. of Lines: " + Origrammer.diagram.lines.size());
 			}
+		} else if (Globals.editMode == Constants.ToolbarMode.INPUT_ARROW){
+			
+//			double xPos = currentMousePointLogic.x;
+//			double yPos = currentMousePointLogic.y;
+//			int type = Globals.inputArrowType;
+//			Origrammer.diagram.addArrow(new OriArrow(xPos, yPos, type));
+//			repaint();
+			
+		} else if (Globals.editMode == Constants.ToolbarMode.SELECTION_TOOL) {
+			OriLine l = pickLine(clickPoint);
+			
+			if (l != null) {
+				if (!l.isSelected()) {
+					l.setSelected(true);
+				} else {
+					l.setSelected(false);
+				}
+			}
+		
+			repaint();
+			return;
 		}
 		
 
@@ -540,7 +588,7 @@ public class MainScreen extends JPanel
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 &&
+		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 &&
 				(e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 			//scale diagram with CTRL + dragging mouse
 			double moved = e.getX() - preMousePoint.getX() + e.getY() - preMousePoint.getY();
@@ -558,8 +606,26 @@ public class MainScreen extends JPanel
 			preMousePoint = e.getPoint();
 			updateAffineTransform(g2d);
 			repaint();
-		} else if (Globals.editMode == Constants.EditMode.SELECT_LINE
-				|| Globals.editMode == Constants.EditMode.CHANGE_LINE_TYPE) {
+		} else if ((Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) 
+				&& (e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0) {
+			
+
+			double xPos = 0;
+			double yPos = 0;
+			xPos += (double) (preMousePoint.getX()-400) / scale;
+			yPos += (double) (preMousePoint.getY()-400) / scale;
+			preMousePoint = e.getPoint();
+			
+			tmpArrowLabel.setIcon(arrowImage);
+			tmpArrowLabel.setBounds((int) xPos, (int) yPos, 20, 20);
+
+			add(tmpArrowLabel);
+
+			
+			//System.out.println("MousePos: " + currentMousePointLogic.x + " | " + currentMousePointLogic.y);
+			repaint();
+		} else if (Globals.editMode == Constants.ToolbarMode.SELECT_LINE
+				|| Globals.editMode == Constants.ToolbarMode.CHANGE_LINE_TYPE) {
 			currentMouseDraggingPoint = e.getPoint();
 			repaint();
 		}
@@ -574,7 +640,7 @@ public class MainScreen extends JPanel
 			return;
 		}
 		
-		if(Globals.editMode == Constants.EditMode.INPUT_LINE) {
+		if(Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
 			if (Globals.lineEditMode == Constants.LineEditMode.INPUT_LINE) {
 				Vector2d firstV = selectedCandidateV;
 				selectedCandidateV = this.pickVertex(currentMousePointLogic);
@@ -593,9 +659,17 @@ public class MainScreen extends JPanel
 					repaint();
 				}
 			}
-			
-			
+		} else if (Globals.editMode == Constants.ToolbarMode.SELECTION_TOOL) {
+			OriLine preLine = selectedCandidateL;
+			selectedCandidateL = pickLine(currentMousePointLogic);
+			if (preLine != selectedCandidateL) {
+				repaint();
+
+			}
 		}
+		
+		
+		
 	}
 
 	@Override
@@ -617,7 +691,18 @@ public class MainScreen extends JPanel
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		if(Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) {
+
+			int type = Globals.inputArrowType;
+			double xPos = 0;
+			double yPos = 0;
+			xPos += (double) (preMousePoint.getX()-400) / scale;
+			yPos += (double) (preMousePoint.getY()-400) / scale;
+			Origrammer.diagram.addArrow(new OriArrow(xPos, yPos, type));
+			remove(tmpArrowLabel);
+			repaint();
+		}
+		
 		
 	}
 }

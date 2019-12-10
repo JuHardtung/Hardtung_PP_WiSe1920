@@ -9,8 +9,9 @@ public class Constants {
 		CHANGE_LINE_TYPE
 	};
 	
-	public static enum EditMode {
+	public static enum ToolbarMode {
 		NONE,
+		SELECTION_TOOL,
 		INPUT_LINE,
 		CHANGE_LINE_TYPE,
 		INPUT_ARROW,

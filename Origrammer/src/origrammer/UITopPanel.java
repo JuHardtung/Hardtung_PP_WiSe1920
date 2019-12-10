@@ -119,13 +119,13 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		
 		//Add Lines and Arrow Panel to UITopPanel
-		add(inputMethod);
+		//add(inputMethod);
 		add(linesPanel);
 		add(arrowsPanel);
 		
 		
-		lineInputRadioButton.addActionListener(this);
-		arrowInputRadioButton.addActionListener(this);
+//		lineInputRadioButton.addActionListener(this);
+//		arrowInputRadioButton.addActionListener(this);
 		
 		modeChanged();
 		
@@ -138,46 +138,42 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		Object selectedLine = menuLineCB.getSelectedItem();
 		Object selectedArrow = menuArrowCB.getSelectedItem();
 		
-		if (e.getSource() == lineInputRadioButton) {
-			Globals.editMode = Constants.EditMode.INPUT_LINE;
-			modeChanged();
+//		if (e.getSource() == lineInputRadioButton) {
+//			Globals.editMode = Constants.ToolbarMode.INPUT_LINE;
+//			modeChanged();
+//			
+//		} else if (e.getSource() == arrowInputRadioButton) {
+//			Globals.editMode = Constants.ToolbarMode.INPUT_ARROW;
+//			modeChanged();
+//		}
+		if(Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
 			
-		} else if (e.getSource() == arrowInputRadioButton) {
-			Globals.editMode = Constants.EditMode.INPUT_ARROW;
-			modeChanged();
-		}
-		
-		if(Globals.editMode == Constants.EditMode.INPUT_LINE) {
-			
-			System.out.println("EDIT MODE: " + Globals.editMode);
 			if(selectedLine == "Valley Fold") {
 				Globals.inputLineType = OriLine.TYPE_VALLEY;
-				System.out.println("LINE Valley Fold");
 			} else if(selectedLine == "Mountain Fold") {
 				Globals.inputLineType = OriLine.TYPE_MOUNTAIN;
-				System.out.println("LINE Mountain Fold");
 			} else if(selectedLine == "X-Ray Fold") {				
 				Globals.inputLineType = OriLine.TYPE_XRAY;
-				System.out.println("LINE X-Ray Fold");
 			} else if(selectedLine == "Edge Line") {
 				Globals.inputLineType = OriLine.TYPE_EDGE;
-				System.out.println("LINE Edge Line");
 			}			
-		} else if(Globals.editMode == Constants.EditMode.INPUT_ARROW) {
+		} else if(Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) {
 			
-			System.out.println("EDIT MODE: " + Globals.editMode);
 			if(selectedArrow == "Valley Fold") {
-				System.out.println("ARROW Valley Fold");
+
+
 			} else if(selectedArrow == "Mountain Fold") {
-				System.out.println("ARROW Mountain Fold");
+
+
 			} else if(selectedArrow == "Turn over") {
-				System.out.println("ARROW Turn over");
+
+
 			} else if(selectedArrow == "Push here") {
-				System.out.println("ARROW Push here");
+
 			} else if(selectedArrow == "Pull here") {
-				System.out.println("ARROW Pull here");
+
 			} else if(selectedArrow == "Inflate here") {
-				System.out.println("ARROW Inflate here");
+
 			}	
 		}
 
@@ -186,10 +182,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	}
 	
 	public void modeChanged() {
-		if(Globals.editMode == Constants.EditMode.INPUT_LINE) {
+		if(Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
 			menuLineCB.setEnabled(true);
 			menuArrowCB.setEnabled(false);			
-		} else if (Globals.editMode == Constants.EditMode.INPUT_ARROW) {
+		} else if (Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) {
 			menuLineCB.setEnabled(false);
 			menuArrowCB.setEnabled(true);			
 		}
@@ -262,17 +258,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				oldItem = selectedArrow;
 				}
 	      if(selectedArrow == "Valley Fold") {
-	    	  System.out.println("ARROW Valley Fold");
+				Globals.inputArrowType = OriArrow.TYPE_VALLEY;
 	      } else if(selectedArrow == "Mountain Fold") {
-	    	  System.out.println("ARROW Mountain Fold");
+				Globals.inputArrowType = OriArrow.TYPE_MOUNTAIN;
 	      } else if(selectedArrow == "Turn over") {
-	    	  System.out.println("ARROW Turn over");
+				Globals.inputArrowType = OriArrow.TYPE_TURN_OVER;
 	      } else if(selectedArrow == "Push here") {
-	    	  System.out.println("ARROW Push here");
+				Globals.inputArrowType = OriArrow.TYPE_PUSH_HERE;
 	      } else if(selectedArrow == "Pull out") {
-	    	  System.out.println("ARROW Pull out");
+				Globals.inputArrowType = OriArrow.TYPE_PULL_HERE;
 	      } else if(selectedArrow == "Inflate here") {
-	    	  System.out.println("ARROW Inflate here");
+				Globals.inputArrowType = OriArrow.TYPE_INFLATE_HERE;
 			}
 	   }
 	}

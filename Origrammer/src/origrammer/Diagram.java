@@ -32,6 +32,8 @@ public class Diagram {
 	public ArrayList<OriLine> crossLines = new ArrayList<>();
 	public ArrayList<OriLine> lines = new ArrayList<>();
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
+	public ArrayList<OriArrow> arrows = new ArrayList<>();
+	
 	public static final double POINT_EPS = 1.0;
 	
 	public double size;
@@ -132,13 +134,28 @@ public class Diagram {
 			lines.add(new OriLine(prePoint, p, inputLine.type));
 			prePoint = p;
 		}
-		System.out.println("Vertex size: " + vertices.size());
-		for(int i = 0; i<vertices.size(); i++) {
-			System.out.println("VERTICES: " + vertices.get(i).toString());
-		}
+		
+//		System.out.println("Vertex size: " + vertices.size());
+//		for(int i = 0; i<vertices.size(); i++) {
+//			System.out.println("VERTICES: " + vertices.get(i).toString());
+//		}
 	}
 
 
-
+	/** Adds a new Arrow
+	 * 
+	 * @param inputArrow
+	 */
+	public void addArrow(OriArrow inputArrow) {
+		
+		arrows.add(new OriArrow(inputArrow));
+		System.out.println("Arrows | Size: " + arrows.size());
+		
+		for(int i=0; i<arrows.size(); i++) {
+			System.out.println("Arrow[" + i + "] X=" + arrows.get(i).xPos + " | Y=" + arrows.get(i).yPos 
+					+ " || Width=" + arrows.get(i).width + " | Height=" + arrows.get(i).height
+					+ " || Type=" + arrows.get(i).type);
+		}
+	}
 
 }
