@@ -3,13 +3,18 @@ package origrammer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -17,6 +22,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
@@ -50,6 +57,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 	private JComboBox menuLineCB = new JComboBox(lineInputOptions);
 	private JComboBox menuArrowCB = new JComboBox(arrowInputOptions);
+	
+	
+	JPanel sliderPanel = new JPanel();
+	private JSlider sliderScaleIcon = new JSlider(0, 100);
+	private JSlider sliderRotIcon = new JSlider(0, 360);
 	
 	
 	MainScreen screen;
@@ -117,11 +129,37 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		arrowsPanel.setToolTipText(Origrammer.res.getString("TT_ArrowCB"));
 
 		
+		//##### SLIDERS #####
+		
+		sliderScaleIcon.setMajorTickSpacing(10);
+		//menuIconSizeSlider.setMinorTickSpacing(1);
+		sliderScaleIcon.setPaintTicks(true);
+		sliderScaleIcon.setPaintLabels(true);
+		//sliderScaleIcon.setSnapToTicks(true);
+		sliderScaleIcon.addChangeListener(e -> sliderScaleChanged());
+
+		//TODO: allow for float input (for the 22.5° rotations)
+		sliderRotIcon.setMajorTickSpacing(45);
+		//menuIconRotSlider.setMinorTickSpacing(1);
+		sliderRotIcon.setPaintTicks(true);
+		sliderRotIcon.setPaintLabels(true);
+		//sliderRotIcon.setSnapToTicks(true);
+		sliderRotIcon.addChangeListener(e -> sliderRotChanged());
+
+		
+		sliderPanel.add(sliderScaleIcon);
+		sliderPanel.add(sliderRotIcon);
+		sliderPanel.setLayout(new GridLayout(1,2,10,10));
+		sliderPanel.setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
+		sliderPanel.setVisible(false);
+		
 		
 		//Add Lines and Arrow Panel to UITopPanel
 		//add(inputMethod);
 		add(linesPanel);
 		add(arrowsPanel);
+		add(sliderPanel);
+		
 		
 		
 //		lineInputRadioButton.addActionListener(this);
@@ -131,6 +169,54 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		
 	}
+	
+	private void sliderScaleChanged() {
+
+		BufferedImage img = null;
+
+		for(OriArrow arrow : Origrammer.diagram.arrows) {
+
+			if(arrow.isSelected()) {
+				
+//				img = Origrammer.mainFrame.mainScreen.getBufImgByTypeAndRot(arrow.getType(), arrow.getDegrees());
+//
+//				int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*arrow.getScale());
+//				int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*arrow.getScale());
+//				arrow.getArrowLabel().setSize(newArrowLabelWidth, newArrowLabelHeight);
+//
+//				Image dimg = img.getScaledInstance(arrow.getArrowLabel().getWidth(), arrow.getArrowLabel().getHeight(), Image.SCALE_SMOOTH);
+//				ImageIcon arrowImageIcon = new ImageIcon(dimg);
+				
+				//sliderScale can never be 0, otherwise the updated size failes
+				if(sliderScaleIcon.getValue() == 0) {
+					arrow.setScale(0.01);
+				} else {
+					arrow.setScale((double) sliderScaleIcon.getValue()/100);
+				}
+				screen.repaint();
+
+				//arrow.getArrowLabel().setIcon(arrowImageIcon);
+				arrow.getArrowLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), 
+												(int) Math.round(arrow.getWidth()*arrow.getScale()), 
+												(int) Math.round(arrow.getHeight()*arrow.getScale()));
+
+			}
+		}
+	}		
+	
+	private void sliderRotChanged() {
+		
+		for(OriArrow arrow : Origrammer.diagram.arrows) {			
+			if(arrow.isSelected()) {
+				
+				arrow.setDegrees(sliderRotIcon.getValue());
+				screen.repaint();
+			}
+		}
+	}
+	
+
+
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -146,7 +232,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 //			Globals.editMode = Constants.ToolbarMode.INPUT_ARROW;
 //			modeChanged();
 //		}
-		if(Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
+		if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			
 			if(selectedLine == "Valley Fold") {
 				Globals.inputLineType = OriLine.TYPE_VALLEY;
@@ -157,7 +243,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else if(selectedLine == "Edge Line") {
 				Globals.inputLineType = OriLine.TYPE_EDGE;
 			}			
-		} else if(Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) {
+		} else if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
 			
 			if(selectedArrow == "Valley Fold") {
 
@@ -182,16 +268,21 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	}
 	
 	public void modeChanged() {
-		if(Globals.editMode == Constants.ToolbarMode.INPUT_LINE) {
+		if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			menuLineCB.setEnabled(true);
 			menuArrowCB.setEnabled(false);			
-		} else if (Globals.editMode == Constants.ToolbarMode.INPUT_ARROW) {
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
 			menuLineCB.setEnabled(false);
 			menuArrowCB.setEnabled(true);			
 		}
 		
+		//TODO arrow slider only visible when an arrow is selected
+		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
+			sliderPanel.setVisible(true);
+		} else {
+			sliderPanel.setVisible(false);
+		}
 		screen.modeChanged();
-		
 	}
 	
 	//Indents JComboBox entries

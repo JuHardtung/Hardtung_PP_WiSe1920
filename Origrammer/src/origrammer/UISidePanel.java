@@ -27,10 +27,14 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 	JFormattedTextField gridTextField;
 	
-	JRadioButton selectionToolRButton = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
-	JRadioButton lineInputToolRButton = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
-	JRadioButton arrowInputToolRButton = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
+	JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
+	JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
+	JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
 	ButtonGroup toolbarGroup;
+	
+	JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
+	JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
+	ButtonGroup lineInputGroup;
 	
 	//Grid
 	JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
@@ -52,37 +56,49 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		setBackground(new Color(230, 230, 230));
 				
 		toolbarGroup = new ButtonGroup();
-		toolbarGroup.add(selectionToolRButton);
-		toolbarGroup.add(lineInputToolRButton);
-		toolbarGroup.add(arrowInputToolRButton);
+		toolbarGroup.add(selectionToolRB);
+		toolbarGroup.add(lineInputToolRB);
+		toolbarGroup.add(arrowInputToolRB);
 		
+		lineInputGroup = new ButtonGroup();
+		lineInputGroup.add(lineInputTwoVerticesRB);
+		lineInputGroup.add(lineInputIncenterRB);
 		
 		dispVerticesCheckBox.addActionListener(this);
 		dispVerticesCheckBox.setSelected(true);
 		Globals.dispVertex = true;
 		
 		//TOOLBAR ActionListener
-		selectionToolRButton.addActionListener(this);
-		lineInputToolRButton.addActionListener(this);
-		arrowInputToolRButton.addActionListener(this);
+		selectionToolRB.addActionListener(this);
+		lineInputToolRB.addActionListener(this);
+		arrowInputToolRB.addActionListener(this);
+		
+		//LINE INPUT ActionListener
+		lineInputTwoVerticesRB.addActionListener(this);
+		lineInputIncenterRB.addActionListener(this);
 		
 		//GRID ActionListener
 		dispGridCheckBox.addActionListener(this);
 		gridHalfButton.addActionListener(this);
 		gridDoubleButton.addActionListener(this);
 		gridSetButton.addActionListener(this);
-				
-				
+					
 		//TOOLBAR Panel and positioning
 		JPanel toolbarPanel = new JPanel();
 		
-		toolbarPanel.add(selectionToolRButton);
-		toolbarPanel.add(lineInputToolRButton);
-		toolbarPanel.add(arrowInputToolRButton);
+		toolbarPanel.add(selectionToolRB);
+		toolbarPanel.add(lineInputToolRB);
+		toolbarPanel.add(arrowInputToolRB);
 		toolbarPanel.setLayout(new GridLayout(5, 1, 10, 2));
 		add(toolbarPanel);
 		
+		//LINE INPUT Panel and positioning
+		JPanel lineInputPanel = new JPanel();
 		
+		lineInputPanel.add(lineInputTwoVerticesRB);
+		lineInputPanel.add(lineInputIncenterRB);
+		lineInputPanel.setLayout(new GridLayout(5, 1, 10, 2));
+		add(lineInputPanel);
 		
 		//GRID Panel and positioning
 		JPanel gridPanel = new JPanel();
@@ -108,8 +124,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 		add(gridPanel);
 		
-		
-		
 		//Buttons Panel
 		JPanel buttonsPanel = new JPanel();
 		
@@ -126,14 +140,23 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == selectionToolRButton) {
-			Globals.editMode = Constants.ToolbarMode.SELECTION_TOOL;
+		if (e.getSource() == selectionToolRB) {
+			Globals.toolbarMode = Constants.ToolbarMode.SELECTION_TOOL;
 			modeChanged();
-		} else if (e.getSource() == lineInputToolRButton) {
-			Globals.editMode = Constants.ToolbarMode.INPUT_LINE;
+		} else if (e.getSource() == lineInputToolRB) {
+			Globals.toolbarMode = Constants.ToolbarMode.INPUT_LINE;
 			modeChanged();
-		} else if (e.getSource() == arrowInputToolRButton) {
-			Globals.editMode = Constants.ToolbarMode.INPUT_ARROW;
+		} else if (e.getSource() == arrowInputToolRB) {
+			Globals.toolbarMode = Constants.ToolbarMode.INPUT_ARROW;
+			modeChanged();
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
+				&& e.getSource() == lineInputTwoVerticesRB) {
+			Globals.lineEditMode = Constants.LineInputMode.INPUT_LINE;
+			modeChanged();
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
+				&& e.getSource() == lineInputIncenterRB) {
+			Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
+			System.out.println("Mode Changed to" + Globals.lineEditMode);
 			modeChanged();
 		}
 		
@@ -168,7 +191,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	
 	public void modeChanged() {
-		
+		System.out.println("Mode Changed to: " + Globals.toolbarMode);
 		uiTopPanel.modeChanged();
 		screen.modeChanged();
 		repaint();

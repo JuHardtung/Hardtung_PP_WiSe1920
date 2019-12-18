@@ -1,9 +1,15 @@
 package origrammer;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.swing.ImageIcon;
 import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
@@ -60,14 +66,16 @@ public class Diagram {
 		ArrayList<OriLine> tmpLines = new ArrayList<>();
 		tmpLines.addAll(lines);
 		
+		//check if the line already exists
 		for(OriLine line : tmpLines) {
 			if(GeometryUtil.isSameLineSegment(line, inputLine)) {
 				return;
 			}
 		}
 
+		//if new line crosses another one, split them up to smaller lines
 		for (OriLine line : tmpLines) {
-			if (inputLine.type == OriLine.TYPE_NONE && line.type != OriLine.TYPE_NONE) {
+			if (inputLine.getType() == OriLine.TYPE_NONE && line.getType() != OriLine.TYPE_NONE) {
 				continue;
 			}
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
@@ -79,10 +87,10 @@ public class Diagram {
 			lines.remove(line);
 
 			if(GeometryUtil.Distance(line.p0,  crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p0, crossPoint, line.type));
+				lines.add(new OriLine(line.p0, crossPoint, line.getType()));
 			}
 			if(GeometryUtil.Distance(line.p1, crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p1, crossPoint, line.type));
+				lines.add(new OriLine(line.p1, crossPoint, line.getType()));
 			}
 		}
 
@@ -90,6 +98,7 @@ public class Diagram {
 		points.add(inputLine.p0);
 		points.add(inputLine.p1);
 
+		//if the intersection is really close to the end of line --> do nothing
 		for(OriLine line : lines) {
 			if(GeometryUtil.Distance(inputLine.p0,  line.p0) < POINT_EPS) {
 				continue;
@@ -131,31 +140,99 @@ public class Diagram {
 				continue;
 			}
 			
-			lines.add(new OriLine(prePoint, p, inputLine.type));
+			lines.add(new OriLine(prePoint, p, inputLine.getType()));
 			prePoint = p;
 		}
-		
-//		System.out.println("Vertex size: " + vertices.size());
-//		for(int i = 0; i<vertices.size(); i++) {
-//			System.out.println("VERTICES: " + vertices.get(i).toString());
-//		}
 	}
 
 
-	/** Adds a new Arrow
+	/** Adds a new Arrow to the diagram
 	 * 
 	 * @param inputArrow
 	 */
 	public void addArrow(OriArrow inputArrow) {
-		
 		arrows.add(new OriArrow(inputArrow));
-		System.out.println("Arrows | Size: " + arrows.size());
-		
-		for(int i=0; i<arrows.size(); i++) {
-			System.out.println("Arrow[" + i + "] X=" + arrows.get(i).xPos + " | Y=" + arrows.get(i).yPos 
-					+ " || Width=" + arrows.get(i).width + " | Height=" + arrows.get(i).height
-					+ " || Type=" + arrows.get(i).type);
+	}
+	
+	public void selectAll() {
+		selectAllLines();
+		selectAllArrows();
+	}
+
+	public void selectAllLines() {
+		for (OriLine l : lines) {
+			l.setSelected(true);
 		}
+	}
+
+	public void selectAllArrows() {
+		for (OriArrow a : arrows) {
+			a.setSelected(true);
+		}
+	}
+
+	public void unselectAll() {
+		unselectAllLines();
+		unselectAllArrows();
+	}
+
+	public void unselectAllLines() {
+		for (OriLine l : lines) {
+			l.setSelected(false);
+		}
+	}
+
+	public void unselectAllArrows() {
+		for (OriArrow a : arrows) {
+			a.setSelected(false);
+		}
+	}
+
+	/**
+	 * Deletes all selected lines of the current diagram step
+	 */
+	public void deleteSelectedLines() {
+		ArrayList<OriLine> selectedLines = new ArrayList<>();
+		
+		for (OriLine line : lines) {
+			if(line.isSelected()) {
+				selectedLines.add(line);
+			}
+		}
+		
+		for (OriLine line : selectedLines) {
+			lines.remove(line);
+		}
+	}
+	
+	
+	/**
+	 * Deletes all selected arrows of the current diagram step
+	 */
+	public void deleteSelectedArrows() {
+		ArrayList<OriArrow> selectedArrows = new ArrayList<>();
+		
+		for (OriArrow arrow : arrows) {
+			if(arrow.isSelected()) {
+				selectedArrows.add(arrow);
+			}
+		}
+		
+		for (OriArrow arrow : selectedArrows) {
+			arrows.remove(arrow);
+		}
+	}
+
+	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
+		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
+		if(incenter == null) {
+			System.out.println("Failed to calculate the incenter of the triangle");
+		}
+		
+		addLine(new OriLine(incenter, v0, Globals.inputLineType));
+		addLine(new OriLine(incenter, v1, Globals.inputLineType));
+		addLine(new OriLine(incenter, v2, Globals.inputLineType));
+
 	}
 
 }

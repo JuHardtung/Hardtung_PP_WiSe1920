@@ -2,9 +2,10 @@ package origrammer;
 
 public class Constants {
 
-	public static enum LineEditMode {
+	public static enum LineInputMode {
 		NONE,
 		INPUT_LINE,
+		TRIANGLE_INSECTOR,
 		DELETE_LINE,
 		CHANGE_LINE_TYPE
 	};
@@ -13,12 +14,9 @@ public class Constants {
 		NONE,
 		SELECTION_TOOL,
 		INPUT_LINE,
-		CHANGE_LINE_TYPE,
 		INPUT_ARROW,
 		ADD_VERTEX,
-		DELETE_VERTEX,
-		SELECT_LINE,
-		DELETE_LINE
+		DELETE_VERTEX
 	}
 	
 	final public static double DEFAULT_PAPER_SIZE = 400;

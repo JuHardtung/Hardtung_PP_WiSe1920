@@ -7,8 +7,11 @@ public class StringResource extends ListResourceBundle {
 	static final Object[][] strings = {
 			{"Title", "Origrammer: An origami diagramming tool"},
 			{"UI_selectionTool", "Selection Tool"},
+			{"UI_moveTool", "Move Tool"},
 			{"UI_lineInputTool", "Line Input Tool"},
 			{"UI_arrowInputTool", "Arrow Input Tool"},
+			{"UI_lineInputTwoVertices", "Input 2 endpoints"},
+			{"UI_lineInputIncenter", "Rabbit Ear (Triangle Incenter)"},
 			{"UI_ShowGrid", "Show Grid"},
 			{"UI_gridHalf", "x2"},
 			{"UI_gridDouble", "x1/2"},
@@ -21,8 +24,9 @@ public class StringResource extends ListResourceBundle {
 			{"MenuMountainLine", "Mountain Fold"},
 			{"MenuXRayLine", "X-Ray Fold"},
 			{"MenuEdgeLine", "Edge Line"},
-			{"MenuArrows", "Arrows"}
-			
+			{"MenuArrows", "Arrows"},
+			{"TT_LineCB", "Choose the type of line you want to place."},
+			{"TT_ArrowCB", "Choose the type of arrow you want to place."}
 	};
 	
 	

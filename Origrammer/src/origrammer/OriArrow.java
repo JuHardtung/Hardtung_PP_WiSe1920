@@ -14,17 +14,25 @@ public class OriArrow {
 	final public static int TYPE_PULL_HERE = 5;
 	final public static int TYPE_INFLATE_HERE = 6;
 	
-	public boolean selected;
-	public int type = TYPE_NONE;
-	public double xPos;
-	public double yPos;
-	public double width;
-	public double height;
+	final public static int VALLEY_ARROW_WIDTH = 50;
+	final public static int VALLEY_ARROW_HEIGHT = 50;
 
 	
-	public JLabel arrowLabel = new JLabel();
+	private int type = TYPE_NONE;
+	public double xPos;
+	public double yPos;
+	private int width;
+	private int height;
+	private double scale = 0.6;
+	private boolean selected;
+	private double degrees = 0;
+
+	private JLabel arrowLabel = new JLabel();
 	
 	
+	public OriArrow() {
+		
+	}
 	
 	public OriArrow(OriArrow a) {
 		this.xPos = a.xPos;
@@ -35,7 +43,7 @@ public class OriArrow {
 		
 	}
 	
-	public OriArrow(double xPos, double yPos, double width, double height, int type) {
+	public OriArrow(double xPos, double yPos, int width, int height, int type) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.width = width;
@@ -47,14 +55,82 @@ public class OriArrow {
 	public OriArrow(double xPos, double yPos, int type) {
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.width = 20;
-		this.height = 20;
+		this.width = VALLEY_ARROW_WIDTH;
+		this.height = VALLEY_ARROW_HEIGHT;
 		this.type = type;
 	}
 	
+
+	public double getxPos() {
+		return xPos;
+	}
+
+	public void setxPos(double xPos) {
+		this.xPos = xPos;
+	}
+
+	public double getyPos() {
+		return yPos;
+	}
+
+	public void setyPos(double yPos) {
+		this.yPos = yPos;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
 	
-	
-	
-	
+	public double getScale() {
+		return scale;
+	}
+
+	public void setScale(double scale) {
+		this.scale = scale;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public double getDegrees() {
+		return degrees;
+	}
+
+	public void setDegrees(double degrees) {
+		this.degrees = degrees;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public JLabel getArrowLabel() {
+		return arrowLabel;
+	}
+
+	public void setArrowLabel(JLabel arrowLabel) {
+		this.arrowLabel = arrowLabel;
+	}
 
 }

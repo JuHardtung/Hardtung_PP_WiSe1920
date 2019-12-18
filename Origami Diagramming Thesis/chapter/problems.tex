@@ -2,3 +2,15 @@
 
 \section{Problems \& other findings}
 \label{sec:problems}
+
+
+quality problems while scaling the notation symbols --> solution: using .svg instead of .png
+
+rotating ImageIcons
+
+JFrame --> JPanel --> JLabel --> ImageIcon --> BufferedImage --> Arrow
+
+Can move, scale but not rotate (either override the paintComponent method) or use graphics2d.rotate();)
+Both doesn't work for my setup
+
+dirty solution--> load different, already rotated images depending on OriArrow rotation.

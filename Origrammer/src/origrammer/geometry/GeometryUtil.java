@@ -2,6 +2,8 @@ package origrammer.geometry;
 
 import javax.vecmath.Vector2d;
 
+import origrammer.OriArrow;
+
 public class GeometryUtil {
 
 	public final static double POINT_SNAP_VALUE = 0.00001f;
@@ -10,6 +12,10 @@ public class GeometryUtil {
 		return Distance(p0.x, p0.y, p1.x, p1.y);
 	}
 	
+	
+	/**   __________________
+	 *  \/(x0-x1)²+(y0-y1)²
+	 */
 	private static double Distance(double x0, double y0, double x1, double y1) {
         return Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
 
@@ -107,6 +113,54 @@ public class GeometryUtil {
 			nearestPoint.set(x0 + t * sub.x, y0 + t * sub.y);
 			return Distance(x0 + t * sub.x, y0 + t * sub.y, px, py);
 		}
+	}
+	
+	/**
+	 * Returns true if mouseCoordinates are within the bounds of the tested OriArrow
+	 * @param x Mouse position 
+	 * @param y Mouse position
+	 * @param a OriArrow that is tested for selection
+	 * @return returns true if mouse is over OriArrow and false if it isn't
+	 */
+	public static boolean isMouseOverArrow(double x, double y, OriArrow a) {
+		
+		double aX = a.getxPos();
+		double aY = a.getyPos();
+		double aXEnd = aX + (a.getWidth());
+		double aYEnd = aY + (a.getHeight());
+		
+		if(x>aX && x <aXEnd) {
+			if(y>aY && y<aYEnd) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**
+	 * [a,b,c] = Distance(
+	 * 
+	 * 		(ax1 + bx2 + cx3   ay1 + by2 + cy3)
+	 * 	I = (--------------- , ---------------) = (Ix, Iy)
+	 *      (   a + b + c         a + b + c   )
+	 * 
+	 * 
+	 * @param v0
+	 * @param v1
+	 * @param v2
+	 * @return
+	 */
+	public static Vector2d getIncenter(Vector2d v0, Vector2d v1, Vector2d v2) {
+		double l0 = Distance(v1, v2);
+		double l1 = Distance(v0, v2);
+		double l2 = Distance(v0, v1);
+		
+		Vector2d vc = new Vector2d();
+		vc.x = (v0.x * l0 + v1.x * l1 + v2.x * l2) / (l0 + l1 + l2);
+		vc.y = (v0.y * l0 + v1.y * l1 + v2.y * l2) / (l0 + l1 + l2);
+
+		return vc;
 	}
 	
 	
