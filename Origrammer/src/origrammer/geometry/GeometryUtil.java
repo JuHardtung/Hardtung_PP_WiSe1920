@@ -1,8 +1,13 @@
 package origrammer.geometry;
 
+import java.awt.geom.GeneralPath;
+import java.util.ArrayList;
+
 import javax.vecmath.Vector2d;
 
+import origrammer.Globals;
 import origrammer.OriArrow;
+import origrammer.Origrammer;
 
 public class GeometryUtil {
 
@@ -136,20 +141,26 @@ public class GeometryUtil {
 		}
 		return false;
 	}
+	
+	public static boolean isMouseOverFace(double x, double y, OriFace f) {
+		
+		System.out.println("X=" + x + "Y=" + y + " | Path=" + f.toString());
+		
+		return f.path.intersects(x, y, 5, 5);
+	}
 
 
 	/**
 	 * [a,b,c] = Distance(
 	 * 
-	 * 		(ax1 + bx2 + cx3   ay1 + by2 + cy3)
-	 * 	I = (--------------- , ---------------) = (Ix, Iy)
-	 *      (   a + b + c         a + b + c   )
+	 * 		            (ax1 + bx2 + cx3   ay1 + by2 + cy3)
+	 * 	Incenter(x,y) = (--------------- , ---------------)
+	 *                  (   a + b + c         a + b + c   )
 	 * 
-	 * 
-	 * @param v0
-	 * @param v1
-	 * @param v2
-	 * @return
+	 * @param v0 Vertex of the triangle
+	 * @param v1 Vertex of the triangle
+	 * @param v2 Vertex of the triangle
+	 * @return returns the triangle incenter as Vector2d
 	 */
 	public static Vector2d getIncenter(Vector2d v0, Vector2d v1, Vector2d v2) {
 		double l0 = Distance(v1, v2);
@@ -161,6 +172,129 @@ public class GeometryUtil {
 		vc.y = (v0.y * l0 + v1.y * l1 + v2.y * l2) / (l0 + l1 + l2);
 
 		return vc;
+	}
+	
+	
+	/**
+	 * 		    (b² + c² - a²)		a = Distance(C, B)
+	 * cos(A) = --------------		b = Distance(A, C)
+	 * 			     2bc			c = Distance(A, B)
+	 * 
+	 * @param v0
+	 * @param v1
+	 * @param v2
+	 * @return returns the angle that v0 is the vertex of
+	 */
+	public static double measureAngle(Vector2d v0, Vector2d v1, Vector2d v2) {
+		double angle = 0;
+		double a = Distance(v2, v1);
+		double b = Distance(v0, v2);
+		double c = Distance(v0, v1);
+		double cosA = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2*b*c);
+		angle = Math.toDegrees(Math.acos(cosA));
+		return angle;
+	}
+	
+	
+	public static double measureAngle(OriLine l0, OriLine l1) {
+		
+		Vector2d l0p0 = l0.p0;
+		Vector2d l0p1 = l0.p1;
+		Vector2d l1p0 = l1.p0;
+		Vector2d l1p1 = l1.p1;
+		
+		Vector2d angleVertex;
+		Vector2d v0;
+		Vector2d v1;
+		
+		if (l0p0 == l1p0) {
+			angleVertex = l0p0;
+			v0 = l0p1;
+			v1 = l1p1;
+		} else if (l0p0 == l1p1) {
+			angleVertex = l0p0;
+			v0 = l0p1;
+			v1 = l1p0;
+		} else if (l0p1 == l1p0) {
+			angleVertex = l0p1;
+			v0 = l0p0;
+			v1 = l1p1;
+		} else {
+			angleVertex = l0p1;
+			v0 = l0p0;
+			v1 = l1p0;
+		}
+		
+		
+		return measureAngle(angleVertex, v0, v1);
+	}
+
+	/**
+	 * 
+	 * @param v0 vertex 1
+	 * @param v1 vertex 2
+	 * @return returns the distance between v0 and v1
+	 */
+	public static double measureLength(Vector2d v0, Vector2d v1) {
+		return Distance(v0, v1);
+	}
+	
+	
+	public static GeneralPath createFaceFromLines(OriLine l0, OriLine l1, OriLine l2) {
+		
+		ArrayList<OriLine> lines = new ArrayList<>();
+		
+		ArrayList<Vector2d> points = new ArrayList<>();
+		lines.add(l0);
+		lines.add(l1);
+		lines.add(l2);
+		//lines.add(l3);
+
+		for(int i=1;i<lines.size(); i++) {
+			if (lines.get(0).p0.x == lines.get(i).p0.x && lines.get(0).p0.y == lines.get(i).p0.y) {
+			points.add(lines.get(0).p0);
+			} else if (lines.get(0).p0.x == lines.get(i).p1.x && lines.get(0).p0.y == lines.get(i).p1.y) {
+				points.add(lines.get(0).p0);
+			} else if (lines.get(0).p1.x == lines.get(i).p0.x && lines.get(0).p1.y == lines.get(i).p0.y) {
+				points.add(lines.get(0).p1);
+			} else if (lines.get(0).p1.x == lines.get(i).p1.x && lines.get(0).p1.y == lines.get(i).p1.y) {
+				points.add(lines.get(0).p1);
+			}
+		}
+		
+		for (int j=2; j<lines.size(); j++) {
+			if (lines.get(1).p0.x == lines.get(j).p0.x && lines.get(1).p0.y == lines.get(j).p0.y) {
+				points.add(lines.get(1).p0);
+			} else if (lines.get(1).p0.x == lines.get(j).p1.x && lines.get(1).p0.y == lines.get(j).p1.y) {
+				points.add(lines.get(1).p0);
+			} else if (lines.get(1).p1.x == lines.get(j).p0.x && lines.get(1).p1.y == lines.get(j).p0.y) {
+				points.add(lines.get(1).p1);
+			} else if (lines.get(1).p1.x == lines.get(j).p1.x && lines.get(1).p1.y == lines.get(j).p1.y) {
+				points.add(lines.get(1).p1);
+			}
+		}
+		
+		
+//		if (lines.get(2).p0.x == lines.get(3).p0.x && lines.get(2).p0.y == lines.get(3).p0.y) {
+//			points.add(lines.get(2).p0);
+//		} else if (lines.get(2).p0.x == lines.get(3).p1.x && lines.get(2).p0.y == lines.get(3).p1.y) {
+//			points.add(lines.get(2).p0);
+//		} else if (lines.get(2).p1.x == lines.get(3).p0.x && lines.get(2).p1.y == lines.get(3).p0.y) {
+//			points.add(lines.get(2).p1);
+//		} else if (lines.get(2).p1.x == lines.get(3).p1.x && lines.get(2).p1.y == lines.get(3).p1.y) {
+//			points.add(lines.get(2).p1);
+//		}
+		
+		
+		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, points.size());
+		path.moveTo(points.get(0).x, points.get(0).y);
+		
+		for (int i=0; i<points.size(); i++) {
+			path.lineTo(points.get(i).x, points.get(i).y);
+		}
+		path.closePath();
+		
+		return path;
 	}
 	
 	

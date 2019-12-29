@@ -1,6 +1,7 @@
 package origrammer;
 import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -15,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import origrammer.geometry.OriLine;
@@ -23,6 +25,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	MainScreen mainScreen;
 	public UITopPanel uiTopPanel;
 	public UISidePanel uiSidePanel;
+	public UIBottomPanel uiBottomPanel;
 	
 	private JMenu menuFile = new JMenu("File");
 	private JMenuItem menuItemOpen = new JMenuItem("Open File");
@@ -54,10 +57,15 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		
 		uiTopPanel = new UITopPanel(mainScreen);
 		uiSidePanel = new UISidePanel(mainScreen, uiTopPanel);
+		uiBottomPanel = new UIBottomPanel(mainScreen);
+		
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(uiTopPanel, BorderLayout.NORTH);
-		getContentPane().add(uiSidePanel, BorderLayout.WEST);
+		getContentPane().add(uiTopPanel, BorderLayout.PAGE_START);
+		getContentPane().add(uiSidePanel, BorderLayout.LINE_START);
 		getContentPane().add(mainScreen, BorderLayout.CENTER);
+		getContentPane().add(uiBottomPanel, BorderLayout.PAGE_END);
+
+	
 		
 		pack();
 		setVisible(true);
@@ -81,8 +89,9 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
         menuItemDeleteSelected.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Origrammer.diagram.deleteSelectedLines();
-				Origrammer.diagram.deleteSelectedArrows();
+				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedLines();
+				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedArrows();
+				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedFaces();
 				mainScreen.repaint();
 			}
 		});
@@ -92,7 +101,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
         menuItemSelectAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Origrammer.diagram.selectAll();
+				Origrammer.diagram.steps.get(Globals.currentStep).selectAll();
 				Globals.toolbarMode = Constants.ToolbarMode.SELECTION_TOOL;
 				uiSidePanel.selectionToolRB.setSelected(true);
 				uiSidePanel.modeChanged();
@@ -105,7 +114,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
         menuItemUnselectAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Origrammer.diagram.unselectAll();
+				Origrammer.diagram.steps.get(Globals.currentStep).unselectAll();
 				Globals.toolbarMode = Constants.ToolbarMode.SELECTION_TOOL;
 				uiSidePanel.selectionToolRB.setSelected(true);
 				uiSidePanel.modeChanged();
@@ -151,6 +160,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		menuEdit.add(menuItemCopy);
 		menuEdit.add(menuItemPaste);
 		menuEdit.add(menuItemDeleteSelected);
+		menuEdit.addSeparator();
 		menuEdit.add(menuItemPreferences);
 	}
 	
@@ -164,6 +174,20 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	private void initMainScreen() {
 
 		add(mainScreen);
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == menuItemPreferences) {
+			PreferenceDialog pd = new PreferenceDialog(this);
+			Rectangle rec = getBounds();
+            pd.setLocation((int) (rec.getCenterX() - pd.getWidth() / 2),
+                    (int) (rec.getCenterY() - pd.getHeight() / 2));
+			//pd.setModal(true);
+			pd.setVisible(true);
+			
+		}
 	}
 
 	@Override
@@ -228,12 +252,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

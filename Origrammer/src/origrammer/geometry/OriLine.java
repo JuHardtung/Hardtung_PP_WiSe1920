@@ -54,4 +54,10 @@ public class OriLine {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
+	@Override
+	public String toString() {
+		return "OriLine [selected=" + selected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + "]";
+	}
+	
 }

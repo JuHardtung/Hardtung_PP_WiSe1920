@@ -174,18 +174,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 		BufferedImage img = null;
 
-		for(OriArrow arrow : Origrammer.diagram.arrows) {
+		for(OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 
 			if(arrow.isSelected()) {
-				
-//				img = Origrammer.mainFrame.mainScreen.getBufImgByTypeAndRot(arrow.getType(), arrow.getDegrees());
-//
-//				int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*arrow.getScale());
-//				int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*arrow.getScale());
-//				arrow.getArrowLabel().setSize(newArrowLabelWidth, newArrowLabelHeight);
-//
-//				Image dimg = img.getScaledInstance(arrow.getArrowLabel().getWidth(), arrow.getArrowLabel().getHeight(), Image.SCALE_SMOOTH);
-//				ImageIcon arrowImageIcon = new ImageIcon(dimg);
 				
 				//sliderScale can never be 0, otherwise the updated size failes
 				if(sliderScaleIcon.getValue() == 0) {
@@ -206,7 +197,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 	private void sliderRotChanged() {
 		
-		for(OriArrow arrow : Origrammer.diagram.arrows) {			
+		for(OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {			
 			if(arrow.isSelected()) {
 				
 				arrow.setDegrees(sliderRotIcon.getValue());
@@ -262,9 +253,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 			}	
 		}
-
-		
-		//if(e.getSource() == )
 	}
 	
 	public void modeChanged() {

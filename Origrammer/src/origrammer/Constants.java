@@ -1,5 +1,7 @@
 package origrammer;
 
+import java.awt.Color;
+
 public class Constants {
 
 	public static enum LineInputMode {
@@ -15,9 +17,33 @@ public class Constants {
 		SELECTION_TOOL,
 		INPUT_LINE,
 		INPUT_ARROW,
+		MEASURE_TOOL,
+		FILL_TOOL,
 		ADD_VERTEX,
 		DELETE_VERTEX
 	}
 	
+	public static enum MeasureMode {
+		NONE,
+		MEASURE_LENGTH,
+		MEASURE_ANGLE
+	}
+	
+	public static enum MountainFoldStyle {
+		DASH_DOT,
+		DASH_DOT_DOT
+	}
+	
+	public static enum OutsideReverseStyle {
+		AOM_AOA, 		//Arrow of Motion + Arrow of Action
+		AOM_AOM			//2 Arrows of Motion
+	}
+	
+	public static enum RabbitEarStyle {
+		SAOM_SAOM_BAOM, //2 small Arrows of Motion + 1 big AoM
+		BAOM_BAOM_BAOM  //3 small Arrows of Motion
+	}
+	
 	final public static double DEFAULT_PAPER_SIZE = 400;
+
 }

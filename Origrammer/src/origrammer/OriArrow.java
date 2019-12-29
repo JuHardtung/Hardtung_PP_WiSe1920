@@ -133,4 +133,11 @@ public class OriArrow {
 		this.arrowLabel = arrowLabel;
 	}
 
+	@Override
+	public String toString() {
+		return "OriArrow [type=" + type + ", xPos=" + xPos + ", yPos=" + yPos + ", width=" + width + ", height="
+				+ height + ", scale=" + scale + ", selected=" + selected + ", degrees=" + degrees + "]";
+	}
+	
+
 }
