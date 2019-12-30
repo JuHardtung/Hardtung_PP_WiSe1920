@@ -149,7 +149,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
 		
 		JPanel measureLengthPanel = new JPanel();
-		measureLengthTextField = new JFormattedTextField(new DecimalFormat("###.##"));
+		measureLengthTextField = new JFormattedTextField(new DecimalFormat("###.##cm"));
 		measureLengthPanel.add(measureLengthRB);
 		measureLengthPanel.add(measureLengthTextField);
 		measureLengthPanel.add(copyMeasuredLength);
@@ -235,12 +235,22 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				Globals.measureMode = Constants.MeasureMode.MEASURE_ANGLE;
 			}
 			if (e.getSource() == copyMeasuredLength) {
-				if(measureLengthTextField.getValue() != null) {
+				if (measureLengthTextField.getValue() != null) {
 					StringSelection stringSelection = new StringSelection(measureLengthTextField.getValue().toString());
 					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					clipboard.setContents(stringSelection, null);
 				} else {
 					System.out.println("measureLengthTextField is empty!");
+				}
+
+			}
+			if (e.getSource() == copyMeasuredAngle) {
+				if (measureAngleTextField.getValue() != null) {
+					StringSelection stringSelection = new StringSelection(measureAngleTextField.getValue().toString());
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					clipboard.setContents(stringSelection, null);
+				} else {
+					System.out.println("measureAngleTextField is empty!");
 				}
 
 			}

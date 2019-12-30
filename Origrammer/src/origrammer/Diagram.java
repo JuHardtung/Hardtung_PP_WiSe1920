@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Diagram {
 	public double paperSize;
-	//private double paperWidth;
-	//private double paperHeight;
+	private int recPaperWidth = 0;
+	private int recPaperHeight = 0;
 	private Color paperColor;
 	public ArrayList<Step> steps = new ArrayList<>();
 	
@@ -28,24 +28,24 @@ public class Diagram {
 	}
 
 
-//	public double getPaperWidth() {
-//		return paperWidth;
-//	}
-//
-//
-//	public void setPaperWidth(double paperWidth) {
-//		this.paperWidth = paperWidth;
-//	}
-//
-//
-//	public double getPaperHeight() {
-//		return paperHeight;
-//	}
-//
-//
-//	public void setPaperHeight(double paperHeight) {
-//		this.paperHeight = paperHeight;
-//	}
+	public int getPaperWidth() {
+		return recPaperWidth;
+	}
+
+
+	public void setPaperWidth(int paperWidth) {
+		this.recPaperWidth = paperWidth;
+	}
+
+
+	public int getPaperHeight() {
+		return recPaperHeight;
+	}
+
+
+	public void setPaperHeight(int paperHeight) {
+		this.recPaperHeight = paperHeight;
+	}
 
 
 	public Color getPaperColor() {
