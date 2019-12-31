@@ -248,12 +248,6 @@ public class MainScreen extends JPanel
     			   tmpOutline.get(outlineVnum - 1).y, cv.x, cv.y));
        }
        
-       
-
-       
-       
-       
-       
        //show all vertices if in ToolbarMode ADD_VERTEX or DELETE_VERTEX mode or if dispVertex is true
        if (Globals.toolbarMode == Constants.ToolbarMode.ADD_VERTEX 
     		   || Globals.toolbarMode == Constants.ToolbarMode.DELETE_VERTEX
@@ -378,9 +372,7 @@ public class MainScreen extends JPanel
        if (selectedCandidateV != null ) {
     	   g.setColor(Color.BLACK);
     	   g.drawString("(" + selectedCandidateV.x + ", " + selectedCandidateV.y + ")", -250, -250);
-       }
-       
-    	   
+       }   
     }
     
     private void drawGrid(Graphics2D g2d) {

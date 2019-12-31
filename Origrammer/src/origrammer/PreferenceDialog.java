@@ -159,8 +159,8 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 					if (recPaperWidthTF.getText().length() > 0) {
 						Origrammer.diagram.setPaperWidth(Integer.parseInt(recPaperWidthTF.getText()));
 					} else {
-						System.out.println("TF is empty");
-						Origrammer.diagram.setPaperWidth(0);
+						System.out.println("TF width is empty");
+						//Origrammer.diagram.setPaperWidth(0);
 					}
 				}
 			});
@@ -184,7 +184,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 					if (recPaperHeightTF.getText().length() > 0) {
 						Origrammer.diagram.setPaperHeight(Integer.parseInt(recPaperHeightTF.getText()));
 					} else {
-						System.out.println("TF is empty");
+						System.out.println("TFheight is empty");
 						Origrammer.diagram.setPaperHeight(0);
 					}
 				}
