@@ -9,15 +9,21 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileFilter;
 
 import origrammer.geometry.OriLine;
 
@@ -50,6 +56,12 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	
 	private JMenu menuHelp = new JMenu("Help");
 	private JMenu menuAbout = new JMenu("About");
+	
+	private XMLEncoderDecoder xmlEncoderDecoder = new XMLEncoderDecoder();
+	private String lastPath = "";
+	public ArrayList<String> mruFiles = new ArrayList<>(); //MostRecentlyUsedFiles
+	private JMenuItem[] mruFilesMenuItem = new JMenuItem[Config.MRUFILE_NUM];
+
 	
 	MainFrame(){
 		mainScreen = new MainScreen();
@@ -137,8 +149,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
         menuBar.add(menuType);
         menuBar.add(menuSelect);
         menuBar.add(menuAbout);
-        setJMenuBar(menuBar);
-        
+        setJMenuBar(menuBar);       
 	}
 	
 	private void buildMenuFile() {
@@ -148,6 +159,18 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		menuFile.addSeparator();
 		menuFile.add(menuItemSave);
 		menuFile.add(menuItemSaveAs);
+		
+		
+//        for (int i=0; i<Config.MRUFILE_NUM; i++) {
+//        	int index = mruFiles.size() - 1 - i;
+//        	if (index >= 0) {
+//        		String path = mruFiles.get(index);
+//        		mruFilesMenuItem[i].setText(path);
+//        		menuFile.add(mruFilesMenuItem[i]);
+//        	} else {
+//        		mruFilesMenuItem[i].setText("");
+//        	}
+//        }
 	}
 	
 	private void buildMenuEdit() {
@@ -176,11 +199,114 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		add(mainScreen);
 	}
 	
+	public void updateMenu(String filePath) {
+		if (mruFiles.contains(filePath)) {
+			return;
+		}
+		
+		mruFiles.add(filePath);
+		buildMenuFile();
+	}
+	
+	private void openFile(String filePath) {
+		Origrammer.mainFrame.uiSidePanel.dispGridCheckBox.setSelected(false);
+		Origrammer.mainFrame.mainScreen.setDispGrid(false);
+
+		//if (filePath.endsWith(".xml")) {
+
+			DiagramDataSet diaDataSet = xmlEncoderDecoder.deserializeFromXML();
+
+
+			if (diaDataSet == null) {
+				return;
+			}
+			
+			Diagram diagram = new Diagram();
+			diaDataSet.recover(diagram);
+			Origrammer.diagram = diagram;
+		//}
+	}
+	
+	private void saveFile() {
+		JFileChooser fileChooser = new JFileChooser(lastPath);
+		fileChooser.addChoosableFileFilter(new FileFilterEx(new String[]{".xml"},
+				"(*.xml) " + Origrammer.res.getString("Origrammer_File")));
+		if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(this)) {
+			try {
+				String filePath = fileChooser.getSelectedFile().getPath();
+				if (!filePath.endsWith(".xml")) {
+					filePath += ".xml";
+				}
+				File file = new File(filePath);
+				if (file.exists()) {
+					if (JOptionPane.showConfirmDialog(
+							null, Origrammer.res.getString("Warning_SameNameFileExists"),
+							Origrammer.res.getString("DialogTitle_FileSave"),
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION) {
+						return;
+					}
+				}
+				saveFile(filePath);
+				updateMenu(filePath);
+				lastPath = filePath;
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this,  e.toString(), Origrammer.res.getString("Error_FileSaveFailed"),
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	private void saveFile(String filePath) {
+		XMLEncoderDecoder exporter = new XMLEncoderDecoder();
+		DiagramDataSet diagramData = new DiagramDataSet(Origrammer.diagram);
+		exporter.serializeToXML(diagramData, filePath);
+		Origrammer.diagram.dataFilePath = filePath;
+	}
+	
+	
+	public void updateTitleText() {
+		String fileName;
+		if ((Origrammer.diagram.dataFilePath).equals("")) {
+			fileName = Origrammer.res.getString("DefaultFileName");
+		} else {
+			File file = new File(Origrammer.diagram.dataFilePath);
+			fileName = file.getName();
+		}
+		setTitle(fileName + " - " + Origrammer.TITLE);
+	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == menuItemPreferences) {
-			PreferenceDialog pd = new PreferenceDialog(this);
+		
+		//check the last opened files
+		for (int i=0; i<Config.MRUFILE_NUM; i++) {
+			if (e.getSource() == mruFilesMenuItem[i]) {
+				try {
+					String filePath = mruFilesMenuItem[i].getText();
+					openFile(filePath);
+					updateMenu(filePath);
+					updateTitleText();
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(
+							this, e.toString(), Origrammer.res.getString("Error_FileLoadFailed"),
+									JOptionPane.ERROR_MESSAGE);
+				}
+				mainScreen.repaint();
+				return;
+			}
+
+		}
+		
+		if (e.getSource() == menuItemSave) {
+			System.out.println("SAVING");
+			saveFile();	
+		} else if (e.getSource() == menuItemOpen) {
+			System.out.println("OPENING");
+			openFile("dsfsd");
+		} else if (e.getSource() == menuItemPreferences) {
+			PreferenceDialog pd = new PreferenceDialog(this, mainScreen);
 			Rectangle rec = getBounds();
             pd.setLocation((int) (rec.getCenterX() - pd.getWidth() / 2),
                     (int) (rec.getCenterY() - pd.getHeight() / 2));
@@ -258,8 +384,31 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	
 	
 	
-	/*TODO: Top row buttons 
-			(File: New, open, save, save as, export***, close)
-			(Edit: Select all, unselect all, undo, redo)
-	 */
+	class FileFilterEx extends FileFilter {
+		private String extensions[];
+		private String msg;
+		
+		public FileFilterEx(String[] extensions, String msg) {
+			this.extensions = extensions;
+			this.msg = msg;
+		}
+
+		@Override
+		public boolean accept(File f) {
+			for (int i=0; i < extensions.length; i++) {
+				if (f.isDirectory()) {
+					return true;
+				}
+				if (f.getName().endsWith(extensions[i])) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return msg;
+		}
+	}
 }

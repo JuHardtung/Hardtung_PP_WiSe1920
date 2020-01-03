@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_231" class="java.beans.XMLDecoder">
+ <object class="origrammer.Diagram" id="Diagram0">
+  <void class="origrammer.Diagram" method="getField">
+   <string>paperSize</string>
+   <void method="set">
+    <object idref="Diagram0"/>
+    <double>400.0</double>
+   </void>
+  </void>
+  <void property="paperColor">
+   <object class="java.awt.Color">
+    <int>133</int>
+    <int>133</int>
+    <int>133</int>
+    <int>255</int>
+   </object>
+  </void>
+ </object>
+<void class="origrammer.Step" id="Step0">
+ <void property="stepDescription">
+  <string>tfdhdfh</string>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine0">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine1">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine2">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine3">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine4">
+ <void property="type">
+  <int>3</int>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine5">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="origrammer.Step" id="Step1">
+ <void property="stepNumber">
+  <int>0</int>
+ </void>
+ <void property="stepDescription">
+  <string>dfghfgdhj</string>
+ </void>
+</void>
+<void class="origrammer.geometry.OriLine" id="OriLine6">
+ <void property="type">
+  <int>1</int>
+ </void>
+</void>
+<void class="origrammer.Step" id="Field0" method="getField">
+ <string>lines</string>
+ <void id="ArrayList0" method="get">
+  <object idref="Step0"/>
+  <void method="add">
+   <object idref="OriLine6"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine0"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine1"/>
+  </void>
+  <void method="add">
+   <object class="origrammer.geometry.OriLine" id="OriLine7">
+    <void property="type">
+     <int>3</int>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="origrammer.geometry.OriLine" id="OriLine8">
+    <void property="type">
+     <int>3</int>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="origrammer.geometry.OriLine" id="OriLine9">
+    <void property="type">
+     <int>3</int>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object idref="OriLine5"/>
+  </void>
+ </void>
+</void>
+<void idref="ArrayList0"/>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="origrammer.Diagram" id="Field1" method="getField">
+ <string>steps</string>
+ <void id="ArrayList1" method="get">
+  <object idref="Diagram0"/>
+  <void method="add">
+   <object idref="Step0"/>
+  </void>
+  <void method="add">
+   <object idref="Step1"/>
+  </void>
+ </void>
+</void>
+<void idref="ArrayList1"/>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p0"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>x</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>-200.0</double>
+ </void>
+</void>
+<void class="javax.vecmath.Tuple2d" method="getField">
+ <string>y</string>
+ <void method="set">
+  <object class="origrammer.geometry.OriLine" field="p1"/>
+  <double>200.0</double>
+ </void>
+</void>
+<void class="origrammer.Step" id="Field2" method="getField">
+ <string>lines</string>
+ <void id="ArrayList2" method="get">
+  <object idref="Step1"/>
+  <void method="add">
+   <object idref="OriLine3"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine5"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine6"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine4"/>
+  </void>
+  <void method="add">
+   <object idref="OriLine2"/>
+  </void>
+ </void>
+</void>
+<void idref="ArrayList2"/>
+</java>

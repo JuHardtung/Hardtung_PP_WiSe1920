@@ -21,6 +21,8 @@ public class StringResource_en extends ListResourceBundle {
 			{"UI_gridSet", "Set"},
 			{"UI_ShowVertices", "Show vertices"},
 			{"UI_ShowFilledFaces", "Show Filled Faces"},
+			{"Pref_applyButton", "Apply"},
+			{"Pref_okButton", "Ok"},
 			{"MenuLineInput", "Input Lines"},
 			{"MenuArrowInput", "Input Arrows"},
 			{"MenuLines", "Lines"},
@@ -30,7 +32,8 @@ public class StringResource_en extends ListResourceBundle {
 			{"MenuEdgeLine", "Edge Line"},
 			{"MenuArrows", "Arrows"},
 			{"TT_LineCB", "Choose the type of line you want to place."},
-			{"TT_ArrowCB", "Choose the type of arrow you want to place."}
+			{"TT_ArrowCB", "Choose the type of arrow you want to place."},
+			{"Origrammer_File", "Origrammer file"}
 	};
 	
 	

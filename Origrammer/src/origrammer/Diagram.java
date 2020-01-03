@@ -10,6 +10,7 @@ public class Diagram {
 	private int recPaperHeight = 0;
 	private Color paperColor;
 	public ArrayList<Step> steps = new ArrayList<>();
+	public String dataFilePath = "";
 	
 	
 	public Diagram() {

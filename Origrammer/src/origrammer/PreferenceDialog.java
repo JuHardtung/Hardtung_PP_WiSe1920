@@ -51,6 +51,8 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	private JTextField recPaperWidthTF;
 	private JTextField recPaperHeightTF;
 
+	private JButton applyButton = new JButton(Origrammer.res.getString("Pref_applyButton"));
+	private JButton okButton = new JButton(Origrammer.res.getString("Pref_okButton"));
 	
 	private JPanel jContentPane = null;
 	
@@ -58,15 +60,17 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	JColorChooser colorChooser;
 	JPanel preferencePanel;
 	private boolean toggled = false;
+	MainScreen __screen;
 	
-	public PreferenceDialog(JFrame frame) {
+	public PreferenceDialog(JFrame frame, MainScreen __screen) {
 		super(frame);
+		this.__screen = __screen;
 		init();
 	}
 	
 	private void init() {
 		this.addComponentListener(this);
-		this.setSize(770, 500);
+		this.setSize(770, 550);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Preferences");	
 	}
@@ -91,10 +95,8 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 				rabbitEarCB.setSelectedIndex(1);
 			}			
 
-		
-			mountainStyleCB.addActionListener(this);
-			outsideReverseCB.addActionListener(this);
-			rabbitEarCB.addActionListener(this);
+			applyButton.addActionListener(this);
+			okButton.addActionListener(this);
 			
 		if (jContentPane == null) {
 			
@@ -129,8 +131,10 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			JPanel filePanel = new JPanel();	
 			
 			JLabel paperSizeLabel = new JLabel("Recommended Paper Size: ");
-			recPaperWidthTF = new JFormattedTextField(new DecimalFormat("####cm"));
-			recPaperHeightTF = new JFormattedTextField(new DecimalFormat("####cm"));
+
+			
+			recPaperWidthTF = new JTextField();
+			recPaperHeightTF = new JTextField();
 			
 			recPaperWidthTF.setText(Integer.toString(Origrammer.diagram.getPaperWidth()));
 			recPaperHeightTF.setText(Integer.toString(Origrammer.diagram.getPaperHeight()));
@@ -139,56 +143,6 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			docW.setDocumentFilter(new IntFilter());
 			PlainDocument docH = (PlainDocument) recPaperHeightTF.getDocument();
 			docH.setDocumentFilter(new IntFilter());
-			
-			recPaperWidthTF.getDocument().addDocumentListener(new DocumentListener() {
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					changed();
-				}
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					changed();
-				}
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					changed();
-				}
-				
-				public void changed() {
-					if (recPaperWidthTF.getText().length() > 0) {
-						Origrammer.diagram.setPaperWidth(Integer.parseInt(recPaperWidthTF.getText()));
-					} else {
-						System.out.println("TF width is empty");
-						//Origrammer.diagram.setPaperWidth(0);
-					}
-				}
-			});
-			
-			recPaperHeightTF.getDocument().addDocumentListener(new DocumentListener() {
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					changed();
-				}
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					changed();
-				}
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					changed();
-				}
-				
-				public void changed() {
-					if (recPaperHeightTF.getText().length() > 0) {
-						Origrammer.diagram.setPaperHeight(Integer.parseInt(recPaperHeightTF.getText()));
-					} else {
-						System.out.println("TFheight is empty");
-						Origrammer.diagram.setPaperHeight(0);
-					}
-				}
-			});
 			
 			
 			//PAPER SIZE panel and positioning
@@ -214,52 +168,54 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	                colorChooser.removeChooserPanel(panels[i]);
 	            } else {
 	                JPanel panel = panels[i];
-	                System.out.println(panel.getComponentCount()); // 1
-	                System.out.println(panel.getPreferredSize()); //width=424,height=112
-	                System.out.println(panel.getLayout()); //FlowLayout[hgap=5,vgap=5,align=center]
 	            }
 	        }
-			
-			
-			//colorChooser.removeChooserPanel(panels)
-			colorChooser.getSelectionModel().addChangeListener(new ChangeListener() {
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					colorChanged();
-				}
-			});
 			
 			filePanel.add(fileLabel);
 			filePanel.add(colorChooser);
 			filePanel.setLayout(fileLayout);
 			SpringUtilities.makeCompactGrid(filePanel, 2, 2, 6, 6, 6, 6);
+			
+			SpringLayout buttonLayout = new SpringLayout();
+			JPanel buttonPanel = new JPanel();
+			applyButton.setHorizontalAlignment(SwingConstants.RIGHT);
+			okButton.setHorizontalAlignment(SwingConstants.RIGHT);
 
+			buttonPanel.add(applyButton);
+			buttonPanel.add(okButton);
+			buttonPanel.setLayout(buttonLayout);
+			SpringUtilities.makeCompactGrid(buttonPanel, 1, 2, 6, 6, 6, 6);
 			
 			jContentPane = new JPanel();
 			jContentPane.add(preferencePanel);
 			jContentPane.add(separator);
 			jContentPane.add(filePanel);
+			jContentPane.add(buttonPanel);
 			
 			SpringLayout layout = new SpringLayout();
 			jContentPane.setLayout(layout);
-			SpringUtilities.makeCompactGrid(jContentPane, 3, 1, 6, 6, 6, 6);
-			
+			SpringUtilities.makeCompactGrid(jContentPane, 4, 1, 6, 6, 6, 6);
 		}
 		return jContentPane;
 	}
 	
 	private void colorChanged() {
-		//button.setBackground(colorChooser.getSelectionModel().getSelectedColor());
 		Globals.DEFAULT_PAPER_COLOR = colorChooser.getSelectionModel().getSelectedColor();
-		//System.out.println("DEFAULT COLOR: " + Globals.DEFAULT_PAPER_COLOR);
-		System.out.println(this.getSize());
-
 	}
 	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+	
+		if (e.getSource() == applyButton) {
+			applyChanges();
+		} else if (e.getSource() == okButton) {
+			applyChanges();
+			dispose();
+		}
+	}
+	
+	private void applyChanges() {
 		Object selectedMountainStyle = mountainStyleCB.getSelectedItem();
 		Object selectedOutsideReverseStyle = outsideReverseCB.getSelectedItem();
 		Object selectedRabbitEarStyle = rabbitEarCB.getSelectedItem();
@@ -279,6 +235,11 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 		} else if (selectedRabbitEarStyle == "3 small AoM") {
 			Globals.rabbitEarStyle = Constants.RabbitEarStyle.BAOM_BAOM_BAOM;
 		}
+		
+		Globals.DEFAULT_PAPER_COLOR = colorChooser.getSelectionModel().getSelectedColor();
+		Origrammer.diagram.setPaperWidth(Integer.parseInt(recPaperWidthTF.getText()));
+		Origrammer.diagram.setPaperHeight(Integer.parseInt(recPaperHeightTF.getText()));
+		__screen.repaint();
 	}
 	
 	
@@ -296,6 +257,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 				super.insertString(fb, offset, string, attr);
 			} else {
 				// warn the user and don't allow the insert
+				System.out.println("Can't paste letters");
 			}
 		}
 
@@ -321,6 +283,8 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 				super.replace(fb, offset, length, text, attrs);
 			} else {
 				// warn the user and don't allow the insert
+				System.out.println("Can't replace digits with letters");
+
 			}
 
 		}
@@ -336,7 +300,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			if (test(sb.toString())) {
 				super.remove(fb, offset, length);
 			} else {
-				// warn the user and don't allow the insert
+				System.out.println("paperSize can't be null (can't remove last digit)");
 			}
 
 		}
