@@ -89,44 +89,42 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 			}
 			
 			public void changed() {
-				Origrammer.diagram.steps.get(Globals.currentStep).setStepDescription(foldDescr.getText());
+				Origrammer.diagram.steps.get(Globals.currentStep).stepDescription = foldDescr.getText();
 			}
 		});
 		
-		modeChanged();
+		stepChanged();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == stepBack) {
-			if(Globals.currentStep >= 1) {
+			if (Globals.currentStep >= 1) {
 				Globals.currentStep -= 1;
 			}
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAll();
-			modeChanged();
+			stepChanged();
 		} else if (e.getSource() == stepForth) {
 			//if currentStep == last step in diagram --> create new step
 			int prevStep = Globals.currentStep;
 			Globals.currentStep += 1;
 
-			if((int) currentStep.getValue() == Origrammer.diagram.steps.size()-1) {
-				
-				System.out.println("Completely new step");
-				
+			if ((int) currentStep.getValue() == Origrammer.diagram.steps.size()-1) {
+								
 				Step newStep = new Step();
 				
-				for(int i=0; i<Origrammer.diagram.steps.get(prevStep).crossLines.size(); i++) {
+				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).crossLines.size(); i++) {
 					newStep.crossLines.add(Origrammer.diagram.steps.get(prevStep).crossLines.get(i));
 				}
 				
-				for(int i=0; i<Origrammer.diagram.steps.get(prevStep).lines.size(); i++) {
+				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).lines.size(); i++) {
 					newStep.lines.add(Origrammer.diagram.steps.get(prevStep).lines.get(i));
 				}
 				
-				for(int i=0; i<Origrammer.diagram.steps.get(prevStep).vertices.size(); i++) {
+				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).vertices.size(); i++) {
 					newStep.vertices.add(Origrammer.diagram.steps.get(prevStep).vertices.get(i));
 				}				
-				for(int i=0; i<Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
+				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
 					
 					OriArrow tmpArrow = new OriArrow();
 					tmpArrow.setxPos(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getxPos());
@@ -142,22 +140,21 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 					newStep.arrows.add(tmpArrow);
 				}
 				
-				newStep.setStepNumber(Globals.currentStep);
+				newStep.stepNumber = Globals.currentStep;
 				Origrammer.diagram.steps.add(newStep);
 			}
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAll();
-			modeChanged();
+			stepChanged();
 		}
 	}
 	
 	
-	private void modeChanged() {
-		//System.out.println("number of steps: " + Origrammer.diagram.steps.size());
-		//System.out.println(Origrammer.diagram.toString());
-		
-
-		//System.out.println("Step " + Globals.currentStep + " description: " + Origrammer.diagram.steps.get(Globals.currentStep).getStepDescription());
-		foldDescr.setValue(Origrammer.diagram.steps.get(Globals.currentStep).getStepDescription());
+	public void stepChanged() {
+		if (Origrammer.diagram.steps.get(Globals.currentStep).stepDescription == null) {
+			foldDescr.setValue("");
+		} else {
+			foldDescr.setValue(Origrammer.diagram.steps.get(Globals.currentStep).stepDescription);
+		}
 		currentStep.setValue(Globals.currentStep);
 		screen.modeChanged();
 	}

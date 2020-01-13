@@ -1,6 +1,8 @@
 package origrammer.geometry;
 
+import java.awt.Rectangle;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.vecmath.Vector2d;
@@ -240,6 +242,20 @@ public class GeometryUtil {
 	}
 	
 	
+	public static GeneralPath createFaceFromVertices(ArrayList<Vector2d> vList) {
+		
+		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, vList.size());
+		path.moveTo(vList.get(0).x, vList.get(0).y);
+		
+		for (int i=0; i<vList.size(); i++) {
+			path.lineTo(vList.get(i).x, vList.get(i).y);
+		}
+		path.closePath();
+
+		return path;
+	}
+	
+	
 	public static GeneralPath createFaceFromLines(OriLine l0, OriLine l1, OriLine l2) {
 		
 		ArrayList<OriLine> lines = new ArrayList<>();
@@ -248,7 +264,6 @@ public class GeometryUtil {
 		lines.add(l0);
 		lines.add(l1);
 		lines.add(l2);
-		//lines.add(l3);
 
 		for(int i=1;i<lines.size(); i++) {
 			if (lines.get(0).p0.x == lines.get(i).p0.x && lines.get(0).p0.y == lines.get(i).p0.y) {
@@ -275,17 +290,6 @@ public class GeometryUtil {
 		}
 		
 		
-//		if (lines.get(2).p0.x == lines.get(3).p0.x && lines.get(2).p0.y == lines.get(3).p0.y) {
-//			points.add(lines.get(2).p0);
-//		} else if (lines.get(2).p0.x == lines.get(3).p1.x && lines.get(2).p0.y == lines.get(3).p1.y) {
-//			points.add(lines.get(2).p0);
-//		} else if (lines.get(2).p1.x == lines.get(3).p0.x && lines.get(2).p1.y == lines.get(3).p0.y) {
-//			points.add(lines.get(2).p1);
-//		} else if (lines.get(2).p1.x == lines.get(3).p1.x && lines.get(2).p1.y == lines.get(3).p1.y) {
-//			points.add(lines.get(2).p1);
-//		}
-		
-		
 		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, points.size());
 		path.moveTo(points.get(0).x, points.get(0).y);
 		
@@ -295,6 +299,78 @@ public class GeometryUtil {
 		path.closePath();
 		
 		return path;
+	}
+	
+	
+	public static Rectangle2D calcRotatedBox(double x, double y, double width, double height, double degrees) {
+		
+		Vector2d v0 = new Vector2d(x, y);
+		Vector2d v1 = new Vector2d(x+width, y);
+		Vector2d v2 = new Vector2d(x, y+height);
+		Vector2d v3 = new Vector2d(x+width, y+height);
+
+		Vector2d newV0 = rotVertex(v0, degrees);
+		Vector2d newV1 = rotVertex(v1, degrees);
+		Vector2d newV2 = rotVertex(v2, degrees);
+		Vector2d newV3 = rotVertex(v3, degrees);
+		
+		ArrayList<Vector2d> vertexList = new ArrayList<>();
+		
+		ArrayList<Vector2d> newEdgePoints = new ArrayList<>();
+		
+		vertexList.add(newV0);
+		vertexList.add(newV1);
+		vertexList.add(newV2);
+		vertexList.add(newV3);
+		
+		double smallestX = 0;
+		double biggestX = 0;
+		double smallestY = 0;
+		double biggestY = 0;
+		
+		System.out.println("vertexList: " + vertexList.toString());
+		
+		for (int i=0; i<vertexList.size(); i++) {
+			if (i == 0) {
+				smallestX = vertexList.get(i).x;
+				smallestY = vertexList.get(i).y;
+			}
+			if (vertexList.get(i).x < smallestX) {
+				smallestX = vertexList.get(i).x;
+			} else if (vertexList.get(i).x > biggestX) {
+				biggestX = vertexList.get(i).x;
+			}
+			
+			if (vertexList.get(i).y < smallestY) {
+				smallestY = vertexList.get(i).y;
+			} else if (vertexList.get(i).y > biggestY) {
+				biggestY = vertexList.get(i).y;
+			}
+			
+		}
+		
+		System.out.println("smalX: " + smallestX + " | bigX: " + biggestX + " | smalY: " + smallestY + " | bigY: " + biggestY);
+
+		newEdgePoints.add(new Vector2d(smallestX,biggestY));
+		newEdgePoints.add(new Vector2d(biggestX, smallestY));
+		
+		double newWidth = biggestX - smallestX;
+		double newHeight = biggestY - smallestY;
+		
+		Rectangle2D rect = new Rectangle((int) Math.round(smallestX), (int) Math.round(biggestY), (int) Math.round(newWidth), (int) Math.round(newHeight));
+
+		
+		return rect;
+		
+		
+	}
+	
+	
+	public static Vector2d rotVertex(Vector2d v, double degrees) {
+		double newX = v.x * Math.cos(Math.toRadians(degrees)) - v.y * Math.sin(Math.toRadians(degrees));
+		double newY = v.x * Math.sin(Math.toRadians(degrees)) + v.y * Math.cos(Math.toRadians(degrees));
+		
+		return new Vector2d(newX, newY);
 	}
 	
 	

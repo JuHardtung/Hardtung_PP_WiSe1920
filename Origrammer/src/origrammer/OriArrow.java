@@ -23,7 +23,7 @@ public class OriArrow {
 	public double yPos;
 	private int width;
 	private int height;
-	private double scale = 0.6;
+	private double scale = 2.0;
 	private boolean selected;
 	private double degrees = 0;
 

@@ -44,6 +44,24 @@ public class Constants {
 		BAOM_BAOM_BAOM  //3 small Arrows of Motion
 	}
 	
-	final public static double DEFAULT_PAPER_SIZE = 400;
+	public static enum NewStepOptions {
+		EMPTY_STEP,
+		COPY_LAST_STEP,
+		PASTE_DEFAULT_PAPER
+	}
+	
+	public static enum PaperShape {
+		SQUARE,
+		RECTANGLE,
+		TRIANGLE,
+		POLYGON
+	}
+	
+	public static enum FaceInputDirection  {
+		FACE_DOWN,
+		FACE_UP
+	}
+	
+	final public static double DEFAULT_PAPER_SIZE = 450;
 
 }

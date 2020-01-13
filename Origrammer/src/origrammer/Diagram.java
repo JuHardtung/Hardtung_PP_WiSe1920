@@ -5,10 +5,14 @@ import java.util.ArrayList;
 
 
 public class Diagram {
+	public String title;
+	public String author;
+	public String comments;
 	public double paperSize;
-	private int recPaperWidth = 0;
-	private int recPaperHeight = 0;
-	private Color paperColor;
+	public int recPaperWidth = 0;
+	public int recPaperHeight = 0;
+	public Color faceUpColor;
+	public Color faceDownColor;
 	public ArrayList<Step> steps = new ArrayList<>();
 	public String dataFilePath = "";
 	
@@ -17,17 +21,43 @@ public class Diagram {
 		
 	}
 	
-	public Diagram(double paperSize, Color paperColor) {
+	public Diagram(double paperSize, Color faceUpColor, Color faceDownColor) {
 		this.paperSize = paperSize;
-		this.paperColor = paperColor;
+		this.faceUpColor = faceUpColor;
+		this.faceDownColor = faceDownColor;
 	}
 	
-	public Diagram(double paperSize, Color paperColor, Step step) {
+	public Diagram(double paperSize, Color faceUpColor, Color faceDownColor, Step step) {
 		this.paperSize = paperSize;
-		this.paperColor = paperColor;
+		this.faceUpColor = faceUpColor;
+		this.faceDownColor = faceDownColor;
 		steps.add(step);
 	}
+	
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 
 	public int getPaperWidth() {
 		return recPaperWidth;
@@ -48,16 +78,21 @@ public class Diagram {
 		this.recPaperHeight = paperHeight;
 	}
 
-
-	public Color getPaperColor() {
-		return paperColor;
+	public Color getFaceUpColor() {
+		return faceUpColor;
 	}
 
-
-	public void setPaperColor(Color paperColor) {
-		this.paperColor = paperColor;
+	public void setFaceUpColor(Color faceUpColor) {
+		this.faceUpColor = faceUpColor;
 	}
 
+	public Color getFaceDownColor() {
+		return faceDownColor;
+	}
+
+	public void setFaceDownColor(Color faceDownColor) {
+		this.faceDownColor = faceDownColor;
+	}
 
 	public void addStep(Step step) {
 		steps.add(step);
@@ -65,8 +100,12 @@ public class Diagram {
 
 	@Override
 	public String toString() {
-		return "Diagram [paperSize=" + paperSize + ", paperColor=" + paperColor + ", steps=" + steps + "]";
+		return "Diagram [title=" + title + ", author=" + author + ", comments=" + comments + ", paperSize=" + paperSize
+				+ ", recPaperWidth=" + recPaperWidth + ", recPaperHeight=" + recPaperHeight + ", faceUpColor="
+				+ faceUpColor + ", faceDownColor=" + faceDownColor + ", steps=" + steps + ", dataFilePath="
+				+ dataFilePath + "]";
 	}
+
 	
 	
 

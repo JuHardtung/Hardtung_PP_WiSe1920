@@ -23,6 +23,7 @@ public class StringResource extends ListResourceBundle {
 			{"UI_ShowFilledFaces", "Show Filled Faces"},
 			{"Pref_applyButton", "Apply"},
 			{"Pref_okButton", "Ok"},
+			{"Pref_cancelButton", "Cancel"},
 			{"MenuLineInput", "Input Lines"},
 			{"MenuArrowInput", "Input Arrows"},
 			{"MenuLines", "Lines"},
@@ -33,7 +34,12 @@ public class StringResource extends ListResourceBundle {
 			{"MenuArrows", "Arrows"},
 			{"TT_LineCB", "Choose the type of line you want to place."},
 			{"TT_ArrowCB", "Choose the type of arrow you want to place."},
-			{"Origrammer_File", "Origrammer file"}
+			{"Origrammer_File", "Origrammer file"},
+			{"DefaultFileName", "No Title"},
+			{"Error_FileLoadFailed", "Error: Loading File failed"},
+			{"Error_FileSaveFailed", "Error: Saving File failed"},
+			{"Warning_SameNameFileExists", "Warning: File with the same name already exists!"},
+			{"DialogTitle_FileSave", "Save!"}
 	};
 	
 	

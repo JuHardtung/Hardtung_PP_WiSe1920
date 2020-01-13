@@ -1,42 +1,30 @@
 package origrammer;
 
 import java.awt.*;
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.*;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
-import javax.swing.text.DocumentFilter.FilterBypass;
 import javax.swing.text.PlainDocument;
-
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.scene.control.ColorPicker;
 
 public class PreferenceDialog extends JDialog implements ActionListener, ComponentListener {
 
@@ -72,7 +60,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 		this.addComponentListener(this);
 		this.setSize(770, 550);
 		this.setContentPane(getJContentPane());
-		this.setTitle("Preferences");	
+		this.setTitle("Origrammer Preferences");	
 	}
 	
 	private JPanel getJContentPane() {
@@ -136,8 +124,8 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			recPaperWidthTF = new JTextField();
 			recPaperHeightTF = new JTextField();
 			
-			recPaperWidthTF.setText(Integer.toString(Origrammer.diagram.getPaperWidth()));
-			recPaperHeightTF.setText(Integer.toString(Origrammer.diagram.getPaperHeight()));
+			recPaperWidthTF.setText(Integer.toString(Origrammer.diagram.recPaperWidth));
+			recPaperHeightTF.setText(Integer.toString(Origrammer.diagram.recPaperHeight));
 			
 			PlainDocument docW = (PlainDocument) recPaperWidthTF.getDocument();
 			docW.setDocumentFilter(new IntFilter());
@@ -189,12 +177,12 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			jContentPane = new JPanel();
 			jContentPane.add(preferencePanel);
 			jContentPane.add(separator);
-			jContentPane.add(filePanel);
+			//jContentPane.add(filePanel);
 			jContentPane.add(buttonPanel);
 			
 			SpringLayout layout = new SpringLayout();
 			jContentPane.setLayout(layout);
-			SpringUtilities.makeCompactGrid(jContentPane, 4, 1, 6, 6, 6, 6);
+			SpringUtilities.makeCompactGrid(jContentPane, 3, 1, 6, 6, 6, 6);
 		}
 		return jContentPane;
 	}
@@ -237,74 +225,11 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 		}
 		
 		Globals.DEFAULT_PAPER_COLOR = colorChooser.getSelectionModel().getSelectedColor();
-		Origrammer.diagram.setPaperWidth(Integer.parseInt(recPaperWidthTF.getText()));
-		Origrammer.diagram.setPaperHeight(Integer.parseInt(recPaperHeightTF.getText()));
+		Origrammer.diagram.recPaperWidth = Integer.parseInt(recPaperWidthTF.getText());
+		Origrammer.diagram.recPaperHeight = Integer.parseInt(recPaperHeightTF.getText());
 		__screen.repaint();
 	}
 	
-	
-	class IntFilter extends DocumentFilter {
-		@Override
-		public void insertString(FilterBypass fb, int offset, String string,
-				AttributeSet attr) throws BadLocationException {
-
-			Document doc = fb.getDocument();
-			StringBuilder sb = new StringBuilder();
-			sb.append(doc.getText(0, doc.getLength()));
-			sb.insert(offset, string);
-
-			if (test(sb.toString())) {
-				super.insertString(fb, offset, string, attr);
-			} else {
-				// warn the user and don't allow the insert
-				System.out.println("Can't paste letters");
-			}
-		}
-
-		private boolean test(String text) {
-			try {
-				Integer.parseInt(text);
-				return true;
-			} catch (NumberFormatException e) {
-				return false;
-			}
-		}
-
-		@Override
-		public void replace(FilterBypass fb, int offset, int length, String text,
-				AttributeSet attrs) throws BadLocationException {
-
-			Document doc = fb.getDocument();
-			StringBuilder sb = new StringBuilder();
-			sb.append(doc.getText(0, doc.getLength()));
-			sb.replace(offset, offset + length, text);
-
-			if (test(sb.toString())) {
-				super.replace(fb, offset, length, text, attrs);
-			} else {
-				// warn the user and don't allow the insert
-				System.out.println("Can't replace digits with letters");
-
-			}
-
-		}
-
-		@Override
-		public void remove(FilterBypass fb, int offset, int length)
-				throws BadLocationException {
-			Document doc = fb.getDocument();
-			StringBuilder sb = new StringBuilder();
-			sb.append(doc.getText(0, doc.getLength()));
-			sb.delete(offset, offset + length);
-
-			if (test(sb.toString())) {
-				super.remove(fb, offset, length);
-			} else {
-				System.out.println("paperSize can't be null (can't remove last digit)");
-			}
-
-		}
-	}
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {

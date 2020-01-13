@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 		
@@ -44,8 +45,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	JButton copyMeasuredLength = new JButton("Copy");
 	JButton copyMeasuredAngle = new JButton("Copy");
 	ButtonGroup measureGroup;
-	JFormattedTextField measureLengthTextField;
-	JFormattedTextField measureAngleTextField;
+	JFormattedTextField measureLengthTF;
+	JFormattedTextField measureAngleTF;
 	
 	
 
@@ -149,16 +150,17 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
 		
 		JPanel measureLengthPanel = new JPanel();
-		measureLengthTextField = new JFormattedTextField(new DecimalFormat("###.##cm"));
+		measureLengthTF = new JFormattedTextField(new DecimalFormat("###.##cm"));
+		measureLengthPanel.setMaximumSize(new Dimension(50,30));
 		measureLengthPanel.add(measureLengthRB);
-		measureLengthPanel.add(measureLengthTextField);
+		measureLengthPanel.add(measureLengthTF);
 		measureLengthPanel.add(copyMeasuredLength);
 		measureLengthPanel.setLayout(new GridLayout(1, 3, 2, 2));
 		
-		measureAngleTextField = new JFormattedTextField(new DecimalFormat("##.##°"));
+		measureAngleTF = new JFormattedTextField(new DecimalFormat("##.##°"));
 		JPanel measureAnglePanel = new JPanel();
 		measureAnglePanel.add(measureAngleRB);
-		measureAnglePanel.add(measureAngleTextField);
+		measureAnglePanel.add(measureAngleTF);
 		measureAnglePanel.add(copyMeasuredAngle);
 		measureAnglePanel.setLayout(new GridLayout(1, 3, 2, 2));
 		
@@ -189,7 +191,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 		gridPanel.setLayout(new GridLayout(3, 1, 10, 2));
 		gridPanel.setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
-		
+		//gridPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Grid"));
 		add(gridPanel);
 		
 		//Buttons Panel and positioning
@@ -226,7 +228,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
 				&& e.getSource() == lineInputIncenterRB) {
 			Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
-			System.out.println("Mode Changed to" + Globals.lineEditMode);
 			modeChanged();
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			if (e.getSource() == measureLengthRB) {
@@ -235,8 +236,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				Globals.measureMode = Constants.MeasureMode.MEASURE_ANGLE;
 			}
 			if (e.getSource() == copyMeasuredLength) {
-				if (measureLengthTextField.getValue() != null) {
-					StringSelection stringSelection = new StringSelection(measureLengthTextField.getValue().toString());
+				if (measureLengthTF.getValue() != null) {
+					StringSelection stringSelection = new StringSelection(measureLengthTF.getValue().toString());
 					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					clipboard.setContents(stringSelection, null);
 				} else {
@@ -245,8 +246,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 
 			}
 			if (e.getSource() == copyMeasuredAngle) {
-				if (measureAngleTextField.getValue() != null) {
-					StringSelection stringSelection = new StringSelection(measureAngleTextField.getValue().toString());
+				if (measureAngleTF.getValue() != null) {
+					StringSelection stringSelection = new StringSelection(measureAngleTF.getValue().toString());
 					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					clipboard.setContents(stringSelection, null);
 				} else {
@@ -265,13 +266,13 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				gridTextField.setValue(Globals.gridDivNum);
 			}
 		} else if (e.getSource() == gridHalfButton) {
-			if(Globals.gridDivNum > 3) {
+			if (Globals.gridDivNum > 3) {
 				Globals.gridDivNum /= 2;
 				gridTextField.setValue(Globals.gridDivNum);
 				screen.repaint();
 			}
 		} else if (e.getSource() == gridDoubleButton) {
-			if(Globals.gridDivNum < 33) {
+			if (Globals.gridDivNum < 33) {
 				Globals.gridDivNum *= 2;
 				gridTextField.setValue(Globals.gridDivNum);
 				screen.repaint();
@@ -287,7 +288,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	
 	public void modeChanged() {
-		System.out.println("Mode Changed to: " + Globals.toolbarMode);
 		if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			measureOptionsPanel.setVisible(true);		
 		} else {

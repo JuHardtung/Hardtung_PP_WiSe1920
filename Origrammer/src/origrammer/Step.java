@@ -42,21 +42,22 @@ public class Step {
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
 	public ArrayList<OriFace> filledFaces = new ArrayList<>();
-	private String stepDescription = "";
-	private int stepNumber;
+	public String stepDescription;
+	public int stepNumber;
 	
 	public static final double POINT_EPS = 1.0;
 	
 	public double size = Constants.DEFAULT_PAPER_SIZE;
 
 	public Step() {
-		if(Globals.currentStep == 0) {
+		if (Globals.newStepOptions == Constants.NewStepOptions.PASTE_DEFAULT_PAPER) {
 			initFirstStep();
 		}
 		stepNumber = Globals.currentStep;
 	}
 	
 	private void initFirstStep() {
+		//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
 		OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0,size/2.0, OriLine.TYPE_EDGE);
 		OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0,-size/2.0, OriLine.TYPE_EDGE);
 		OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0,-size/2.0, OriLine.TYPE_EDGE);
@@ -85,7 +86,7 @@ public class Step {
 
 		//if new line crosses another one, split them up to smaller lines
 		for (OriLine line : tmpLines) {
-			if (inputLine.getType() == OriLine.TYPE_NONE && line.getType() != OriLine.TYPE_NONE) {
+			if (inputLine.type == OriLine.TYPE_NONE && line.type != OriLine.TYPE_NONE) {
 				continue;
 			}
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
@@ -96,11 +97,11 @@ public class Step {
 			crossingLines.add(line);
 			lines.remove(line);
 
-			if(GeometryUtil.Distance(line.p0,  crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p0, crossPoint, line.getType()));
+			if (GeometryUtil.Distance(line.p0,  crossPoint) > POINT_EPS) {
+				lines.add(new OriLine(line.p0, crossPoint, line.type));
 			}
-			if(GeometryUtil.Distance(line.p1, crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p1, crossPoint, line.getType()));
+			if (GeometryUtil.Distance(line.p1, crossPoint) > POINT_EPS) {
+				lines.add(new OriLine(line.p1, crossPoint, line.type));
 			}
 		}
 
@@ -109,23 +110,23 @@ public class Step {
 		points.add(inputLine.p1);
 
 		//if the intersection is really close to the end of line --> do nothing
-		for(OriLine line : lines) {
-			if(GeometryUtil.Distance(inputLine.p0,  line.p0) < POINT_EPS) {
+		for (OriLine line : lines) {
+			if (GeometryUtil.Distance(inputLine.p0,  line.p0) < POINT_EPS) {
 				continue;
 			}
-			if(GeometryUtil.Distance(inputLine.p0,  line.p1) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.p0,  line.p1) < POINT_EPS) {
 				continue;
 			}
-			if(GeometryUtil.Distance(inputLine.p1,  line.p0) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.p1,  line.p0) < POINT_EPS) {
 				continue;
 			}
-			if(GeometryUtil.Distance(inputLine.p1,  line.p1) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.p1,  line.p1) < POINT_EPS) {
 				continue;
 			}
-			if(GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
+			if (GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
 				points.add(line.p0);
 			}
-			if(GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
+			if (GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
 				points.add(line.p1);
 			}
 
@@ -150,7 +151,7 @@ public class Step {
 				continue;
 			}
 			
-			lines.add(new OriLine(prePoint, p, inputLine.getType()));
+			lines.add(new OriLine(prePoint, p, inputLine.type));
 			prePoint = p;
 		}
 	}
@@ -171,7 +172,7 @@ public class Step {
 
 	public void selectAllLines() {
 		for (OriLine l : lines) {
-			l.setSelected(true);
+			l.isSelected = true;
 		}
 	}
 
@@ -189,7 +190,7 @@ public class Step {
 
 	public void unselectAllLines() {
 		for (OriLine l : lines) {
-			l.setSelected(false);
+			l.isSelected = false;
 		}
 	}
 
@@ -212,7 +213,7 @@ public class Step {
 		ArrayList<OriLine> selectedLines = new ArrayList<>();
 		
 		for (OriLine line : lines) {
-			if(line.isSelected()) {
+			if(line.isSelected) {
 				selectedLines.add(line);
 			}
 		}

@@ -13,12 +13,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -41,6 +43,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import origrammer.geometry.GeometryUtil;
 import origrammer.geometry.OriLine;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
@@ -49,7 +52,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
 									new JSeparator(JSeparator.HORIZONTAL),
 									"Push here", "Pull out", "Inflate here"};
+	
+	JPanel linesPanel = new JPanel();
 	JLabel linesLabel = new JLabel(Origrammer.res.getString("MenuLines"));
+	JPanel arrowsPanel = new JPanel();
 	JLabel arrowsLabel = new JLabel(Origrammer.res.getString("MenuArrows"));
 
 	private JRadioButton lineInputRadioButton = new JRadioButton(Origrammer.res.getString("MenuLineInput"));
@@ -58,10 +64,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox menuLineCB = new JComboBox(lineInputOptions);
 	private JComboBox menuArrowCB = new JComboBox(arrowInputOptions);
 	
+	private JRadioButton faceUpInput = new JRadioButton("Face Up", false);
+	private JRadioButton faceDownInput = new JRadioButton("Face Down", true);
+	
+
 	
 	JPanel sliderPanel = new JPanel();
-	private JSlider sliderScaleIcon = new JSlider(0, 100);
-	private JSlider sliderRotIcon = new JSlider(0, 360);
+	private JSlider sliderScaleIcon = new JSlider(100, 200);
+	private JSlider sliderRotIcon = new JSlider(0, 3600);
 	
 	
 	MainScreen screen;
@@ -83,6 +93,20 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		inputMethod.setToolTipText("Activate this to enable line input.");
 		
 		inputMethod.setLayout(new GridLayout(2, 1, 0, 0));
+		
+		//##### FACE UP / FACE DOWN INPUT
+		ButtonGroup faceDirectionInput = new ButtonGroup();
+		faceDirectionInput.add(faceUpInput);
+		faceDirectionInput.add(faceDownInput);
+		
+		JPanel faceDirectionPanel = new JPanel();
+		faceDirectionPanel.add(faceUpInput);
+		faceDirectionPanel.add(faceDownInput);
+		faceDirectionPanel.setLayout(new BoxLayout(faceDirectionPanel, BoxLayout.PAGE_AXIS));
+		
+		faceUpInput.addActionListener(this);
+		faceDownInput.addActionListener(this);
+		
 				
 		//##### LINES #####
 		linesLabel.setBorder(BorderFactory.createEmptyBorder(-10,0,-10,0));
@@ -94,12 +118,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		menuLineCB.setToolTipText(Origrammer.res.getString("TT_LineCB"));
 
 
-		
 		JPanel linesSubPanel = new JPanel();
 		linesSubPanel.add(menuLineCB);
 		linesSubPanel.setBorder(BorderFactory.createEmptyBorder(-5,0,0,0));
 		
-		JPanel linesPanel = new JPanel();
 		linesPanel.add(linesLabel);
 		linesPanel.add(linesSubPanel);
 		linesPanel.setLayout(new GridLayout(2, 1, 0, 0));
@@ -121,7 +143,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		arrowsSubPanel.add(menuArrowCB);
 		arrowsSubPanel.setBorder(BorderFactory.createEmptyBorder(-5,0,0,0));
 		
-		JPanel arrowsPanel = new JPanel();
 		arrowsPanel.add(arrowsLabel);
 		arrowsPanel.add(arrowsSubPanel);
 		arrowsPanel.setLayout(new GridLayout(2, 1, 0, 0));
@@ -139,7 +160,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		sliderScaleIcon.addChangeListener(e -> sliderScaleChanged());
 
 		//TODO: allow for float input (for the 22.5° rotations)
-		sliderRotIcon.setMajorTickSpacing(45);
+		sliderRotIcon.setMajorTickSpacing(225);
 		//menuIconRotSlider.setMinorTickSpacing(1);
 		sliderRotIcon.setPaintTicks(true);
 		sliderRotIcon.setPaintLabels(true);
@@ -156,6 +177,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		//Add Lines and Arrow Panel to UITopPanel
 		//add(inputMethod);
+		add(faceDirectionPanel);
 		add(linesPanel);
 		add(arrowsPanel);
 		add(sliderPanel);
@@ -170,38 +192,42 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 	}
 	
+	
+	/**
+	 * Sets the scale for all selected OriArrows
+	 */
 	private void sliderScaleChanged() {
 
 		BufferedImage img = null;
 
-		for(OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 
-			if(arrow.isSelected()) {
-				
-				//sliderScale can never be 0, otherwise the updated size failes
-				if(sliderScaleIcon.getValue() == 0) {
-					arrow.setScale(0.01);
-				} else {
-					arrow.setScale((double) sliderScaleIcon.getValue()/100);
-				}
+			if (arrow.isSelected()) {
+			
+				arrow.setScale((double) sliderScaleIcon.getValue()/100);
 				screen.repaint();
 
 				//arrow.getArrowLabel().setIcon(arrowImageIcon);
 				arrow.getArrowLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), 
 												(int) Math.round(arrow.getWidth()*arrow.getScale()), 
 												(int) Math.round(arrow.getHeight()*arrow.getScale()));
-
 			}
 		}
 	}		
 	
+	/**
+	 * Sets the rotation of all selected OriArrows
+	 */
 	private void sliderRotChanged() {
-		
-		for(OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {			
-			if(arrow.isSelected()) {
-				
-				arrow.setDegrees(sliderRotIcon.getValue());
+		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			if (arrow.isSelected()) {
+				arrow.setDegrees(sliderRotIcon.getValue()/10);
 				screen.repaint();
+				
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getxPos(), arrow.getyPos(), arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
+				
+				arrow.getArrowLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
+				//arrow.getArrowLabel().setSize((int) rect.getWidth(), (int) rect.getHeight()); 
 			}
 		}
 	}
@@ -223,7 +249,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 //			Globals.editMode = Constants.ToolbarMode.INPUT_ARROW;
 //			modeChanged();
 //		}
-		if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
+		
+		if (e.getSource() == faceUpInput) {
+			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_UP;
+		} else if (e.getSource() == faceDownInput) {
+			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_DOWN;
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			
 			if(selectedLine == "Valley Fold") {
 				Globals.inputLineType = OriLine.TYPE_VALLEY;
@@ -234,34 +267,29 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else if(selectedLine == "Edge Line") {
 				Globals.inputLineType = OriLine.TYPE_EDGE;
 			}			
-		} else if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
-			
-			if(selectedArrow == "Valley Fold") {
-
-
-			} else if(selectedArrow == "Mountain Fold") {
-
-
-			} else if(selectedArrow == "Turn over") {
-
-
-			} else if(selectedArrow == "Push here") {
-
-			} else if(selectedArrow == "Pull here") {
-
-			} else if(selectedArrow == "Inflate here") {
-
-			}	
 		}
 	}
 	
 	public void modeChanged() {
-		if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
-			menuLineCB.setEnabled(true);
-			menuArrowCB.setEnabled(false);			
-		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
-			menuLineCB.setEnabled(false);
-			menuArrowCB.setEnabled(true);			
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
+			linesPanel.setVisible(true);
+		} else {
+			linesPanel.setVisible(false);
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
+			arrowsPanel.setVisible(true);			
+		} else {
+			arrowsPanel.setVisible(false);			
+
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
+			faceUpInput.setVisible(true);
+			faceDownInput.setVisible(true);
+		} else {
+			faceUpInput.setVisible(false);
+			faceDownInput.setVisible(false);
 		}
 		
 		//TODO arrow slider only visible when an arrow is selected

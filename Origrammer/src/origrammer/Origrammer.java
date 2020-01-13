@@ -23,32 +23,24 @@ public class Origrammer {
 		//int mainFrameWidth = 800;
 		//int mainFrameHeight = 800;
 		
-		
 		res = ResourceBundle.getBundle("origrammer.StringResource", Locale.ENGLISH);
 		
 		TITLE = Origrammer.res.getString("Title") + "  v0.01";
 		
-		diagram = new Diagram(size, Globals.DEFAULT_PAPER_COLOR);
-		
+		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
+		//TODO: get the real faceUp and faceDown Colors
+		diagram = new Diagram(size, Globals.DEFAULT_PAPER_COLOR, Globals.DEFAULT_PAPER_COLOR); 
 		step = new Step();
-		
-//		OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0,size/2.0, OriLine.TYPE_EDGE);
-//		OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0,-size/2.0, OriLine.TYPE_EDGE);
-//		OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0,-size/2.0, OriLine.TYPE_EDGE);
-//		OriLine l3 = new OriLine(-size/2.0, -size/2.0, -size/2.0,size/2.0, OriLine.TYPE_EDGE);
-//		step.lines.add(l0);
-//		step.lines.add(l1);
-//		step.lines.add(l2);
-//		step.lines.add(l3);
-
-		diagram.addStep(step);
+		diagram.steps.add(step);
+		Globals.newStepOptions = Constants.NewStepOptions.COPY_LAST_STEP;
 		
 		mainFrame = new MainFrame();
+
 	}
 	
 	
 	
-	private void initFirstStep() {
+	public void initFirstStep() {
 		
 	}
 

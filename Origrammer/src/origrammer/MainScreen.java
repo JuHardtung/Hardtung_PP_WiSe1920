@@ -1,17 +1,14 @@
 package origrammer;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,10 +20,13 @@ import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -39,8 +39,21 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.vecmath.Vector2d;
 
-import javafx.geometry.Bounds;
-import net.miginfocom.swing.MigLayout;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.util.SVGConstants;
+import org.apache.commons.io.FileUtils;
+
+import com.kitfox.svg.SVGCache;
+import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGException;
+import com.kitfox.svg.SVGUniverse;
+
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import origrammer.geometry.*;
 
 public class MainScreen extends JPanel 
@@ -68,7 +81,7 @@ public class MainScreen extends JPanel
 	private OriArrow selectedCandidateA = null;
 	private ArrayList<Vector2d> tmpOutline = new ArrayList<>();
 	
-	private boolean displayGrid = true;
+	private boolean dispGrid = true;
 	//Affine transformation info
 	private Dimension preSize;
 	private AffineTransform affineTransform = new AffineTransform();
@@ -102,22 +115,6 @@ public class MainScreen extends JPanel
 		preSize = getSize();
 
 	}
-	private void testAll() {
-		int xPoints[] = {-180, 180, 180, -180};
-		int yPoints[] = {-180, -180, 180, 180};
-
-		
-		GeneralPath testPath = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);
-		testPath.moveTo(xPoints[0], yPoints[0]);
-		
-		for (int i=0; i<xPoints.length; i++) {
-			testPath.lineTo(xPoints[i], yPoints[i]);
-		}
-		testPath.closePath();
-		g2d.draw(testPath);
-	    g2d.setPaint(Color.red);
-		g2d.fill(testPath);
-	}
 
     @Override
     public void paintComponent(Graphics g) {
@@ -128,31 +125,71 @@ public class MainScreen extends JPanel
         g2d = (Graphics2D) g;        
         updateAffineTransform(g2d);
 
-        if (displayGrid) {
+        if (dispGrid) {
         	drawGrid(g2d);
         }
         
-        //show all FILLED FACES
-        if (Globals.dispFilledFaces) {
-            for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
-            	if (f.isSelected()) {
-               	   g2d.draw(f.path);
-              	   g2d.setPaint(new Color(200, 100, 100));
-              	   g2d.fill(f.path);
-            	} else {
-               	   g2d.draw(f.path);
-              	   g2d.setPaint(Globals.DEFAULT_PAPER_COLOR);
-              	   g2d.fill(f.path);
-            	}
-             }
-        }
+        
+        
+    	File file = new File("./images/test1.svg");
+//    	SVGUniverse svgUniverse = new SVGUniverse();	
+//    	
+//    	SVGDiagram diagram = null;
+//		try {
+//			diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(file.toURI().toURL()));
+//		} catch (MalformedURLException e1) {
+//			e1.printStackTrace();
+//		}
+//    	
+//    	try {
+//			diagram.render(g2d);
+    	//		} catch (SVGException e1) {
+    	//			e1.printStackTrace();
+    	//		}
 
-         
+//    	BufferedImage testbimg = null;
+//    	try {
+//    		testbimg = rasterize(file);
+//    	} catch (IOException e1) {
+//    		// TODO Auto-generated catch block
+//    		e1.printStackTrace();
+//    	}
+//
+//    	JLabel label = new JLabel();
+//
+//    	Image testdimg = testbimg.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+//    	ImageIcon testImageIcon = new ImageIcon(testdimg);
+//
+//
+//    	label.setIcon(testImageIcon);
+//    	add(label);
+
+
+
+    	//show all FILLED FACES
+    	if (Globals.dispFilledFaces) {
+    		for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
+    			if (f.isSelected()) {
+    				g2d.draw(f.path);
+    				g2d.setPaint(new Color(200, 100, 100));
+    				g2d.fill(f.path);
+    			} else {
+    				g2d.draw(f.path);
+    				if (f.isFaceUp()) {
+        				g2d.setPaint(Origrammer.diagram.getFaceUpColor());
+    				} else {
+        				g2d.setPaint(Origrammer.diagram.getFaceDownColor());
+    				}
+    				g2d.fill(f.path);
+    			}
+    		}
+    	}
+
        g2d.setStroke(Config.STROKE_VALLEY);
        g2d.setColor(Color.BLACK);
        for(OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
     	   //render lines according to their LINE_TYPE
-    	   switch(line.getType()) {
+    	   switch(line.type) {
     	   		case OriLine.TYPE_VALLEY:
     	   			g2d.setColor(Config.LINE_COLOR_VALLEY);
     	   			g2d.setStroke(Config.STROKE_VALLEY);
@@ -173,9 +210,9 @@ public class MainScreen extends JPanel
     	   
     	   //if line is selected during INPUT_LINE/SELECTION_TOOL mode, render GREEN
     	   if ((Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE
-    			   && line.isSelected())
+    			   && line.isSelected)
     			   || (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL
-    			   && line.isSelected())) {
+    			   && line.isSelected)) {
     		   g2d.setColor(Config.LINE_COLOR_SELECTED);
     		   g2d.setStroke(Config.STROKE_SELECTED);
     		   }
@@ -195,22 +232,22 @@ public class MainScreen extends JPanel
        add(tmpArrowLabel);
 
        //render all arrows
-       for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
-
-    	   BufferedImage bimg = getBufImgByTypeAndRot(arrow.getType(), arrow.getDegrees());
+       for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {    	   
+    	   
+    	   BufferedImage bimg = getBufImgByTypeAndRot(arrow);
 
     	   int newArrowLabelWidth = (int) Math.round(bimg.getWidth()/2*arrow.getScale());
     	   int newArrowLabelHeight = (int) Math.round(bimg.getHeight()/2*arrow.getScale());
-    	   arrow.getArrowLabel().setSize(newArrowLabelWidth, newArrowLabelHeight);
-
+    	   arrow.setWidth(newArrowLabelWidth);
+    	   arrow.setHeight(newArrowLabelHeight);
+    	   arrow.getArrowLabel().setSize(arrow.getWidth(), arrow.getHeight());
+    	   
     	   Image dimg = bimg.getScaledInstance(arrow.getArrowLabel().getWidth(), arrow.getArrowLabel().getHeight(), Image.SCALE_SMOOTH);
     	   ImageIcon arrowImageIcon = new ImageIcon(dimg);
 
-    	   arrow.setWidth(newArrowLabelWidth);
-    	   arrow.setHeight(newArrowLabelHeight);
-
+//    	   arrow.setWidth(newArrowLabelWidth);
+//    	   arrow.setHeight(newArrowLabelHeight);
     	   arrow.getArrowLabel().setIcon(arrowImageIcon);
-
 
     	   //set Border to indicate a selected arrow or when hovering over one
     	   if (arrow.isSelected()) {
@@ -347,25 +384,25 @@ public class MainScreen extends JPanel
     		   }
     	   }
        }
-       
+
        //draw RECTANGULAR selection 
        if (currentMouseDraggingPoint != null && (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL)) {
     	   Point2D.Double sp = new Point2D.Double();
     	   Point2D.Double ep = new Point2D.Double();
-    	   
+
     	   try {
     		   affineTransform.inverseTransform(preMousePoint, sp);
-			   affineTransform.inverseTransform(currentMouseDraggingPoint, ep);
-			   g2d.setStroke(Config.STROKE_SELECTED);
-			   g2d.setColor(Color.BLACK);
-			   double sx = Math.min(sp.x, ep.x);
-			   double sy = Math.min(sp.y, ep.y);
-			   double w = Math.abs(sp.x - ep.x);
-			   double h = Math.abs(sp.y - ep.y);
-			   g2d.draw(new Rectangle2D.Double(sx, sy, w, h));
-		} catch (NoninvertibleTransformException e) {
-			e.printStackTrace();
-		}
+    		   affineTransform.inverseTransform(currentMouseDraggingPoint, ep);
+    		   g2d.setStroke(Config.STROKE_SELECTED);
+    		   g2d.setColor(Color.BLACK);
+    		   double sx = Math.min(sp.x, ep.x);
+    		   double sy = Math.min(sp.y, ep.y);
+    		   double w = Math.abs(sp.x - ep.x);
+    		   double h = Math.abs(sp.y - ep.y);
+    		   g2d.draw(new Rectangle2D.Double(sx, sy, w, h));
+    	   } catch (NoninvertibleTransformException e) {
+    		   e.printStackTrace();
+    	   }
        }
        
        //show coordinates of selected Vertex
@@ -375,13 +412,75 @@ public class MainScreen extends JPanel
        }   
     }
     
+    public static BufferedImage rasterize(File svgFile) throws IOException {
+
+        final BufferedImage[] imagePointer = new BufferedImage[1];
+
+        // Rendering hints can't be set programatically, so
+        // we override defaults with a temporary stylesheet.
+        // These defaults emphasize quality and precision, and
+        // are more similar to the defaults of other SVG viewers.
+        // SVG documents can still override these defaults.
+        String css = "svg {" +
+                "shape-rendering: geometricPrecision;" +
+                "text-rendering:  geometricPrecision;" +
+                "color-rendering: optimizeQuality;" +
+                "image-rendering: optimizeQuality;" +
+                "}";
+        File cssFile = File.createTempFile("batik-default-override-", ".css");
+        FileUtils.writeStringToFile(cssFile, css, "ISO-8859-1");
+        
+        TranscodingHints transcoderHints = new TranscodingHints();
+        transcoderHints.put(ImageTranscoder.KEY_XML_PARSER_VALIDATING, Boolean.FALSE);
+        transcoderHints.put(ImageTranscoder.KEY_DOM_IMPLEMENTATION,
+                SVGDOMImplementation.getDOMImplementation());
+        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT_NAMESPACE_URI,
+                SVGConstants.SVG_NAMESPACE_URI);
+        transcoderHints.put(ImageTranscoder.KEY_DOCUMENT_ELEMENT, "svg");
+        transcoderHints.put(ImageTranscoder.KEY_USER_STYLESHEET_URI, cssFile.toURI().toString());
+
+        try {
+
+            TranscoderInput input = new TranscoderInput(new FileInputStream(svgFile));
+
+            ImageTranscoder t = new ImageTranscoder() {
+
+                @Override
+                public BufferedImage createImage(int w, int h) {
+                    return new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                }
+
+                @Override
+                public void writeImage(BufferedImage image, TranscoderOutput out)
+                        throws TranscoderException {
+                    imagePointer[0] = image;
+                }
+            };
+            t.setTranscodingHints(transcoderHints);
+            t.transcode(input, null);
+        }
+        catch (TranscoderException ex) {
+            // Requires Java 6
+            ex.printStackTrace();
+            throw new IOException("Couldn't convert " + svgFile);
+        }
+        finally {
+            cssFile.delete();
+        }
+
+        return imagePointer[0];
+    }
+    
+    
+    
+
     private void drawGrid(Graphics2D g2d) {
     	g2d.setColor(Color.LIGHT_GRAY);
     	g2d.setStroke(Config.STROKE_GRID);
     	
     	int lineNum = Globals.gridDivNum;
     	double step = Origrammer.diagram.steps.get(Globals.currentStep).size / lineNum;
-    	for(int i = 1; i<lineNum; i++) {
+    	for (int i=1; i<lineNum; i++) {
     		g2d.draw(new Line2D.Double(step * i - Origrammer.diagram.paperSize / 2.0, -Origrammer.diagram.paperSize / 2.0, 
     									step * i - Origrammer.diagram.paperSize / 2.0, Origrammer.diagram.paperSize / 2.0));
     		g2d.draw(new Line2D.Double(-Origrammer.diagram.paperSize / 2.0, step * i - Origrammer.diagram.paperSize / 2.0,
@@ -390,7 +489,7 @@ public class MainScreen extends JPanel
     }
     
     public void setDispGrid(boolean dispGrid) {
-    	this.displayGrid = dispGrid;
+    	this.dispGrid = dispGrid;
     	resetPickedElements();
     	repaint();
     }
@@ -419,13 +518,14 @@ public class MainScreen extends JPanel
 
     }
 
-    public BufferedImage getBufImgByTypeAndRot(int type, double rotation) {
+    public BufferedImage getBufImgByTypeAndRot(OriArrow a) {
 
     	BufferedImage img = null;
     	String fileName = null;
+    	double rotation = a.getDegrees();
     	String rot = "";
 
-    	switch (type) {
+    	switch (a.getType()) {
     	case OriArrow.TYPE_VALLEY:
     		fileName = "valleyFold";
     		break;
@@ -433,16 +533,16 @@ public class MainScreen extends JPanel
     		fileName = "mountainFold";
     		break;
     	case OriArrow.TYPE_TURN_OVER:
-    		fileName = "origrammer";
+    		fileName = "turnOver";
     		break;
     	case OriArrow.TYPE_PUSH_HERE:
-    		fileName = "origrammer";
+    		fileName = "pushHere";
     		break;
     	case OriArrow.TYPE_PULL_HERE:
-    		fileName = "origrammer";
+    		fileName = "pullHere";
     		break;
     	case OriArrow.TYPE_INFLATE_HERE:
-    		fileName = "origrammer";
+    		fileName = "inflateHere";
     		break;
     	default:
     		fileName = "origrammer";
@@ -450,32 +550,58 @@ public class MainScreen extends JPanel
     	}
     	
     	//add degrees to fileName 
-    	if(rotation < 45) {
-    		rot = "";
-    	} else if(rotation > 0 && rotation < 90) {
+    	if (rotation < 22.5) {
+    		rot = "0";
+    	} else if(rotation > 0 && rotation < 45) {
+    		rot = "22,5";
+    	} else if (rotation > 22.5 && rotation < 67.5) {
     		rot = "45";
-    	} else if (rotation > 45 && rotation < 135) {
+    	} else if (rotation > 45 && rotation < 90) {
+    		rot = "67,5";
+    	} else if (rotation > 67.5 && rotation < 112.5) {
     		rot = "90";
-    	} else if (rotation > 90 && rotation < 180) {
+    	} else if (rotation > 90 && rotation < 135) {
+    		rot = "112,5";
+    	} else if (rotation > 112.5 && rotation < 157.5) {
     		rot = "135";
-    	} else if (rotation > 135 && rotation < 225) {
+    	} else if (rotation > 135 && rotation < 180) {
+    		rot = "157,5";
+    	} else if (rotation > 157.5 && rotation < 202.5) {
     		rot = "180";
-    	} else if (rotation > 180 && rotation < 270) {
-    		rot = "225";
-    	} else if (rotation > 225 && rotation < 315) {
+    	} else if (rotation > 180 && rotation < 225) {
+     		rot = "202,5";
+     	} else if (rotation > 202.5 && rotation < 247.5) {
+     		rot = "225";
+     	} else if (rotation > 225 && rotation < 270) {
+    		rot = "247,5";
+    	} else if (rotation > 247.5 && rotation < 292.5) {
     		rot = "270";
-    	} else if (rotation > 270 && rotation < 360) {
+    	} else if (rotation > 270 && rotation < 315) {
+    		rot = "292,5";
+    	} else if (rotation > 292.5 && rotation < 337.5) {
     		rot = "315";
-    	} else if (rotation > 315) {
-    		rot = "";
+    	} else if (rotation > 315 && rotation < 360) {
+    		rot = "337,5";
+    	} else if (rotation > 337.5) {
+    		rot = "0";
     	}
-
+    	
+    	
+    	
+    	File file = new File("./images/" + fileName +"/" + rot + ".svg");
+    	//BufferedImage img = null;
     	try {
-    		img = ImageIO.read(new File("./images/" + fileName + rot +".gif"));
-    	} catch (IOException e) {
-    		e.printStackTrace();
+    		img = rasterize(file);
+    	} catch (IOException e1) {
+    		e1.printStackTrace();
     	}
 
+//    	try {
+//    		img = ImageIO.read(new File("./images/" + fileName + rot +".gif"));
+//    	} catch (IOException e) {
+//    		e.printStackTrace();
+//    	}
+    	    	
     	return img;
 
     }
@@ -498,7 +624,7 @@ public class MainScreen extends JPanel
     		}
     	}
     	
-    	if(displayGrid) {
+    	if(dispGrid) {
     		double step = Origrammer.diagram.paperSize / Globals.gridDivNum;
     		for (int ix = 0; ix < Globals.gridDivNum +1; ix++) {
     			for (int iy = 0; iy < Globals.gridDivNum + 1; iy++) {
@@ -579,17 +705,14 @@ public class MainScreen extends JPanel
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//if right clicked, remove any selected vertices
-		if(SwingUtilities.isRightMouseButton(e)) {
-			if(firstSelectedV != null) {
-				System.out.println("firstSelected reset");
+		if (SwingUtilities.isRightMouseButton(e)) {
+			if (firstSelectedV != null) {
 				firstSelectedV = null;
 				repaint();
 			} else if (secondSelectedV != null) {
-				System.out.println("secondSelected reset");
 				secondSelectedV = null;
 				repaint();
 			} else if (thirdSelectedV != null) {
-				System.out.println("thirdSelected reset");
 				thirdSelectedV = null;
 				repaint();
 			}
@@ -614,7 +737,7 @@ public class MainScreen extends JPanel
 			if (Globals.lineEditMode == Constants.LineInputMode.INPUT_LINE) {
 				//create line on the two picked vertices (or on custom point on a OriLine while pressing CTRL)
 				Vector2d v = pickVertex(clickPoint);
-				if(v == null) {
+				if (v == null) {
 					if ((e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 						OriLine l = pickLine(clickPoint);
 						if (l != null) {
@@ -652,10 +775,10 @@ public class MainScreen extends JPanel
 			//select OriLine or unselect all OriLines if clicked on nothing
 			OriLine l = pickLine(clickPoint);
 			if (l != null) {
-				if (!l.isSelected()) {
-					l.setSelected(true);
+				if (!l.isSelected) {
+					l.isSelected = true;
 				} else {
-					l.setSelected(false);
+					l.isSelected = false;
 				}
 			} else {
 				Origrammer.diagram.steps.get(Globals.currentStep).unselectAllLines();
@@ -696,7 +819,7 @@ public class MainScreen extends JPanel
 						firstSelectedV = v;
 					} else {
 						double length = GeometryUtil.measureLength(firstSelectedV, v);
-						Origrammer.mainFrame.uiSidePanel.measureLengthTextField.setValue(length);;
+						Origrammer.mainFrame.uiSidePanel.measureLengthTF.setValue(length);;
 						firstSelectedV = null;
 					}
 				}
@@ -704,7 +827,7 @@ public class MainScreen extends JPanel
 				OriLine l = pickLine(clickPoint);
 				if (v == null && l != null) {
 						double length = GeometryUtil.measureLength(l.p0, l.p1);
-						Origrammer.mainFrame.uiSidePanel.measureLengthTextField.setValue(length);;
+						Origrammer.mainFrame.uiSidePanel.measureLengthTF.setValue(length);;
 						firstSelectedL = null;
 					}
 				
@@ -718,7 +841,7 @@ public class MainScreen extends JPanel
 						secondSelectedV = v;
 					} else {
 						double angle = GeometryUtil.measureAngle(firstSelectedV, secondSelectedV, v);
-						Origrammer.mainFrame.uiSidePanel.measureAngleTextField.setValue(angle);;
+						Origrammer.mainFrame.uiSidePanel.measureAngleTF.setValue(angle);;
 						firstSelectedV = null;
 						secondSelectedV = null;
 					}
@@ -731,33 +854,82 @@ public class MainScreen extends JPanel
 						firstSelectedL = l;
 					} else {
 						double angle = GeometryUtil.measureAngle(firstSelectedL, l);
-						Origrammer.mainFrame.uiSidePanel.measureAngleTextField.setValue(angle);
+						Origrammer.mainFrame.uiSidePanel.measureAngleTF.setValue(angle);
 						firstSelectedL = null;
 					}
 				}
 			} 
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
 			//create OriFace that is to be filled with DEFAULT_PAPER_COLOR --> OriFace is a triangle with 3 OriLines as sides
-			OriLine l = pickLine(clickPoint);
-			if(l != null) {
-				if(firstSelectedL == null) {
-					firstSelectedL = l;
-				} else if (secondSelectedL == null) {
-					secondSelectedL = l;
+//			OriLine l = pickLine(clickPoint);
+//			if (l != null) {
+//				if (firstSelectedL == null) {
+//					firstSelectedL = l;
+//				} else if (secondSelectedL == null) {
+//					secondSelectedL = l;
+//				} else {
+//					GeneralPath filledFace = GeometryUtil.createFaceFromLines(firstSelectedL, secondSelectedL, l);
+//					OriFace newFace = new OriFace(filledFace, false);
+//					Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
+//					firstSelectedL = null;
+//					secondSelectedL = null;
+//					thirdSelectedL = null;
+//				}
+//			}
+			
+			
+			Vector2d v = pickVertex(clickPoint);
+			if (v != null) {
+				if (firstSelectedV == null) {
+					firstSelectedV = v;
+				} else if (secondSelectedV == null) {
+					secondSelectedV = v;
 				} else {
-					GeneralPath filledFace = GeometryUtil.createFaceFromLines(firstSelectedL, secondSelectedL, l);
-					OriFace newFace = new OriFace(filledFace, false);
+					ArrayList<Vector2d> vList = new ArrayList<>();
+					
+					vList.add(v);
+					vList.add(firstSelectedV);
+					vList.add(secondSelectedV);
+					OriFace newFace;
+
+					GeneralPath filledFace = GeometryUtil.createFaceFromVertices(vList);
+
+					if (Globals.faceInputDirection == Constants.FaceInputDirection.FACE_UP) {
+						newFace = new OriFace(filledFace, false, true);
+					} else {
+						newFace = new OriFace(filledFace, false, false);
+					}
 					Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
-					firstSelectedL = null;
-					secondSelectedL = null;
-					thirdSelectedL = null;
+					firstSelectedV = null;
+					secondSelectedV = null;
+					thirdSelectedV = null;
 				}
-			}
+			}			
+			
+			
 		}
 		//TODO: CHANGE LINE TYPE		
 		repaint();
-		
 	}
+	
+	
+	private void closeTmpOutline() {
+		ArrayList<OriLine> outlines = new ArrayList<>();
+		
+		
+		int outlineVnum = tmpOutline.size();
+		for (int i=0; i<outlineVnum; i++) {
+			OriLine line = new OriLine(tmpOutline.get(i), tmpOutline.get((i+1)% outlineVnum), OriLine.TYPE_EDGE);
+		}
+		
+		while (true) {
+			boolean bDeleteLine = false;
+			for (OriLine lines : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+				
+			}
+		}
+	}
+	
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
@@ -838,8 +1010,7 @@ public class MainScreen extends JPanel
 			tmpOriArrow = new OriArrow(xPos, yPos, type);
 			
 			//get correct Arrow Image
-			BufferedImage img = null;
-			img = getBufImgByTypeAndRot(tmpOriArrow.getType(), tmpOriArrow.getDegrees());
+			BufferedImage img = getBufImgByTypeAndRot(tmpOriArrow);
 			
 			//get updated label width & height
 			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriArrow.getScale());
@@ -916,7 +1087,8 @@ public class MainScreen extends JPanel
 		
 		if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			if (Globals.lineEditMode == Constants.LineInputMode.INPUT_LINE
-					|| Globals.lineEditMode == Constants.LineInputMode.TRIANGLE_INSECTOR) {
+					|| Globals.lineEditMode == Constants.LineInputMode.TRIANGLE_INSECTOR
+					|| Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
 				Vector2d firstV = selectedCandidateV;
 				selectedCandidateV = this.pickVertex(currentMousePointLogic);
 				
@@ -934,8 +1106,7 @@ public class MainScreen extends JPanel
 					repaint();
 				}
 			}
-		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL
-				|| Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			OriLine preLine = selectedCandidateL;
 			selectedCandidateL = pickLine(currentMousePointLogic);
 			if (preLine != selectedCandidateL) {
@@ -961,6 +1132,9 @@ public class MainScreen extends JPanel
 					repaint();
 				}
 			}
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
+			selectedCandidateV = this.pickVertex(currentMousePointLogic);
+			repaint();
 		}
 	}
 
@@ -1011,7 +1185,7 @@ public class MainScreen extends JPanel
 
 			//get correct Arrow Image
 			BufferedImage img = null;
-			img = getBufImgByTypeAndRot(arrow.getType(), arrow.getDegrees());
+			img = getBufImgByTypeAndRot(arrow);
 
 			//get updated label width & height
 			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*arrow.getScale());
@@ -1055,9 +1229,9 @@ public class MainScreen extends JPanel
 				for(OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 					Line2D tmpL = new Line2D.Double(l.p0.x, l.p0.y, l.p1.x, l.p1.y);
 					if(tmpL.intersects(tmpR)) {
-						l.setSelected(true);
+						l.isSelected = true;
 					} else {
-						l.setSelected(false);
+						l.isSelected = false;
 					}
 				}
 

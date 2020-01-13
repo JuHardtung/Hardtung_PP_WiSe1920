@@ -15,6 +15,10 @@ public class Globals {
 	public static Constants.OutsideReverseStyle outsideReverseStyle = Constants.OutsideReverseStyle.AOM_AOA;
 	public static Constants.RabbitEarStyle rabbitEarStyle = Constants.RabbitEarStyle.SAOM_SAOM_BAOM;
 	
+	public static Constants.NewStepOptions newStepOptions = Constants.NewStepOptions.COPY_LAST_STEP;
+	public static Constants.PaperShape paperShape = Constants.PaperShape.SQUARE;
+	public static Constants.FaceInputDirection faceInputDirection = Constants.FaceInputDirection.FACE_DOWN;
+	
 	public static int gridDivNum = Config.DEFAULT_GRID_DIV_NUM;
 	public static boolean dispVertex = true;
 	public static boolean dispFilledFaces = true;

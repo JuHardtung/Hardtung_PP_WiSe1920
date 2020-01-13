@@ -9,8 +9,8 @@ public class OriLine {
 	final public static int TYPE_VALLEY = 3;
 	final public static int TYPE_XRAY = 4;
 	
-	private boolean selected;
-	private int type = TYPE_NONE;
+	public boolean isSelected;
+	public int type = TYPE_NONE;
 	public Vector2d p0 = new Vector2d();
 	public Vector2d p1 = new Vector2d();
 
@@ -48,16 +48,16 @@ public class OriLine {
 	}
 
 	public boolean isSelected() {
-		return selected;
+		return isSelected;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 
 	@Override
 	public String toString() {
-		return "OriLine [selected=" + selected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + "]";
+		return "OriLine [selected=" + isSelected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + "]";
 	}
 	
 }
