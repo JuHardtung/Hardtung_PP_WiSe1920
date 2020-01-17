@@ -1,16 +1,9 @@
 package origrammer;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import javax.swing.ImageIcon;
 import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
@@ -18,21 +11,19 @@ import origrammer.geometry.OriFace;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriVertex;
 
-class PointComparatorX implements Comparator {
+class PointComparatorX implements Comparator<Object> {
 	@Override
 	public int compare(Object v1, Object v2) {
 		return ((Vector2d) v1).x > ((Vector2d) v2).x ? 1 : -1;
 	}
 }
 
-class PointComparatorY implements Comparator {
+class PointComparatorY implements Comparator<Object> {
 	@Override
 	public int compare(Object v1, Object v2) {
 		return ((Vector2d) v1).x > ((Vector2d) v2).y ? 1 : -1;
 	}
 }
-
-
 
 
 public class Step {
@@ -56,16 +47,40 @@ public class Step {
 		stepNumber = Globals.currentStep;
 	}
 	
-	private void initFirstStep() {
-		//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
-		OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0,size/2.0, OriLine.TYPE_EDGE);
-		OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0,-size/2.0, OriLine.TYPE_EDGE);
-		OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0,-size/2.0, OriLine.TYPE_EDGE);
-		OriLine l3 = new OriLine(-size/2.0, -size/2.0, -size/2.0,size/2.0, OriLine.TYPE_EDGE);
-		lines.add(l0);
-		lines.add(l1);
-		lines.add(l2);
-		lines.add(l3);
+	public void initFirstStep() {
+		
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
+			OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0, size/2.0, OriLine.TYPE_EDGE);
+			OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0, -size/2.0, OriLine.TYPE_EDGE);
+			OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0, -size/2.0, OriLine.TYPE_EDGE);
+			OriLine l3 = new OriLine(-size/2.0, -size/2.0, -size/2.0, size/2.0, OriLine.TYPE_EDGE);
+			lines.add(l0);
+			lines.add(l1);
+			lines.add(l2);
+			lines.add(l3);
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			double width = Origrammer.diagram.recPaperWidth;
+			double height = Origrammer.diagram.recPaperHeight;
+			double ratio = 0;
+			
+			if (width > height) {
+				ratio =  height / width;
+			} else {
+				ratio = width / height;
+			}
+			
+			OriLine l0 = new OriLine(-size/2.0, size/2.0*ratio, size/2.0,  size/2.0*ratio, OriLine.TYPE_EDGE);
+			OriLine l1 = new OriLine(size/2.0, size/2.0*ratio, size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
+			OriLine l2 = new OriLine(size/2.0, -size/2.0*ratio, -size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
+			OriLine l3 = new OriLine(-size/2.0, -size/2.0*ratio, -size/2.0,size/2.0*ratio, OriLine.TYPE_EDGE);
+			lines.add(l0);
+			lines.add(l1);
+			lines.add(l2);
+			lines.add(l3);
+			
+		}
+
 	}
 	
 	/**Adds a new OriLine and checks for intersections with others
@@ -78,8 +93,8 @@ public class Step {
 		tmpLines.addAll(lines);
 		
 		//check if the line already exists
-		for(OriLine line : tmpLines) {
-			if(GeometryUtil.isSameLineSegment(line, inputLine)) {
+		for (OriLine line : tmpLines) {
+			if (GeometryUtil.isSameLineSegment(line, inputLine)) {
 				return;
 			}
 		}
@@ -90,7 +105,7 @@ public class Step {
 				continue;
 			}
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
-			if(crossPoint == null) {
+			if (crossPoint == null) {
 				continue;
 			}
 
@@ -131,7 +146,7 @@ public class Step {
 			}
 
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
-			if(crossPoint != null) {
+			if (crossPoint != null) {
 				points.add(crossPoint);
 			}
 		}
@@ -147,7 +162,7 @@ public class Step {
 
 		for (int i = 1; i < points.size(); i++) {
 			Vector2d p = points.get(i);
-			if(GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
+			if (GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
 				continue;
 			}
 			
@@ -213,7 +228,7 @@ public class Step {
 		ArrayList<OriLine> selectedLines = new ArrayList<>();
 		
 		for (OriLine line : lines) {
-			if(line.isSelected) {
+			if (line.isSelected) {
 				selectedLines.add(line);
 			}
 		}
@@ -252,7 +267,6 @@ public class Step {
 				selectedFaces.add(face);
 			}
 		}
-		
 		for (OriFace face : selectedFaces)  {
 			filledFaces.remove(face);
 		}
@@ -261,7 +275,7 @@ public class Step {
 
 	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
 		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
-		if(incenter == null) {
+		if (incenter == null) {
 			System.out.println("Failed to calculate the incenter of the triangle");
 		}
 		

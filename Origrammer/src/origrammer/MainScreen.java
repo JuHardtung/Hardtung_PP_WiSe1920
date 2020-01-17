@@ -24,12 +24,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -48,20 +44,12 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.util.SVGConstants;
 import org.apache.commons.io.FileUtils;
 
-import com.kitfox.svg.SVGCache;
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGException;
-import com.kitfox.svg.SVGUniverse;
-
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import origrammer.geometry.*;
 
 public class MainScreen extends JPanel 
 		implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ComponentListener {
 	
 	
-	private BufferedImage bufferImage;
-	private Graphics2D bufferGraphic;
 	private Point2D preMousePoint;
 	private Point2D currentMouseDraggingPoint = null;
 	private Point2D.Double currentMousePointLogic = new Point2D.Double();
@@ -129,43 +117,6 @@ public class MainScreen extends JPanel
         	drawGrid(g2d);
         }
         
-        
-        
-    	File file = new File("./images/test1.svg");
-//    	SVGUniverse svgUniverse = new SVGUniverse();	
-//    	
-//    	SVGDiagram diagram = null;
-//		try {
-//			diagram = svgUniverse.getDiagram(svgUniverse.loadSVG(file.toURI().toURL()));
-//		} catch (MalformedURLException e1) {
-//			e1.printStackTrace();
-//		}
-//    	
-//    	try {
-//			diagram.render(g2d);
-    	//		} catch (SVGException e1) {
-    	//			e1.printStackTrace();
-    	//		}
-
-//    	BufferedImage testbimg = null;
-//    	try {
-//    		testbimg = rasterize(file);
-//    	} catch (IOException e1) {
-//    		// TODO Auto-generated catch block
-//    		e1.printStackTrace();
-//    	}
-//
-//    	JLabel label = new JLabel();
-//
-//    	Image testdimg = testbimg.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-//    	ImageIcon testImageIcon = new ImageIcon(testdimg);
-//
-//
-//    	label.setIcon(testImageIcon);
-//    	add(label);
-
-
-
     	//show all FILLED FACES
     	if (Globals.dispFilledFaces) {
     		for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
@@ -252,7 +203,7 @@ public class MainScreen extends JPanel
     	   //set Border to indicate a selected arrow or when hovering over one
     	   if (arrow.isSelected()) {
     		   arrow.getArrowLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
-    	   } else if(selectedCandidateA == arrow) {
+    	   } else if (selectedCandidateA == arrow) {
     		   arrow.getArrowLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
     	   } else {
     		   arrow.getArrowLabel().setBorder(BorderFactory.createEmptyBorder());
@@ -342,8 +293,6 @@ public class MainScreen extends JPanel
         			g2d.draw(new Line2D.Double(firstSelectedV.x, firstSelectedV.y, cv.x, cv.y));
         	   }
     	   }
-
-    	   
        }
        
        if (secondSelectedV != null) {
@@ -905,42 +854,9 @@ public class MainScreen extends JPanel
 					thirdSelectedV = null;
 				}
 			}			
-			
-			
 		}
 		//TODO: CHANGE LINE TYPE		
 		repaint();
-	}
-	
-	
-	private void closeTmpOutline() {
-		ArrayList<OriLine> outlines = new ArrayList<>();
-		
-		
-		int outlineVnum = tmpOutline.size();
-		for (int i=0; i<outlineVnum; i++) {
-			OriLine line = new OriLine(tmpOutline.get(i), tmpOutline.get((i+1)% outlineVnum), OriLine.TYPE_EDGE);
-		}
-		
-		while (true) {
-			boolean bDeleteLine = false;
-			for (OriLine lines : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-				
-			}
-		}
-	}
-	
-
-	@Override
-	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -955,18 +871,6 @@ public class MainScreen extends JPanel
 		
 		//updateAffineTransform(g2d);
 		repaint();
-		
-	}
-
-	@Override
-	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -1138,19 +1042,6 @@ public class MainScreen extends JPanel
 		}
 	}
 
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void mousePressed(MouseEvent e) {
 		preMousePoint = e.getPoint();
@@ -1212,7 +1103,6 @@ public class MainScreen extends JPanel
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL
 				&& currentMouseDraggingPoint != null) {
 			//Rectangular Selection
-			ArrayList<OriLine> selectedLines = new ArrayList<>();
 			Point2D.Double sp = new Point2D.Double();
 			Point2D.Double ep = new Point2D.Double();
 			try {
@@ -1226,9 +1116,9 @@ public class MainScreen extends JPanel
 				Rectangle tmpR = new Rectangle(minX, minY, maxX-minX, maxY-minY);
 
 				//Check if there is a line in the selection rectangle
-				for(OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+				for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 					Line2D tmpL = new Line2D.Double(l.p0.x, l.p0.y, l.p1.x, l.p1.y);
-					if(tmpL.intersects(tmpR)) {
+					if (tmpL.intersects(tmpR)) {
 						l.isSelected = true;
 					} else {
 						l.isSelected = false;
@@ -1257,5 +1147,30 @@ public class MainScreen extends JPanel
 		currentMouseDraggingPoint = null;
 		isMovingArrows = false;
 		repaint();
+	}
+	
+	
+	@Override
+	public void mouseEntered(MouseEvent arg0) {		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {		
+	}
+	
+	@Override
+	public void componentShown(ComponentEvent arg0) {		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {		
+	}
+	
+	@Override
+	public void componentHidden(ComponentEvent arg0) {		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {		
 	}
 }

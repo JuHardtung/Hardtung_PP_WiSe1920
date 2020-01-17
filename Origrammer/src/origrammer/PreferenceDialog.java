@@ -1,6 +1,5 @@
 package origrammer;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -17,14 +16,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.PlainDocument;
 
 public class PreferenceDialog extends JDialog implements ActionListener, ComponentListener {
 
@@ -32,9 +23,9 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	String[] outsideReverseOptions = {"AoM + AoA", "2 AoM"};
 	String[] rabbitEarOptions = {"2 small AoM + 1 big AoM", "3 small AoM"};
 	
-	private JComboBox mountainStyleCB = new JComboBox(mountainStyleOptions);
-	private JComboBox outsideReverseCB = new JComboBox(outsideReverseOptions);
-	private JComboBox rabbitEarCB = new JComboBox(rabbitEarOptions);
+	private JComboBox<String> mountainStyleCB = new JComboBox<>(mountainStyleOptions);
+	private JComboBox<String> outsideReverseCB = new JComboBox<>(outsideReverseOptions);
+	private JComboBox<String> rabbitEarCB = new JComboBox<>(rabbitEarOptions);
 	
 	private JTextField recPaperWidthTF;
 	private JTextField recPaperHeightTF;
@@ -47,7 +38,6 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	JButton button;
 	JColorChooser colorChooser;
 	JPanel preferencePanel;
-	private boolean toggled = false;
 	MainScreen __screen;
 	
 	public PreferenceDialog(JFrame frame, MainScreen __screen) {
@@ -58,7 +48,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	
 	private void init() {
 		this.addComponentListener(this);
-		this.setSize(770, 550);
+		this.setSize(375, 210);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Origrammer Preferences");	
 	}
@@ -115,55 +105,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
 
 			
-			SpringLayout fileLayout = new SpringLayout();
-			JPanel filePanel = new JPanel();	
-			
-			JLabel paperSizeLabel = new JLabel("Recommended Paper Size: ");
-
-			
-			recPaperWidthTF = new JTextField();
-			recPaperHeightTF = new JTextField();
-			
-			recPaperWidthTF.setText(Integer.toString(Origrammer.diagram.recPaperWidth));
-			recPaperHeightTF.setText(Integer.toString(Origrammer.diagram.recPaperHeight));
-			
-			PlainDocument docW = (PlainDocument) recPaperWidthTF.getDocument();
-			docW.setDocumentFilter(new IntFilter());
-			PlainDocument docH = (PlainDocument) recPaperHeightTF.getDocument();
-			docH.setDocumentFilter(new IntFilter());
-			
-			
-			//PAPER SIZE panel and positioning
-			JPanel recPaperSizePanel = new JPanel();
-			
-			filePanel.add(paperSizeLabel);
-			recPaperWidthTF.setPreferredSize(new Dimension(50, 20));
-			recPaperHeightTF.setPreferredSize(new Dimension(50, 20));
-
-			recPaperSizePanel.add(recPaperWidthTF);
-			recPaperSizePanel.add(recPaperHeightTF);
-			
-			filePanel.add(recPaperSizePanel);
-						
-			JLabel fileLabel = new JLabel("Paper Color: ", JLabel.TRAILING);
-			colorChooser = new JColorChooser(Globals.DEFAULT_PAPER_COLOR);
-			colorChooser.setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
-			
-			AbstractColorChooserPanel[] panels = colorChooser.getChooserPanels();
-			
-	        for (int i = 0; i < panels.length; i++) {
-	            if (!panels[i].getDisplayName().equals("RGB")) {
-	                colorChooser.removeChooserPanel(panels[i]);
-	            } else {
-	                JPanel panel = panels[i];
-	            }
-	        }
-			
-			filePanel.add(fileLabel);
-			filePanel.add(colorChooser);
-			filePanel.setLayout(fileLayout);
-			SpringUtilities.makeCompactGrid(filePanel, 2, 2, 6, 6, 6, 6);
-			
+			//BUTTONS APPLY/OK
 			SpringLayout buttonLayout = new SpringLayout();
 			JPanel buttonPanel = new JPanel();
 			applyButton.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -174,10 +116,10 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			buttonPanel.setLayout(buttonLayout);
 			SpringUtilities.makeCompactGrid(buttonPanel, 1, 2, 6, 6, 6, 6);
 			
+			
 			jContentPane = new JPanel();
 			jContentPane.add(preferencePanel);
 			jContentPane.add(separator);
-			//jContentPane.add(filePanel);
 			jContentPane.add(buttonPanel);
 			
 			SpringLayout layout = new SpringLayout();
@@ -185,10 +127,6 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			SpringUtilities.makeCompactGrid(jContentPane, 3, 1, 6, 6, 6, 6);
 		}
 		return jContentPane;
-	}
-	
-	private void colorChanged() {
-		Globals.DEFAULT_PAPER_COLOR = colorChooser.getSelectionModel().getSelectedColor();
 	}
 	
 	
@@ -232,27 +170,19 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	
 
 	@Override
-	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void componentHidden(ComponentEvent arg0) {		
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void componentMoved(ComponentEvent arg0) {		
 	}
 
 	@Override
-	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void componentResized(ComponentEvent arg0) {		
 	}
 
 	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void componentShown(ComponentEvent e) {		
 	}
 
 }

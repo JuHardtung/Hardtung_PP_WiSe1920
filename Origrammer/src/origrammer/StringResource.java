@@ -38,6 +38,10 @@ public class StringResource extends ListResourceBundle {
 			{"DefaultFileName", "No Title"},
 			{"Error_FileLoadFailed", "Error: Loading File failed"},
 			{"Error_FileSaveFailed", "Error: Saving File failed"},
+			{"Error_EmptyTitle", "Error: Title can't be empty!"},
+			{"Error_EmptySideLength", "Error: Side Length can't be empty!"},
+			{"Error_EmptyWidth", "Error: Paper Width can't be empty!"},
+			{"Error_EmptyHeight", "Error: Paper Height can't be empty!"},
 			{"Warning_SameNameFileExists", "Warning: File with the same name already exists!"},
 			{"DialogTitle_FileSave", "Save!"}
 	};

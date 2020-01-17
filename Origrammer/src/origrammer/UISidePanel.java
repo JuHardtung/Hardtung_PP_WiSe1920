@@ -18,20 +18,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
-		
-	
+
 	JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
 	JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
 	JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
@@ -47,9 +42,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	ButtonGroup measureGroup;
 	JFormattedTextField measureLengthTF;
 	JFormattedTextField measureAngleTF;
-	
-	
-
 	
 	JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
 	JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
@@ -67,10 +59,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 
 	MainScreen screen;
 	UITopPanel uiTopPanel;
-	
-	private boolean displMeasureOptionsPanel = false;
-
-	
 	
 	public UISidePanel(MainScreen __screen, UITopPanel __uiTopPanel) {
 		this.screen = __screen;
@@ -200,9 +188,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		buttonsPanel.add(dispFilledFacedCB);
 		buttonsPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(buttonsPanel);
-
 	}
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -288,6 +274,14 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	
 	public void modeChanged() {
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
+			lineInputTwoVerticesRB.setEnabled(true);
+			lineInputIncenterRB.setEnabled(true);
+		} else {
+			lineInputTwoVerticesRB.setEnabled(false);
+			lineInputIncenterRB.setEnabled(false);
+		}
+		
 		if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			measureOptionsPanel.setVisible(true);		
 		} else {
@@ -301,33 +295,19 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void keyPressed(KeyEvent arg0) {		
 	}
 
-
-
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void keyReleased(KeyEvent e) {		
 	}
 
-
-
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void keyTyped(KeyEvent e) {		
 	}
 
-
-
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		
+	public void propertyChange(PropertyChangeEvent evt) {		
 	}
 	
 }

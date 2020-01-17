@@ -1,5 +1,5 @@
 package origrammer;
-import java.awt.EventQueue;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;

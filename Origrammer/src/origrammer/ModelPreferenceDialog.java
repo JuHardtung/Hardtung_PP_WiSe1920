@@ -51,8 +51,17 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 	JCheckBox rotatedCB = new JCheckBox("Rotated");
 	
 	//PAPER SIZE
+	JPanel paperSizePanel = new JPanel();
 	JLabel paperSideSizeLabel = new JLabel("Side:");
 	JTextField paperSizeTF = new JTextField();
+
+	
+	//PAPER SIZE RECTANGLE
+	JPanel paperSizeRectPanel = new JPanel();
+	JLabel paperWidthLabel = new JLabel("Width:");
+	JTextField paperWidthTF = new JTextField();
+	JLabel paperHeightLabel = new JLabel("Height:");
+	JTextField paperHeightTF = new JTextField();
 	
 	//PAPER COLOR
 	JLabel faceUpLabel = new JLabel("Face Up:");
@@ -80,7 +89,7 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 	
 	private void init() {
 		this.addComponentListener(this);
-		this.setSize(900, 550);
+		this.setSize(700, 425);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Model Preferences");
 	}
@@ -160,21 +169,53 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 			paperShapePanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Shape"));
 
 			
-			//##### Paper Size #####
+			//##### Paper Size SQUARE #####
 
 			PlainDocument docPaperSize = (PlainDocument) paperSizeTF.getDocument();
 			docPaperSize.setDocumentFilter(new IntFilter());
+			paperSizeTF.setHorizontalAlignment(JTextField.RIGHT);
 			paperSizeTF.setPreferredSize(new Dimension(150, 25));
 			paperSizeTF.setMaximumSize(new Dimension(200, 25));
 			JLabel paperSizeUnit = new JLabel("cm");
-			
-			JPanel paperSizePanel = new JPanel();
-			
+						
 			paperSizePanel.add(paperSideSizeLabel);
 			paperSizePanel.add(paperSizeTF);
 			paperSizePanel.add(paperSizeUnit);
 			paperSizePanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Size"));
 			
+			
+			//##### Paper Size RECTANGLE #####
+			PlainDocument docPaperWidth = (PlainDocument) paperWidthTF.getDocument();
+			JLabel paperWidthRectUnit = new JLabel("cm");
+			docPaperWidth.setDocumentFilter(new IntFilter());
+			paperWidthTF.setHorizontalAlignment(JTextField.RIGHT);
+			paperWidthTF.setPreferredSize(new Dimension(100, 25));
+			//paperWidthTF.setMaximumSize(new Dimension(200, 25));
+			JPanel paperWidthRect = new JPanel();
+			
+			PlainDocument docPaperHeight = (PlainDocument) paperHeightTF.getDocument();
+			JLabel paperHeightRectUnit = new JLabel("cm");
+			docPaperHeight.setDocumentFilter(new IntFilter());
+			paperHeightTF.setHorizontalAlignment(JTextField.RIGHT);
+			paperHeightTF.setPreferredSize(new Dimension(100, 25));
+			//paperHeightTF.setMaximumSize(new Dimension(200, 25));
+			JPanel paperHeightRect = new JPanel();
+			
+			paperWidthRect.add(paperWidthLabel);
+			paperWidthRect.add(paperWidthTF);
+			paperWidthRect.add(paperWidthRectUnit);
+			paperHeightRect.add(paperHeightLabel);
+			paperHeightRect.add(paperHeightTF);
+			paperHeightRect.add(paperHeightRectUnit);
+			
+			paperWidthRect.setAlignmentX(RIGHT_ALIGNMENT);
+			paperHeightRect.setAlignmentX(RIGHT_ALIGNMENT);
+
+			paperSizeRectPanel.add(paperWidthRect);
+			paperSizeRectPanel.add(paperHeightRect);
+			paperSizeRectPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Size"));
+			paperSizeRectPanel.setLayout(new BoxLayout(paperSizeRectPanel, BoxLayout.PAGE_AXIS));
+
 			
 			//##### Paper Color #####
 			faceUpColor.setPreferredSize(new Dimension(100, 50));
@@ -217,17 +258,7 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 			instructPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Instructions"));
 			
 			
-			/***************************
-			 *****  Paper Options  *****  
-			 ***************************/
-			
-			JPanel paperOptionsPanel = new JPanel();
-			paperOptionsPanel.add(paperShapePanel);
-			paperOptionsPanel.add(paperSizePanel);
-			paperOptionsPanel.add(paperColorPanel);
-			//paperOptionsPanel.add(instructPanel);
-			paperOptionsPanel.setLayout(new BoxLayout(paperOptionsPanel, BoxLayout.PAGE_AXIS));			
-			
+			//##### BUTTONS PANEL #####
 			SpringLayout buttonLayout = new SpringLayout();
 			JPanel buttonPanel = new JPanel();
 			okButton.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -238,14 +269,27 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 			buttonPanel.setLayout(buttonLayout);
 			SpringUtilities.makeCompactGrid(buttonPanel, 1, 2, 6, 6, 6, 6);
 			
+			/***************************
+			 *****  Paper Options  *****  
+			 ***************************/
+			
+			JPanel paperOptionsPanel = new JPanel();
+			//paperOptionsPanel.add(paperShapePanel);
+			paperOptionsPanel.add(paperSizePanel);
+			paperOptionsPanel.add(paperSizeRectPanel);
+			paperOptionsPanel.add(paperColorPanel);
+			paperOptionsPanel.add(buttonPanel);
+			//paperOptionsPanel.add(instructPanel);
+			paperOptionsPanel.setLayout(new BoxLayout(paperOptionsPanel, BoxLayout.PAGE_AXIS));			
+
 			jContentPane = new JPanel();
 			jContentPane.add(modelPanel);
 			jContentPane.add(paperOptionsPanel);
-			jContentPane.add(buttonPanel);
+			//jContentPane.add(buttonPanel);
 			
 			SpringLayout layout = new SpringLayout();
 			jContentPane.setLayout(layout);
-			SpringUtilities.makeCompactGrid(jContentPane, 1, 3, 6, 6, 6, 6);
+			SpringUtilities.makeCompactGrid(jContentPane, 1, 2, 6, 6, 6, 6);
 		}
 		
 		titleTF.setText(Origrammer.diagram.title);
@@ -255,9 +299,19 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 		faceDownColor.setBackground(Origrammer.diagram.faceDownColor);
 		
 		
-		if (Origrammer.diagram.recPaperWidth == Origrammer.diagram.recPaperHeight) {
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			paperSizePanel.setVisible(true);
+			paperSizeRectPanel.setVisible(false);
 			paperSizeTF.setText(Integer.toString(Origrammer.diagram.recPaperWidth));
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			paperSizePanel.setVisible(false);
+			paperSizeRectPanel.setVisible(true);
+			paperWidthTF.setText(Integer.toString(Origrammer.diagram.recPaperWidth));
+			paperHeightTF.setText(Integer.toString(Origrammer.diagram.recPaperHeight));
+
 		}
+		
+
 
 		return jContentPane;
 	}
@@ -265,15 +319,7 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if (e.getSource() == squareRB) {
-			Globals.paperShape = Constants.PaperShape.SQUARE;
-		} else if (e.getSource() == rectangleRB) {
-			Globals.paperShape = Constants.PaperShape.RECTANGLE;
-		} else if (e.getSource() == triangleRB) {
-			Globals.paperShape = Constants.PaperShape.TRIANGLE;
-		} else if (e.getSource() == polygonRB) {
-			Globals.paperShape = Constants.PaperShape.POLYGON;
-		} else if (e.getSource() == switchColors) {
+		 if (e.getSource() == switchColors) {
 			tmpColor = faceUpColor.getBackground();
 			faceUpColor.setBackground(faceDownColor.getBackground());
 			faceDownColor.setBackground(tmpColor);

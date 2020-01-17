@@ -4,7 +4,6 @@ import java.awt.Color;
 
 public class DiagramDataSet {
 	
-	
 	public String title;
 	public String author;
 	public String comments;
@@ -13,7 +12,6 @@ public class DiagramDataSet {
 	public Color faceUpColor;
 	public Color faceDownColor;
 	public StepDataSet[] steps;
-	
 	
 	public DiagramDataSet() {
 		

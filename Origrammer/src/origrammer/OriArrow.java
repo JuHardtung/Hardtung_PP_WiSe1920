@@ -17,7 +17,6 @@ public class OriArrow {
 	final public static int VALLEY_ARROW_WIDTH = 50;
 	final public static int VALLEY_ARROW_HEIGHT = 50;
 
-	
 	private int type = TYPE_NONE;
 	public double xPos;
 	public double yPos;

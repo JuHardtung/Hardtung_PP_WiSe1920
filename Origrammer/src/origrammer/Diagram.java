@@ -3,22 +3,19 @@ package origrammer;
 import java.awt.Color;
 import java.util.ArrayList;
 
-
 public class Diagram {
 	public String title;
 	public String author;
 	public String comments;
 	public double paperSize;
-	public int recPaperWidth = 0;
-	public int recPaperHeight = 0;
+	public int recPaperWidth;
+	public int recPaperHeight;
 	public Color faceUpColor;
 	public Color faceDownColor;
 	public ArrayList<Step> steps = new ArrayList<>();
 	public String dataFilePath = "";
 	
-	
 	public Diagram() {
-		
 	}
 	
 	public Diagram(double paperSize, Color faceUpColor, Color faceDownColor) {
@@ -105,8 +102,5 @@ public class Diagram {
 				+ faceUpColor + ", faceDownColor=" + faceDownColor + ", steps=" + steps + ", dataFilePath="
 				+ dataFilePath + "]";
 	}
-
-	
-	
 
 }

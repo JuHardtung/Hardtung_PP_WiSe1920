@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector2d;
 
-import origrammer.Globals;
 import origrammer.OriArrow;
-import origrammer.Origrammer;
 
 public class GeometryUtil {
 
@@ -136,8 +134,8 @@ public class GeometryUtil {
 		double aXEnd = aX + (a.getWidth());
 		double aYEnd = aY + (a.getHeight());
 		
-		if(x>aX && x <aXEnd) {
-			if(y>aY && y<aYEnd) {
+		if (x > aX && x < aXEnd) {
+			if (y > aY && y < aYEnd) {
 				return true;
 			}
 		}
@@ -145,9 +143,6 @@ public class GeometryUtil {
 	}
 	
 	public static boolean isMouseOverFace(double x, double y, OriFace f) {
-		
-		System.out.println("X=" + x + "Y=" + y + " | Path=" + f.toString());
-		
 		return f.path.intersects(x, y, 5, 5);
 	}
 
@@ -227,7 +222,6 @@ public class GeometryUtil {
 			v1 = l1p0;
 		}
 		
-		
 		return measureAngle(angleVertex, v0, v1);
 	}
 
@@ -259,13 +253,12 @@ public class GeometryUtil {
 	public static GeneralPath createFaceFromLines(OriLine l0, OriLine l1, OriLine l2) {
 		
 		ArrayList<OriLine> lines = new ArrayList<>();
-		
 		ArrayList<Vector2d> points = new ArrayList<>();
 		lines.add(l0);
 		lines.add(l1);
 		lines.add(l2);
 
-		for(int i=1;i<lines.size(); i++) {
+		for(int i=1; i<lines.size(); i++) {
 			if (lines.get(0).p0.x == lines.get(i).p0.x && lines.get(0).p0.y == lines.get(i).p0.y) {
 			points.add(lines.get(0).p0);
 			} else if (lines.get(0).p0.x == lines.get(i).p1.x && lines.get(0).p0.y == lines.get(i).p1.y) {
@@ -289,7 +282,6 @@ public class GeometryUtil {
 			}
 		}
 		
-		
 		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, points.size());
 		path.moveTo(points.get(0).x, points.get(0).y);
 		
@@ -303,7 +295,6 @@ public class GeometryUtil {
 	
 	
 	public static Rectangle2D calcRotatedBox(double x, double y, double width, double height, double degrees) {
-		
 		Vector2d v0 = new Vector2d(x, y);
 		Vector2d v1 = new Vector2d(x+width, y);
 		Vector2d v2 = new Vector2d(x, y+height);
@@ -315,7 +306,6 @@ public class GeometryUtil {
 		Vector2d newV3 = rotVertex(v3, degrees);
 		
 		ArrayList<Vector2d> vertexList = new ArrayList<>();
-		
 		ArrayList<Vector2d> newEdgePoints = new ArrayList<>();
 		
 		vertexList.add(newV0);
@@ -327,14 +317,13 @@ public class GeometryUtil {
 		double biggestX = 0;
 		double smallestY = 0;
 		double biggestY = 0;
-		
-		System.out.println("vertexList: " + vertexList.toString());
-		
+				
 		for (int i=0; i<vertexList.size(); i++) {
 			if (i == 0) {
 				smallestX = vertexList.get(i).x;
 				smallestY = vertexList.get(i).y;
 			}
+			
 			if (vertexList.get(i).x < smallestX) {
 				smallestX = vertexList.get(i).x;
 			} else if (vertexList.get(i).x > biggestX) {
@@ -346,11 +335,8 @@ public class GeometryUtil {
 			} else if (vertexList.get(i).y > biggestY) {
 				biggestY = vertexList.get(i).y;
 			}
-			
 		}
 		
-		System.out.println("smalX: " + smallestX + " | bigX: " + biggestX + " | smalY: " + smallestY + " | bigY: " + biggestY);
-
 		newEdgePoints.add(new Vector2d(smallestX,biggestY));
 		newEdgePoints.add(new Vector2d(biggestX, smallestY));
 		
@@ -359,12 +345,8 @@ public class GeometryUtil {
 		
 		Rectangle2D rect = new Rectangle((int) Math.round(smallestX), (int) Math.round(biggestY), (int) Math.round(newWidth), (int) Math.round(newHeight));
 
-		
 		return rect;
-		
-		
 	}
-	
 	
 	public static Vector2d rotVertex(Vector2d v, double degrees) {
 		double newX = v.x * Math.cos(Math.toRadians(degrees)) - v.y * Math.sin(Math.toRadians(degrees));
@@ -372,6 +354,5 @@ public class GeometryUtil {
 		
 		return new Vector2d(newX, newY);
 	}
-	
 	
 }

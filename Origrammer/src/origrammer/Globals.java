@@ -30,5 +30,4 @@ public class Globals {
 	
 	public static Color DEFAULT_PAPER_COLOR = new Color(133, 133, 133);
 
-
 }

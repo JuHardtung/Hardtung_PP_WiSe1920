@@ -13,7 +13,6 @@ public class OriLineProxy {
 	private int type;
 	
 	public OriLineProxy() {
-		
 	}
 	
 	public OriLineProxy(OriLine l) {

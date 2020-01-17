@@ -1,7 +1,5 @@
 package origrammer;
 import java.awt.BorderLayout;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,20 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import origrammer.Constants.NewStepOptions;
-import origrammer.geometry.OriLine;
 
 public class MainFrame extends JFrame implements ActionListener, ComponentListener, WindowListener {
 	MainScreen mainScreen;
@@ -60,10 +54,9 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	private JMenuItem menuItemSelectAll = new JMenuItem("Select All");
 	private JMenuItem menuItemUnselectAll = new JMenuItem("Unselect All");
 	
-	private JMenu menuHelp = new JMenu("Help");
+	//private JMenu menuHelp = new JMenu("Help");
 	private JMenu menuAbout = new JMenu("About");
 	
-	//private XMLEncoderDecoder xmlEncoderDecoder = new XMLEncoderDecoder();
 	private String lastPath = "";
 	public ArrayList<String> mruFiles = new ArrayList<>(); //MostRecentlyUsedFiles
 	private JMenuItem[] mruFilesMenuItem = new JMenuItem[Config.MRUFILE_NUM];
@@ -91,12 +84,9 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		getContentPane().add(mainScreen, BorderLayout.CENTER);
 		getContentPane().add(uiBottomPanel, BorderLayout.PAGE_END);
 
-
 		pack();
 		setVisible(true);
         setTitle("Origrammer Alpha v0.01");
-        
-
         
         //setSize(1010, 800);
         setLocationRelativeTo(null);
@@ -151,7 +141,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 			}
 		});
         menuItemUnselectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
-        
         
         
         //##### MENU BAR #####
@@ -214,7 +203,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	}
 
 	private void initMainScreen() {
-
 		add(mainScreen);
 	}
 	
@@ -345,7 +333,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 				mainScreen.repaint();
 				return;
 			}
-
 		}
 		if (e.getSource() == menuItemNew) {
 			
@@ -375,77 +362,8 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
                     (int) (rec.getCenterY() - pd.getHeight() / 2));
 			//pd.setModal(true);
 			pd.setVisible(true);
-			
 		}
 	}
-
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 	
 	class FileFilterEx extends FileFilter {
 		private String extensions[];
@@ -473,5 +391,50 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		public String getDescription() {
 			return msg;
 		}
+	}
+	
+	
+	@Override
+	public void windowActivated(WindowEvent arg0) {		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {		
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {		
 	}
 }

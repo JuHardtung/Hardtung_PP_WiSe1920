@@ -1,9 +1,7 @@
 package origrammer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import origrammer.geometry.OriLine;
 
 public class StepDataSet {
 	
@@ -22,10 +20,6 @@ public class StepDataSet {
 		for (int i=0; i<lineNum; i++) {
 			lines[i] = new OriLineProxy(s.lines.get(i));
 		}
-		
-		System.out.println("pre descr: " + s.stepDescription + " | " + stepDescription);
-
-		
 		stepDescription = s.stepDescription;
 		stepNumber = s.stepNumber;
 	}
@@ -34,10 +28,7 @@ public class StepDataSet {
 		s.lines.clear();
 		for (int i=0; i<lines.length; i++) {
 			s.lines.add(lines[i].getLine());
-		}
-		
-		System.out.println("recover descr: " + s.stepDescription + " | " + stepDescription);
-		
+		}		
 		s.stepDescription = stepDescription;
 		s.stepNumber = stepNumber;
 	}

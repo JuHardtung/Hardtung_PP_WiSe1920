@@ -2,14 +2,11 @@ package origrammer.geometry;
 
 import java.awt.geom.GeneralPath;
 
-
 public class OriFace {
-	
 	
 	public GeneralPath path;
 	private boolean selected;
 	private boolean isFaceUp;
-	
 	
 	public OriFace(GeneralPath path, boolean selected, boolean isFaceUp) {
 		this.path = path;

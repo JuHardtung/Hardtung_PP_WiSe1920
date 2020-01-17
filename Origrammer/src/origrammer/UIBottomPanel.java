@@ -11,7 +11,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -19,10 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
 
 public class UIBottomPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
@@ -72,7 +67,6 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 		
 		add(stepDescrAndNavPanel);
 		
-		
 		foldDescr.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -109,8 +103,7 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 			int prevStep = Globals.currentStep;
 			Globals.currentStep += 1;
 
-			if ((int) currentStep.getValue() == Origrammer.diagram.steps.size()-1) {
-								
+			if ((int) currentStep.getValue() == Origrammer.diagram.steps.size()-1) {			
 				Step newStep = new Step();
 				
 				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).crossLines.size(); i++) {
@@ -123,9 +116,9 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 				
 				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).vertices.size(); i++) {
 					newStep.vertices.add(Origrammer.diagram.steps.get(prevStep).vertices.get(i));
-				}				
+				}		
+				
 				for (int i=0; i<Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
-					
 					OriArrow tmpArrow = new OriArrow();
 					tmpArrow.setxPos(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getxPos());
 					tmpArrow.setyPos(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getyPos());
@@ -160,29 +153,19 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void keyPressed(KeyEvent arg0) {		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void keyReleased(KeyEvent arg0) {		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void keyTyped(KeyEvent arg0) {		
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void propertyChange(PropertyChangeEvent arg0) {		
 	}
-
-
 
 }

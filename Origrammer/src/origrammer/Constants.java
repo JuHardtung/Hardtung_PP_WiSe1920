@@ -1,7 +1,5 @@
 package origrammer;
 
-import java.awt.Color;
-
 public class Constants {
 
 	public static enum LineInputMode {

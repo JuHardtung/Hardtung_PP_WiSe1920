@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.text.DecimalFormat;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,6 +17,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -46,14 +46,23 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 	//PAPER SHAPE
 	JRadioButton squareRB = new JRadioButton("Square", true);
 	JRadioButton rectangleRB = new JRadioButton("Rectangle", false);
-	JRadioButton triangleRB = new JRadioButton("Triangle", false);
-	JRadioButton polygonRB = new JRadioButton("Polygon", false);
+	JRadioButton triangleRB = new JRadioButton("Triangle (TBD)", false);
+	JRadioButton polygonRB = new JRadioButton("Polygon (TBD)", false);
 	ButtonGroup paperShapeBG = new ButtonGroup();
-	JCheckBox rotatedCB = new JCheckBox("Rotated");
+	JCheckBox rotatedCB = new JCheckBox("Rotated (TBD)");
 	
-	//PAPER SIZE
+	//PAPER SIZE SUQARE
+	JPanel paperSizePanel = new JPanel();
 	JLabel paperSideSizeLabel = new JLabel("Side:");
 	JTextField paperSizeTF = new JTextField();
+	
+	//PAPER SIZE RECTANGLE
+	JPanel paperSizeRectPanel = new JPanel();
+	JLabel paperWidthLabel = new JLabel("Width:");
+	JTextField paperWidthTF = new JTextField();
+	JLabel paperHeightLabel = new JLabel("Height:");
+	JTextField paperHeightTF = new JTextField();
+
 	
 	//PAPER COLOR
 	JLabel faceUpLabel = new JLabel("Face Up:");
@@ -81,7 +90,7 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 	
 	private void init() {
 		this.addComponentListener(this);
-		this.setSize(900, 550);
+		this.setSize(750, 425);
 		this.setContentPane(getJContentPane());
 		this.setTitle("New Model");
 	}
@@ -157,26 +166,58 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 			paperShapePanel.add(polygonRB);
 			paperShapePanel.add(rotatedCB);
 			
+			triangleRB.setEnabled(false);
+			polygonRB.setEnabled(false);
+			rotatedCB.setEnabled(false);
+			
 			paperShapePanel.setLayout(new GridLayout(5, 1, 1, 0));
 			paperShapePanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Shape"));
 
 			
-			//##### Paper Size #####
+			//##### Paper Size SQUARE#####
 
 			PlainDocument docPaperSize = (PlainDocument) paperSizeTF.getDocument();
 			docPaperSize.setDocumentFilter(new IntFilter());
+			paperSizeTF.setHorizontalAlignment(JTextField.RIGHT);
 			paperSizeTF.setPreferredSize(new Dimension(150, 25));
 			paperSizeTF.setMaximumSize(new Dimension(200, 25));
 			JLabel paperSizeUnit = new JLabel("cm");
-			
-			JPanel paperSizePanel = new JPanel();
-			
+						
 			paperSizePanel.add(paperSideSizeLabel);
 			paperSizePanel.add(paperSizeTF);
 			paperSizePanel.add(paperSizeUnit);
 			paperSizePanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Size"));
 			
+			//##### Paper Size RECTANGLE #####
 			
+			PlainDocument docPaperWidth = (PlainDocument) paperWidthTF.getDocument();
+			JLabel paperWidthRectUnit = new JLabel("cm");
+			docPaperWidth.setDocumentFilter(new IntFilter());
+			paperWidthTF.setHorizontalAlignment(JTextField.RIGHT);
+			paperWidthTF.setPreferredSize(new Dimension(100, 25));
+			//paperWidthTF.setMaximumSize(new Dimension(200, 25));
+			JPanel paperWidthRect = new JPanel();
+			
+			PlainDocument docPaperHeight = (PlainDocument) paperHeightTF.getDocument();
+			JLabel paperHeightRectUnit = new JLabel("cm");
+			docPaperHeight.setDocumentFilter(new IntFilter());
+			paperHeightTF.setHorizontalAlignment(JTextField.RIGHT);
+			paperHeightTF.setPreferredSize(new Dimension(100, 25));
+			//paperHeightTF.setMaximumSize(new Dimension(200, 25));
+			JPanel paperHeightRect = new JPanel();
+			
+			paperWidthRect.add(paperWidthLabel);
+			paperWidthRect.add(paperWidthTF);
+			paperWidthRect.add(paperWidthRectUnit);
+			paperHeightRect.add(paperHeightLabel);
+			paperHeightRect.add(paperHeightTF);
+			paperHeightRect.add(paperHeightRectUnit);
+			
+			paperSizeRectPanel.add(paperWidthRect);
+			paperSizeRectPanel.add(paperHeightRect);
+			paperSizeRectPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Paper Size"));
+			paperSizeRectPanel.setLayout(new BoxLayout(paperSizeRectPanel, BoxLayout.PAGE_AXIS));
+
 			//##### Paper Color #####
 			faceUpColor.setPreferredSize(new Dimension(100, 50));
 			faceUpColor.setOpaque(true);
@@ -225,6 +266,7 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 			JPanel paperOptionsPanel = new JPanel();
 			paperOptionsPanel.add(paperShapePanel);
 			paperOptionsPanel.add(paperSizePanel);
+			paperOptionsPanel.add(paperSizeRectPanel);
 			paperOptionsPanel.add(paperColorPanel);
 			//paperOptionsPanel.add(instructPanel);
 			paperOptionsPanel.setLayout(new BoxLayout(paperOptionsPanel, BoxLayout.PAGE_AXIS));			
@@ -248,6 +290,7 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 			jContentPane.setLayout(layout);
 			SpringUtilities.makeCompactGrid(jContentPane, 1, 3, 6, 6, 6, 6);
 		}
+		modeChanged();
 
 		return jContentPane;
 	}
@@ -257,12 +300,16 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 		
 		if (e.getSource() == squareRB) {
 			Globals.paperShape = Constants.PaperShape.SQUARE;
+			modeChanged();
 		} else if (e.getSource() == rectangleRB) {
 			Globals.paperShape = Constants.PaperShape.RECTANGLE;
+			modeChanged();
 		} else if (e.getSource() == triangleRB) {
 			Globals.paperShape = Constants.PaperShape.TRIANGLE;
+			modeChanged();
 		} else if (e.getSource() == polygonRB) {
 			Globals.paperShape = Constants.PaperShape.POLYGON;
+			modeChanged();
 		} else if (e.getSource() == switchColors) {
 			tmpColor = faceUpColor.getBackground();
 			faceUpColor.setBackground(faceDownColor.getBackground());
@@ -281,35 +328,73 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 			} else {
 				faceDownColor.setBackground(newColor);
 			}
-		}
-		
-		if (e.getSource() == okButton) {
-			createNewDiagram();
-			dispose();
+		} else if (e.getSource() == okButton) {
+			if (titleTF.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyTitle"),
+						"Error_EmptyTitle", 
+						JOptionPane.ERROR_MESSAGE);
+			} else if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+				if (paperWidthTF.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptySideLength"),
+							"Error_EmptyWidth", 
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+				if (paperWidthTF.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyWidth"),
+							"Error_EmptyWidth", 
+							JOptionPane.ERROR_MESSAGE);
+				} else if (paperHeightTF.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(this, Origrammer.res.getString("Error_EmptyHeight"),
+							"Error_EmptyHeight", 
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else if ((!titleTF.getText().isEmpty()) && (!paperWidthTF.getText().isEmpty()) && (!paperHeightTF.getText().isEmpty())){
+				createNewDiagram();
+				dispose();	
+			}
 
 		} else if (e.getSource() == cancelButton) {
 			dispose();		
 		}
 	}
 	
+	public void modeChanged() {
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			paperSizePanel.setVisible(true);
+			paperSizeRectPanel.setVisible(false);
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			paperSizePanel.setVisible(false);
+			paperSizeRectPanel.setVisible(true);
+		}
+	}
+	
 	private void createNewDiagram() {
+		
+		
 		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
 
 		Diagram tmpDiagram = new Diagram(Constants.DEFAULT_PAPER_SIZE, 
 										faceUpColor.getBackground(), 
 										faceDownColor.getBackground());
+		
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			tmpDiagram.setPaperWidth(Integer.parseInt(paperSizeTF.getText()));
+			tmpDiagram.setPaperHeight(Integer.parseInt(paperSizeTF.getText()));
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			tmpDiagram.setPaperWidth(Integer.parseInt(paperWidthTF.getText()));
+			tmpDiagram.setPaperHeight(Integer.parseInt(paperHeightTF.getText()));
+		}
 		tmpDiagram.setTitle(titleTF.getText());
 		tmpDiagram.setAuthor(authorTF.getText());
 		tmpDiagram.setComments(commentsTF.getText());
-		tmpDiagram.setPaperWidth(Integer.parseInt(paperSizeTF.getText()));
-		tmpDiagram.setPaperHeight(Integer.parseInt(paperSizeTF.getText()));
 		
 		tmpDiagram.setFaceUpColor(faceUpColor.getBackground());
 		tmpDiagram.setFaceDownColor(faceDownColor.getBackground());
+		Origrammer.diagram = tmpDiagram;
 
 		Step step = new Step();
-		tmpDiagram.steps.add(step);
-		Origrammer.diagram = tmpDiagram;
+		Origrammer.diagram.steps.add(step);
 		Globals.currentStep = 0;
 		__screen.modeChanged();
 		
@@ -321,24 +406,19 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 	}
 
 	@Override
-	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void componentHidden(ComponentEvent e) {		
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 
