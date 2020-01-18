@@ -24,16 +24,20 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 
 	JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
 	JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
 	JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
+	JRadioButton symbolInputToolRB = new JRadioButton(Origrammer.res.getString("UI_symbolInputTool"), false);
+
 	JRadioButton measureToolRB = new JRadioButton(Origrammer.res.getString("UI_measureTool"), false);
 	JRadioButton fillToolRB = new JRadioButton(Origrammer.res.getString("UI_fillTool"), false);
 	ButtonGroup toolbarGroup;
 	
+	//MEASURE PANEL
 	JPanel measureOptionsPanel = new JPanel();
 	JRadioButton measureLengthRB = new JRadioButton(Origrammer.res.getString("UI_measureLength"), true);
 	JRadioButton measureAngleRB = new JRadioButton(Origrammer.res.getString("UI_measureAngle"), true);
@@ -43,6 +47,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	JFormattedTextField measureLengthTF;
 	JFormattedTextField measureAngleTF;
 	
+	//INPUT LINE MODE
 	JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
 	JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
 	ButtonGroup lineInputGroup;
@@ -71,6 +76,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		toolbarGroup.add(selectionToolRB);
 		toolbarGroup.add(lineInputToolRB);
 		toolbarGroup.add(arrowInputToolRB);
+		toolbarGroup.add(symbolInputToolRB);
 		toolbarGroup.add(measureToolRB);
 		toolbarGroup.add(fillToolRB);
 		
@@ -78,7 +84,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		lineInputGroup = new ButtonGroup();
 		lineInputGroup.add(lineInputTwoVerticesRB);
 		lineInputGroup.add(lineInputIncenterRB);
-		
+				
 		//MEASURE Button Group
 		measureGroup = new ButtonGroup();
 		measureGroup.add(measureLengthRB);
@@ -88,6 +94,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		selectionToolRB.addActionListener(this);
 		lineInputToolRB.addActionListener(this);
 		arrowInputToolRB.addActionListener(this);
+		symbolInputToolRB.addActionListener(this);
 		measureToolRB.addActionListener(this);
 		fillToolRB.addActionListener(this);
 		
@@ -122,9 +129,10 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		toolbarPanel.add(selectionToolRB);
 		toolbarPanel.add(lineInputToolRB);
 		toolbarPanel.add(arrowInputToolRB);
+		toolbarPanel.add(symbolInputToolRB);
 		toolbarPanel.add(measureToolRB);
 		toolbarPanel.add(fillToolRB);
-		toolbarPanel.setLayout(new GridLayout(5, 1, 10, 2));
+		toolbarPanel.setLayout(new GridLayout(6, 1, 10, 2));
 		add(toolbarPanel);
 		
 		//LINE INPUT Panel and positioning
@@ -133,6 +141,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		lineInputPanel.add(lineInputIncenterRB);
 		lineInputPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(lineInputPanel);
+		
+
 		
 		//MEASURING OPTIONS Panel and positioning
 		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
@@ -188,6 +198,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		buttonsPanel.add(dispFilledFacedCB);
 		buttonsPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(buttonsPanel);
+		
+		modeChanged();
 	}
 	
 	@Override
@@ -200,6 +212,9 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			modeChanged();
 		} else if (e.getSource() == arrowInputToolRB) {
 			Globals.toolbarMode = Constants.ToolbarMode.INPUT_ARROW;
+			modeChanged();
+		} else if (e.getSource() == symbolInputToolRB) {
+			Globals.toolbarMode = Constants.ToolbarMode.INPUT_SYMBOL;
 			modeChanged();
 		} else if (e.getSource() == measureToolRB) {
 			Globals.toolbarMode = Constants.ToolbarMode.MEASURE_TOOL;
@@ -281,7 +296,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			lineInputTwoVerticesRB.setEnabled(false);
 			lineInputIncenterRB.setEnabled(false);
 		}
-		
+			
 		if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			measureOptionsPanel.setVisible(true);		
 		} else {

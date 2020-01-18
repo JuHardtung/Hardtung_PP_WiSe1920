@@ -11,6 +11,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -39,10 +40,11 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 		stepBack.addActionListener(this);
 		stepForth.addActionListener(this);
 		
+		
 		//FOLD DESCRIPTION panel and positioning
 		JLabel foldDescrTitel = new JLabel("Fold Description", SwingConstants.CENTER);
 		JPanel foldDescrPanel = new JPanel();
-		foldDescr.setPreferredSize(new Dimension(300, 20));	
+		foldDescr.setPreferredSize(new Dimension(400, 20));	
 		foldDescrPanel.add(foldDescrTitel);
 		foldDescrPanel.add(foldDescr);
 		foldDescrPanel.setLayout(new GridLayout(2, 1, 10, 2));
@@ -50,21 +52,24 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 		
 		//STEP NAVIGATION panel and positioning
 		JPanel stepNavigation = new JPanel();
-		stepBack.setPreferredSize(new Dimension(50, 20));
-		stepForth.setPreferredSize(new Dimension(50, 20));
+		stepBack.setPreferredSize(new Dimension(30, 10));
+		stepForth.setPreferredSize(new Dimension(30, 10));
 		currentStep.setHorizontalAlignment(JFormattedTextField.CENTER);
-		currentStep.setPreferredSize(new Dimension(50, 20));
+		currentStep.setPreferredSize(new Dimension(30, 10));
+		currentStep.setMaximumSize(new Dimension(30, 10));
 		currentStep.setValue(Globals.currentStep);
 		stepNavigation.add(stepBack);
 		stepNavigation.add(currentStep);
 		stepNavigation.add(stepForth);
-		stepNavigation.setLayout(new GridLayout(1, 3, 70, 2));
+		stepNavigation.setLayout(new GridLayout(1, 3, 100, 2));
 		
 		JPanel stepDescrAndNavPanel = new JPanel();
 		stepDescrAndNavPanel.add(foldDescrPanel);
 		stepDescrAndNavPanel.add(stepNavigation);
 		stepDescrAndNavPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		
+		
+		add(Box.createRigidArea(new Dimension(190,70)));
 		add(stepDescrAndNavPanel);
 		
 		foldDescr.getDocument().addDocumentListener(new DocumentListener() {

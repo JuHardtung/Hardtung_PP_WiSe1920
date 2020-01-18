@@ -9,6 +9,7 @@ public class StringResource extends ListResourceBundle {
 			{"UI_selectionTool", "Selection Tool"},
 			{"UI_lineInputTool", "Line Input Tool"},
 			{"UI_arrowInputTool", "Arrow Input Tool"},
+			{"UI_symbolInputTool", "Symbol Input Tool"},
 			{"UI_measureTool", "Measure Tool"},
 			{"UI_fillTool", "Fill Tool"},
 			{"UI_measureLength", "Measure Length"},

@@ -15,10 +15,27 @@ public class Constants {
 		SELECTION_TOOL,
 		INPUT_LINE,
 		INPUT_ARROW,
+		INPUT_SYMBOL,
 		MEASURE_TOOL,
 		FILL_TOOL,
 		ADD_VERTEX,
 		DELETE_VERTEX
+	}
+	
+	public static enum InputSymbolMode {
+		NONE,
+		LEADER,
+		EQUAL_DIST,
+		EQUAL_ANGL,
+		ROTATIONS,
+		X_RAY_CIRCLE,
+		FOLD_OVER_AND_OVER,
+		REPETITION_BOX,
+		NEXT_VIEW,
+		HOLD_HERE,
+		HOLD_HERE_AND_PULL,
+		CRIMPING_PLEATING,
+		SINKS
 	}
 	
 	public static enum MeasureMode {

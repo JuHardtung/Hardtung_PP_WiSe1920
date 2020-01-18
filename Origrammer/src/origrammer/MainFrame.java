@@ -110,6 +110,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedLines();
 				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedArrows();
 				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedFaces();
+				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedLeaders();
 				mainScreen.repaint();
 			}
 		});

@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
@@ -39,17 +40,30 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
 									new JSeparator(JSeparator.HORIZONTAL),
 									"Push here", "Pull out", "Inflate here"};
+	Object[] symbolInputOptions = {"Leader", "Equal Distances", "Equal Angles", 
+			new JSeparator(JSeparator.HORIZONTAL), 
+            "Rotations", "X-Ray Circle", "Fold over and over", 
+            "Repetition Box", new JSeparator(JSeparator.HORIZONTAL), 
+            "Next View Here", "Hold Here", "Hold Here and Pull", 
+            new JSeparator(JSeparator.HORIZONTAL), "Crimping & Pleating", "Sinks"};
 
 	
-	//INPUT LINES/ARROWS
+	//INPUT LINES/ ARROWS/ SYMBOLS
 	JPanel inputLinesPanel = new JPanel();
 	JLabel linesLabel = new JLabel(Origrammer.res.getString("MenuLines"));
 	JPanel inputArrowPanel = new JPanel();
 	JLabel arrowsLabel = new JLabel(Origrammer.res.getString("MenuArrows"));
+	JPanel inputSymbolsPanel = new JPanel();
 	private JComboBox<String> menuLineCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> menuArrowCB = new JComboBox<>(arrowInputOptions);
+	private JComboBox<Object> symbolInputCB = new JComboBox<>(symbolInputOptions);
+	
+	//INPUT SYMBOL LEADER
+	JPanel inputSymbolLeaderPanel = new JPanel();
+	public JTextField inputLeaderText = new JTextField();
 	
 	//FACE UP/ FACE DOWN COLOR
+	JPanel faceDirectionPanel = new JPanel();
 	private JRadioButton faceUpInput = new JRadioButton("Face Up", false);
 	private JRadioButton faceDownInput = new JRadioButton("Face Down", true);
 	
@@ -60,8 +74,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<Object> changeArrowTypeCB = new JComboBox<>(arrowInputOptions);
 	JButton changeLineButton = new JButton("Set");
 	JButton changeArrowButton = new JButton("Set");
-
-
 
 	//ROTATE/SCALE ARROWS
 	JPanel sliderPanel = new JPanel();
@@ -82,7 +94,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		faceDirectionInput.add(faceUpInput);
 		faceDirectionInput.add(faceDownInput);
 		
-		JPanel faceDirectionPanel = new JPanel();
 		faceDirectionPanel.add(faceUpInput);
 		faceDirectionPanel.add(faceDownInput);
 		faceDirectionPanel.setLayout(new BoxLayout(faceDirectionPanel, BoxLayout.PAGE_AXIS));
@@ -95,37 +106,62 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		menuLineCB.setRenderer(new IndentedRenderer());
 		menuLineCB.setSelectedIndex(0);
 		menuLineCB.addActionListener(this);
-		menuLineCB.setToolTipText(Origrammer.res.getString("TT_LineCB"));
 		
 		inputLinesPanel.add(menuLineCB);
-		inputLinesPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Input Line Type"));
-		inputLinesPanel.setToolTipText(Origrammer.res.getString("TT_LineCB"));
+		inputLinesPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Input Line Type"));
 
-		
 		//##### ARROW INPUT TYPE #####
 		menuArrowCB.setRenderer(new SeparatorComboBoxRenderer());
 		menuArrowCB.setSelectedIndex(0);
 		menuArrowCB.addActionListener(new SeparatorComboBoxListener(menuArrowCB));
-		menuArrowCB.setToolTipText(Origrammer.res.getString("TT_ArrowCB"));
 		
 		inputArrowPanel.add(menuArrowCB);
-		inputArrowPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Input Arrow Type"));
-		inputArrowPanel.setToolTipText(Origrammer.res.getString("TT_ArrowCB"));
+		inputArrowPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Input Arrow Type"));
 
+		//##### SYMBOL INPUT TYPE #####
+		symbolInputCB.setRenderer(new SeparatorComboBoxRenderer());
+		symbolInputCB.setSelectedIndex(0);
+		symbolInputCB.addActionListener(new SeparatorComboBoxListener(symbolInputCB));
+		
+		inputSymbolsPanel.add(symbolInputCB);
+		inputSymbolsPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Input Symbol Type"));
+		
+		//##### INPUT SYMBOL LEADER #####
+		inputLeaderText.setPreferredSize(new Dimension(150, 25));
+		inputSymbolLeaderPanel.add(inputLeaderText);
+		inputSymbolLeaderPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Input Leader Text"));
 		
 		//##### SLIDERS #####
 		sliderScaleIcon.setMajorTickSpacing(10);
 		sliderScaleIcon.setPaintTicks(true);
 		//sliderScaleIcon.setPaintLabels(true);
 		sliderScaleIcon.addChangeListener(e -> sliderScaleChanged());
-		sliderScaleIcon.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Scale Arrow"));
+		sliderScaleIcon.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Scale Arrow"));
 
 		sliderRotIcon.setMajorTickSpacing(225);
 		sliderRotIcon.setPaintTicks(true);
 		//sliderRotIcon.setPaintLabels(true);
 		sliderRotIcon.setSnapToTicks(true);
 		sliderRotIcon.addChangeListener(e -> sliderRotChanged());
-		sliderRotIcon.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Rotate Arrow"));
+		sliderRotIcon.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Rotate Arrow"));
 
 		sliderPanel.add(sliderScaleIcon);
 		sliderPanel.add(sliderRotIcon);
@@ -135,7 +171,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		changeLineButton.addActionListener(this);
 		changeLinePanel.add(changeLineTypeCB);
 		changeLinePanel.add(changeLineButton);
-		changeLinePanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Change Line Type"));
+		changeLinePanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+											getBackground().darker(), 
+											getBackground().brighter()), "Change Line Type"));
 		
 		
 		//##### CHANGE ARROW TYPE #####
@@ -143,7 +182,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		changeArrowTypeCB.setRenderer(new SeparatorComboBoxRenderer());
 		changeArrowPanel.add(changeArrowTypeCB);
 		changeArrowPanel.add(changeArrowButton);
-		changeArrowPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Change Arrow Type"));
+		changeArrowPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Change Arrow Type"));
 
 		//Add Lines and Arrow Panel to UITopPanel
 		add(changeLinePanel);
@@ -151,6 +193,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(faceDirectionPanel);
 		add(inputLinesPanel);
 		add(inputArrowPanel);
+		add(inputSymbolsPanel);
+		add(inputSymbolLeaderPanel);
 		add(sliderPanel);
 	
 		modeChanged();
@@ -192,7 +236,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object selectedLine = menuLineCB.getSelectedItem();
 
 		if (e.getSource() == changeLineButton) {
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
@@ -213,7 +256,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 
 		} else if (e.getSource() == changeArrowButton) {
-
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 				if (a.isSelected()) {
 					String arrowType = changeArrowTypeCB.getSelectedItem().toString();
@@ -241,8 +283,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_DOWN;
 		}
 
-		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
+			Object selectedLine = menuLineCB.getSelectedItem();
+			
 			if (selectedLine == "Valley Fold") {
 				Globals.inputLineType = OriLine.TYPE_VALLEY;
 			} else if (selectedLine == "Mountain Fold") {
@@ -268,12 +312,22 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			inputArrowPanel.setVisible(false);			
 		}
 		
-		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
-			faceUpInput.setVisible(true);
-			faceDownInput.setVisible(true);
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
+			inputSymbolsPanel.setVisible(true);
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
+				inputSymbolLeaderPanel.setVisible(true);
+			} else {
+				inputSymbolLeaderPanel.setVisible(false);
+			}
 		} else {
-			faceUpInput.setVisible(false);
-			faceDownInput.setVisible(false);
+			inputSymbolsPanel.setVisible(false);
+			inputSymbolLeaderPanel.setVisible(false);
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
+			faceDirectionPanel.setVisible(true);
+		} else {
+			faceDirectionPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
@@ -344,26 +398,60 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			Object selectedArrow = menuArrowCB.getSelectedItem();
+			
+			if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
+				Object selectedArrow = menuArrowCB.getSelectedItem();
 
-			if (selectedArrow instanceof JSeparator) {
-				combobox.setSelectedItem(oldItem);
-			} else {
-				oldItem = selectedArrow;
+				if (selectedArrow instanceof JSeparator) {
+					combobox.setSelectedItem(oldItem);
+				} else {
+					oldItem = selectedArrow;
+				}
+				if (selectedArrow == "Valley Fold") {
+					Globals.inputArrowType = OriArrow.TYPE_VALLEY;
+				} else if (selectedArrow == "Mountain Fold") {
+					Globals.inputArrowType = OriArrow.TYPE_MOUNTAIN;
+				} else if (selectedArrow == "Turn over") {
+					Globals.inputArrowType = OriArrow.TYPE_TURN_OVER;
+				} else if (selectedArrow == "Push here") {
+					Globals.inputArrowType = OriArrow.TYPE_PUSH_HERE;
+				} else if (selectedArrow == "Pull out") {
+					Globals.inputArrowType = OriArrow.TYPE_PULL_HERE;
+				} else if (selectedArrow == "Inflate here") {
+					Globals.inputArrowType = OriArrow.TYPE_INFLATE_HERE;
+				}
+				modeChanged();
+			} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
+				Object inputSymbol = symbolInputCB.getSelectedItem();
+				
+				if (inputSymbol == "Leader") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.LEADER;
+				} else if (inputSymbol == "Equal Distances") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_DIST;
+				} else if (inputSymbol == "Equal Angles") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_ANGL;
+				} else if (inputSymbol == "Rotations") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.ROTATIONS;
+				} else if (inputSymbol == "X-Ray Circle") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.X_RAY_CIRCLE;
+				} else if (inputSymbol == "Fold over and over") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.FOLD_OVER_AND_OVER;
+				} else if (inputSymbol == "Repetition Box") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.REPETITION_BOX;
+				} else if (inputSymbol == "Next View Here") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.NEXT_VIEW;
+				} else if (inputSymbol == "Hold Here") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE;
+				} else if (inputSymbol == "Hold Here and Pull") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE_AND_PULL;
+				} else if (inputSymbol == "Crimping & Pleating") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.CRIMPING_PLEATING;
+				} else if (inputSymbol == "Sinks") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.SINKS;
+				}
+				modeChanged();
 			}
-			if (selectedArrow == "Valley Fold") {
-				Globals.inputArrowType = OriArrow.TYPE_VALLEY;
-			} else if (selectedArrow == "Mountain Fold") {
-				Globals.inputArrowType = OriArrow.TYPE_MOUNTAIN;
-			} else if (selectedArrow == "Turn over") {
-				Globals.inputArrowType = OriArrow.TYPE_TURN_OVER;
-			} else if (selectedArrow == "Push here") {
-				Globals.inputArrowType = OriArrow.TYPE_PUSH_HERE;
-			} else if (selectedArrow == "Pull out") {
-				Globals.inputArrowType = OriArrow.TYPE_PULL_HERE;
-			} else if (selectedArrow == "Inflate here") {
-				Globals.inputArrowType = OriArrow.TYPE_INFLATE_HERE;
-			}
+
 		}
 	}
 	

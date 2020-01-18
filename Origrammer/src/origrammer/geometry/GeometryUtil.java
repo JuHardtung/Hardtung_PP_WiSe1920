@@ -145,6 +145,10 @@ public class GeometryUtil {
 	public static boolean isMouseOverFace(double x, double y, OriFace f) {
 		return f.path.intersects(x, y, 5, 5);
 	}
+	
+	public static boolean isMouseOverRectangle(double x, double y, Rectangle rect) {
+		return rect.intersects(x, y, 5, 5);
+	}
 
 
 	/**

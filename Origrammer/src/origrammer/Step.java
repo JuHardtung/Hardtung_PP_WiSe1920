@@ -8,6 +8,7 @@ import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
 import origrammer.geometry.OriFace;
+import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriVertex;
 
@@ -33,6 +34,7 @@ public class Step {
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
 	public ArrayList<OriFace> filledFaces = new ArrayList<>();
+	public ArrayList<OriLeader> leader = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -172,12 +174,20 @@ public class Step {
 	}
 
 
-	/** Adds a new Arrow to the diagram
+	/** Adds a new Arrow to the current diagram step
 	 * 
 	 * @param inputArrow
 	 */
 	public void addArrow(OriArrow inputArrow) {
-		arrows.add(new OriArrow(inputArrow));
+		arrows.add(inputArrow);
+	}
+	
+	/**
+	 * Adds a new Leader to the current diagram step
+	 * @param inputLeader
+	 */
+	public void addLeader(OriLeader inputLeader) {
+		leader.add(inputLeader);
 	}
 	
 	public void selectAll() {
@@ -218,6 +228,12 @@ public class Step {
 	public void unselectAllFaces() {
 		for (OriFace f : filledFaces) {
 			f.setSelected(false);
+		}
+	}
+	
+	public void unselectAllLeaders() {
+		for (OriLeader l : leader) {
+			l.setSelected(false);
 		}
 	}
 
@@ -269,6 +285,20 @@ public class Step {
 		}
 		for (OriFace face : selectedFaces)  {
 			filledFaces.remove(face);
+		}
+	}
+	
+	
+	public void deleteSelectedLeaders() {
+		ArrayList<OriLeader> selectedLeader = new ArrayList<>();
+		
+		for (OriLeader l : leader) {
+			if (l.isSelected()) {
+				selectedLeader.add(l);
+			}
+		}
+		for (OriLeader l : selectedLeader) {
+			leader.remove(l);
 		}
 	}
 	
