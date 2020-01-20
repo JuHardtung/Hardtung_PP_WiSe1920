@@ -4,20 +4,20 @@ import java.awt.Rectangle;
 
 import javax.swing.JLabel;
 
-public class OriLeader {
+public class OriRepetitionBox {
 
 	
 	public OriLine line = new OriLine();
-	private JLabel leaderLabel = new JLabel();
+	private JLabel repetitionLabel = new JLabel();
 	private boolean isSelected;
 	
-	public OriLeader() {
+	public OriRepetitionBox() {
 		
 	}
 	
-	public OriLeader(OriLine leader, JLabel leaderLabel) {
-		this.line = leader;
-		this.leaderLabel = leaderLabel;
+	public OriRepetitionBox(OriLine line, JLabel repetitionLabel) {
+		this.line = line;
+		this.repetitionLabel = repetitionLabel;
 	}
 	
 	public void moveBy(double x, double y) {
@@ -28,33 +28,33 @@ public class OriLeader {
 		line.p1.x += x;
 		line.p1.y += y;
 		
-		Rectangle oldBounds = leaderLabel.getBounds();
-		leaderLabel.setBounds(oldBounds.x + (int) x, oldBounds.y + (int) y, 
+		Rectangle oldBounds = repetitionLabel.getBounds();
+		repetitionLabel.setBounds(oldBounds.x + (int) x, oldBounds.y + (int) y, 
 				oldBounds.width, oldBounds.height);
 	}
 
-	public OriLine getLeader() {
+	public OriLine getLine() {
 		return line;
 	}
 
-	public void setLeader(OriLine leader) {
-		this.line = leader;
+	public void setLine(OriLine line) {
+		this.line = line;
 	}
 
 	public JLabel getLabel() {
-		return leaderLabel;
+		return repetitionLabel;
 	}
 
-	public void setLabel(JLabel leaderLabel) {
-		this.leaderLabel = leaderLabel;
+	public void setLabel(JLabel repetitionLabel) {
+		this.repetitionLabel = repetitionLabel;
 	}
 	
 	public void setText(String leaderText) {
-		leaderLabel.setText(leaderText);
+		repetitionLabel.setText(leaderText);
 	}
 	
 	public void setPosition(Rectangle rect) {
-		leaderLabel.setBounds(rect);
+		repetitionLabel.setBounds(rect);
 	}
 
 	public boolean isSelected() {
@@ -64,5 +64,4 @@ public class OriLeader {
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
-	
 }

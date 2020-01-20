@@ -142,6 +142,21 @@ public class GeometryUtil {
 		return false;
 	}
 	
+	public static boolean isMouseOverSymbol(double x, double y, OriSymbol s) {
+		
+		double sX = s.getxPos();
+		double sY = s.getyPos();
+		double sXEnd = sX + (s.getWidth());
+		double sYEnd = sY + (s.getHeight());
+		
+		if (x > sX && x < sXEnd) {
+			if (y > sY && y < sYEnd) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean isMouseOverFace(double x, double y, OriFace f) {
 		return f.path.intersects(x, y, 5, 5);
 	}

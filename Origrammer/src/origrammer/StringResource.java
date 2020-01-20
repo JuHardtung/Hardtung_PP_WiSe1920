@@ -43,6 +43,8 @@ public class StringResource extends ListResourceBundle {
 			{"Error_EmptySideLength", "Error: Side Length can't be empty!"},
 			{"Error_EmptyWidth", "Error: Paper Width can't be empty!"},
 			{"Error_EmptyHeight", "Error: Paper Height can't be empty!"},
+			{"Error_EmptyLeaderTextField", "Error: The TextField for a leader can't be empty!"},
+			{"Error_EmptyRepetitionTextField", "Error: The TextField for a RepetitionBox can't be empty!"},
 			{"Warning_SameNameFileExists", "Warning: File with the same name already exists!"},
 			{"DialogTitle_FileSave", "Save!"}
 	};

@@ -4,6 +4,7 @@ package origrammer;
 import java.awt.Color;
 
 import origrammer.geometry.OriLine;
+import origrammer.geometry.OriSymbol;
 
 public class Globals {
 	
@@ -26,6 +27,8 @@ public class Globals {
 	public static boolean bDispCrossLine = false;
 	public static int inputLineType = OriLine.TYPE_VALLEY;
 	public static int inputArrowType = OriArrow.TYPE_VALLEY;
+	public static int inputSymbolType = OriSymbol.TYPE_NONE;
+	//TODO: remove either inputSymbolType or inputSymbolMode to make things straight forward
 	
 	public static int currentStep = 0;
 	

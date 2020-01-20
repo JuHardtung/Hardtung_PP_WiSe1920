@@ -124,11 +124,11 @@ public class OriArrow {
 		this.type = type;
 	}
 
-	public JLabel getArrowLabel() {
+	public JLabel getLabel() {
 		return arrowLabel;
 	}
 
-	public void setArrowLabel(JLabel arrowLabel) {
+	public void setLabel(JLabel arrowLabel) {
 		this.arrowLabel = arrowLabel;
 	}
 

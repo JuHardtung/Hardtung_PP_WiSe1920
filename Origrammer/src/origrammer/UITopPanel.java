@@ -33,6 +33,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import origrammer.geometry.GeometryUtil;
 import origrammer.geometry.OriLine;
+import origrammer.geometry.OriSymbol;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
@@ -40,12 +41,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
 									new JSeparator(JSeparator.HORIZONTAL),
 									"Push here", "Pull out", "Inflate here"};
-	Object[] symbolInputOptions = {"Leader", "Equal Distances", "Equal Angles", 
-			new JSeparator(JSeparator.HORIZONTAL), 
-            "Rotations", "X-Ray Circle", "Fold over and over", 
-            "Repetition Box", new JSeparator(JSeparator.HORIZONTAL), 
-            "Next View Here", "Hold Here", "Hold Here and Pull", 
-            new JSeparator(JSeparator.HORIZONTAL), "Crimping & Pleating", "Sinks"};
+	Object[] symbolInputOptions = {"Leader", "Repetition Box", "Next View Here", "Rotations", 
+			"Hold Here", "Hold Here and Pull", new JSeparator(JSeparator.HORIZONTAL),  
+			"X-Ray Circle", "Fold over and over", "Equal Distances", "Equal Angles", 
+			new JSeparator(JSeparator.HORIZONTAL),  "Crimping & Pleating", "Sinks"};
 
 	
 	//INPUT LINES/ ARROWS/ SYMBOLS
@@ -61,6 +60,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	//INPUT SYMBOL LEADER
 	JPanel inputSymbolLeaderPanel = new JPanel();
 	public JTextField inputLeaderText = new JTextField();
+	
+	//INPUT SYMBOL REPETITION BOX
+	JPanel inputSymbolRepetitionPanel = new JPanel();
+	public JTextField inputRepetitionText = new JTextField();
 	
 	//FACE UP/ FACE DOWN COLOR
 	JPanel faceDirectionPanel = new JPanel();
@@ -79,7 +82,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	JPanel sliderPanel = new JPanel();
 	private JSlider sliderScaleIcon = new JSlider(100, 200);
 	private JSlider sliderRotIcon = new JSlider(0, 3600);
-	
 	
 	MainScreen screen;
 	
@@ -143,6 +145,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Leader Text"));
 		
+		//##### INPUT SYMBOL LEADER #####
+		inputRepetitionText.setPreferredSize(new Dimension(150, 25));
+		inputSymbolRepetitionPanel.add(inputRepetitionText);
+		inputSymbolRepetitionPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Input Repetition Text"));
+		
 		//##### SLIDERS #####
 		sliderScaleIcon.setMajorTickSpacing(10);
 		sliderScaleIcon.setPaintTicks(true);
@@ -195,6 +205,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputArrowPanel);
 		add(inputSymbolsPanel);
 		add(inputSymbolLeaderPanel);
+		add(inputSymbolRepetitionPanel);
 		add(sliderPanel);
 	
 		modeChanged();
@@ -211,9 +222,21 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				screen.repaint();
 
 				//TODO: add preview pictures of arrow types
-				arrow.getArrowLabel().setBounds((int) arrow.getxPos(), (int)arrow.getyPos(), 
+				arrow.getLabel().setBounds((int) arrow.getxPos(), (int)arrow.getyPos(), 
 												(int) Math.round(arrow.getWidth() * arrow.getScale()), 
 												(int) Math.round(arrow.getHeight() * arrow.getScale()));
+			}
+		}
+		
+		for (OriSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).symbols) {
+			if (symbol.isSelected()) {
+				symbol.setScale((double) sliderScaleIcon.getValue()/100);
+				screen.repaint();
+
+				//TODO: add preview pictures of arrow types
+				symbol.getLabel().setBounds((int) symbol.getxPos(), (int)symbol.getyPos(), 
+												(int) Math.round(symbol.getWidth() * symbol.getScale()), 
+												(int) Math.round(symbol.getHeight() * symbol.getScale()));
 			}
 		}
 	}		
@@ -229,7 +252,18 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				
 				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getxPos(), arrow.getyPos(), arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
 				
-				arrow.getArrowLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
+				arrow.getLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
+			}
+		}
+		
+		for (OriSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).symbols) {
+			if (symbol.isSelected()) {
+				symbol.setDegrees(sliderRotIcon.getValue()/10);
+				screen.repaint();
+				
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getxPos(), symbol.getyPos(), symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
+				
+				symbol.getLabel().setBounds((int)symbol.getxPos(), (int)symbol.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
 			}
 		}
 	}
@@ -319,9 +353,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else {
 				inputSymbolLeaderPanel.setVisible(false);
 			}
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
+				inputSymbolRepetitionPanel.setVisible(true);
+			} else {
+				inputSymbolRepetitionPanel.setVisible(false);
+
+			}
 		} else {
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
+			inputSymbolRepetitionPanel.setVisible(false);
+
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
@@ -426,28 +468,40 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				
 				if (inputSymbol == "Leader") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.LEADER;
-				} else if (inputSymbol == "Equal Distances") {
-					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_DIST;
-				} else if (inputSymbol == "Equal Angles") {
-					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_ANGL;
-				} else if (inputSymbol == "Rotations") {
-					Globals.inputSymbolMode = Constants.InputSymbolMode.ROTATIONS;
-				} else if (inputSymbol == "X-Ray Circle") {
-					Globals.inputSymbolMode = Constants.InputSymbolMode.X_RAY_CIRCLE;
-				} else if (inputSymbol == "Fold over and over") {
-					Globals.inputSymbolMode = Constants.InputSymbolMode.FOLD_OVER_AND_OVER;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Repetition Box") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.REPETITION_BOX;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
+				} else if (inputSymbol == "Equal Distances") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_DIST;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
+				} else if (inputSymbol == "Equal Angles") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_ANGL;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
+				} else if (inputSymbol == "Rotations") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.ROTATIONS;
+					Globals.inputSymbolType = OriSymbol.TYPE_ROTATION;
+				} else if (inputSymbol == "X-Ray Circle") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.X_RAY_CIRCLE;
+					Globals.inputSymbolType = OriSymbol.TYPE_XRAY_CIRCLE;
+				} else if (inputSymbol == "Fold over and over") {
+					Globals.inputSymbolMode = Constants.InputSymbolMode.FOLD_OVER_AND_OVER;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Next View Here") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.NEXT_VIEW;
+					Globals.inputSymbolType = OriSymbol.TYPE_NEXT_VIEW_HERE;
 				} else if (inputSymbol == "Hold Here") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE;
+					Globals.inputSymbolType = OriSymbol.TYPE_HOLD;
 				} else if (inputSymbol == "Hold Here and Pull") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE_AND_PULL;
+					Globals.inputSymbolType = OriSymbol.TYPE_HOLD_AND_PULL;
 				} else if (inputSymbol == "Crimping & Pleating") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.CRIMPING_PLEATING;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Sinks") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.SINKS;
+					Globals.inputSymbolType = OriSymbol.TYPE_NONE;
 				}
 				modeChanged();
 			}

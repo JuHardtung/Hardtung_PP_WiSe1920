@@ -77,6 +77,6 @@ public class Constants {
 		FACE_UP
 	}
 	
-	final public static double DEFAULT_PAPER_SIZE = 450;
+	final public static double DEFAULT_PAPER_SIZE = 600;
 
 }

@@ -10,6 +10,8 @@ import origrammer.geometry.GeometryUtil;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
+import origrammer.geometry.OriRepetitionBox;
+import origrammer.geometry.OriSymbol;
 import origrammer.geometry.OriVertex;
 
 class PointComparatorX implements Comparator<Object> {
@@ -35,6 +37,8 @@ public class Step {
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
 	public ArrayList<OriFace> filledFaces = new ArrayList<>();
 	public ArrayList<OriLeader> leader = new ArrayList<>();
+	public ArrayList<OriRepetitionBox> repetitionBoxes = new ArrayList<>();
+	public ArrayList<OriSymbol> symbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -190,6 +194,22 @@ public class Step {
 		leader.add(inputLeader);
 	}
 	
+	/**
+	 * Adds a new RepetitionBox to the current diagram step
+	 * @param inputRepetitionBox
+	 */
+	public void addRepetitionBox(OriRepetitionBox inputRepetitionBox) {
+		repetitionBoxes.add(inputRepetitionBox);
+	}
+	
+	/**
+	 * Adds a new Symbol to the current diagram step
+	 * @param inputSymbol
+	 */
+	public void addSymbol(OriSymbol inputSymbol) {
+		symbols.add(inputSymbol);
+	}
+	
 	public void selectAll() {
 		selectAllLines();
 		selectAllArrows();
@@ -211,6 +231,9 @@ public class Step {
 		unselectAllLines();
 		unselectAllArrows();
 		unselectAllFaces();
+		unselectAllLeaders();
+		unselectAllRepetitionBoxes();
+		unselectAllSymbols();
 	}
 
 	public void unselectAllLines() {
@@ -234,6 +257,18 @@ public class Step {
 	public void unselectAllLeaders() {
 		for (OriLeader l : leader) {
 			l.setSelected(false);
+		}
+	}
+	
+	public void unselectAllRepetitionBoxes() {
+		for (OriRepetitionBox r : repetitionBoxes) {
+			r.setSelected(false);
+		}
+	}
+	
+	public void unselectAllSymbols() {
+		for (OriSymbol s : symbols) {
+			s.setSelected(false);
 		}
 	}
 
@@ -273,7 +308,7 @@ public class Step {
 	}
 	
 	/**
-	 * Deleted all selected faces of the current diagram step
+	 * Deletes all selected faces of the current diagram step
 	 */
 	public void deleteSelectedFaces() {
 		ArrayList<OriFace> selectedFaces = new ArrayList<>();
@@ -288,7 +323,9 @@ public class Step {
 		}
 	}
 	
-	
+	/**
+	 * Deletes all selected leaders of the current diagram step
+	 */
 	public void deleteSelectedLeaders() {
 		ArrayList<OriLeader> selectedLeader = new ArrayList<>();
 		
@@ -299,6 +336,22 @@ public class Step {
 		}
 		for (OriLeader l : selectedLeader) {
 			leader.remove(l);
+		}
+	}
+	
+	/**
+	 * Deletes all selected repetitionBoxes of the current diagram step
+	 */
+	public void deleteSelectedRepetitionBoxes() {
+		ArrayList<OriRepetitionBox> selectedRepe = new ArrayList<>();
+		
+		for (OriRepetitionBox r : repetitionBoxes) {
+			if (r.isSelected()) {
+				selectedRepe.add(r);
+			}
+		}
+		for (OriRepetitionBox r : selectedRepe) {
+			repetitionBoxes.remove(r);
 		}
 	}
 	
