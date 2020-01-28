@@ -2,7 +2,7 @@ package origrammer.geometry;
 
 import javax.swing.JLabel;
 
-public class OriSymbol {
+public class OriPicSymbol {
 
 	
 	final public static int TYPE_NONE = 0;
@@ -22,11 +22,11 @@ public class OriSymbol {
 	private boolean isSelected;
 	private double degrees = 0;
 	
-	public OriSymbol() {
+	public OriPicSymbol() {
 		
 	}
 	
-	public OriSymbol(double x, double y, int type) {
+	public OriPicSymbol(double x, double y, int type) {
 		xPos = x;
 		yPos = y;
 		this.type = type;

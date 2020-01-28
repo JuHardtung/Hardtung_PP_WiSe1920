@@ -8,10 +8,11 @@ import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
 import origrammer.geometry.OriFace;
+import origrammer.geometry.OriGeomSymbol;
 import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriRepetitionBox;
-import origrammer.geometry.OriSymbol;
+import origrammer.geometry.OriPicSymbol;
 import origrammer.geometry.OriVertex;
 
 class PointComparatorX implements Comparator<Object> {
@@ -38,7 +39,8 @@ public class Step {
 	public ArrayList<OriFace> filledFaces = new ArrayList<>();
 	public ArrayList<OriLeader> leader = new ArrayList<>();
 	public ArrayList<OriRepetitionBox> repetitionBoxes = new ArrayList<>();
-	public ArrayList<OriSymbol> symbols = new ArrayList<>();
+	public ArrayList<OriPicSymbol> picSymbols = new ArrayList<>();
+	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -203,16 +205,29 @@ public class Step {
 	}
 	
 	/**
-	 * Adds a new Symbol to the current diagram step
+	 * Adds a new OriPicSymbol to the current diagram step
 	 * @param inputSymbol
 	 */
-	public void addSymbol(OriSymbol inputSymbol) {
-		symbols.add(inputSymbol);
+	public void addPicSymbol(OriPicSymbol inputSymbol) {
+		picSymbols.add(inputSymbol);
+	}
+	
+	/**
+	 * Adds a new OriGeomSymbol to the current diagram step
+	 * @param inputSymbol
+	 */
+	public void addGeomSymbol(OriGeomSymbol inputSymbol) {
+		geomSymbols.add(inputSymbol);
 	}
 	
 	public void selectAll() {
 		selectAllLines();
 		selectAllArrows();
+		selectAllFaces();
+		selectAllLeaders();
+		selectAllRepetitionBoxes();
+		selectAllPicSymbols();
+		selectAllGeomSymbols();
 	}
 
 	public void selectAllLines() {
@@ -226,6 +241,35 @@ public class Step {
 			a.setSelected(true);
 		}
 	}
+	
+	public void selectAllFaces() {
+		for (OriArrow a : arrows) {
+			a.setSelected(true);
+		}
+	}
+	public void selectAllLeaders() {
+		for (OriLeader l : leader) {
+			l.setSelected(true);
+		}
+	}	
+	
+	public void selectAllRepetitionBoxes() {
+		for (OriRepetitionBox r : repetitionBoxes) {
+			r.setSelected(true);
+		}
+	}	
+	
+	public void selectAllPicSymbols() {
+		for (OriPicSymbol s : picSymbols) {
+			s.setSelected(true);
+		}
+	}
+	
+	public void selectAllGeomSymbols() {
+		for (OriGeomSymbol s : geomSymbols) {
+			s.setSelected(true);
+		}
+	}
 
 	public void unselectAll() {
 		unselectAllLines();
@@ -233,7 +277,8 @@ public class Step {
 		unselectAllFaces();
 		unselectAllLeaders();
 		unselectAllRepetitionBoxes();
-		unselectAllSymbols();
+		unselectAllPicSymbols();
+		unselectAllGeomSymbols();
 	}
 
 	public void unselectAllLines() {
@@ -266,8 +311,14 @@ public class Step {
 		}
 	}
 	
-	public void unselectAllSymbols() {
-		for (OriSymbol s : symbols) {
+	public void unselectAllPicSymbols() {
+		for (OriPicSymbol s : picSymbols) {
+			s.setSelected(false);
+		}
+	}
+	
+	public void unselectAllGeomSymbols() {
+		for (OriGeomSymbol s : geomSymbols) {
 			s.setSelected(false);
 		}
 	}
@@ -352,6 +403,38 @@ public class Step {
 		}
 		for (OriRepetitionBox r : selectedRepe) {
 			repetitionBoxes.remove(r);
+		}
+	}
+	
+	/**
+	 * Deletes all selected OriPicSymbols of the current diagram step
+	 */
+	public void deleteSelectedPicSymbols() {
+		ArrayList<OriPicSymbol> selectedPicS = new ArrayList<>();
+		
+		for (OriPicSymbol ps : picSymbols) {
+			if (ps.isSelected()) {
+				selectedPicS.add(ps);
+			}
+		}
+		for (OriPicSymbol ps : selectedPicS) {
+			picSymbols.remove(ps);
+		}
+	}
+	
+	/**
+	 * Deletes all selected OriGeomSymbols of the current diagram step
+	 */
+	public void deleteSelectedGeomSymbols() {
+		ArrayList<OriGeomSymbol> selectedGeomS = new ArrayList<>();
+		
+		for (OriGeomSymbol gs : geomSymbols) {
+			if (gs.isSelected()) {
+				selectedGeomS.add(gs);
+			}
+		}
+		for (OriGeomSymbol gs : selectedGeomS) {
+			geomSymbols.remove(gs);
 		}
 	}
 	

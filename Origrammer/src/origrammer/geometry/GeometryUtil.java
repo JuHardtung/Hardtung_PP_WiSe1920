@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector2d;
 
+import javafx.scene.shape.Circle;
 import origrammer.OriArrow;
 
 public class GeometryUtil {
@@ -142,8 +143,22 @@ public class GeometryUtil {
 		return false;
 	}
 	
-	public static boolean isMouseOverSymbol(double x, double y, OriSymbol s) {
+	public static boolean isMouseOverSymbol(double x, double y, OriPicSymbol s) {
 		
+		double sX = s.getxPos();
+		double sY = s.getyPos();
+		double sXEnd = sX + (s.getWidth());
+		double sYEnd = sY + (s.getHeight());
+		
+		if (x > sX && x < sXEnd) {
+			if (y > sY && y < sYEnd) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isMouseOverGeomSymbol(double x, double y, OriGeomSymbol s) {
 		double sX = s.getxPos();
 		double sY = s.getyPos();
 		double sXEnd = sX + (s.getWidth());
