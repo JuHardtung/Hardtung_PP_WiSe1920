@@ -7,6 +7,7 @@ import java.util.Comparator;
 import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
+import origrammer.geometry.OriEqualDistSymbol;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriGeomSymbol;
 import origrammer.geometry.OriLeader;
@@ -41,6 +42,7 @@ public class Step {
 	public ArrayList<OriRepetitionBox> repetitionBoxes = new ArrayList<>();
 	public ArrayList<OriPicSymbol> picSymbols = new ArrayList<>();
 	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
+	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -220,6 +222,15 @@ public class Step {
 		geomSymbols.add(inputSymbol);
 	}
 	
+	/**
+	 * Adds a new OriEqualDistSymbol to the current diagram step
+	 * @param inputSymbol
+	 */
+	public void addEqualDistSymbol(OriEqualDistSymbol inputSymbol) {
+		equalDistSymbols.add(inputSymbol);
+	}
+	
+	
 	public void selectAll() {
 		selectAllLines();
 		selectAllArrows();
@@ -228,11 +239,12 @@ public class Step {
 		selectAllRepetitionBoxes();
 		selectAllPicSymbols();
 		selectAllGeomSymbols();
+		selectAllEqualDistSymbols();
 	}
 
 	public void selectAllLines() {
 		for (OriLine l : lines) {
-			l.isSelected = true;
+			l.setSelected(true);
 		}
 	}
 
@@ -270,6 +282,12 @@ public class Step {
 			s.setSelected(true);
 		}
 	}
+	
+	public void selectAllEqualDistSymbols() {
+		for (OriEqualDistSymbol eds : equalDistSymbols) {
+			eds.setSelected(true);
+		}
+	}
 
 	public void unselectAll() {
 		unselectAllLines();
@@ -279,11 +297,12 @@ public class Step {
 		unselectAllRepetitionBoxes();
 		unselectAllPicSymbols();
 		unselectAllGeomSymbols();
+		unselectAllEqualDistSymbols();
 	}
 
 	public void unselectAllLines() {
 		for (OriLine l : lines) {
-			l.isSelected = false;
+			l.setSelected(false);
 		}
 	}
 
@@ -322,6 +341,12 @@ public class Step {
 			s.setSelected(false);
 		}
 	}
+	
+	public void unselectAllEqualDistSymbols() {
+		for (OriEqualDistSymbol eds : equalDistSymbols) {
+			eds.setSelected(false);
+		}
+	}
 
 	/**
 	 * Deletes all selected lines of the current diagram step
@@ -330,7 +355,7 @@ public class Step {
 		ArrayList<OriLine> selectedLines = new ArrayList<>();
 		
 		for (OriLine line : lines) {
-			if (line.isSelected) {
+			if (line.isSelected()) {
 				selectedLines.add(line);
 			}
 		}
@@ -435,6 +460,22 @@ public class Step {
 		}
 		for (OriGeomSymbol gs : selectedGeomS) {
 			geomSymbols.remove(gs);
+		}
+	}
+	
+	/**
+	 * Deletes all selected OriEqualDistSymbols of the current diagram step
+	 */
+	public void deleteSelectedEqualDistSymbols() {
+		ArrayList<OriEqualDistSymbol> selectedEqualDistS = new ArrayList<>();
+		
+		for (OriEqualDistSymbol eds : equalDistSymbols) {
+			if (eds.isSelected()) {
+				selectedEqualDistS.add(eds);
+			}
+		}
+		for (OriEqualDistSymbol eds : selectedEqualDistS) {
+			equalDistSymbols.remove(eds);
 		}
 	}
 	

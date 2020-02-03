@@ -2,6 +2,7 @@ package origrammer.geometry;
 
 import java.awt.Rectangle;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -172,8 +173,38 @@ public class GeometryUtil {
 		return false;
 	}
 	
+	public static boolean isMouseOverEqualDistSymbol(double x, double y, OriEqualDistSymbol s) {
+//		double rectX = s.getP0().x + 15*s.getNormalVector().x;
+//		double rectY = s.getP0().y + 15*s.getNormalVector().y;
+
+		double p0x = s.getP0Pos().x + 15*s.getNormalVector().x;
+		double p0y = s.getP0Pos().y + 15*s.getNormalVector().y;
+		
+		double p1x = s.getP0Pos().x - 15*s.getNormalVector().x;
+		double p1y = s.getP0Pos().y - 15*s.getNormalVector().y;
+		
+		double p2x = s.getP1Pos().x - 15*s.getNormalVector().x;
+		double p2y = s.getP1Pos().y - 15*s.getNormalVector().y;
+		
+		double p3x = s.getP1Pos().x + 15*s.getNormalVector().x;
+		double p3y = s.getP1Pos().y + 15*s.getNormalVector().y;
+		
+		Path2D.Double p = new Path2D.Double();
+		p.moveTo(p0x, p0y);
+		p.lineTo(p1x, p1y);
+		p.lineTo(p2x, p2y);
+		p.lineTo(p3x, p3y);
+		p.closePath();
+				
+		return isMouseOverPath(x, y, p);
+	}
+	
 	public static boolean isMouseOverFace(double x, double y, OriFace f) {
 		return f.path.intersects(x, y, 5, 5);
+	}
+	
+	public static boolean isMouseOverPath(double x, double y, Path2D.Double p) {
+		return p.intersects(x, y, 5, 5);
 	}
 	
 	public static boolean isMouseOverRectangle(double x, double y, Rectangle rect) {

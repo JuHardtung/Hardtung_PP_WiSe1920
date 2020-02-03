@@ -29,11 +29,19 @@ import javax.swing.ListCellRenderer;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.text.PlainDocument;
 
 import origrammer.geometry.GeometryUtil;
+import origrammer.geometry.OriEqualDistSymbol;
+import origrammer.geometry.OriFace;
+import origrammer.geometry.OriGeomSymbol;
+import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriPicSymbol;
+import origrammer.geometry.OriRepetitionBox;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
@@ -77,6 +85,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<Object> changeArrowTypeCB = new JComboBox<>(arrowInputOptions);
 	JButton changeLineButton = new JButton("Set");
 	JButton changeArrowButton = new JButton("Set");
+	
+	//EQUAL DISTANCE SETTINGS
+	JPanel equalDistPanel = new JPanel();
+	public JSlider sliderEqualDist = new JSlider(-50, 50);
+	public JTextField equalDistDividerTF = new JTextField();
 
 	//ROTATE/SCALE ARROWS
 	JPanel sliderPanel = new JPanel();
@@ -196,6 +209,43 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
 												getBackground().brighter()), "Change Arrow Type"));
+		
+		//##### EQUAL DIST SETTINGS
+		sliderEqualDist.setMajorTickSpacing(10);
+		sliderEqualDist.setPaintTicks(true);
+		sliderEqualDist.addChangeListener(e -> sliderEqualDistChanged());
+		equalDistDividerTF.setPreferredSize(new Dimension(20,20));
+		PlainDocument docEqualDistDivider = (PlainDocument) equalDistDividerTF.getDocument();
+		docEqualDistDivider.setDocumentFilter(new IntFilter());
+		equalDistDividerTF.setText(Integer.toString(Globals.gridDivNum));
+		//TODO: use "SET" button instead of documentListener
+		docEqualDistDivider.addDocumentListener(new DocumentListener() { 
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				System.out.println("remove");
+				//setDivider();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				System.out.println("insert");
+				setEqualDistanceDividerCount();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				System.out.println("change");
+				setEqualDistanceDividerCount();
+			}
+		});
+		
+		equalDistPanel.add(sliderEqualDist);
+		equalDistPanel.add(equalDistDividerTF);
+		equalDistPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(),
+												getBackground().brighter()), "Equal Distance Settings"));
 
 		//Add Lines and Arrow Panel to UITopPanel
 		add(changeLinePanel);
@@ -206,12 +256,22 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputSymbolsPanel);
 		add(inputSymbolLeaderPanel);
 		add(inputSymbolRepetitionPanel);
+		add(equalDistPanel);
 		add(sliderPanel);
 	
 		modeChanged();
 	}
 	
-	
+	private void setEqualDistanceDividerCount() {
+		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+			if (eds.isSelected()) {
+				eds.setDividerCount(Integer.parseInt(equalDistDividerTF.getText()));
+			}
+			screen.repaint();
+		}
+	}
+
+
 	/**
 	 * Sets the scale for all selected OriArrows
 	 */
@@ -267,13 +327,29 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 		}
 	}
+	
+	/**
+	 * Sets the translation distance of equalDistanceSymbol
+	 */
+	private void sliderEqualDistChanged() {
+		System.out.println("equalDistSliderChanged");
+		
+		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+			if (eds.isSelected()) {
+				eds.setTranslationDist(sliderEqualDist.getValue());
+				screen.repaint();
+			}
+		}
+	}
+	
 		
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		modeChanged();
 
 		if (e.getSource() == changeLineButton) {
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-				if (l.isSelected) {
+				if (l.isSelected()) {
 					String lineType = changeLineTypeCB.getSelectedItem().toString();
 					
 					if (lineType == "Valley Fold") {
@@ -333,7 +409,73 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 	}
 	
+	private int getSelectedTypes() {
+		
+		//	0000 0001	LINES
+		//	0000 0010	ARROWS
+		//  0000 0100	FILLED_FACES
+		//  0000 1000	LEADER
+		//  0001 0000	REPE_BOXES
+		//  0010 0000	PIC_SYMBOLS
+		//  0100 0000	GEO_SYMBOLS
+		//  1000 0000	EQUAL_DIST_SYMBOLS
+		
+		int selectedTypes = 0b00000000;
+		
+		
+		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+			if (line.isSelected()) {
+				selectedTypes += 0b00000001;
+				break;
+			}
+		}
+		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			if (arrow.isSelected()) {
+				selectedTypes += 0b00000010;
+				break;
+			}
+		}
+		for (OriFace face : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
+			if (face.isSelected()) {
+				selectedTypes += 0b00000100;
+				break;
+			}
+		}
+		for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+			if (leader.isSelected()) {
+				selectedTypes += 0b00001000;
+				break;
+			}
+		}
+		for (OriRepetitionBox repeBox : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
+			if (repeBox.isSelected()) {
+				selectedTypes += 0b00010000;
+				break;
+			}
+		}
+		for (OriPicSymbol picS : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
+			if (picS.isSelected()) {
+				selectedTypes += 0b00100000;
+				break;
+			}
+		}
+		for (OriGeomSymbol geoS : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
+			if (geoS.isSelected()) {
+				selectedTypes += 0b01000000;
+				break;
+			}
+		}
+		for (OriEqualDistSymbol equalDist : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+			if (equalDist.isSelected()) {
+				selectedTypes += 0b10000000;
+				break;
+			}
+		}
+		return selectedTypes;
+	}
+	
 	public void modeChanged() {
+			
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			inputLinesPanel.setVisible(true);
 		} else {
@@ -357,13 +499,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				inputSymbolRepetitionPanel.setVisible(true);
 			} else {
 				inputSymbolRepetitionPanel.setVisible(false);
-
+			}
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
+				equalDistPanel.setVisible(true);
+			} else {
+				equalDistPanel.setVisible(false);
 			}
 		} else {
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
 			inputSymbolRepetitionPanel.setVisible(false);
-
+			equalDistPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
@@ -373,9 +519,85 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
-			sliderPanel.setVisible(true);
-			changeLinePanel.setVisible(true);
-			changeArrowPanel.setVisible(true);
+			
+			//	0000 0001	LINES
+			//	0000 0010	ARROWS
+			//  0000 0100	FILLED_FACES
+			//  0000 1000	LEADER
+			//  0001 0000	REPE_BOXES
+			//  0010 0000	PIC_SYMBOLS
+			//  0100 0000	GEO_SYMBOLS
+			//  1000 0000	EQUAL_DIST_SYMBOLS
+			int selectedTypes = getSelectedTypes();
+			
+			int lineMask 	= 0b00000001;
+			int arrowMask 	= 0b00000010;
+			int faceMask	= 0b00000100;
+			int leaderMask	= 0b00001000;
+			int repeMask	= 0b00010000;
+			int picMask		= 0b00100000;
+			int geoMask		= 0b01000000;
+			int equDistMask = 0b10000000;
+			int result = selectedTypes & lineMask;
+			
+			
+			if (result == 0b00000001) {
+				System.out.println("lines");
+				changeLinePanel.setVisible(true);
+			} else {
+				changeLinePanel.setVisible(false);
+			}
+			result = selectedTypes & arrowMask;
+			if (result == 0b00000010) {
+				System.out.println("arrow");
+				changeArrowPanel.setVisible(true);
+				sliderPanel.setVisible(true);
+			} else {
+				changeArrowPanel.setVisible(false);
+				sliderPanel.setVisible(false);
+			}
+			result = selectedTypes & faceMask;
+			if (result == 0b00000100) {
+				System.out.println("faces");
+				faceDirectionPanel.setVisible(true);
+			} else {
+				faceDirectionPanel.setVisible(false);
+			}
+			result = selectedTypes & leaderMask;
+			if (result == 0b00001000) {
+				System.out.println("leader");
+				inputSymbolLeaderPanel.setVisible(true);
+			} else {
+				inputSymbolLeaderPanel.setVisible(false);
+			}
+			result = selectedTypes & repeMask;
+			if (result == 0b00010000) {
+				System.out.println("repe");
+				inputSymbolRepetitionPanel.setVisible(true);
+			} else {
+				inputSymbolRepetitionPanel.setVisible(false);
+			}
+			result = selectedTypes & picMask;
+			if (result == 0b00100000) {
+				System.out.println("picSymbols");
+				sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
+			} else {
+				sliderPanel.setVisible(false);
+			}
+			result = selectedTypes & geoMask;
+			if (result == 0b01000000) {
+				System.out.println("geoSymbols");
+				//TODO: editing options for geoSymbols
+			}
+			result = selectedTypes & equDistMask;
+			if (result == 0b10000000) {
+				System.out.println("equDist");
+				equalDistPanel.setVisible(true);
+			} else {
+				equalDistPanel.setVisible(false);
+			}
+			
+		
 		} else {
 			sliderPanel.setVisible(false);
 			changeLinePanel.setVisible(false);

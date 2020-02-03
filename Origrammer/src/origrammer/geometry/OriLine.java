@@ -9,7 +9,7 @@ public class OriLine {
 	final public static int TYPE_VALLEY = 3;
 	final public static int TYPE_XRAY = 4;
 	
-	public boolean isSelected;
+	private boolean isSelected;
 	public int type = TYPE_NONE;
 	public Vector2d p0 = new Vector2d();
 	public Vector2d p1 = new Vector2d();
