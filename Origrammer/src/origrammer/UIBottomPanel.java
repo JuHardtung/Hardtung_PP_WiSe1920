@@ -20,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import origrammer.geometry.OriArrow;
+
 public class UIBottomPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
 	JFormattedTextField foldDescr = new JFormattedTextField();

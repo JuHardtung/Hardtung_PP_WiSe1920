@@ -14,3 +14,14 @@ Can move, scale but not rotate (either override the paintComponent method) or us
 Both doesn't work for my setup
 
 dirty solution--> load different, already rotated images depending on OriArrow rotation.
+
+
+
+
+calculations are sometimes breaking depending on user input
+|
+--> for example OriEqualAnglSymbol: 	firstV	--> point of angle
+						scndV	--> verticalVertex			if verticalVertex and horizontalVertex are switched, everything breaks
+						thirdV --> horizontalVertex
+						
+						

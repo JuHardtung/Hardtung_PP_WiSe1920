@@ -7,6 +7,8 @@ import java.util.Comparator;
 import javax.vecmath.Vector2d;
 
 import origrammer.geometry.GeometryUtil;
+import origrammer.geometry.OriArrow;
+import origrammer.geometry.OriEqualAnglSymbol;
 import origrammer.geometry.OriEqualDistSymbol;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriGeomSymbol;
@@ -43,6 +45,7 @@ public class Step {
 	public ArrayList<OriPicSymbol> picSymbols = new ArrayList<>();
 	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
 	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
+	public ArrayList<OriEqualAnglSymbol> equalAnglSymbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -230,6 +233,14 @@ public class Step {
 		equalDistSymbols.add(inputSymbol);
 	}
 	
+	/**
+	 * Adds a new OriEqualAngleSymbol to the current diagram step
+	 * @param inputSymbol
+	 */
+	public void addEqualAngleSymbol(OriEqualAnglSymbol inputSymbol) {
+		equalAnglSymbols.add(inputSymbol);
+	}
+	
 	
 	public void selectAll() {
 		selectAllLines();
@@ -240,6 +251,7 @@ public class Step {
 		selectAllPicSymbols();
 		selectAllGeomSymbols();
 		selectAllEqualDistSymbols();
+		selectAllEqualAnglSymbols();
 	}
 
 	public void selectAllLines() {
@@ -288,6 +300,12 @@ public class Step {
 			eds.setSelected(true);
 		}
 	}
+	
+	public void selectAllEqualAnglSymbols() {
+		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
+			eas.setSelected(true);
+		}
+	}
 
 	public void unselectAll() {
 		unselectAllLines();
@@ -298,6 +316,7 @@ public class Step {
 		unselectAllPicSymbols();
 		unselectAllGeomSymbols();
 		unselectAllEqualDistSymbols();
+		unselectAllEqualAnglSymbols();
 	}
 
 	public void unselectAllLines() {
@@ -345,6 +364,12 @@ public class Step {
 	public void unselectAllEqualDistSymbols() {
 		for (OriEqualDistSymbol eds : equalDistSymbols) {
 			eds.setSelected(false);
+		}
+	}
+	
+	public void unselectAllEqualAnglSymbols() {
+		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
+			eas.setSelected(false);
 		}
 	}
 
@@ -476,6 +501,22 @@ public class Step {
 		}
 		for (OriEqualDistSymbol eds : selectedEqualDistS) {
 			equalDistSymbols.remove(eds);
+		}
+	}
+	
+	/**
+	 * Deletes all selected OriEqualAnglSymbols of the current diagram step
+	 */
+	public void deleteSelectedEqualAnglSymbols() {
+		ArrayList<OriEqualAnglSymbol> selectedEqualAnglS = new ArrayList<>();
+		
+		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
+			if (eas.isSelected()) {
+				selectedEqualAnglS.add(eas);
+			}
+		}
+		for (OriEqualAnglSymbol eas : selectedEqualAnglS) {
+			equalAnglSymbols.remove(eas);
 		}
 	}
 	

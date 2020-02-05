@@ -1,4 +1,5 @@
 package origrammer;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -17,6 +18,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -75,11 +77,11 @@ public class MainScreen extends JPanel
 	private OriPicSymbol selectedCandidatePS = null;
 	private OriGeomSymbol selectedCandidateGS = null;
 	private OriEqualDistSymbol selectedCandidateEDS = null;
+	private OriEqualAnglSymbol selectedCandidateEAS = null;
 	private OriLeader selectedCandidateLeader = null;
 	private OriRepetitionBox selectedCandidateRepeBox = null;
 	private OriLeader tmpLeader = new OriLeader();
 	private OriRepetitionBox tmpRepetitionBox = new OriRepetitionBox();
-	private ArrayList<Vector2d> tmpOutline = new ArrayList<>();
 	
 	private boolean dispGrid = true;
 	//Affine transformation info
@@ -304,7 +306,6 @@ public class MainScreen extends JPanel
 	   
 	   
 	   //RENDER ALL EQUAL_DISTANCE_SYMBOLS
-
 	   for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 		   
 		   if (eds.isSelected() || selectedCandidateEDS == eds) {
@@ -314,23 +315,15 @@ public class MainScreen extends JPanel
 			   g2d.setStroke(Config.STROKE_EDGE);
 			   g2d.setColor(Color.BLACK);
 		   }
-			Vector2d uv = eds.getUnitVector();
-			Vector2d nv = eds.getNormalVector();
-			
-			//translate the actual equalDist symbol by the translationDist
-//			double p0x = eds.getP0().x + (-eds.getTranslationDist()*nv.x);
-//			double p0y = eds.getP0().y + (-eds.getTranslationDist()*nv.y);
+			Vector2d uv = GeometryUtil.getUnitVector(eds.getP0(), eds.getP1());
+			Vector2d nv = GeometryUtil.getNormalVector(uv);
 			
 			Vector2d p0Pos = eds.getP0Pos();
-
-			//########################################
-			//TODO: select, delete, move, change equalDist
-			//########################################
 			double dist = GeometryUtil.Distance(eds.getP0(), eds.getP1());
 			double trans = dist/eds.getDividerCount();
 
+			//main line 
 			for (int j=1; j<=eds.getDividerCount(); j++) {
-
 				double slp0x = p0Pos.x + trans*(j-1)*uv.x + 10*uv.x;
 				double slp0y = p0Pos.y + trans*(j-1)*uv.y + 10*uv.y;
 				double slp1x = p0Pos.x + trans*j*uv.x - 10*uv.x;
@@ -339,6 +332,7 @@ public class MainScreen extends JPanel
 				g2d.draw(new Line2D.Double(slp0x, slp0y, slp1x, slp1y));
 			}
 
+			//small divider lines
 			for (int i=0; i<=eds.getDividerCount(); i++) {
 				double tmpX = p0Pos.x + ((trans*i)*uv.x);
 				double tmpY = p0Pos.y + ((trans*i)*uv.y);
@@ -350,29 +344,25 @@ public class MainScreen extends JPanel
 				double y6 = tmpY - (15*nv.y);
 
 				g2d.draw(new Line2D.Double(x5, y5, x6, y6));
-
 			}
 	   }
 	   
-       int outlineVnum = tmpOutline.size();
-       if (outlineVnum != 0) {
-    	   g2d.setColor(Color.GREEN);
-    	   g2d.setStroke(Config.STROKE_SELECTED);
-    	   for (int i = 0; i < outlineVnum - 1; i++) {
-    		   Vector2d p0 = tmpOutline.get(i);
-    		   Vector2d p1 = tmpOutline.get((i+1) % outlineVnum);
-    		   g2d.draw(new Line2D.Double(p0.x, p0.y, p1.x, p1.y));
-    	   }
-    	   
-    	   Vector2d cv = selectedCandidateV == null 
-    			   ? new Vector2d(currentMousePointLogic.getX(), currentMousePointLogic.getY()) 
-    				: selectedCandidateV;
-    	   
-    	   g2d.draw(new Line2D.Double(tmpOutline.get(0).x, 
-    			   tmpOutline.get(0).y, cv.x, cv.y));
-    	   g2d.draw(new Line2D.Double(tmpOutline.get(outlineVnum - 1).x, 
-    			   tmpOutline.get(outlineVnum - 1).y, cv.x, cv.y));
-       }
+	   //RENDER ALL EQUAL_ANGLE_SYMBOLS
+	   for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+		   if (eas.isSelected()|| selectedCandidateEAS == eas) {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.GREEN);
+		   } else {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.BLACK);
+		   }
+		   
+		   ArrayList<Shape> shapes = eas.getShapesForDrawing();
+		   for (Shape s : shapes) {
+			   g2d.draw(s);
+		   }
+	   }
+	   
        
        //show all vertices if in ToolbarMode ADD_VERTEX or DELETE_VERTEX mode or if dispVertex is true
        if (Globals.toolbarMode == Constants.ToolbarMode.ADD_VERTEX 
@@ -397,7 +387,7 @@ public class MainScreen extends JPanel
        if (firstSelectedV != null) {
     	   switch (Globals.inputLineType) {
     	   		case OriLine.TYPE_NONE:
-    	   			g2d.setColor(Config.LINE_COLOR_SELECTED);//TODO TYPE_NONE COLOR
+    	   			g2d.setColor(Config.LINE_COLOR_SELECTED);//TODO: TYPE_NONE COLOR
     	   			g2d.setStroke(Config.STROKE_SELECTED);
     	   			break;
     	   		case OriLine.TYPE_VALLEY:
@@ -615,9 +605,7 @@ public class MainScreen extends JPanel
     	selectedCandidateLeader = null;
     	selectedCandidatePS = null;
     	tmpLeader = new OriLeader();
-    	crossPoints.clear();
-    	tmpOutline.clear();
-    	
+    	crossPoints.clear();    	
     }
     
     //update the AffineTransform
@@ -968,6 +956,22 @@ public class MainScreen extends JPanel
     	}
     }
     
+    private OriEqualAnglSymbol pickEqualAnglSymbol(Point2D.Double p) {
+    	OriEqualAnglSymbol bestSymbol = null;
+    	
+    	for (OriEqualAnglSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+    		boolean pickedS = GeometryUtil.isMouseOverEqualAnglSymbol(p.getX(), p.getY(), symbol);
+    		if (pickedS) {
+    			bestSymbol = symbol;
+    		}
+    	}
+    	if (bestSymbol != null) {
+    		return bestSymbol;
+    	} else {
+    		return null;
+    	}
+    }
+    
 	
 	private void createRepetitionBox(Point2D.Double clickPoint) {
 		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
@@ -1036,7 +1040,43 @@ public class MainScreen extends JPanel
 			firstSelectedV = null;
 			secondSelectedV = null;
 		}
+	}
+	
+	private void createEqualAnglSymbol(Point2D.Double clickPoint) {
+		Vector2d v = pickVertex(clickPoint);
+		
+		if (firstSelectedV == null) {
+			firstSelectedV = v;
+		} else if (secondSelectedV == null) {
+			secondSelectedV = v;
+		} else if (thirdSelectedV == null) {
+			thirdSelectedV = v;
+			
+			Vector2d uv1 = GeometryUtil.getUnitVector(firstSelectedV, secondSelectedV);
+			Vector2d uv2 = GeometryUtil.getUnitVector(firstSelectedV, thirdSelectedV);
 
+			double dist1 = GeometryUtil.Distance(firstSelectedV, secondSelectedV);
+			double dist2 = GeometryUtil.Distance(firstSelectedV, thirdSelectedV);
+			
+			if (dist1 < dist2) {
+				thirdSelectedV.x = firstSelectedV.x + uv2.x*dist1;
+				thirdSelectedV.y = firstSelectedV.y + uv2.y*dist1;
+
+			} else if (dist2 < dist1) {
+				secondSelectedV.x = firstSelectedV.x + uv1.x*dist2;
+				secondSelectedV.y = firstSelectedV.y + uv1.y*dist2;
+			}
+
+			
+			OriEqualAnglSymbol tmpEquAnglSymbol = new OriEqualAnglSymbol(firstSelectedV, secondSelectedV, thirdSelectedV);
+			tmpEquAnglSymbol.setDividerCount(Integer.parseInt(Origrammer.mainFrame.uiTopPanel.equalAnglDividerTF.getText()));
+			
+			Origrammer.diagram.steps.get(Globals.currentStep).addEqualAngleSymbol(tmpEquAnglSymbol);
+			
+			firstSelectedV = null;
+			secondSelectedV = null;
+			thirdSelectedV = null;
+		}
 	}
 	
 	private void createLeader(Point2D.Double clickPoint) {
@@ -1198,6 +1238,18 @@ public class MainScreen extends JPanel
 		} else {
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllEqualDistSymbols();
 		}
+		
+		//select OriEqualAnglSymbol or unselect all OriEqualAnglSymbols if clicked on nothing
+		OriEqualAnglSymbol eas = pickEqualAnglSymbol(clickPoint);
+		if (eas != null) {
+			if (!eas.isSelected()) {
+				eas.setSelected(true);
+			} else if (!isPressedOverSymbol) {
+				eas.setSelected(false);
+			}
+		} else {
+			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllEqualAnglSymbols();
+		}
 	
 		Origrammer.mainFrame.uiTopPanel.modeChanged();
 	}
@@ -1285,9 +1337,9 @@ public class MainScreen extends JPanel
 	}
 	
 	
-	//##################################
-	//######### MOUSE LISTENER #########
-	//##################################
+	//############################################
+	//############## MOUSE LISTENER ##############
+	//############################################
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -1303,15 +1355,15 @@ public class MainScreen extends JPanel
 				thirdSelectedV = null;
 				repaint();
 			}
-			
+
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAll();
 			return;
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.NONE) {
 			return;
 		}
-		
+
 		//get mouse click coordinates
 		Point2D.Double clickPoint = new Point2D.Double();
 		try {
@@ -1319,7 +1371,7 @@ public class MainScreen extends JPanel
 		} catch (Exception ex) {
 			return;
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			if (Globals.lineEditMode == Constants.LineInputMode.INPUT_LINE) {
 				//create line on the two picked vertices (or on custom point on a OriLine while pressing CTRL)
@@ -1353,6 +1405,8 @@ public class MainScreen extends JPanel
 				createRepetitionBox(clickPoint);
 			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
 				createEqualDistSymbol(clickPoint);
+			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL) {
+				createEqualAnglSymbol(clickPoint);
 			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			selectOnClickPoint(clickPoint);
@@ -1397,14 +1451,14 @@ public class MainScreen extends JPanel
 			double yPos = (double) (preMousePoint.getY()-400) / scale;
 			preMousePoint = e.getPoint();
 			tmpOriArrow = new OriArrow(xPos, yPos, type);
-			
+
 			//get correct Arrow Image
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriArrow);
-			
+
 			//get updated label width & height
 			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriArrow.getScale());
 			int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriArrow.getScale());
-			
+
 			//set width & height of arrowLabel and OriArrow
 			tmpArrowLabel = new JLabel();
 			tmpArrowLabel.setSize(newArrowLabelWidth, newArrowLabelHeight);
@@ -1417,9 +1471,9 @@ public class MainScreen extends JPanel
 			//set bounds of tmpArowLabel
 			tmpOriArrow.setLabel(tmpArrowLabel);
 			tmpOriArrow.getLabel().setBounds((int) tmpOriArrow.getxPos(), 
-												(int) tmpOriArrow.getyPos(), 
-												(int) tmpOriArrow.getWidth(),
-												(int) tmpOriArrow.getHeight());
+					(int) tmpOriArrow.getyPos(), 
+					(int) tmpOriArrow.getWidth(),
+					(int) tmpOriArrow.getHeight());
 			repaint();
 		} else if ((Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL 
 				&& Globals.inputSymbolType != OriPicSymbol.TYPE_NONE  //TODO: shouldn't it be OR ||?
@@ -1432,14 +1486,14 @@ public class MainScreen extends JPanel
 			double yPos = (double) (preMousePoint.getY()-400) / scale;
 			preMousePoint = e.getPoint();
 			tmpOriSymbol = new OriPicSymbol(xPos, yPos, type);
-			
+
 			//get correct Symbol Image
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriSymbol);
-			
+
 			//get updated label width & height
 			int newSymbolLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriSymbol.getScale());
 			int newSymbolLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriSymbol.getScale());
-			
+
 			//set width & height of symbolLabel and OriSymbol
 			tmpSymbolLabel = new JLabel();
 			tmpSymbolLabel.setSize(newSymbolLabelWidth, newSymbolLabelHeight);
@@ -1452,11 +1506,11 @@ public class MainScreen extends JPanel
 			//set bounds of tmpArowLabel
 			tmpOriSymbol.setLabel(tmpSymbolLabel);
 			tmpOriSymbol.getLabel().setBounds((int) tmpOriSymbol.getxPos(), 
-												(int) tmpOriSymbol.getyPos(), 
-												(int) tmpOriSymbol.getWidth(),
-												(int) tmpOriSymbol.getHeight());
+					(int) tmpOriSymbol.getyPos(), 
+					(int) tmpOriSymbol.getWidth(),
+					(int) tmpOriSymbol.getHeight());
 			repaint();
-			
+
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL 
 				|| (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL
 				&& Globals.inputSymbolMode == Constants.InputSymbolMode.X_RAY_CIRCLE)) {
@@ -1468,12 +1522,12 @@ public class MainScreen extends JPanel
 			} catch (NoninvertibleTransformException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			OriArrow pickedArrow = pickArrow(affineMouseDraggingPoint);
 			if (pickArrow(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedArrow != null) {
-					
+
 					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
@@ -1491,13 +1545,13 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
-			
+
 			OriLeader pickedLeader = pickLeader(affineMouseDraggingPoint);
 			if (pickLeader(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 
 				if (pickedLeader != null) {
-					
+
 					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
@@ -1510,13 +1564,13 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
-			
+
 			OriRepetitionBox pickedRepetition = pickRepetitionBox(affineMouseDraggingPoint);
 			if (pickRepetitionBox(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 
 				if (pickedRepetition != null) {
-					
+
 					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
@@ -1529,12 +1583,12 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
-			
+
 			OriPicSymbol pickedSymbol = pickPicSymbol(affineMouseDraggingPoint);
 			if (pickPicSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedSymbol != null) {
-					
+
 					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
@@ -1552,12 +1606,12 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
-			
+
 			OriGeomSymbol pickedGeomSymbol = pickGeomSymbol(affineMouseDraggingPoint);
 			if (pickGeomSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedGeomSymbol != null) {
-					
+
 					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
@@ -1572,57 +1626,31 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
-			
-			OriEqualDistSymbol pickedEqualDistSymbol = pickEqualDistSymbol(affineMouseDraggingPoint);
-			if (pickEqualDistSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
-				isMovingSymbols = true;
-//				if (pickedEqualDistSymbol != null) {
-//					
-//					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-//					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
-//					preMousePoint = e.getPoint();
-//					for (OriEqualDistSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
-						//if selected, move to new position
-//						if (s.isSelected()) {
-////							int newP0X = (int) Math.round(s.getP0().x + xTrans);
-////							int newP0Y = (int) Math.round(s.getP0().y + yTrans);
-////							int newP1X = (int) Math.round(s.getP0().x + xTrans);
-////							int newP1Y = (int) Math.round(s.getP0().y + yTrans);
-//							
-//							Vector2d newP0 = new Vector2d((int) Math.round(s.getP0().x + xTrans), 
-//														(int) Math.round(s.getP0().y + yTrans));
-//							Vector2d newP1 = new Vector2d((int) Math.round(s.getP1().x + xTrans), 
-//														(int) Math.round(s.getP1().y + yTrans));
-//							s.setP0(newP0);
-//							s.setP1(newP1);
-//						}
-//					}
-//				}
-			}
 
 			repaint();
 		}
 	}
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
+
 		try {
 			affineTransform.inverseTransform(e.getPoint(), currentMousePointLogic);
 		} catch (Exception ex) {
 			return;
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			if (Globals.lineEditMode == Constants.LineInputMode.INPUT_LINE
 					|| Globals.lineEditMode == Constants.LineInputMode.TRIANGLE_INSECTOR
 					|| Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
 				Vector2d firstV = selectedCandidateV;
 				selectedCandidateV = this.pickVertex(currentMousePointLogic);
-				
+
 				if (selectedCandidateV == null) {
 					if ((e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 						OriLine l = pickLine(currentMousePointLogic);
-						if(l != null) {
+						if (l != null) {
 							selectedCandidateV = new Vector2d();
 							Vector2d cp = new Vector2d(currentMousePointLogic.x, currentMousePointLogic.y);
 							GeometryUtil.DistancePointToSegment(cp,  l.p0, l.p1, selectedCandidateV);
@@ -1639,49 +1667,55 @@ public class MainScreen extends JPanel
 			if (preLine != selectedCandidateL) {
 				repaint();
 			}
-			
+
 			OriArrow preArrow = selectedCandidateA;
 			selectedCandidateA = pickArrow(currentMousePointLogic);
 			if (preArrow != selectedCandidateA) {
 				repaint();
 			}
-			
+
 			OriFace preFace = selectedCandidateF;
 			selectedCandidateF = pickFace(currentMousePointLogic);
 			if (preFace != selectedCandidateF) {
 				repaint();
 			}
-			
+
 			OriLeader preLeader = selectedCandidateLeader;
 			selectedCandidateLeader = pickLeader(currentMousePointLogic);
 			if (preLeader != selectedCandidateLeader) {
 				repaint();
 			}
-			
+
 			OriRepetitionBox preRepeBox = selectedCandidateRepeBox;
 			selectedCandidateRepeBox = pickRepetitionBox(currentMousePointLogic);
 			if (preRepeBox != selectedCandidateRepeBox) {
 				repaint();
 			}
-			
+
 			OriPicSymbol prePicSymbol = selectedCandidatePS;
 			selectedCandidatePS = pickPicSymbol(currentMousePointLogic);
 			if (prePicSymbol != selectedCandidatePS) {
 				repaint();
 			}
-			
+
 			OriGeomSymbol preGeomSymbol = selectedCandidateGS;
 			selectedCandidateGS = pickGeomSymbol(currentMousePointLogic);
 			if (preGeomSymbol != selectedCandidateGS) {
 				repaint();
 			}
-			
+
 			OriEqualDistSymbol preEqualDistSymbol = selectedCandidateEDS;
 			selectedCandidateEDS = pickEqualDistSymbol(currentMousePointLogic);
 			if (preEqualDistSymbol != selectedCandidateEDS) {
 				repaint();
 			}
 			
+			OriEqualAnglSymbol preEqualAnglSymbol = selectedCandidateEAS;
+			selectedCandidateEAS = pickEqualAnglSymbol(currentMousePointLogic);
+			if (preEqualAnglSymbol != selectedCandidateEAS) {
+				repaint();
+			}
+
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			Vector2d firstV = selectedCandidateV;
 			selectedCandidateV = this.pickVertex(currentMousePointLogic);
@@ -1696,21 +1730,21 @@ public class MainScreen extends JPanel
 					repaint();
 				}
 			}
-		} else if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
-			selectedCandidateV = this.pickVertex(currentMousePointLogic);
-			repaint();
-		} else if(Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL
-				&& Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL ||
+				(Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL 
+				&& (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST 
+					|| Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL))) {
 			selectedCandidateV = this.pickVertex(currentMousePointLogic);
 			repaint();
 		}
 	}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		preMousePoint = e.getPoint();
 		
 		//mark OriArrow as selected if in SELECTION_TOOL mode and you have pressed left mouse button while over OriArrow -->
-		//only needed for freely moovable objects
+		//only needed for freely movable objects
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			OriArrow pickedArrow = pickArrow(currentMousePointLogic);
 			if (pickedArrow != null) {
@@ -1857,13 +1891,13 @@ public class MainScreen extends JPanel
 			int minY = (int) Math.round(Math.min(sp.y, ep.y));
 			int maxX = (int) Math.round(Math.max(sp.x, ep.x));
 			int maxY = (int) Math.round(Math.max(sp.y, ep.y));
-			Rectangle tmpR = new Rectangle(minX, minY, maxX-minX, maxY-minY);
+			Rectangle selectRect = new Rectangle(minX, minY, maxX-minX, maxY-minY);
 			
-			
+		
 			//Check if there is a line in the selection rectangle
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 				Line2D tmpL = new Line2D.Double(l.p0.x, l.p0.y, l.p1.x, l.p1.y);
-				if (tmpL.intersects(tmpR)) {
+				if (tmpL.intersects(selectRect)) {
 					l.setSelected(true);
 				} else {
 					l.setSelected(false);
@@ -1874,7 +1908,7 @@ public class MainScreen extends JPanel
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(a.getxPos()), 
 						(int) Math.round(a.getyPos()), a.getWidth(), a.getHeight());
-				if (tmpR2.intersects(tmpR)) {
+				if (tmpR2.intersects(selectRect)) {
 					a.setSelected(true);
 				} else {
 					a.setSelected(false);
@@ -1883,7 +1917,7 @@ public class MainScreen extends JPanel
 			
 			//Check if there is a OriFace in the selection rectangle
 			for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
-				if (f.path.intersects(tmpR)) {
+				if (f.path.intersects(selectRect)) {
 					f.setSelected(true);
 				} else {
 					f.setSelected(false);
@@ -1894,7 +1928,7 @@ public class MainScreen extends JPanel
 			for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(s.getxPos()), 
 						(int) Math.round(s.getyPos()), s.getWidth(), s.getHeight());
-				if (tmpR2.intersects(tmpR)) {
+				if (tmpR2.intersects(selectRect)) {
 					s.setSelected(true);
 				} else {
 					s.setSelected(false);
@@ -1904,7 +1938,7 @@ public class MainScreen extends JPanel
 			//Check if there is a symbol in the selection rectangle
 			for (OriGeomSymbol gs : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 				Shape tmpC2 = new Ellipse2D.Double(gs.getxPos(), gs.getyPos(), gs.getWidth(), gs.getHeight());
-				if (tmpC2.intersects(tmpR)) {
+				if (tmpC2.intersects(selectRect)) {
 					gs.setSelected(true);
 				} else {
 					gs.setSelected(false);
@@ -1917,9 +1951,9 @@ public class MainScreen extends JPanel
 				Rectangle tmpR3 = leader.getLabel().getBounds();
 				Line2D tmpL2 = new Line2D.Double(leader.line.p0.x, leader.line.p0.y, leader.line.p1.x, leader.line.p1.y);
 
-				if (tmpR3.intersects(tmpR)) {
+				if (tmpR3.intersects(selectRect)) {
 					leader.setSelected(true);
-				} else if (tmpL2.intersects(tmpR)) {
+				} else if (tmpL2.intersects(selectRect)) {
 					leader.setSelected(true);
 				} else {
 					leader.setSelected(false);
@@ -1932,9 +1966,9 @@ public class MainScreen extends JPanel
 				Rectangle tmpR4 = repe.getLabel().getBounds();
 				Line2D tmpL3 = new Line2D.Double(repe.line.p0.x, repe.line.p0.y, repe.line.p1.x, repe.line.p1.y);
 
-				if (tmpR4.intersects(tmpR)) {
+				if (tmpR4.intersects(selectRect)) {
 					repe.setSelected(true);
-				} else if (tmpL3.intersects(tmpR)) {
+				} else if (tmpL3.intersects(selectRect)) {
 					repe.setSelected(true);
 				} else {
 					repe.setSelected(false);
@@ -1944,17 +1978,18 @@ public class MainScreen extends JPanel
 			//Check if there is a equalDistSymbol in the selection rectangle
 			for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 
-				double p0x = eds.getP0().x + 15*eds.getNormalVector().x;
-				double p0y = eds.getP0().y + 15*eds.getNormalVector().y;
+				Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(eds.getP0(), eds.getP1()));
+				double p0x = eds.getP0().x + 15*nv.x;
+				double p0y = eds.getP0().y + 15*nv.y;
 								
-				double p1x = eds.getP0().x - 15*eds.getNormalVector().x;
-				double p1y = eds.getP0().y - 15*eds.getNormalVector().y;
+				double p1x = eds.getP0().x - 15*nv.x;
+				double p1y = eds.getP0().y - 15*nv.y;
 				
-				double p2x = eds.getP1().x - 15*eds.getNormalVector().x;
-				double p2y = eds.getP1().y - 15*eds.getNormalVector().y;
+				double p2x = eds.getP1().x - 15*nv.x;
+				double p2y = eds.getP1().y - 15*nv.y;
 				
-				double p3x = eds.getP1().x + 15*eds.getNormalVector().x;
-				double p3y = eds.getP1().y + 15*eds.getNormalVector().y;
+				double p3x = eds.getP1().x + 15*nv.x;
+				double p3y = eds.getP1().y + 15*nv.y;
 				
 				Path2D.Double p = new Path2D.Double();
 				p.moveTo(p0x, p0y);
@@ -1963,13 +1998,27 @@ public class MainScreen extends JPanel
 				p.lineTo(p3x, p3y);
 				p.closePath();
 
-				if (p.intersects(tmpR)) {
+				if (p.intersects(selectRect)) {
 					eds.setSelected(true);
 				} else {
 					eds.setSelected(false);
 				}
-
 			}
+			
+			//Check if there is a equalAnglSymbol in the selection rectangle
+			for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+				ArrayList<Shape> shapes = eas.getShapesForDrawing();
+				
+				for(Shape s : shapes) {
+					if(s.intersects(selectRect)) {
+						eas.setSelected(true);
+						break;
+					} else {
+						eas.setSelected(false);
+					}
+				}
+			}
+			
 			Origrammer.mainFrame.uiTopPanel.modeChanged();
 		}
 		currentMouseDraggingPoint = null;

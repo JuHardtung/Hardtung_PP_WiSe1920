@@ -35,6 +35,8 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.text.PlainDocument;
 
 import origrammer.geometry.GeometryUtil;
+import origrammer.geometry.OriArrow;
+import origrammer.geometry.OriEqualAnglSymbol;
 import origrammer.geometry.OriEqualDistSymbol;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriGeomSymbol;
@@ -45,54 +47,61 @@ import origrammer.geometry.OriRepetitionBox;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
-	String[] lineInputOptions = {"Valley Fold", "Mountain Fold", "X-Ray Fold", "Edge Line"};
-	Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
+	private String[] lineInputOptions = {"Valley Fold", "Mountain Fold", "X-Ray Fold", "Edge Line"};
+	private Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
 									new JSeparator(JSeparator.HORIZONTAL),
 									"Push here", "Pull out", "Inflate here"};
-	Object[] symbolInputOptions = {"Leader", "Repetition Box", "Next View Here", "Rotations", 
+	private Object[] symbolInputOptions = {"Leader", "Repetition Box", "Next View Here", "Rotations", 
 			"Hold Here", "Hold Here and Pull", new JSeparator(JSeparator.HORIZONTAL),  
 			"X-Ray Circle", "Fold over and over", "Equal Distances", "Equal Angles", 
 			new JSeparator(JSeparator.HORIZONTAL),  "Crimping & Pleating", "Sinks"};
 
 	
 	//INPUT LINES/ ARROWS/ SYMBOLS
-	JPanel inputLinesPanel = new JPanel();
-	JLabel linesLabel = new JLabel(Origrammer.res.getString("MenuLines"));
-	JPanel inputArrowPanel = new JPanel();
-	JLabel arrowsLabel = new JLabel(Origrammer.res.getString("MenuArrows"));
-	JPanel inputSymbolsPanel = new JPanel();
+	private JPanel inputLinesPanel = new JPanel();
+	private JLabel linesLabel = new JLabel(Origrammer.res.getString("MenuLines"));
+	private JPanel inputArrowPanel = new JPanel();
+	private JLabel arrowsLabel = new JLabel(Origrammer.res.getString("MenuArrows"));
+	private JPanel inputSymbolsPanel = new JPanel();
 	private JComboBox<String> menuLineCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> menuArrowCB = new JComboBox<>(arrowInputOptions);
 	private JComboBox<Object> symbolInputCB = new JComboBox<>(symbolInputOptions);
 	
 	//INPUT SYMBOL LEADER
-	JPanel inputSymbolLeaderPanel = new JPanel();
+	private JPanel inputSymbolLeaderPanel = new JPanel();
 	public JTextField inputLeaderText = new JTextField();
 	
 	//INPUT SYMBOL REPETITION BOX
-	JPanel inputSymbolRepetitionPanel = new JPanel();
+	private JPanel inputSymbolRepetitionPanel = new JPanel();
 	public JTextField inputRepetitionText = new JTextField();
 	
 	//FACE UP/ FACE DOWN COLOR
-	JPanel faceDirectionPanel = new JPanel();
+	private JPanel faceDirectionPanel = new JPanel();
 	private JRadioButton faceUpInput = new JRadioButton("Face Up", false);
 	private JRadioButton faceDownInput = new JRadioButton("Face Down", true);
 	
 	//CHANGE LINE/ARROW TYPE
-	JPanel changeLinePanel = new JPanel();
-	JPanel changeArrowPanel = new JPanel();
+	private JPanel changeLinePanel = new JPanel();
+	private JPanel changeArrowPanel = new JPanel();
 	private JComboBox<String> changeLineTypeCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> changeArrowTypeCB = new JComboBox<>(arrowInputOptions);
-	JButton changeLineButton = new JButton("Set");
-	JButton changeArrowButton = new JButton("Set");
+	private JButton changeLineButton = new JButton("Set");
+	private JButton changeArrowButton = new JButton("Set");
 	
 	//EQUAL DISTANCE SETTINGS
-	JPanel equalDistPanel = new JPanel();
+	private JPanel equalDistPanel = new JPanel();
 	public JSlider sliderEqualDist = new JSlider(-50, 50);
 	public JTextField equalDistDividerTF = new JTextField();
+	public JButton equalDistButton = new JButton("Set");
+	
+	//EQUAL ANGLE SETTINGS
+	private JPanel equalAnglPanel = new JPanel();
+	private JSlider sliderEqualAngl = new JSlider(50,600);
+	public JTextField equalAnglDividerTF = new JTextField();
+	public JButton equalAnglButton = new JButton("Set");
 
 	//ROTATE/SCALE ARROWS
-	JPanel sliderPanel = new JPanel();
+	private JPanel sliderPanel = new JPanel();
 	private JSlider sliderScaleIcon = new JSlider(100, 200);
 	private JSlider sliderRotIcon = new JSlider(0, 3600);
 	
@@ -218,36 +227,36 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		PlainDocument docEqualDistDivider = (PlainDocument) equalDistDividerTF.getDocument();
 		docEqualDistDivider.setDocumentFilter(new IntFilter());
 		equalDistDividerTF.setText(Integer.toString(Globals.gridDivNum));
-		//TODO: use "SET" button instead of documentListener
-		docEqualDistDivider.addDocumentListener(new DocumentListener() { 
-			
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				System.out.println("remove");
-				//setDivider();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				System.out.println("insert");
-				setEqualDistanceDividerCount();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				System.out.println("change");
-				setEqualDistanceDividerCount();
-			}
-		});
-		
+		equalDistButton.addActionListener(this);
 		equalDistPanel.add(sliderEqualDist);
 		equalDistPanel.add(equalDistDividerTF);
+		equalDistPanel.add(equalDistButton);
 		equalDistPanel.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(),
-												getBackground().brighter()), "Equal Distance Settings"));
+												getBackground().brighter()), "Equal Distance"));
 
-		//Add Lines and Arrow Panel to UITopPanel
+		//##### EQUAL ANGLE SETTINGS
+		sliderEqualAngl.setMajorTickSpacing(50);
+		sliderEqualAngl.setSnapToTicks(true);
+		sliderEqualAngl.setPaintTicks(true);
+		sliderEqualAngl.addChangeListener(e -> sliderEqualAnglChanged());
+		equalAnglDividerTF.setPreferredSize(new Dimension(20,20));
+		PlainDocument docEqualAnglDivider = (PlainDocument) equalDistDividerTF.getDocument();
+		docEqualAnglDivider.setDocumentFilter(new IntFilter());
+		equalAnglDividerTF.setText(Integer.toString(Globals.gridDivNum));
+		equalAnglButton.addActionListener(this);
+		equalAnglPanel.add(sliderEqualAngl);
+		sliderEqualAngl.setVisible(false);
+		equalAnglPanel.add(equalAnglDividerTF);
+		equalAnglPanel.add(equalAnglButton);
+		equalAnglPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(),
+												getBackground().brighter()), "Equal Angle"));
+		
+
+		//add all panels to UITopPanel
 		add(changeLinePanel);
 		add(changeArrowPanel);
 		add(faceDirectionPanel);
@@ -257,6 +266,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputSymbolLeaderPanel);
 		add(inputSymbolRepetitionPanel);
 		add(equalDistPanel);
+		add(equalAnglPanel);
 		add(sliderPanel);
 	
 		modeChanged();
@@ -268,6 +278,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				eds.setDividerCount(Integer.parseInt(equalDistDividerTF.getText()));
 			}
 			screen.repaint();
+		}
+	}
+	
+	private void setEqualAngleDividerCount() {
+		for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+			if (eas.isSelected()) {
+				eas.setDividerCount(Integer.parseInt(equalAnglDividerTF.getText()));
+			}
 		}
 	}
 
@@ -331,12 +349,22 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	/**
 	 * Sets the translation distance of equalDistanceSymbol
 	 */
-	private void sliderEqualDistChanged() {
-		System.out.println("equalDistSliderChanged");
-		
+	private void sliderEqualDistChanged() {		
 		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 			if (eds.isSelected()) {
 				eds.setTranslationDist(sliderEqualDist.getValue());
+				screen.repaint();
+			}
+		}
+	}
+	
+	/**
+	 * Sets the translation distance of equalDistanceSymbol
+	 */
+	private void sliderEqualAnglChanged() {		
+		for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+			if (eas.isSelected()) {
+				eas.setLineLength(sliderEqualAngl.getValue());
 				screen.repaint();
 			}
 		}
@@ -391,6 +419,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_UP;
 		} else if (e.getSource() == faceDownInput) {
 			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_DOWN;
+		} else if (e.getSource() == equalDistButton) {
+			setEqualDistanceDividerCount();
+		} else if (e.getSource() == equalAnglButton) {
+			setEqualAngleDividerCount();
 		}
 
 
@@ -420,54 +452,60 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		//  0100 0000	GEO_SYMBOLS
 		//  1000 0000	EQUAL_DIST_SYMBOLS
 		
-		int selectedTypes = 0b00000000;
+		int selectedTypes = 0b000000000;
 		
 		
 		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (line.isSelected()) {
-				selectedTypes += 0b00000001;
+				selectedTypes += 0b000000001;
 				break;
 			}
 		}
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				selectedTypes += 0b00000010;
+				selectedTypes += 0b000000010;
 				break;
 			}
 		}
 		for (OriFace face : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
 			if (face.isSelected()) {
-				selectedTypes += 0b00000100;
+				selectedTypes += 0b000000100;
 				break;
 			}
 		}
 		for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
 			if (leader.isSelected()) {
-				selectedTypes += 0b00001000;
+				selectedTypes += 0b000001000;
 				break;
 			}
 		}
 		for (OriRepetitionBox repeBox : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
 			if (repeBox.isSelected()) {
-				selectedTypes += 0b00010000;
+				selectedTypes += 0b000010000;
 				break;
 			}
 		}
 		for (OriPicSymbol picS : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 			if (picS.isSelected()) {
-				selectedTypes += 0b00100000;
+				selectedTypes += 0b000100000;
 				break;
 			}
 		}
 		for (OriGeomSymbol geoS : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 			if (geoS.isSelected()) {
-				selectedTypes += 0b01000000;
+				selectedTypes += 0b001000000;
 				break;
 			}
 		}
 		for (OriEqualDistSymbol equalDist : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 			if (equalDist.isSelected()) {
-				selectedTypes += 0b10000000;
+				selectedTypes += 0b010000000;
+				break;
+			}
+		}
+		for (OriEqualAnglSymbol equalAngl : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+			if (equalAngl.isSelected()) {
+				selectedTypes += 0b100000000;
 				break;
 			}
 		}
@@ -505,11 +543,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else {
 				equalDistPanel.setVisible(false);
 			}
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL) {
+				equalAnglPanel.setVisible(true);
+			} else {
+				equalAnglPanel.setVisible(false);
+			}
 		} else {
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
 			inputSymbolRepetitionPanel.setVisible(false);
 			equalDistPanel.setVisible(false);
+			equalAnglPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
@@ -530,26 +574,25 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			//  1000 0000	EQUAL_DIST_SYMBOLS
 			int selectedTypes = getSelectedTypes();
 			
-			int lineMask 	= 0b00000001;
-			int arrowMask 	= 0b00000010;
-			int faceMask	= 0b00000100;
-			int leaderMask	= 0b00001000;
-			int repeMask	= 0b00010000;
-			int picMask		= 0b00100000;
-			int geoMask		= 0b01000000;
-			int equDistMask = 0b10000000;
+			int lineMask 	= 0b000000001;
+			int arrowMask 	= 0b000000010;
+			int faceMask	= 0b000000100;
+			int leaderMask	= 0b000001000;
+			int repeMask	= 0b000010000;
+			int picMask		= 0b000100000;
+			int geoMask		= 0b001000000;
+			int equDistMask = 0b010000000;
+			int equAnglMask = 0b100000000;
 			int result = selectedTypes & lineMask;
 			
 			
-			if (result == 0b00000001) {
-				System.out.println("lines");
+			if (result == 0b000000001) {
 				changeLinePanel.setVisible(true);
 			} else {
 				changeLinePanel.setVisible(false);
 			}
 			result = selectedTypes & arrowMask;
-			if (result == 0b00000010) {
-				System.out.println("arrow");
+			if (result == 0b000000010) {
 				changeArrowPanel.setVisible(true);
 				sliderPanel.setVisible(true);
 			} else {
@@ -557,48 +600,51 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & faceMask;
-			if (result == 0b00000100) {
-				System.out.println("faces");
+			if (result == 0b000000100) {
 				faceDirectionPanel.setVisible(true);
 			} else {
 				faceDirectionPanel.setVisible(false);
 			}
 			result = selectedTypes & leaderMask;
-			if (result == 0b00001000) {
-				System.out.println("leader");
+			if (result == 0b000001000) {
 				inputSymbolLeaderPanel.setVisible(true);
 			} else {
 				inputSymbolLeaderPanel.setVisible(false);
 			}
 			result = selectedTypes & repeMask;
-			if (result == 0b00010000) {
-				System.out.println("repe");
+			if (result == 0b000010000) {
 				inputSymbolRepetitionPanel.setVisible(true);
 			} else {
 				inputSymbolRepetitionPanel.setVisible(false);
 			}
 			result = selectedTypes & picMask;
-			if (result == 0b00100000) {
-				System.out.println("picSymbols");
+			if (result == 0b000100000) {
 				sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
 			} else {
 				sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & geoMask;
-			if (result == 0b01000000) {
+			if (result == 0b001000000) {
 				System.out.println("geoSymbols");
 				//TODO: editing options for geoSymbols
 			}
 			result = selectedTypes & equDistMask;
-			if (result == 0b10000000) {
-				System.out.println("equDist");
+			if (result == 0b010000000) {
 				equalDistPanel.setVisible(true);
 			} else {
 				equalDistPanel.setVisible(false);
 			}
+			result = selectedTypes & equAnglMask;
+			if (result == 0b100000000) {
+				sliderEqualAngl.setVisible(true);
+				equalAnglPanel.setVisible(true);
+			} else {
+				sliderEqualAngl.setVisible(false);
+				equalAnglPanel.setVisible(false);
+			}
 			
-		
 		} else {
+			sliderEqualAngl.setVisible(false);
 			sliderPanel.setVisible(false);
 			changeLinePanel.setVisible(false);
 			changeArrowPanel.setVisible(false);

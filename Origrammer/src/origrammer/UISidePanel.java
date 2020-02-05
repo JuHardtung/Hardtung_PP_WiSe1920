@@ -28,42 +28,42 @@ import javax.swing.border.TitledBorder;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 
-	JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
-	JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
-	JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
-	JRadioButton symbolInputToolRB = new JRadioButton(Origrammer.res.getString("UI_symbolInputTool"), false);
+	public JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
+	private JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
+	private JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
+	private JRadioButton symbolInputToolRB = new JRadioButton(Origrammer.res.getString("UI_symbolInputTool"), false);
 
-	JRadioButton measureToolRB = new JRadioButton(Origrammer.res.getString("UI_measureTool"), false);
-	JRadioButton fillToolRB = new JRadioButton(Origrammer.res.getString("UI_fillTool"), false);
-	ButtonGroup toolbarGroup;
+	private JRadioButton measureToolRB = new JRadioButton(Origrammer.res.getString("UI_measureTool"), false);
+	private JRadioButton fillToolRB = new JRadioButton(Origrammer.res.getString("UI_fillTool"), false);
+	private ButtonGroup toolbarGroup;
 	
 	//MEASURE PANEL
-	JPanel measureOptionsPanel = new JPanel();
-	JRadioButton measureLengthRB = new JRadioButton(Origrammer.res.getString("UI_measureLength"), true);
-	JRadioButton measureAngleRB = new JRadioButton(Origrammer.res.getString("UI_measureAngle"), true);
-	JButton copyMeasuredLength = new JButton("Copy");
-	JButton copyMeasuredAngle = new JButton("Copy");
-	ButtonGroup measureGroup;
-	JFormattedTextField measureLengthTF;
-	JFormattedTextField measureAngleTF;
+	private JPanel measureOptionsPanel = new JPanel();
+	private JRadioButton measureLengthRB = new JRadioButton(Origrammer.res.getString("UI_measureLength"), true);
+	private JRadioButton measureAngleRB = new JRadioButton(Origrammer.res.getString("UI_measureAngle"), true);
+	private JButton copyMeasuredLength = new JButton("Copy");
+	private JButton copyMeasuredAngle = new JButton("Copy");
+	private ButtonGroup measureGroup;
+	public JFormattedTextField measureLengthTF;
+	public JFormattedTextField measureAngleTF;
 	
 	//INPUT LINE MODE
-	JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
-	JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
-	ButtonGroup lineInputGroup;
+	private JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
+	private JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
+	private ButtonGroup lineInputGroup;
 	
 	//Grid
-	JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
-	JButton gridHalfButton = new JButton(Origrammer.res.getString("UI_gridHalf"));
-	JButton gridDoubleButton = new JButton(Origrammer.res.getString("UI_gridDouble"));
-	JButton gridSetButton = new JButton(Origrammer.res.getString("UI_gridSet"));
-	JFormattedTextField gridTextField;
+	public JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
+	private JButton gridHalfButton = new JButton(Origrammer.res.getString("UI_gridHalf"));
+	private JButton gridDoubleButton = new JButton(Origrammer.res.getString("UI_gridDouble"));
+	private JButton gridSetButton = new JButton(Origrammer.res.getString("UI_gridSet"));
+	private JFormattedTextField gridTextField;
 	
-	JCheckBox dispVerticesCB = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
-	JCheckBox dispFilledFacedCB = new JCheckBox(Origrammer.res.getString("UI_ShowFilledFaces"), true);
+	private JCheckBox dispVerticesCB = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
+	private JCheckBox dispFilledFacedCB = new JCheckBox(Origrammer.res.getString("UI_ShowFilledFaces"), true);
 
-	MainScreen screen;
-	UITopPanel uiTopPanel;
+	private MainScreen screen;
+	private UITopPanel uiTopPanel;
 	
 	public UISidePanel(MainScreen __screen, UITopPanel __uiTopPanel) {
 		this.screen = __screen;
@@ -73,12 +73,12 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 		//TOOLBAR Button Group
 		toolbarGroup = new ButtonGroup();
-		toolbarGroup.add(selectionToolRB);
 		toolbarGroup.add(lineInputToolRB);
 		toolbarGroup.add(arrowInputToolRB);
 		toolbarGroup.add(symbolInputToolRB);
-		toolbarGroup.add(measureToolRB);
 		toolbarGroup.add(fillToolRB);
+		toolbarGroup.add(selectionToolRB);
+		toolbarGroup.add(measureToolRB);
 		
 		//LINE INPUT Button Group
 		lineInputGroup = new ButtonGroup();

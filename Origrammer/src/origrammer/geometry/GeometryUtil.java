@@ -1,6 +1,7 @@
 package origrammer.geometry;
 
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import javax.vecmath.Vector2d;
 
 import javafx.scene.shape.Circle;
-import origrammer.OriArrow;
 
 public class GeometryUtil {
 
@@ -177,17 +177,19 @@ public class GeometryUtil {
 //		double rectX = s.getP0().x + 15*s.getNormalVector().x;
 //		double rectY = s.getP0().y + 15*s.getNormalVector().y;
 
-		double p0x = s.getP0Pos().x + 15*s.getNormalVector().x;
-		double p0y = s.getP0Pos().y + 15*s.getNormalVector().y;
+		Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(s.getP0(), s.getP1()));
+
+		double p0x = s.getP0Pos().x + 15*nv.x;
+		double p0y = s.getP0Pos().y + 15*nv.y;
 		
-		double p1x = s.getP0Pos().x - 15*s.getNormalVector().x;
-		double p1y = s.getP0Pos().y - 15*s.getNormalVector().y;
+		double p1x = s.getP0Pos().x - 15*nv.x;
+		double p1y = s.getP0Pos().y - 15*nv.y;
 		
-		double p2x = s.getP1Pos().x - 15*s.getNormalVector().x;
-		double p2y = s.getP1Pos().y - 15*s.getNormalVector().y;
+		double p2x = s.getP1Pos().x - 15*nv.x;
+		double p2y = s.getP1Pos().y - 15*nv.y;
 		
-		double p3x = s.getP1Pos().x + 15*s.getNormalVector().x;
-		double p3y = s.getP1Pos().y + 15*s.getNormalVector().y;
+		double p3x = s.getP1Pos().x + 15*nv.x;
+		double p3y = s.getP1Pos().y + 15*nv.y;
 		
 		Path2D.Double p = new Path2D.Double();
 		p.moveTo(p0x, p0y);
@@ -197,6 +199,19 @@ public class GeometryUtil {
 		p.closePath();
 				
 		return isMouseOverPath(x, y, p);
+	}
+	
+	public static boolean isMouseOverEqualAnglSymbol(double x, double y, OriEqualAnglSymbol s) {
+		
+		ArrayList<Shape> shapes = s.getShapesForDrawing();
+		
+		for (Shape shape : shapes) {
+			if (shape.intersects(x, y, 5, 5)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public static boolean isMouseOverFace(double x, double y, OriFace f) {
@@ -418,6 +433,41 @@ public class GeometryUtil {
 		double newY = v.x * Math.sin(Math.toRadians(degrees)) + v.y * Math.cos(Math.toRadians(degrees));
 		
 		return new Vector2d(newX, newY);
+	}
+	
+	
+	/**				 p2 - p1
+	 * unitVector = ---------
+	 * 				|p2 - p1|	
+	 * @return unitVector of line(p0,p1)
+	 */
+	public static Vector2d getUnitVector(Vector2d p0, Vector2d p1) {
+		
+		Vector2d normal = new Vector2d();
+		normal.set(p1);
+		normal.sub(p0);
+
+		Vector2d uv = new Vector2d();
+		uv.set(normal);
+		uv.normalize();
+		
+		return uv;
+	}
+	
+	/** rotate unitVector by 90 degrees to get normalVector
+	 * 	x' = x*cos(angle) - y*sin(angle)
+	 * 	y' = x*sin(angle) + y*cos(angle)
+	 * 
+	 * @return normalVector of line(p0,p1)
+	 */
+	public static Vector2d getNormalVector(Vector2d uv) {
+		double angleRadian = Math.toRadians(90);
+		
+		double rx = (uv.x * Math.cos(angleRadian)) - (uv.y * Math.sin(angleRadian));
+		double ry = (uv.x * Math.sin(angleRadian)) + (uv.y * Math.cos(angleRadian));
+		Vector2d nv = new Vector2d(rx, ry);
+
+		return nv;
 	}
 	
 }

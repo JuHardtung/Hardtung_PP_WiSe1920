@@ -21,50 +21,17 @@ public class OriEqualDistSymbol {
 		this.dividerCount = dividerCount;
 	}
 	
-	/**				 p2 - p1
-	 * unitVector = ---------
-	 * 				|p2 - p1|	
-	 * @return unitVector of line(p0,p1)
-	 */
-	public Vector2d getUnitVector() {
-		Vector2d normal = new Vector2d();
-		normal.set(p1);
-		normal.sub(p0);
-
-		Vector2d uv = new Vector2d();
-		uv.set(normal);
-		uv.normalize();
-		
-		return uv;
-	}
-	
-	
-	/** rotate unitVector by 90 degrees to get normalVector
-	 * 	x' = x*cos(angle) - y*sin(angle)
-	 * 	y' = x*sin(angle) + y*cos(angle)
-	 * 
-	 * @return normalVector of line(p0,p1)
-	 */
-	public Vector2d getNormalVector() {
-		double angleRadian = Math.toRadians(90);
-		
-		Vector2d uv = getUnitVector();
-		double rx = (uv.x * Math.cos(angleRadian)) - (uv.y * Math.sin(angleRadian));
-		double ry = (uv.x * Math.sin(angleRadian)) + (uv.y * Math.cos(angleRadian));
-		Vector2d nv = new Vector2d(rx, ry);
-
-		return nv;
-	}
-	
 	public Vector2d getP0Pos() {
-		double p0x = p0.x + (-translationDist * getNormalVector().x);
-		double p0y = p0.y + (-translationDist * getNormalVector().y);
+		Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(p0, p1));
+		double p0x = p0.x + (-translationDist * nv.x);
+		double p0y = p0.y + (-translationDist * nv.y);
 		return new Vector2d(p0x, p0y);
 	}
 	
 	public Vector2d getP1Pos() {
-		double p1x = p1.x + (-translationDist * getNormalVector().x);
-		double p1y = p1.y + (-translationDist * getNormalVector().y);
+		Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(p0, p1));
+		double p1x = p1.x + (-translationDist * nv.x);
+		double p1y = p1.y + (-translationDist * nv.y);
 		return new Vector2d(p1x, p1y);
 	}
 
