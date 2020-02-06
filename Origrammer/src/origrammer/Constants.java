@@ -75,8 +75,7 @@ public class Constants {
 	public static enum FaceInputDirection  {
 		FACE_DOWN,
 		FACE_UP
-	}
-	
+	}	
 	final public static double DEFAULT_PAPER_SIZE = 600;
 
 }

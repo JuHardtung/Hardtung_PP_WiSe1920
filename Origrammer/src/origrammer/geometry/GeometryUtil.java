@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -124,56 +125,54 @@ public class GeometryUtil {
 	
 	/**
 	 * Returns true if mouseCoordinates are within the bounds of the tested OriArrow
-	 * @param x Mouse position 
-	 * @param y Mouse position
+	 * @param p Mouse position
 	 * @param a OriArrow that is tested for selection
-	 * @return returns true if mouse is over OriArrow and false if it isn't
+	 * @return returns true if mouse if over OriArrow and false if it isn't
 	 */
-	public static boolean isMouseOverArrow(double x, double y, OriArrow a) {
-		
+	public static boolean isMouseOverArrow(Point2D.Double p, OriArrow a) {
 		double aX = a.getxPos();
 		double aY = a.getyPos();
 		double aXEnd = aX + (a.getWidth());
 		double aYEnd = aY + (a.getHeight());
 		
-		if (x > aX && x < aXEnd) {
-			if (y > aY && y < aYEnd) {
+		if (p.x > aX && p.x < aXEnd) {
+			if (p.y > aY && p.y < aYEnd) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static boolean isMouseOverSymbol(double x, double y, OriPicSymbol s) {
+	public static boolean isMouseOverSymbol(Point2D.Double p, OriPicSymbol s) {
 		
 		double sX = s.getxPos();
 		double sY = s.getyPos();
 		double sXEnd = sX + (s.getWidth());
 		double sYEnd = sY + (s.getHeight());
 		
-		if (x > sX && x < sXEnd) {
-			if (y > sY && y < sYEnd) {
+		if (p.x > sX && p.x < sXEnd) {
+			if (p.y > sY && p.y < sYEnd) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static boolean isMouseOverGeomSymbol(double x, double y, OriGeomSymbol s) {
+	public static boolean isMouseOverGeomSymbol(Point2D.Double p, OriGeomSymbol s) {
 		double sX = s.getxPos();
 		double sY = s.getyPos();
 		double sXEnd = sX + (s.getWidth());
 		double sYEnd = sY + (s.getHeight());
 		
-		if (x > sX && x < sXEnd) {
-			if (y > sY && y < sYEnd) {
+		if (p.x > sX && p.x < sXEnd) {
+			if (p.y > sY && p.y < sYEnd) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static boolean isMouseOverEqualDistSymbol(double x, double y, OriEqualDistSymbol s) {
+	public static boolean isMouseOverEqualDistSymbol(Point2D.Double p, OriEqualDistSymbol s) {
 //		double rectX = s.getP0().x + 15*s.getNormalVector().x;
 //		double rectY = s.getP0().y + 15*s.getNormalVector().y;
 
@@ -191,39 +190,42 @@ public class GeometryUtil {
 		double p3x = s.getP1Pos().x + 15*nv.x;
 		double p3y = s.getP1Pos().y + 15*nv.y;
 		
-		Path2D.Double p = new Path2D.Double();
-		p.moveTo(p0x, p0y);
-		p.lineTo(p1x, p1y);
-		p.lineTo(p2x, p2y);
-		p.lineTo(p3x, p3y);
-		p.closePath();
+		Path2D.Double path = new Path2D.Double();
+		path.moveTo(p0x, p0y);
+		path.lineTo(p1x, p1y);
+		path.lineTo(p2x, p2y);
+		path.lineTo(p3x, p3y);
+		path.closePath();
 				
-		return isMouseOverPath(x, y, p);
+		return isMouseOverPath(p, path);
 	}
 	
-	public static boolean isMouseOverEqualAnglSymbol(double x, double y, OriEqualAnglSymbol s) {
-		
-		ArrayList<Shape> shapes = s.getShapesForDrawing();
-		
-		for (Shape shape : shapes) {
-			if (shape.intersects(x, y, 5, 5)) {
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param s
+	 * @return
+	 */
+	public static boolean isMouseOverShapes(Point2D.Double p, ArrayList<Shape> s) {
+		for (Shape shape : s) {
+			if (shape.intersects(p.x, p.y, 5, 5)) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	
-	public static boolean isMouseOverFace(double x, double y, OriFace f) {
-		return f.path.intersects(x, y, 5, 5);
+	public static boolean isMouseOverFace(Point2D.Double p, OriFace f) {
+		return f.path.intersects(p.x, p.y, 5, 5);
 	}
 	
-	public static boolean isMouseOverPath(double x, double y, Path2D.Double p) {
-		return p.intersects(x, y, 5, 5);
+	public static boolean isMouseOverPath(Point2D.Double p, Path2D.Double path) {
+		return path.intersects(p.x, p.y, 5, 5);
 	}
 	
-	public static boolean isMouseOverRectangle(double x, double y, Rectangle rect) {
-		return rect.intersects(x, y, 5, 5);
+	public static boolean isMouseOverRectangle(Point2D.Double p, Rectangle rect) {
+		return rect.intersects(p.x, p.y, 5, 5);
 	}
 
 

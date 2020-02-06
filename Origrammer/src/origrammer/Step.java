@@ -16,6 +16,7 @@ import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriRepetitionBox;
 import origrammer.geometry.OriPicSymbol;
+import origrammer.geometry.OriPleatCrimpSymbol;
 import origrammer.geometry.OriVertex;
 
 class PointComparatorX implements Comparator<Object> {
@@ -46,6 +47,7 @@ public class Step {
 	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
 	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
 	public ArrayList<OriEqualAnglSymbol> equalAnglSymbols = new ArrayList<>();
+	public ArrayList<OriPleatCrimpSymbol> pleatCrimpSymbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
 	
@@ -241,6 +243,14 @@ public class Step {
 		equalAnglSymbols.add(inputSymbol);
 	}
 	
+	/**
+	 * Adds a new OriPleatSymbol to the current diagram step
+	 * @param inputSymbol
+	 */
+	public void addPleatSymbol(OriPleatCrimpSymbol inputSymbol) {
+		pleatCrimpSymbols.add(inputSymbol);
+	}
+	
 	
 	public void selectAll() {
 		selectAllLines();
@@ -252,6 +262,8 @@ public class Step {
 		selectAllGeomSymbols();
 		selectAllEqualDistSymbols();
 		selectAllEqualAnglSymbols();
+		selectAllPleatSymbols();
+
 	}
 
 	public void selectAllLines() {
@@ -306,6 +318,12 @@ public class Step {
 			eas.setSelected(true);
 		}
 	}
+	
+	public void selectAllPleatSymbols() {
+		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
+			pleat.setSelected(true);
+		}
+	}
 
 	public void unselectAll() {
 		unselectAllLines();
@@ -317,6 +335,7 @@ public class Step {
 		unselectAllGeomSymbols();
 		unselectAllEqualDistSymbols();
 		unselectAllEqualAnglSymbols();
+		unselectAllPleatSymbols();
 	}
 
 	public void unselectAllLines() {
@@ -370,6 +389,12 @@ public class Step {
 	public void unselectAllEqualAnglSymbols() {
 		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
 			eas.setSelected(false);
+		}
+	}
+	
+	public void unselectAllPleatSymbols() {
+		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
+			pleat.setSelected(false);
 		}
 	}
 
@@ -517,6 +542,22 @@ public class Step {
 		}
 		for (OriEqualAnglSymbol eas : selectedEqualAnglS) {
 			equalAnglSymbols.remove(eas);
+		}
+	}
+	
+	/**
+	 * Deletes all selected OriPleatSymbols of the current diagram step
+	 */
+	public void deleteSelectedPleatSymbols() {
+		ArrayList<OriPleatCrimpSymbol> selectedPleatS = new ArrayList<>();
+		
+		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
+			if (pleat.isSelected()) {
+				selectedPleatS.add(pleat);
+			}
+		}
+		for (OriPleatCrimpSymbol pleat : selectedPleatS) {
+			pleatCrimpSymbols.remove(pleat);
 		}
 	}
 	

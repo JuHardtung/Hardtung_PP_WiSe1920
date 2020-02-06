@@ -51,6 +51,7 @@ import org.apache.commons.io.FileUtils;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import origrammer.geometry.*;
 public class MainScreen extends JPanel 
 		implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ComponentListener {
@@ -78,6 +79,7 @@ public class MainScreen extends JPanel
 	private OriGeomSymbol selectedCandidateGS = null;
 	private OriEqualDistSymbol selectedCandidateEDS = null;
 	private OriEqualAnglSymbol selectedCandidateEAS = null;
+	private OriPleatCrimpSymbol selectedCandidatePleat = null;
 	private OriLeader selectedCandidateLeader = null;
 	private OriRepetitionBox selectedCandidateRepeBox = null;
 	private OriLeader tmpLeader = new OriLeader();
@@ -349,7 +351,7 @@ public class MainScreen extends JPanel
 	   
 	   //RENDER ALL EQUAL_ANGLE_SYMBOLS
 	   for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
-		   if (eas.isSelected()|| selectedCandidateEAS == eas) {
+		   if (eas.isSelected() || selectedCandidateEAS == eas) {
 			   g2d.setStroke(Config.STROKE_EDGE);
 			   g2d.setColor(Color.GREEN);
 		   } else {
@@ -361,6 +363,23 @@ public class MainScreen extends JPanel
 		   for (Shape s : shapes) {
 			   g2d.draw(s);
 		   }
+	   }
+	   
+	   //RENDER ALL PLEATS
+	   for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+		   if (pleat.isSelected() || selectedCandidatePleat == pleat) {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.GREEN);
+		   } else {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.BLACK);
+		   }
+		   
+		   ArrayList<Shape> shapes = pleat.getShapesForDrawing();
+		   for (Shape s : shapes) {
+			   g2d.draw(s);
+		   }
+		   
 	   }
 	   
        
@@ -830,7 +849,7 @@ public class MainScreen extends JPanel
     	OriArrow bestArrow = null;
     	
     	for(OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
-    		boolean pickedA = GeometryUtil.isMouseOverArrow(p.getX(), p.getY(), arrow);
+    		boolean pickedA = GeometryUtil.isMouseOverArrow(p, arrow);
     		if (pickedA) {
     			bestArrow = arrow;
     		}
@@ -846,7 +865,7 @@ public class MainScreen extends JPanel
     	OriFace bestFace = null;
     	
     	for (OriFace face : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
-    		boolean pickedF = GeometryUtil.isMouseOverFace(p.x, p.y, face);
+    		boolean pickedF = GeometryUtil.isMouseOverFace(p, face);
     		if (pickedF) {
     			bestFace = face;
     		}
@@ -864,7 +883,7 @@ public class MainScreen extends JPanel
     	OriLeader bestLeader = null;
     	for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
     		
-    		if (GeometryUtil.isMouseOverRectangle(p.x, p.y, leader.getLabel().getBounds())) {
+    		if (GeometryUtil.isMouseOverRectangle(p, leader.getLabel().getBounds())) {
     			return leader;
     		} else {
         		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), leader.line.p0, leader.line.p1);
@@ -888,7 +907,7 @@ public class MainScreen extends JPanel
     	for (OriRepetitionBox repe : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
     		
     		
-    		if (GeometryUtil.isMouseOverRectangle(p.x, p.y, repe.getLabel().getBounds())) {
+    		if (GeometryUtil.isMouseOverRectangle(p, repe.getLabel().getBounds())) {
     			return repe;
     		} else {
         		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), repe.line.p0, repe.line.p1);
@@ -911,7 +930,7 @@ public class MainScreen extends JPanel
     	OriPicSymbol bestSymbol = null;
     	
     	for(OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
-    		boolean pickedS = GeometryUtil.isMouseOverSymbol(p.getX(), p.getY(), symbol);
+    		boolean pickedS = GeometryUtil.isMouseOverSymbol(p, symbol);
     		if (pickedS) {
     			bestSymbol = symbol;
     		}
@@ -928,7 +947,7 @@ public class MainScreen extends JPanel
     	OriGeomSymbol bestSymbol = null;
     	
     	for (OriGeomSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
-    		boolean pickedS = GeometryUtil.isMouseOverGeomSymbol(p.getX(), p.getY(), symbol);
+    		boolean pickedS = GeometryUtil.isMouseOverGeomSymbol(p, symbol);
     		if (pickedS) {
     			bestSymbol = symbol;
     		}
@@ -944,7 +963,7 @@ public class MainScreen extends JPanel
     	OriEqualDistSymbol bestSymbol = null;
     	
     	for (OriEqualDistSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
-    		boolean pickedS = GeometryUtil.isMouseOverEqualDistSymbol(p.getX(), p.getY(), symbol);
+    		boolean pickedS = GeometryUtil.isMouseOverEqualDistSymbol(p, symbol);
     		if (pickedS) {
     			bestSymbol = symbol;
     		}
@@ -960,7 +979,23 @@ public class MainScreen extends JPanel
     	OriEqualAnglSymbol bestSymbol = null;
     	
     	for (OriEqualAnglSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
-    		boolean pickedS = GeometryUtil.isMouseOverEqualAnglSymbol(p.getX(), p.getY(), symbol);
+    		boolean pickedS = GeometryUtil.isMouseOverShapes(p, symbol.getShapesForDrawing());
+    		if (pickedS) {
+    			bestSymbol = symbol;
+    		}
+    	}
+    	if (bestSymbol != null) {
+    		return bestSymbol;
+    	} else {
+    		return null;
+    	}
+    }
+    
+    private OriPleatCrimpSymbol pickPleatSymbol(Point2D.Double p) {
+    	OriPleatCrimpSymbol bestSymbol = null;
+    	
+    	for (OriPleatCrimpSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+    		boolean pickedS = GeometryUtil.isMouseOverShapes(p, symbol.getShapesForDrawing());
     		if (pickedS) {
     			bestSymbol = symbol;
     		}
@@ -1058,6 +1093,7 @@ public class MainScreen extends JPanel
 			double dist1 = GeometryUtil.Distance(firstSelectedV, secondSelectedV);
 			double dist2 = GeometryUtil.Distance(firstSelectedV, thirdSelectedV);
 			
+			//if Distance(v,a) and Distance(v,b) are not equal --> set both to the lower value
 			if (dist1 < dist2) {
 				thirdSelectedV.x = firstSelectedV.x + uv2.x*dist1;
 				thirdSelectedV.y = firstSelectedV.y + uv2.y*dist1;
@@ -1076,6 +1112,27 @@ public class MainScreen extends JPanel
 			firstSelectedV = null;
 			secondSelectedV = null;
 			thirdSelectedV = null;
+		}
+	}
+	
+	private void createPleatCrimpSymbol(Point2D.Double clickPoint) {
+		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
+
+		if (firstSelectedV == null) {
+			firstSelectedV = tmp;
+		
+			OriPleatCrimpSymbol tmpPCSymbol = new OriPleatCrimpSymbol(firstSelectedV, 
+										Origrammer.mainFrame.uiTopPanel.pleatCB.isSelected(),
+										Integer.parseInt(Origrammer.mainFrame.uiTopPanel.pleatTF.getText()));
+			if (Origrammer.mainFrame.uiTopPanel.pleatRB.isSelected()) {
+				tmpPCSymbol.setType(OriPleatCrimpSymbol.TYPE_PLEAT);
+			} else {
+				tmpPCSymbol.setType(OriPleatCrimpSymbol.TYPE_CRIMP);
+			}
+			Origrammer.diagram.steps.get(Globals.currentStep).addPleatSymbol(tmpPCSymbol);
+
+			
+			firstSelectedV = null;
 		}
 	}
 	
@@ -1250,6 +1307,18 @@ public class MainScreen extends JPanel
 		} else {
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllEqualAnglSymbols();
 		}
+		
+		//select OriPleatSymbol or unselect all OriPleatSymbols if clicked on nothing
+		OriPleatCrimpSymbol pleat = pickPleatSymbol(clickPoint);
+		if (pleat != null) {
+			if (!pleat.isSelected()) {
+				pleat.setSelected(true);
+			} else if (!isPressedOverSymbol) {
+				pleat.setSelected(false);
+			}
+		} else {
+			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllPleatSymbols();
+		}
 	
 		Origrammer.mainFrame.uiTopPanel.modeChanged();
 	}
@@ -1407,6 +1476,8 @@ public class MainScreen extends JPanel
 				createEqualDistSymbol(clickPoint);
 			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL) {
 				createEqualAnglSymbol(clickPoint);
+			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.CRIMPING_PLEATING) {
+				createPleatCrimpSymbol(clickPoint);
 			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			selectOnClickPoint(clickPoint);
@@ -1626,6 +1697,25 @@ public class MainScreen extends JPanel
 					}
 				}
 			}
+			
+			OriPleatCrimpSymbol pickedPleatSymbol = pickPleatSymbol(affineMouseDraggingPoint);
+			if (pickPleatSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
+				isMovingSymbols = true;
+				if (pickedPleatSymbol != null) {
+
+					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
+					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					preMousePoint = e.getPoint();
+					for (OriPleatCrimpSymbol p : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+						//if selected, move to new position
+						if (p.isSelected()) {
+							int newX = (int) Math.round(p.getPosition().x + xTrans);
+							int newY = (int) Math.round(p.getPosition().y + yTrans);
+							p.setPosition(new Vector2d(newX, newY));
+						}
+					}
+				}
+			}
 
 			repaint();
 		}
@@ -1715,6 +1805,12 @@ public class MainScreen extends JPanel
 			if (preEqualAnglSymbol != selectedCandidateEAS) {
 				repaint();
 			}
+			
+			OriPleatCrimpSymbol prePleatSymbol = selectedCandidatePleat;
+			selectedCandidatePleat = pickPleatSymbol(currentMousePointLogic);
+			if (prePleatSymbol != selectedCandidatePleat) {
+				repaint();
+			}
 
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			Vector2d firstV = selectedCandidateV;
@@ -1779,7 +1875,14 @@ public class MainScreen extends JPanel
 				pickedGeomSymbol.setSelected(true);
 				isPressedOverSymbol = true;
 				repaint();
-			}			
+			}
+			
+			OriPleatCrimpSymbol pickedPleatSymbol = pickPleatSymbol(currentMousePointLogic);
+			if (pickedPleatSymbol != null) {
+				pickedPleatSymbol.setSelected(true);
+				isPressedOverSymbol = true;
+				repaint();
+			}
 		}
 	}
 	@Override
@@ -2015,6 +2118,20 @@ public class MainScreen extends JPanel
 						break;
 					} else {
 						eas.setSelected(false);
+					}
+				}
+			}
+			
+			//Check if there is a equalAnglSymbol in the selection rectangle
+			for (OriPleatCrimpSymbol p : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+				ArrayList<Shape> shapes = p.getShapesForDrawing();
+				
+				for(Shape s : shapes) {
+					if(s.intersects(selectRect)) {
+						p.setSelected(true);
+						break;
+					} else {
+						p.setSelected(false);
 					}
 				}
 			}

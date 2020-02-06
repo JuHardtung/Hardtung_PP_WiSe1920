@@ -3,6 +3,7 @@ package origrammer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,6 +18,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -43,6 +45,7 @@ import origrammer.geometry.OriGeomSymbol;
 import origrammer.geometry.OriLeader;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriPicSymbol;
+import origrammer.geometry.OriPleatCrimpSymbol;
 import origrammer.geometry.OriRepetitionBox;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
@@ -98,7 +101,16 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JPanel equalAnglPanel = new JPanel();
 	private JSlider sliderEqualAngl = new JSlider(50,600);
 	public JTextField equalAnglDividerTF = new JTextField();
-	public JButton equalAnglButton = new JButton("Set");
+	private JButton equalAnglButton = new JButton("Set");
+	
+	//PLEATNG/CRIMPING SETTINGS
+	public JRadioButton pleatRB = new JRadioButton("Pleat", true);
+	public JRadioButton crimpRB = new JRadioButton("Crimp");
+	
+	private JPanel pleatPanel = new JPanel();
+	public JCheckBox pleatCB = new JCheckBox("reverseDir");
+	public JTextField pleatTF = new JTextField();
+	private JButton pleatButton = new JButton("Set");
 
 	//ROTATE/SCALE ARROWS
 	private JPanel sliderPanel = new JPanel();
@@ -255,6 +267,31 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(),
 												getBackground().brighter()), "Equal Angle"));
 		
+		//##### PLEATING SETTINGS
+		
+		ButtonGroup pleatCrimpGroup = new ButtonGroup();
+		pleatCrimpGroup.add(pleatRB);
+		pleatCrimpGroup.add(crimpRB);
+		JPanel crimpPleatPanel = new JPanel();
+		crimpPleatPanel.add(pleatRB);
+		crimpPleatPanel.add(crimpRB);
+		crimpPleatPanel.setLayout(new BoxLayout(crimpPleatPanel, BoxLayout.PAGE_AXIS));
+		pleatRB.addActionListener(this);
+		crimpRB.addActionListener(this);
+		pleatTF.setPreferredSize(new Dimension(20,20));
+		pleatTF.setText("2");
+		PlainDocument docPleatLayerCount = (PlainDocument) pleatTF.getDocument();
+		docPleatLayerCount.setDocumentFilter(new IntFilter());
+		pleatButton.addActionListener(this);
+		pleatCB.addActionListener(this);
+		pleatPanel.add(crimpPleatPanel);
+		pleatPanel.add(pleatCB);
+		pleatPanel.add(pleatTF);
+		pleatPanel.add(pleatButton);
+		pleatPanel.setBorder(new TitledBorder(
+							new EtchedBorder(BevelBorder.RAISED, 
+											getBackground().darker(),
+											getBackground().brighter()), "Pleating"));
 
 		//add all panels to UITopPanel
 		add(changeLinePanel);
@@ -267,6 +304,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputSymbolRepetitionPanel);
 		add(equalDistPanel);
 		add(equalAnglPanel);
+		add(pleatPanel);
 		add(sliderPanel);
 	
 		modeChanged();
@@ -286,6 +324,44 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			if (eas.isSelected()) {
 				eas.setDividerCount(Integer.parseInt(equalAnglDividerTF.getText()));
 			}
+			screen.repaint();
+
+		}
+	}
+	
+	private void setPleatLayerCount() {
+		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			if (pleat.isSelected()) {
+				pleat.setLayersCount(Integer.parseInt(pleatTF.getText()));
+			}
+			screen.repaint();
+		}
+	}
+	
+	private void setPleatIsSwitchedDir() {
+		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			if (pleat.isSelected()) {
+				pleat.setIsSwitchedDir(pleatCB.isSelected());
+			}
+			screen.repaint();
+		}
+	}
+	
+	private void changeToPleat() {
+		for(OriPleatCrimpSymbol pc : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			if (pc.isSelected()) {
+				pc.setType(OriPleatCrimpSymbol.TYPE_PLEAT);
+			}
+			screen.repaint();
+		}
+	}
+	
+	private void changeToCrimp() {
+		for(OriPleatCrimpSymbol pc : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			if (pc.isSelected()) {
+				pc.setType(OriPleatCrimpSymbol.TYPE_CRIMP);
+			}
+			screen.repaint();
 		}
 	}
 
@@ -423,6 +499,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			setEqualDistanceDividerCount();
 		} else if (e.getSource() == equalAnglButton) {
 			setEqualAngleDividerCount();
+		} else if (e.getSource() == pleatButton) {
+			setPleatLayerCount();
+		} else if (e.getSource() == pleatCB) {
+			setPleatIsSwitchedDir();
+		} else if (e.getSource() == pleatRB) {
+			changeToPleat();
+		} else if (e.getSource() == crimpRB) {
+			changeToCrimp();
 		}
 
 
@@ -443,69 +527,78 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 	private int getSelectedTypes() {
 		
-		//	0000 0001	LINES
-		//	0000 0010	ARROWS
-		//  0000 0100	FILLED_FACES
-		//  0000 1000	LEADER
-		//  0001 0000	REPE_BOXES
-		//  0010 0000	PIC_SYMBOLS
-		//  0100 0000	GEO_SYMBOLS
-		//  1000 0000	EQUAL_DIST_SYMBOLS
+		//	00 0000 0001	LINES
+		//	00 0000 0010	ARROWS
+		//  00 0000 0100	FILLED_FACES
+		//  00 0000 1000	LEADER
+		//  00 0001 0000	REPE_BOXES
+		//  00 0010 0000	PIC_SYMBOLS
+		//  00 0100 0000	GEO_SYMBOLS
+		//  00 1000 0000	EQUAL_DIST_SYMBOLS
+		//  01 1000 0000	EQUAL_ANGL_SYMBOLS
+		//  10 1000 0000	PLEAT
+
 		
-		int selectedTypes = 0b000000000;
+		int selectedTypes = 0b0000000000;
 		
 		
 		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (line.isSelected()) {
-				selectedTypes += 0b000000001;
+				selectedTypes += 0b0000000001;
 				break;
 			}
 		}
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				selectedTypes += 0b000000010;
+				selectedTypes += 0b0000000010;
 				break;
 			}
 		}
 		for (OriFace face : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
 			if (face.isSelected()) {
-				selectedTypes += 0b000000100;
+				selectedTypes += 0b0000000100;
 				break;
 			}
 		}
 		for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
 			if (leader.isSelected()) {
-				selectedTypes += 0b000001000;
+				selectedTypes += 0b0000001000;
 				break;
 			}
 		}
 		for (OriRepetitionBox repeBox : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
 			if (repeBox.isSelected()) {
-				selectedTypes += 0b000010000;
+				selectedTypes += 0b0000010000;
 				break;
 			}
 		}
 		for (OriPicSymbol picS : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 			if (picS.isSelected()) {
-				selectedTypes += 0b000100000;
+				selectedTypes += 0b0000100000;
 				break;
 			}
 		}
 		for (OriGeomSymbol geoS : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 			if (geoS.isSelected()) {
-				selectedTypes += 0b001000000;
+				selectedTypes += 0b0001000000;
 				break;
 			}
 		}
 		for (OriEqualDistSymbol equalDist : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 			if (equalDist.isSelected()) {
-				selectedTypes += 0b010000000;
+				selectedTypes += 0b0010000000;
 				break;
 			}
 		}
 		for (OriEqualAnglSymbol equalAngl : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
 			if (equalAngl.isSelected()) {
-				selectedTypes += 0b100000000;
+				selectedTypes += 0b0100000000;
+				break;
+			}
+		}
+		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			if (pleat.isSelected()) {
+				selectedTypes += 0b1000000000;
 				break;
 			}
 		}
@@ -548,12 +641,18 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else {
 				equalAnglPanel.setVisible(false);
 			}
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.CRIMPING_PLEATING) {
+				pleatPanel.setVisible(true);
+			} else {
+				pleatPanel.setVisible(false);
+			}
 		} else {
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
 			inputSymbolRepetitionPanel.setVisible(false);
 			equalDistPanel.setVisible(false);
 			equalAnglPanel.setVisible(false);
+			pleatPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
@@ -564,35 +663,39 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			
-			//	0000 0001	LINES
-			//	0000 0010	ARROWS
-			//  0000 0100	FILLED_FACES
-			//  0000 1000	LEADER
-			//  0001 0000	REPE_BOXES
-			//  0010 0000	PIC_SYMBOLS
-			//  0100 0000	GEO_SYMBOLS
-			//  1000 0000	EQUAL_DIST_SYMBOLS
+			//	00 0000 0001	LINES
+			//	00 0000 0010	ARROWS
+			//  00 0000 0100	FILLED_FACES
+			//  00 0000 1000	LEADER
+			//  00 0001 0000	REPE_BOXES
+			//  00 0010 0000	PIC_SYMBOLS
+			//  00 0100 0000	GEO_SYMBOLS
+			//  00 1000 0000	EQUAL_DIST_SYMBOLS
+			//  01 1000 0000	EQUAL_ANGL_SYMBOLS
+			//  10 1000 0000	PLEAT
 			int selectedTypes = getSelectedTypes();
 			
-			int lineMask 	= 0b000000001;
-			int arrowMask 	= 0b000000010;
-			int faceMask	= 0b000000100;
-			int leaderMask	= 0b000001000;
-			int repeMask	= 0b000010000;
-			int picMask		= 0b000100000;
-			int geoMask		= 0b001000000;
-			int equDistMask = 0b010000000;
-			int equAnglMask = 0b100000000;
+			int lineMask 	= 0b0000000001;
+			int arrowMask 	= 0b0000000010;
+			int faceMask	= 0b0000000100;
+			int leaderMask	= 0b0000001000;
+			int repeMask	= 0b0000010000;
+			int picMask		= 0b0000100000;
+			int geoMask		= 0b0001000000;
+			int equDistMask = 0b0010000000;
+			int equAnglMask = 0b0100000000;
+			int pleatMask = 0b1000000000;
+
 			int result = selectedTypes & lineMask;
 			
 			
-			if (result == 0b000000001) {
+			if (result == 0b0000000001) {
 				changeLinePanel.setVisible(true);
 			} else {
 				changeLinePanel.setVisible(false);
 			}
 			result = selectedTypes & arrowMask;
-			if (result == 0b000000010) {
+			if (result == 0b0000000010) {
 				changeArrowPanel.setVisible(true);
 				sliderPanel.setVisible(true);
 			} else {
@@ -600,47 +703,53 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & faceMask;
-			if (result == 0b000000100) {
+			if (result == 0b0000000100) {
 				faceDirectionPanel.setVisible(true);
 			} else {
 				faceDirectionPanel.setVisible(false);
 			}
 			result = selectedTypes & leaderMask;
-			if (result == 0b000001000) {
+			if (result == 0b0000001000) {
 				inputSymbolLeaderPanel.setVisible(true);
 			} else {
 				inputSymbolLeaderPanel.setVisible(false);
 			}
 			result = selectedTypes & repeMask;
-			if (result == 0b000010000) {
+			if (result == 0b0000010000) {
 				inputSymbolRepetitionPanel.setVisible(true);
 			} else {
 				inputSymbolRepetitionPanel.setVisible(false);
 			}
 			result = selectedTypes & picMask;
-			if (result == 0b000100000) {
+			if (result == 0b0000100000) {
 				sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
 			} else {
 				sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & geoMask;
-			if (result == 0b001000000) {
+			if (result == 0b0001000000) {
 				System.out.println("geoSymbols");
 				//TODO: editing options for geoSymbols
 			}
 			result = selectedTypes & equDistMask;
-			if (result == 0b010000000) {
+			if (result == 0b0010000000) {
 				equalDistPanel.setVisible(true);
 			} else {
 				equalDistPanel.setVisible(false);
 			}
 			result = selectedTypes & equAnglMask;
-			if (result == 0b100000000) {
+			if (result == 0b0100000000) {
 				sliderEqualAngl.setVisible(true);
 				equalAnglPanel.setVisible(true);
 			} else {
 				sliderEqualAngl.setVisible(false);
 				equalAnglPanel.setVisible(false);
+			}
+			result = selectedTypes & pleatMask;
+			if (result == 0b1000000000) {
+				pleatPanel.setVisible(true);
+			} else {
+				pleatPanel.setVisible(false);
 			}
 			
 		} else {
