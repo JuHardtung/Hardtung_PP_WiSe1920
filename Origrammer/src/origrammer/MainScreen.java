@@ -226,8 +226,8 @@ public class MainScreen extends JPanel
        //RENDER ALL SYMBOLS
        tmpSymbolLabel.setBorder(new EtchedBorder(BevelBorder.RAISED, Color.RED, getBackground().brighter()));
        add(tmpSymbolLabel);
-       for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {    	   
-    	   
+       for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {    
+
     	   BufferedImage bimg = getBufImgByTypeAndRot(s);
     	   int newSymbolLabelWidth = (int) Math.round(bimg.getWidth()/2*s.getScale());
     	   int newSymbolLabelHeight = (int) Math.round(bimg.getHeight()/2*s.getScale());
@@ -237,8 +237,7 @@ public class MainScreen extends JPanel
     	   
     	   Image dimg = bimg.getScaledInstance(s.getLabel().getWidth(), s.getLabel().getHeight(), Image.SCALE_SMOOTH);
     	   ImageIcon symbolImageIcon = new ImageIcon(dimg);
-//    	   arrow.setWidth(newArrowLabelWidth);
-//    	   arrow.setHeight(newArrowLabelHeight);
+
     	   s.getLabel().setIcon(symbolImageIcon);
     	   //set Border to indicate a selected symbol or when hovering over one
     	   if (s.isSelected()) {
@@ -257,130 +256,22 @@ public class MainScreen extends JPanel
 	   
 	   
 	   //RENDER ALL LEADERS
-	   for (OriLeader l : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
-		   
-		   if (l.isSelected() || selectedCandidateLeader == l) {
-    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-    		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
-		   } else {
-			   g2d.setColor(Config.LINE_COLOR_EDGE);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
-		   }
-		   add(l.getLabel());
-    	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
-	   }
-	   
+	   renderAllOriLeaders();
+
 	   //RENDER ALL REPETITION BOXES
-	   for (OriRepetitionBox l : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-		   
-		   if (l.isSelected() || selectedCandidateRepeBox == l) {
-    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-    		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
-		   } else {
-			   g2d.setColor(Config.LINE_COLOR_EDGE);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
-		   }
-		   add(l.getLabel());
-    	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
-	   }
-	   
+	   renderAllOriRepetitionBoxes();
 	   
 	   //RENDER ALL ORI_GEOM_SYMBOLS
-	   for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
-    	   g2d.setStroke(Config.STROKE_EDGE);
-    	   g2d.setColor(Color.BLACK);
-    	   
-		   if (s.isSelected() || selectedCandidateGS == s) {
-    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-		   } else {
-			   g2d.setColor(Config.LINE_COLOR_EDGE);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-		   }
-
-		   Shape circle = new Ellipse2D.Double(s.xPos, s.yPos, s.width, s.height);
-		   g2d.draw(circle);
-	   }
-	   
+	   renderAllOriGeomSymbols();
 	   
 	   //RENDER ALL EQUAL_DISTANCE_SYMBOLS
-	   for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
-		   
-		   if (eds.isSelected() || selectedCandidateEDS == eds) {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.GREEN);
-		   } else {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.BLACK);
-		   }
-			Vector2d uv = GeometryUtil.getUnitVector(eds.getP0(), eds.getP1());
-			Vector2d nv = GeometryUtil.getNormalVector(uv);
-			
-			Vector2d p0Pos = eds.getP0Pos();
-			double dist = GeometryUtil.Distance(eds.getP0(), eds.getP1());
-			double trans = dist/eds.getDividerCount();
-
-			//main line 
-			for (int j=1; j<=eds.getDividerCount(); j++) {
-				double slp0x = p0Pos.x + trans*(j-1)*uv.x + 10*uv.x;
-				double slp0y = p0Pos.y + trans*(j-1)*uv.y + 10*uv.y;
-				double slp1x = p0Pos.x + trans*j*uv.x - 10*uv.x;
-				double slp1y = p0Pos.y + trans*j*uv.y - 10*uv.y;
-
-				g2d.draw(new Line2D.Double(slp0x, slp0y, slp1x, slp1y));
-			}
-
-			//small divider lines
-			for (int i=0; i<=eds.getDividerCount(); i++) {
-				double tmpX = p0Pos.x + ((trans*i)*uv.x);
-				double tmpY = p0Pos.y + ((trans*i)*uv.y);
-
-				double x5 = tmpX + (15*nv.x);
-				double y5 = tmpY + (15*nv.y);
-
-				double x6 = tmpX - (15*nv.x);
-				double y6 = tmpY - (15*nv.y);
-
-				g2d.draw(new Line2D.Double(x5, y5, x6, y6));
-			}
-	   }
+	   renderAllEquDistSymbols();
 	   
 	   //RENDER ALL EQUAL_ANGLE_SYMBOLS
-	   for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
-		   if (eas.isSelected() || selectedCandidateEAS == eas) {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.GREEN);
-		   } else {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.BLACK);
-		   }
-		   
-		   ArrayList<Shape> shapes = eas.getShapesForDrawing();
-		   for (Shape s : shapes) {
-			   g2d.draw(s);
-		   }
-	   }
+	   renderAllEquAnglSymbols();
 	   
 	   //RENDER ALL PLEATS
-	   for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
-		   if (pleat.isSelected() || selectedCandidatePleat == pleat) {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.GREEN);
-		   } else {
-			   g2d.setStroke(Config.STROKE_EDGE);
-			   g2d.setColor(Color.BLACK);
-		   }
-		   
-		   ArrayList<Shape> shapes = pleat.getShapesForDrawing();
-		   for (Shape s : shapes) {
-			   g2d.draw(s);
-		   }
-		   
-	   }
+	   renderAllCrimpsPleats();
 	   
        
        //show all vertices if in ToolbarMode ADD_VERTEX or DELETE_VERTEX mode or if dispVertex is true
@@ -518,14 +409,14 @@ public class MainScreen extends JPanel
     	   //double radius = GeometryUtil.Distance(pre, after);
     	   double width = ep.x - sp.x;
     	   double height = ep.y - sp.y;
-    	   
-    	   
-    	   g2d.draw(new Ellipse2D.Double(sp.x, sp.y, width, width));
-    	   //g2d.draw(new Circle(sp.x, sp.y, radius));
+			OriGeomSymbol tmpGeomS = new OriGeomSymbol();
+			if (width > height) {
+		    	   g2d.draw(new Ellipse2D.Double(sp.x, sp.y, width, width));
+			} else if (height > width) {
+		    	   g2d.draw(new Ellipse2D.Double(sp.x, sp.y, height, height));
+			}
        }
 
-       
-       
        //show coordinates of selected Vertex
        if (selectedCandidateV != null ) {
     	   g.setColor(Color.BLACK);
@@ -533,6 +424,115 @@ public class MainScreen extends JPanel
        }   
     }
     
+    private void renderAllOriLeaders() {
+ 	   for (OriLeader l : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+ 		   
+ 		   if (l.isSelected() || selectedCandidateLeader == l) {
+     		   g2d.setColor(Config.LINE_COLOR_SELECTED);
+     		   g2d.setStroke(Config.STROKE_EDGE);
+     		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
+ 		   } else {
+ 			   g2d.setColor(Config.LINE_COLOR_EDGE);
+     		   g2d.setStroke(Config.STROKE_EDGE);
+ 			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
+ 		   }
+ 		   add(l.getLabel());
+     	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
+ 	   }
+    }
+    
+    private void renderAllOriRepetitionBoxes() {
+	   for (OriRepetitionBox l : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
+		   
+		   if (l.isSelected() || selectedCandidateRepeBox == l) {
+    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
+    		   g2d.setStroke(Config.STROKE_EDGE);
+    		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
+		   } else {
+			   g2d.setColor(Config.LINE_COLOR_EDGE);
+    		   g2d.setStroke(Config.STROKE_EDGE);
+			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
+		   }
+		   add(l.getLabel());
+    	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
+	   }
+    }
+    
+    private void renderAllOriGeomSymbols() {
+	   for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
+    	   
+		   if (s.isSelected() || selectedCandidateGS == s) {
+    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
+    		   g2d.setStroke(Config.STROKE_EDGE);
+		   } else {
+			   g2d.setColor(Config.LINE_COLOR_EDGE);
+    		   g2d.setStroke(Config.STROKE_EDGE);
+		   }
+		   Shape circle = new Ellipse2D.Double(s.getPosition().x, s.getPosition().y, s.getRadius(), s.getRadius());
+
+		   if (s.getType() == OriGeomSymbol.TYPE_CLOSED_SINK) {
+			   g2d.draw(circle);
+			   g2d.fill(circle);
+		   } else {
+			   g2d.draw(circle);
+		   }
+	   }
+    }
+    
+    private void renderAllEquDistSymbols() {
+	   for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+		   
+		   if (eds.isSelected() || selectedCandidateEDS == eds) {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.GREEN);
+		   } else {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.BLACK);
+		   }
+		   ArrayList<Shape> shapes = eds.getShapesForDrawing();
+		   for (Shape s : shapes) {
+			   g2d.draw(s);
+		   }
+	   }
+    }
+    
+    private void renderAllEquAnglSymbols() {
+ 	   for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+		   if (eas.isSelected() || selectedCandidateEAS == eas) {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.GREEN);
+		   } else {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.BLACK);
+		   }
+		   
+		   ArrayList<Shape> shapes = eas.getShapesForDrawing();
+		   for (Shape s : shapes) {
+			   g2d.draw(s);
+		   }
+	   }
+    }
+    
+    private void renderAllCrimpsPleats() {
+ 	   for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+		   if (pleat.isSelected() || selectedCandidatePleat == pleat) {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.GREEN);
+		   } else {
+			   g2d.setStroke(Config.STROKE_EDGE);
+			   g2d.setColor(Color.BLACK);
+		   }
+		   
+		   ArrayList<Shape> shapes = pleat.getShapesForDrawing();
+		   for (Shape s : shapes) {
+			   g2d.draw(s);
+		   }
+	   }
+    }
+    
+    //#######################################################################################
+    //#######################################################################################
+
     public static BufferedImage rasterize(File svgFile) throws IOException {
         final BufferedImage[] imagePointer = new BufferedImage[1];
         // Rendering hints can't be set programatically, so
@@ -785,7 +785,9 @@ public class MainScreen extends JPanel
     	return img;
     }
     
-    
+    //#######################################################################################
+    //#######################################################################################
+
     private Vector2d pickVertex(Point2D.Double p) {
     	double minDistance = Double.MAX_VALUE;
     	Vector2d minPosition = new Vector2d();
@@ -1006,7 +1008,88 @@ public class MainScreen extends JPanel
     		return null;
     	}
     }
-    
+    //#######################################################################################
+    //#######################################################################################
+
+	/**
+	 * Creates a filled face once 3 vertices are selected
+	 * @param clickPoint
+	 */
+	private void createFilledFace(Point2D.Double clickPoint) {
+		//creates OriFace that is to be filled with DEFAULT_PAPER_COLOR --> OriFace is a triangle with 3 OriLines as sides			
+		Vector2d v = pickVertex(clickPoint);
+		if (v != null) {
+			if (firstSelectedV == null) {
+				firstSelectedV = v;
+			} else if (secondSelectedV == null) {
+				secondSelectedV = v;
+			} else {
+				ArrayList<Vector2d> vList = new ArrayList<>();
+				
+				vList.add(v);
+				vList.add(firstSelectedV);
+				vList.add(secondSelectedV);
+				OriFace newFace;
+				GeneralPath filledFace = GeometryUtil.createFaceFromVertices(vList);
+				if (Globals.faceInputDirection == Constants.FaceInputDirection.FACE_UP) {
+					newFace = new OriFace(filledFace, false, true);
+				} else {
+					newFace = new OriFace(filledFace, false, false);
+				}
+				Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
+				firstSelectedV = null;
+				secondSelectedV = null;
+				thirdSelectedV = null;
+			}
+		}		
+	}
+	
+	private void createLeader(Point2D.Double clickPoint) {
+		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
+		if (firstSelectedV == null) {
+			firstSelectedV = tmp;
+		} else if (secondSelectedV == null) {
+			Rectangle tmpRect = new Rectangle();
+			secondSelectedV = tmp;
+			tmpLeader.line.p0 = firstSelectedV;
+			tmpLeader.line.p1 = secondSelectedV;
+			tmpLeader.setText(Origrammer.mainFrame.uiTopPanel.inputLeaderText.getText());
+			tmpLeader.setSelected(false);
+			
+			if (tmpLeader.getLabel().getText().length() == 0) {
+				JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyLeaderTextField"),
+						"Error_EmptyLeaderTextField", 
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpLeader.getLabel().getText(), g2d);
+				double width =  labelBounds.getWidth()+10;
+				double height = labelBounds.getHeight();
+				
+				if (tmpLeader.line.p0.y < tmpLeader.line.p1.y) {
+					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
+						//bottom right
+						tmpRect.setRect(tmpLeader.line.p1.x, tmpLeader.line.p1.y+1, width, height+2);
+					} else {
+						//bottom left
+						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y+1, width, height+2);
+					}
+				} else {
+					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
+						//top right
+						tmpRect.setRect(tmpLeader.line.p1.x+1, tmpLeader.line.p1.y-height, width, height+2);
+					} else {
+						//top left
+						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y-height, width, height+2);
+					}
+				}
+				tmpLeader.setPosition(tmpRect);
+				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
+			}
+			
+			firstSelectedV = null;
+			secondSelectedV = null;
+		}
+	}
 	
 	private void createRepetitionBox(Point2D.Double clickPoint) {
 		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
@@ -1136,50 +1219,17 @@ public class MainScreen extends JPanel
 		}
 	}
 	
-	private void createLeader(Point2D.Double clickPoint) {
+	private void createClosedSinkDot(Point2D.Double clickPoint) {
 		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
+	
 		if (firstSelectedV == null) {
 			firstSelectedV = tmp;
-		} else if (secondSelectedV == null) {
-			Rectangle tmpRect = new Rectangle();
-			secondSelectedV = tmp;
-			tmpLeader.line.p0 = firstSelectedV;
-			tmpLeader.line.p1 = secondSelectedV;
-			tmpLeader.setText(Origrammer.mainFrame.uiTopPanel.inputLeaderText.getText());
-			tmpLeader.setSelected(false);
 			
-			if (tmpLeader.getLabel().getText().length() == 0) {
-				JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyLeaderTextField"),
-						"Error_EmptyLeaderTextField", 
-						JOptionPane.ERROR_MESSAGE);
-			} else {
-				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpLeader.getLabel().getText(), g2d);
-				double width =  labelBounds.getWidth()+10;
-				double height = labelBounds.getHeight();
-				
-				if (tmpLeader.line.p0.y < tmpLeader.line.p1.y) {
-					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
-						//bottom right
-						tmpRect.setRect(tmpLeader.line.p1.x, tmpLeader.line.p1.y+1, width, height+2);
-					} else {
-						//bottom left
-						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y+1, width, height+2);
-					}
-				} else {
-					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
-						//top right
-						tmpRect.setRect(tmpLeader.line.p1.x+1, tmpLeader.line.p1.y-height, width, height+2);
-					} else {
-						//top left
-						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y-height, width, height+2);
-					}
-				}
-				tmpLeader.setPosition(tmpRect);
-				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
-			}
+			OriGeomSymbol tmpGeoSymbol = new OriGeomSymbol(firstSelectedV, 10);
+			tmpGeoSymbol.setType(OriGeomSymbol.TYPE_CLOSED_SINK);
+			Origrammer.diagram.steps.get(Globals.currentStep).addGeomSymbol(tmpGeoSymbol);
 			
 			firstSelectedV = null;
-			secondSelectedV = null;
 		}
 	}
 	
@@ -1198,6 +1248,10 @@ public class MainScreen extends JPanel
 			}
 		}
 	}
+	
+    //#######################################################################################
+    //#######################################################################################
+
 	
 	private void selectOnClickPoint(Point2D.Double clickPoint) {
 		//select OriLine or unselect all OriLines if clicked on nothing
@@ -1372,39 +1426,6 @@ public class MainScreen extends JPanel
 		}
 	}
 	
-	/**
-	 * Creates a filled face once 3 vertices are selected
-	 * @param clickPoint
-	 */
-	private void createFilledFace(Point2D.Double clickPoint) {
-		//creates OriFace that is to be filled with DEFAULT_PAPER_COLOR --> OriFace is a triangle with 3 OriLines as sides			
-		Vector2d v = pickVertex(clickPoint);
-		if (v != null) {
-			if (firstSelectedV == null) {
-				firstSelectedV = v;
-			} else if (secondSelectedV == null) {
-				secondSelectedV = v;
-			} else {
-				ArrayList<Vector2d> vList = new ArrayList<>();
-				
-				vList.add(v);
-				vList.add(firstSelectedV);
-				vList.add(secondSelectedV);
-				OriFace newFace;
-				GeneralPath filledFace = GeometryUtil.createFaceFromVertices(vList);
-				if (Globals.faceInputDirection == Constants.FaceInputDirection.FACE_UP) {
-					newFace = new OriFace(filledFace, false, true);
-				} else {
-					newFace = new OriFace(filledFace, false, false);
-				}
-				Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
-				firstSelectedV = null;
-				secondSelectedV = null;
-				thirdSelectedV = null;
-			}
-		}		
-	}
-	
 	
 	//############################################
 	//############## MOUSE LISTENER ##############
@@ -1478,6 +1499,8 @@ public class MainScreen extends JPanel
 				createEqualAnglSymbol(clickPoint);
 			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.CRIMPING_PLEATING) {
 				createPleatCrimpSymbol(clickPoint);
+			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.SINKS) {
+				createClosedSinkDot(clickPoint);
 			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			selectOnClickPoint(clickPoint);
@@ -1521,7 +1544,7 @@ public class MainScreen extends JPanel
 			double xPos = (double) (preMousePoint.getX()-400) / scale;
 			double yPos = (double) (preMousePoint.getY()-400) / scale;
 			preMousePoint = e.getPoint();
-			tmpOriArrow = new OriArrow(xPos, yPos, type);
+			tmpOriArrow = new OriArrow(new Vector2d(xPos, yPos), type);
 
 			//get correct Arrow Image
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriArrow);
@@ -1541,8 +1564,8 @@ public class MainScreen extends JPanel
 			tmpArrowLabel.setIcon(arrowImageIcon);
 			//set bounds of tmpArowLabel
 			tmpOriArrow.setLabel(tmpArrowLabel);
-			tmpOriArrow.getLabel().setBounds((int) tmpOriArrow.getxPos(), 
-					(int) tmpOriArrow.getyPos(), 
+			tmpOriArrow.getLabel().setBounds((int) tmpOriArrow.getPosition().x, 
+					(int) tmpOriArrow.getPosition().y, 
 					(int) tmpOriArrow.getWidth(),
 					(int) tmpOriArrow.getHeight());
 			repaint();
@@ -1605,10 +1628,9 @@ public class MainScreen extends JPanel
 					for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 						//if selected, move to new position
 						if (arrow.isSelected()) {
-							int newX = (int) Math.round(arrow.getxPos() + xTrans);
-							int newY = (int) Math.round(arrow.getyPos() + yTrans);
-							arrow.setxPos(newX);
-							arrow.setyPos(newY);
+							int newX = (int) Math.round(arrow.getPosition().x + xTrans);
+							int newY = (int) Math.round(arrow.getPosition().y + yTrans);
+							arrow.setPosition(new Vector2d(newX, newY));
 							arrow.getLabel().setBounds(newX, newY, 
 									(int) Math.round(arrow.getWidth() * arrow.getScale()), 
 									(int) Math.round(arrow.getHeight() * arrow.getScale()));
@@ -1689,10 +1711,9 @@ public class MainScreen extends JPanel
 					for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 						//if selected, move to new position
 						if (s.isSelected()) {
-							int newX = (int) Math.round(s.getxPos() + xTrans);
-							int newY = (int) Math.round(s.getyPos() + yTrans);
-							s.setxPos(newX);
-							s.setyPos(newY);
+							int newX = (int) Math.round(s.getPosition().x + xTrans);
+							int newY = (int) Math.round(s.getPosition().y + yTrans);
+							s.setPosition(new Vector2d(newX, newY));
 						}
 					}
 				}
@@ -1895,7 +1916,7 @@ public class MainScreen extends JPanel
 			double yPos = 0;
 			xPos += (double) (preMousePoint.getX()-400) / scale;
 			yPos += (double) (preMousePoint.getY()-400) / scale;
-			Origrammer.diagram.steps.get(Globals.currentStep).addArrow(new OriArrow(xPos, yPos, type));
+			Origrammer.diagram.steps.get(Globals.currentStep).addArrow(new OriArrow(new Vector2d(xPos, yPos), type));
 			//get last added OriArrow
 			OriArrow arrow = Origrammer.diagram.steps.get(Globals.currentStep).arrows.get(Origrammer.diagram.steps.get(Globals.currentStep).arrows.size()-1);
 			//get correct Arrow Image
@@ -1915,8 +1936,8 @@ public class MainScreen extends JPanel
 			arrowLabel.setIcon(arrowImageIcon);
 			//set bounds of arrowLabel
 			arrow.setLabel(arrowLabel);
-			arrow.getLabel().setBounds((int)arrow.getxPos(), 
-					(int)arrow.getyPos(), 
+			arrow.getLabel().setBounds((int)arrow.getPosition().x, 
+					(int)arrow.getPosition().y, 
 					(int) Math.round(arrow.getWidth()*arrow.getScale()), 
 					(int) Math.round(arrow.getHeight()*arrow.getScale()));
 			repaint();		
@@ -1973,9 +1994,13 @@ public class MainScreen extends JPanel
 			//double diameter = GeometryUtil.Distance(v1, v2);
 			double width = ep.x - sp.x;
 			double height = ep.y - sp.y;
+			OriGeomSymbol tmpGeomS = new OriGeomSymbol();
+			if (width > height) {
+				tmpGeomS = new OriGeomSymbol(new Vector2d(sp.x, sp.y), width);
+			} else if (height > width) {
+				tmpGeomS = new OriGeomSymbol(new Vector2d(sp.x, sp.y), height);
+			}
 
-			OriGeomSymbol tmpGeomS = new OriGeomSymbol(sp.x, sp.y, width, width);
-			
 			Origrammer.diagram.steps.get(Globals.currentStep).addGeomSymbol(tmpGeomS);
 
 			
@@ -2009,8 +2034,8 @@ public class MainScreen extends JPanel
 			
 			//Check if there is an arrow in the selection rectangle
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
-				Rectangle tmpR2 = new Rectangle((int) Math.round(a.getxPos()), 
-						(int) Math.round(a.getyPos()), a.getWidth(), a.getHeight());
+				Rectangle tmpR2 = new Rectangle((int) Math.round(a.getPosition().x), 
+						(int) Math.round(a.getPosition().y), a.getWidth(), a.getHeight());
 				if (tmpR2.intersects(selectRect)) {
 					a.setSelected(true);
 				} else {
@@ -2040,7 +2065,7 @@ public class MainScreen extends JPanel
 			
 			//Check if there is a symbol in the selection rectangle
 			for (OriGeomSymbol gs : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
-				Shape tmpC2 = new Ellipse2D.Double(gs.getxPos(), gs.getyPos(), gs.getWidth(), gs.getHeight());
+				Shape tmpC2 = new Ellipse2D.Double(gs.getPosition().x, gs.getPosition().y, gs.getRadius(), gs.getRadius());
 				if (tmpC2.intersects(selectRect)) {
 					gs.setSelected(true);
 				} else {

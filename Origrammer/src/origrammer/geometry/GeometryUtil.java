@@ -130,8 +130,8 @@ public class GeometryUtil {
 	 * @return returns true if mouse if over OriArrow and false if it isn't
 	 */
 	public static boolean isMouseOverArrow(Point2D.Double p, OriArrow a) {
-		double aX = a.getxPos();
-		double aY = a.getyPos();
+		double aX = a.getPosition().x;
+		double aY = a.getPosition().y;
 		double aXEnd = aX + (a.getWidth());
 		double aYEnd = aY + (a.getHeight());
 		
@@ -159,10 +159,10 @@ public class GeometryUtil {
 	}
 	
 	public static boolean isMouseOverGeomSymbol(Point2D.Double p, OriGeomSymbol s) {
-		double sX = s.getxPos();
-		double sY = s.getyPos();
-		double sXEnd = sX + (s.getWidth());
-		double sYEnd = sY + (s.getHeight());
+		double sX = s.getPosition().x;
+		double sY = s.getPosition().y;
+		double sXEnd = sX + (s.getRadius());
+		double sYEnd = sY + (s.getRadius());
 		
 		if (p.x > sX && p.x < sXEnd) {
 			if (p.y > sY && p.y < sYEnd) {

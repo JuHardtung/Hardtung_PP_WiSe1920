@@ -112,10 +112,15 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	public JTextField pleatTF = new JTextField();
 	private JButton pleatButton = new JButton("Set");
 
-	//ROTATE/SCALE ARROWS
+	//ARROWS SETTINGS
 	private JPanel sliderPanel = new JPanel();
-	private JSlider sliderScaleIcon = new JSlider(100, 200);
-	private JSlider sliderRotIcon = new JSlider(0, 3600);
+	private JSlider arrowScaleSlider = new JSlider(0, 100);
+	private JSlider arrowRotSlider = new JSlider(0, 3600);
+	
+	//ROTATE/SCALE ORI_PIC_SYMBOLS
+	private JPanel picSymbolPanel = new JPanel();
+	private JSlider picSymbolScaleSlider = new JSlider(0, 100);
+	private JSlider picSymbolRotSlider = new JSlider(0, 3600);
 	
 	MainScreen screen;
 	
@@ -137,7 +142,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		faceUpInput.addActionListener(this);
 		faceDownInput.addActionListener(this);
 				
-		
 		//##### LINE INPUT TYPE #####		
 		menuLineCB.setRenderer(new IndentedRenderer());
 		menuLineCB.setSelectedIndex(0);
@@ -148,7 +152,16 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Line Type"));
-
+		//##### CHANGE LINE TYPE #####
+		changeLineButton.addActionListener(this);
+		changeLinePanel.add(changeLineTypeCB);
+		changeLinePanel.add(changeLineButton);
+		changeLinePanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+											getBackground().darker(), 
+											getBackground().brighter()), "Change Line Type"));
+		
+		//-----------------------------------------------------------------------------------------
 		//##### ARROW INPUT TYPE #####
 		menuArrowCB.setRenderer(new SeparatorComboBoxRenderer());
 		menuArrowCB.setSelectedIndex(0);
@@ -159,7 +172,37 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Arrow Type"));
+		//##### CHANGE ARROW TYPE #####
+		changeArrowButton.addActionListener(this);
+		changeArrowTypeCB.setRenderer(new SeparatorComboBoxRenderer());
+		changeArrowPanel.add(changeArrowTypeCB);
+		changeArrowPanel.add(changeArrowButton);
+		changeArrowPanel.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Change Arrow Type"));
+		//##### ARROW SETTINGS #####
+		arrowScaleSlider.setMajorTickSpacing(10);
+		arrowScaleSlider.setPaintTicks(true);
+		//sliderScaleIcon.setPaintLabels(true);
+		arrowScaleSlider.addChangeListener(e -> sliderArrowScale());
+		arrowScaleSlider.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Scale Arrow"));
+		arrowRotSlider.setMajorTickSpacing(225);
+		arrowRotSlider.setPaintTicks(true);
+		//sliderRotIcon.setPaintLabels(true);
+		arrowRotSlider.setSnapToTicks(true);
+		arrowRotSlider.addChangeListener(e -> sliderRotChanged());
+		arrowRotSlider.setBorder(new TitledBorder(
+								new EtchedBorder(BevelBorder.RAISED, 
+												getBackground().darker(), 
+												getBackground().brighter()), "Rotate Arrow"));
+		sliderPanel.add(arrowScaleSlider);
+		sliderPanel.add(arrowRotSlider);
 
+		//-----------------------------------------------------------------------------------------
 		//##### SYMBOL INPUT TYPE #####
 		symbolInputCB.setRenderer(new SeparatorComboBoxRenderer());
 		symbolInputCB.setSelectedIndex(0);
@@ -179,57 +222,34 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Leader Text"));
 		
-		//##### INPUT SYMBOL LEADER #####
+		//##### INPUT SYMBOL REPETITION BOX #####
 		inputRepetitionText.setPreferredSize(new Dimension(150, 25));
 		inputSymbolRepetitionPanel.add(inputRepetitionText);
 		inputSymbolRepetitionPanel.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Repetition Text"));
-		
-		//##### SLIDERS #####
-		sliderScaleIcon.setMajorTickSpacing(10);
-		sliderScaleIcon.setPaintTicks(true);
-		//sliderScaleIcon.setPaintLabels(true);
-		sliderScaleIcon.addChangeListener(e -> sliderScaleChanged());
-		sliderScaleIcon.setBorder(new TitledBorder(
+	
+		//##### ORI_PIC_SYMBOL SETTINGS #####
+		picSymbolScaleSlider.setMajorTickSpacing(10);
+		picSymbolScaleSlider.setPaintTicks(true);
+		//picSymbolScaleSlider.setPaintLabels(true);
+		picSymbolScaleSlider.addChangeListener(e -> sliderPicSymbolScale());
+		picSymbolScaleSlider.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
-												getBackground().brighter()), "Scale Arrow"));
-
-		sliderRotIcon.setMajorTickSpacing(225);
-		sliderRotIcon.setPaintTicks(true);
+												getBackground().brighter()), "Scale Symbol"));
+		picSymbolRotSlider.setMajorTickSpacing(225);
+		picSymbolRotSlider.setPaintTicks(true);
 		//sliderRotIcon.setPaintLabels(true);
-		sliderRotIcon.setSnapToTicks(true);
-		sliderRotIcon.addChangeListener(e -> sliderRotChanged());
-		sliderRotIcon.setBorder(new TitledBorder(
+		picSymbolRotSlider.setSnapToTicks(true);
+		picSymbolRotSlider.addChangeListener(e -> sliderPicSymbolRot());
+		picSymbolRotSlider.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
-												getBackground().brighter()), "Rotate Arrow"));
-
-		sliderPanel.add(sliderScaleIcon);
-		sliderPanel.add(sliderRotIcon);
-		
-		
-		//##### CHANGE LINE TYPE #####
-		changeLineButton.addActionListener(this);
-		changeLinePanel.add(changeLineTypeCB);
-		changeLinePanel.add(changeLineButton);
-		changeLinePanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-											getBackground().darker(), 
-											getBackground().brighter()), "Change Line Type"));
-		
-		
-		//##### CHANGE ARROW TYPE #####
-		changeArrowButton.addActionListener(this);
-		changeArrowTypeCB.setRenderer(new SeparatorComboBoxRenderer());
-		changeArrowPanel.add(changeArrowTypeCB);
-		changeArrowPanel.add(changeArrowButton);
-		changeArrowPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Change Arrow Type"));
+												getBackground().brighter()), "Rotate Symbol"));
+		picSymbolPanel.add(picSymbolScaleSlider);
+		picSymbolPanel.add(picSymbolRotSlider);
 		
 		//##### EQUAL DIST SETTINGS
 		sliderEqualDist.setMajorTickSpacing(10);
@@ -267,8 +287,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(),
 												getBackground().brighter()), "Equal Angle"));
 		
-		//##### PLEATING SETTINGS
-		
+		//##### PLEATS/CRIMPS SETTINGS
 		ButtonGroup pleatCrimpGroup = new ButtonGroup();
 		pleatCrimpGroup.add(pleatRB);
 		pleatCrimpGroup.add(crimpRB);
@@ -300,6 +319,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputLinesPanel);
 		add(inputArrowPanel);
 		add(inputSymbolsPanel);
+		add(picSymbolPanel);
 		add(inputSymbolLeaderPanel);
 		add(inputSymbolRepetitionPanel);
 		add(equalDistPanel);
@@ -369,22 +389,31 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	/**
 	 * Sets the scale for all selected OriArrows
 	 */
-	private void sliderScaleChanged() {
+	private void sliderArrowScale() {
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				arrow.setScale((double) sliderScaleIcon.getValue()/100);
+				if (arrowScaleSlider.getValue() == 0) {
+					arrow.setScale(0.01);
+				} else {
+					arrow.setScale((double) arrowScaleSlider.getValue()/100);
+				}
 				screen.repaint();
 
 				//TODO: add preview pictures of arrow types
-				arrow.getLabel().setBounds((int) arrow.getxPos(), (int)arrow.getyPos(), 
+				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int)arrow.getPosition().y, 
 												(int) Math.round(arrow.getWidth() * arrow.getScale()), 
 												(int) Math.round(arrow.getHeight() * arrow.getScale()));
 			}
 		}
-		
+	}
+	
+	/**
+	 * changes the scale for all selected OriPicSymbol
+	 */
+	private void sliderPicSymbolScale() {
 		for (OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 			if (symbol.isSelected()) {
-				symbol.setScale((double) sliderScaleIcon.getValue()/100);
+				symbol.setScale((double) picSymbolScaleSlider.getValue()/100);
 				screen.repaint();
 
 				//TODO: add preview pictures of arrow types
@@ -393,7 +422,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												(int) Math.round(symbol.getHeight() * symbol.getScale()));
 			}
 		}
-	}		
+	}	
 	
 	/**
 	 * Sets the rotation of all selected OriArrows
@@ -401,18 +430,23 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private void sliderRotChanged() {
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				arrow.setDegrees(sliderRotIcon.getValue()/10);
+				arrow.setDegrees(arrowRotSlider.getValue()/10);
 				screen.repaint();
 				
-				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getxPos(), arrow.getyPos(), arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
 				
-				arrow.getLabel().setBounds((int)arrow.getxPos(), (int)arrow.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
+				arrow.getLabel().setBounds((int)arrow.getPosition().x, (int)arrow.getPosition().y, (int)rect.getWidth(), (int)rect.getHeight());
 			}
 		}
-		
+	}
+	
+	/**
+	 * Sets the rotation of all selected OriPicSymbols
+	 */
+	private void sliderPicSymbolRot() {
 		for (OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 			if (symbol.isSelected()) {
-				symbol.setDegrees(sliderRotIcon.getValue()/10);
+				symbol.setDegrees(picSymbolRotSlider.getValue()/10);
 				screen.repaint();
 				
 				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getxPos(), symbol.getyPos(), symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
@@ -722,9 +756,12 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			result = selectedTypes & picMask;
 			if (result == 0b0000100000) {
-				sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
+				System.out.println("bruv");
+				picSymbolPanel.setVisible(true);
+				//sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
 			} else {
-				sliderPanel.setVisible(false);
+				picSymbolPanel.setVisible(false);
+				//sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & geoMask;
 			if (result == 0b0001000000) {
@@ -757,6 +794,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			sliderPanel.setVisible(false);
 			changeLinePanel.setVisible(false);
 			changeArrowPanel.setVisible(false);
+			picSymbolPanel.setVisible(false);
 		}
 		screen.modeChanged();
 	}

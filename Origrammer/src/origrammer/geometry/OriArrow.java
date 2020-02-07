@@ -1,6 +1,7 @@
 package origrammer.geometry;
 
 import javax.swing.JLabel;
+import javax.vecmath.Vector2d;
 
 public class OriArrow {
 	
@@ -18,11 +19,10 @@ public class OriArrow {
 	final public static int VALLEY_ARROW_HEIGHT = 50;
 
 	private int type = TYPE_NONE;
-	public double xPos;
-	public double yPos;
+	private Vector2d position;
 	private int width;
 	private int height;
-	private double scale = 2.0;
+	private double scale = 0.0;
 	private boolean selected;
 	private double degrees = 0;
 
@@ -34,46 +34,34 @@ public class OriArrow {
 	}
 	
 	public OriArrow(OriArrow a) {
-		this.xPos = a.xPos;
-		this.yPos = a.yPos;
+		this.position = a.position;
 		this.width = a.width;
 		this.height = a.height;
 		this.type = a.type;
 		
 	}
 	
-	public OriArrow(double xPos, double yPos, int width, int height, int type) {
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public OriArrow(Vector2d position, int width, int height, int type) {
+		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.type = type;
 	}
 	
 	
-	public OriArrow(double xPos, double yPos, int type) {
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public OriArrow(Vector2d position, int type) {
+		this.position = position;
 		this.width = VALLEY_ARROW_WIDTH;
 		this.height = VALLEY_ARROW_HEIGHT;
 		this.type = type;
 	}
-	
 
-	public double getxPos() {
-		return xPos;
+	public Vector2d getPosition() {
+		return position;
 	}
 
-	public void setxPos(double xPos) {
-		this.xPos = xPos;
-	}
-
-	public double getyPos() {
-		return yPos;
-	}
-
-	public void setyPos(double yPos) {
-		this.yPos = yPos;
+	public void setPosition(Vector2d position) {
+		this.position = position;
 	}
 
 	public int getWidth() {
@@ -93,7 +81,22 @@ public class OriArrow {
 	}
 	
 	public double getScale() {
-		return scale;
+		if (type == TYPE_VALLEY) {
+			return scale + 1.5;
+		} else if (type == TYPE_MOUNTAIN) {
+			return scale + 0.8;
+		} else if (type == TYPE_TURN_OVER) {
+			return scale + 1.5;
+		} else if (type == TYPE_PUSH_HERE) {
+			return scale + 0.8;
+		} else if (type == TYPE_PULL_HERE) {
+			return scale + 1.0;
+		} else if (type == TYPE_INFLATE_HERE) {
+			return scale + 1.0;
+		} else {
+			return scale;
+		}
+		
 	}
 
 	public void setScale(double scale) {
@@ -134,7 +137,7 @@ public class OriArrow {
 
 	@Override
 	public String toString() {
-		return "OriArrow [type=" + type + ", xPos=" + xPos + ", yPos=" + yPos + ", width=" + width + ", height="
+		return "OriArrow [type=" + type + ", xPos=" + position.x + ", yPos=" + position.y + ", width=" + width + ", height="
 				+ height + ", scale=" + scale + ", selected=" + selected + ", degrees=" + degrees + "]";
 	}
 	

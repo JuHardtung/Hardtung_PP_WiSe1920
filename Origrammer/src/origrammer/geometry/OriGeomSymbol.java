@@ -1,5 +1,7 @@
 package origrammer.geometry;
 
+import javax.vecmath.Vector2d;
+
 public class OriGeomSymbol {
 
 	
@@ -8,29 +10,25 @@ public class OriGeomSymbol {
 	final public static int TYPE_CLOSED_SINK = 2;
 	
 	private int type = TYPE_NONE;
-	public double xPos;
-	public double yPos;
-	public double radius;
-	public double width;
-	public double height;
-	public boolean isSelected;
+	private Vector2d position;
+	private double radius;
+
+	private boolean isSelected;
 	
 	
 	public OriGeomSymbol() {
 	}
 	
-	public OriGeomSymbol(double xPos, double yPos, double radius) {
-		this.xPos = xPos;
-		this.yPos = yPos;
+	public OriGeomSymbol(Vector2d position, double radius) {
+		this.position = position;
 		this.radius = radius;
 	}
 	
-	public OriGeomSymbol(double xPos, double yPos, double width, double height) {
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.width = width;
-		this.height = height;
-	}
+//	public OriGeomSymbol(Vector2d position, double width, double height) {
+//		this.position = position;
+//		this.width = width;
+//		this.height = height;
+//	}
 
 	public int getType() {
 		return type;
@@ -40,20 +38,12 @@ public class OriGeomSymbol {
 		this.type = type;
 	}
 
-	public double getxPos() {
-		return xPos;
+	public Vector2d getPosition() {
+		return position;
 	}
 
-	public void setxPos(double xPos) {
-		this.xPos = xPos;
-	}
-
-	public double getyPos() {
-		return yPos;
-	}
-
-	public void setyPos(double yPos) {
-		this.yPos = yPos;
+	public void setPosition(Vector2d position) {
+		this.position = position;
 	}
 
 	public double getRadius() {
@@ -64,21 +54,21 @@ public class OriGeomSymbol {
 		this.radius = radius;
 	}
 
-	public double getWidth() {
-		return width;
-	}
-
-	public void setWidth(double width) {
-		this.width = width;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
-	public void setHeight(double height) {
-		this.height = height;
-	}
+//	public double getWidth() {
+//		return width;
+//	}
+//
+//	public void setWidth(double width) {
+//		this.width = width;
+//	}
+//
+//	public double getHeight() {
+//		return height;
+//	}
+//
+//	public void setHeight(double height) {
+//		this.height = height;
+//	}
 
 	public boolean isSelected() {
 		return isSelected;

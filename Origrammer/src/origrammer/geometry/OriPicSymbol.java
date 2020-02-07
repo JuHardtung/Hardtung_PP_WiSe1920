@@ -18,7 +18,7 @@ public class OriPicSymbol {
 	public double yPos;
 	private int width;
 	private int height;
-	private double scale = 0.5;
+	private double scale = 0;
 	private boolean isSelected;
 	private double degrees = 0;
 	
@@ -97,7 +97,17 @@ public class OriPicSymbol {
 	}
 
 	public double getScale() {
-		return scale;
+		if (type == TYPE_ROTATION) {
+			return scale + 0.5;
+		} else if (type == TYPE_NEXT_VIEW_HERE) {
+			return scale + 0.25;
+		} else if (type == TYPE_HOLD) {
+			return scale + 0.25;
+		} else if (type == TYPE_HOLD_AND_PULL) {
+			return scale + 0.5;
+		} else {
+			return scale;
+		}
 	}
 
 	public void setScale(double scale) {
