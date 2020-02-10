@@ -1,5 +1,47 @@
 %!TEX root = ../Hardtung_PP_WiSe1920.tex
 
-\section{Program}
+\section{Program Features and Use}
 \label{program}
 
+The Origrammer structure follows a similar approach to the real life diagramming process. To create a new model, we start with some general decisions. When selecting the ``File > New'' menu item, a new dialog box opens (see Figure \ref{fig:newModel}), where you can choose \emph{paper shape, size} and the \emph{paper color} of both sides. Additionally, the text fields \emph{Title, Author, Comments} can be filled out to provide further information of the model. These options can also be accessed and changed during the diagramming process (except for the paper shape) when selecting ``Edit > Model Preferences''. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{newModel}
+	\caption{New Model dialog box}
+	\label{fig:newModel}
+\end{figure}
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{modelPreferences}
+	\caption{Model Preferences dialog box}
+	\label{fig:modelPreferences}
+\end{figure}
+
+After specifying all the model settings, the main diagramming window is presented to the user (see Figure \ref{fig:origrammerMain}). This main editing area consists of four segments:
+
+
+\textbf{Side Panel}
+
+On the right side of the main window the side panel is located. It presents the toolbar where the user can switch between inputting lines, arrows, general origami symbols, the selection tool (further explained later), a measurement tool, as well as a filling tool. Furthermore, the displayed grid can be adjusted or turned off completely and faces that got filled with the filling tool can be turned invisible.
+
+\textbf{Top Panel}
+
+The top panel is directly connected to the side panel, as it shows the actual settings, depending on what tool from the toolbar is active. Such as for the Line Input Tool, the top panel displays a JComboBox that contains the previously mentioned six different arrow types of origami. For other active tools this panel can show scaling or rotating options, different combo boxes, text fields or check boxes for a variety of adjustments.
+
+\textbf{Navigation Panel}
+
+Unlike the aforementioned panels, the navigation panel directly influences the model panel. As the name already states, this panel allows the navigation through the individual diagram steps. It also provides a JTextField to give the textual instructions for the current step.
+
+\textbf{Model Panel}
+
+The previously specified piece of paper is displayed in the model panel. This is the place where the paper, together with the arrows and other symbols is rendered to represent the current state of the paper for each folding step.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{origrammerMain}
+	\caption{Origrammer main window}
+	\label{fig:origrammerMain}
+\end{figure}
