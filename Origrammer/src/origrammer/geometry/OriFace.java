@@ -8,6 +8,15 @@ public class OriFace {
 	private boolean selected;
 	private boolean isFaceUp;
 	
+	public OriFace() {
+		
+	}
+	
+	public OriFace(GeneralPath path, boolean isFaceUp) {
+		this.path = path;
+		this.isFaceUp = isFaceUp;
+	}
+	
 	public OriFace(GeneralPath path, boolean selected, boolean isFaceUp) {
 		this.path = path;
 		this.selected = selected;

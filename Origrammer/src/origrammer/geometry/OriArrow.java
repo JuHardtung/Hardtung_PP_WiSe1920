@@ -18,13 +18,15 @@ public class OriArrow {
 	final public static int VALLEY_ARROW_WIDTH = 50;
 	final public static int VALLEY_ARROW_HEIGHT = 50;
 
-	private int type = TYPE_NONE;
 	private Vector2d position;
 	private int width;
 	private int height;
 	private double scale = 0.0;
-	private boolean selected;
 	private double degrees = 0;
+	private int type = TYPE_NONE;
+	private boolean isSelected;
+
+
 
 	private JLabel arrowLabel = new JLabel();
 	
@@ -40,6 +42,13 @@ public class OriArrow {
 		this.type = a.type;
 		
 	}
+
+	public OriArrow(Vector2d position, int type) {
+		this.position = position;
+		this.width = VALLEY_ARROW_WIDTH;
+		this.height = VALLEY_ARROW_HEIGHT;
+		this.type = type;
+	}
 	
 	public OriArrow(Vector2d position, int width, int height, int type) {
 		this.position = position;
@@ -48,11 +57,12 @@ public class OriArrow {
 		this.type = type;
 	}
 	
-	
-	public OriArrow(Vector2d position, int type) {
+	public OriArrow(Vector2d position, int width, int height, double scale, double degrees, int type) {
 		this.position = position;
-		this.width = VALLEY_ARROW_WIDTH;
-		this.height = VALLEY_ARROW_HEIGHT;
+		this.width = width;
+		this.height = height;
+		this.scale = scale;
+		this.degrees = degrees;
 		this.type = type;
 	}
 
@@ -80,7 +90,7 @@ public class OriArrow {
 		this.height = height;
 	}
 	
-	public double getScale() {
+	public double getAdjustedScale() {
 		if (type == TYPE_VALLEY) {
 			return scale + 1.5;
 		} else if (type == TYPE_MOUNTAIN) {
@@ -96,7 +106,10 @@ public class OriArrow {
 		} else {
 			return scale;
 		}
-		
+	}
+
+	public double getScale() {
+		return scale;
 	}
 
 	public void setScale(double scale) {
@@ -104,11 +117,11 @@ public class OriArrow {
 	}
 
 	public boolean isSelected() {
-		return selected;
+		return isSelected;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 
 	public double getDegrees() {
@@ -138,7 +151,7 @@ public class OriArrow {
 	@Override
 	public String toString() {
 		return "OriArrow [type=" + type + ", xPos=" + position.x + ", yPos=" + position.y + ", width=" + width + ", height="
-				+ height + ", scale=" + scale + ", selected=" + selected + ", degrees=" + degrees + "]";
+				+ height + ", scale=" + scale + ", selected=" + isSelected + ", degrees=" + degrees + "]";
 	}
 	
 

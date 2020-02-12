@@ -122,7 +122,6 @@ public class MainScreen extends JPanel
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        
         removeAll();
         g2d = (Graphics2D) g;
         
@@ -136,16 +135,16 @@ public class MainScreen extends JPanel
     	if (Globals.dispFilledFaces) {
     		for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
     			if (f.isSelected() || selectedCandidateF == f) {
-    				g2d.draw(f.path);
     				g2d.setPaint(new Color(200, 100, 100));
+    				g2d.draw(f.path);
     				g2d.fill(f.path);
     			} else {
-    				g2d.draw(f.path);
     				if (f.isFaceUp()) {
         				g2d.setPaint(Origrammer.diagram.getFaceUpColor());
     				} else {
         				g2d.setPaint(Origrammer.diagram.getFaceDownColor());
     				}
+    				g2d.draw(f.path);
     				g2d.fill(f.path);
     			}
     		}
@@ -195,14 +194,13 @@ public class MainScreen extends JPanel
        //RENDER ALL ARROWS
        tmpArrowLabel.setBorder(new EtchedBorder(BevelBorder.RAISED, Color.RED, getBackground().brighter()));
        add(tmpArrowLabel);
-       for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {    	   
-    	   
+       for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
     	   BufferedImage bimg = getBufImgByTypeAndRot(arrow);
-    	   int newArrowLabelWidth = (int) Math.round(bimg.getWidth()/2*arrow.getScale());
-    	   int newArrowLabelHeight = (int) Math.round(bimg.getHeight()/2*arrow.getScale());
+    	   int newArrowLabelWidth = (int) Math.round(bimg.getWidth()/2*arrow.getAdjustedScale());
+    	   int newArrowLabelHeight = (int) Math.round(bimg.getHeight()/2*arrow.getAdjustedScale());
     	   arrow.setWidth(newArrowLabelWidth);
     	   arrow.setHeight(newArrowLabelHeight);
-    	   arrow.getLabel().setSize(arrow.getWidth(), arrow.getHeight());
+    	   arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, arrow.getWidth(), arrow.getHeight());
     	   
     	   Image dimg = bimg.getScaledInstance(arrow.getLabel().getWidth(), arrow.getLabel().getHeight(), Image.SCALE_SMOOTH);
     	   ImageIcon arrowImageIcon = new ImageIcon(dimg);
@@ -1550,8 +1548,8 @@ public class MainScreen extends JPanel
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriArrow);
 
 			//get updated label width & height
-			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriArrow.getScale());
-			int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriArrow.getScale());
+			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriArrow.getAdjustedScale());
+			int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriArrow.getAdjustedScale());
 
 			//set width & height of arrowLabel and OriArrow
 			tmpArrowLabel = new JLabel();
@@ -1632,8 +1630,8 @@ public class MainScreen extends JPanel
 							int newY = (int) Math.round(arrow.getPosition().y + yTrans);
 							arrow.setPosition(new Vector2d(newX, newY));
 							arrow.getLabel().setBounds(newX, newY, 
-									(int) Math.round(arrow.getWidth() * arrow.getScale()), 
-									(int) Math.round(arrow.getHeight() * arrow.getScale()));
+									(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
+									(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
 						}
 					}
 				}
@@ -1923,8 +1921,8 @@ public class MainScreen extends JPanel
 			BufferedImage img = null;
 			img = getBufImgByTypeAndRot(arrow);
 			//get updated label width & height
-			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*arrow.getScale());
-			int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*arrow.getScale());
+			int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*arrow.getAdjustedScale());
+			int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*arrow.getAdjustedScale());
 			//set width & height of arrowLabel and OriArrow
 			JLabel arrowLabel = new JLabel();
 			arrowLabel.setSize(newArrowLabelWidth, newArrowLabelHeight);
@@ -1938,8 +1936,8 @@ public class MainScreen extends JPanel
 			arrow.setLabel(arrowLabel);
 			arrow.getLabel().setBounds((int)arrow.getPosition().x, 
 					(int)arrow.getPosition().y, 
-					(int) Math.round(arrow.getWidth()*arrow.getScale()), 
-					(int) Math.round(arrow.getHeight()*arrow.getScale()));
+					(int) Math.round(arrow.getWidth()*arrow.getAdjustedScale()), 
+					(int) Math.round(arrow.getHeight()*arrow.getAdjustedScale()));
 			repaint();		
 		} else if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 
 				&& Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL 

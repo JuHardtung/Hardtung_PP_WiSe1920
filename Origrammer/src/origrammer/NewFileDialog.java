@@ -334,10 +334,13 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 						"Error_EmptyTitle", 
 						JOptionPane.ERROR_MESSAGE);
 			} else if (Globals.paperShape == Constants.PaperShape.SQUARE) {
-				if (paperWidthTF.getText().isEmpty()) {
+				if (paperSizeTF.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptySideLength"),
 							"Error_EmptyWidth", 
 							JOptionPane.ERROR_MESSAGE);
+				} else {
+					createNewDiagram();
+					dispose();
 				}
 			} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
 				if (paperWidthTF.getText().isEmpty()) {
@@ -348,10 +351,10 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 					JOptionPane.showMessageDialog(this, Origrammer.res.getString("Error_EmptyHeight"),
 							"Error_EmptyHeight", 
 							JOptionPane.ERROR_MESSAGE);
+				} else {
+					createNewDiagram();
+					dispose();
 				}
-			} else if ((!titleTF.getText().isEmpty()) && (!paperWidthTF.getText().isEmpty()) && (!paperHeightTF.getText().isEmpty())){
-				createNewDiagram();
-				dispose();	
 			}
 
 		} else if (e.getSource() == cancelButton) {

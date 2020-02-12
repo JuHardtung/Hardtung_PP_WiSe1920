@@ -6,14 +6,41 @@
 This section discusses decisions made and problems that arose during the development process.
 
 
-Rendering the lines of the paper, all the arrows and other symbols could be done in a plethora of ways. Although using graphics libraries like JavaFx, libgdx, lwjgl or jogl were some of the options, the Origrammer relies only on Graphics2D. The more sophisticated graphics libraries were mostly developed for game development and offer a lot of features that were not necessary for this project.
+Rendering the lines of the paper, all the arrows and other symbols could be done in a plethora of ways. Although using graphics libraries like JavaFx, libgdx, lwjgl or jogl were some of the options, the Origrammer relies only on Graphics2D. The more sophisticated graphics libraries were mostly developed for game development and offer a lot of features that were not necessary for this project. Using only the general shapes of Graphics2D removes a lot of unnecessary complexity while offering a similar outcome.
+
+So the model Panel consists of a JPanel on which a Graphics2D object draws. 
+
+But this decision also brought some restrictions and problems. As some arrows and symbols are quite complex it would be preferred to just use images of the arrows/symbols and place them over the  paper model (which only consists of simple lines). So the requirements were to display images with variable position, size and rotation. The most obvious solution was to place a JLabel for each arrow or symbol and use its \texttt{setIcon(BufferedImage img)} method to render a \texttt{BufferedImage img} of the arrows/symbols. Placing the labels on absolute x,y coordinates is done by using the \texttt{setBounds(x, y, width, height)} method with the mouse \texttt{x} and \texttt{y} coordinates and the picture \texttt{width} and \texttt{height}. Unfortunately there doesn't seem to be a way to rotate a JLabel itself, so another way had to be found. The next idea was to rotate the BufferedImage that is used and that did work quite well when calculating the new bounds of the JLabel based on the BufferedImage size.
+
+While that solution did technically work, the outcome was not satisfactory as the image quality suffered a lot when scaling and zooming. Using vector graphics instead of .png files would avoid this quality loss, but natively there was no way to load a .svg file into the \texttt{Image} or \texttt{BufferedImage} class. To solve this problem the library Batik\footnote{\url{https://xmlgraphics.apache.org/batik//}} was used. This allowed to load vector graphics of all arrows and symbols. Then after scaling and rotating, the vector graphics can be rasterized (again, with Batik) in order to use them as ImageIcons of the previously mentioned labels. Unfortunately rotating the arrows and symbols turned out to be a problem now. As .svg files contain no explicit width or height values, calculating the updated bounds of the label after a rotation was not longer possible. As a result the rotated BufferedImage got cut off at the old bounds of its label. That is why the current implementation uses a unique vector graphic for every 22.5° rotation and loads them when necessary. The 22.5° angle was deliberately chosen as the paper in origami often gets folded at 90°, 45° or 22.5° angles.%source??????
+
+As a result the current implementation of using arrows and symbols works like this: 
+
+\begin{enumerate}
+	\item Load the .svg file of an arrow or symbol with the required rotation
+	\item Scale it as necessary
+	\item Rasterize it with Batik to a BufferedImage
+	\item Use this BufferedImage as an ImageIcon of a JLabel
+	\item Place this JLabel with \texttt{label.setBounds(x, y, width, height)}  on the diagram (\texttt{width} and \texttt{height} are automatically determined by Batik when rasterizing).
+\end{enumerate}
+
+This solution fulfills almost all requirements, as arrows and symbols can be placed freely by absolute coordinates and they can be rotated and scaled without quality loss. But there are still two problems.
+
+Firstly, the bounding box of the JLabel is always square and therefore not accurate. This is another problem with the missing width and height values of .svg files. Though this could potentially be fixed by individually calculating the new x and y coordinates as well as the new width and height after scaling and rotating an arrow or symbol.
+
+The second problem is unwanted scaling when rotating an arrow or symbol. This happens when a long image is rotated to 45°, 135°, 225° or 315° (so the image goes from one corner to another) as the JLabel tries to display the largest ImageIcon possible within its bounds.
+So both of these problem can be traced back to the missing width and height values of vector graphics.
+
+The most flexible and accurate solution that solves every problem would still be to either rebuild all arrows and symbols by hand with the simple Shape objects inside Java or to transcode vector graphics into the Shapes. These two approaches could be used in the future but couldn't be tested yet as both solutions would take a considerable amount of time and rewriting of existing code.
 
 
-quality problems while scaling the notation symbols --> solution: using .svg instead of .png
+\begin{lstlisting}
+if (draw) {
+	System.out.println();
+}
+\end{lstlisting}
 
-rotating ImageIcons
 
-JFrame --> JPanel --> JLabel --> ImageIcon --> BufferedImage --> Arrow
 
 Can move, scale but not rotate (either override the paintComponent method) or use graphics2d.rotate();)
 Both doesn't work for my setup

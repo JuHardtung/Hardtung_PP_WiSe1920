@@ -323,7 +323,7 @@ public class GeometryUtil {
 		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, vList.size());
 		path.moveTo(vList.get(0).x, vList.get(0).y);
 		
-		for (int i=0; i<vList.size(); i++) {
+		for (int i=1; i<vList.size(); i++) { //TODO: start width 1?
 			path.lineTo(vList.get(i).x, vList.get(i).y);
 		}
 		path.closePath();

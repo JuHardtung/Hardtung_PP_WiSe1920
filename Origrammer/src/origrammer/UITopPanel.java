@@ -401,8 +401,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int)arrow.getPosition().y, 
-												(int) Math.round(arrow.getWidth() * arrow.getScale()), 
-												(int) Math.round(arrow.getHeight() * arrow.getScale()));
+												(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
+												(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
 			}
 		}
 	}
