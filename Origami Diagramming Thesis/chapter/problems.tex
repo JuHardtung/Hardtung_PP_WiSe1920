@@ -8,9 +8,12 @@ This section discusses decisions made and problems that arose during the develop
 
 Rendering the lines of the paper, all the arrows and other symbols could be done in a plethora of ways. Although using graphics libraries like JavaFx, libgdx, lwjgl or jogl were some of the options, the Origrammer relies only on Graphics2D. The more sophisticated graphics libraries were mostly developed for game development and offer a lot of features that were not necessary for this project. Using only the general shapes of Graphics2D removes a lot of unnecessary complexity while offering a similar outcome.
 
-So the model Panel consists of a JPanel on which a Graphics2D object draws. 
+So the model Panel consists of a JPanel on which a Graphics2D object draws. But this decision also brought some restrictions and problems.
 
-But this decision also brought some restrictions and problems. As some arrows and symbols are quite complex it would be preferred to just use images of the arrows/symbols and place them over the  paper model (which only consists of simple lines). So the requirements were to display images with variable position, size and rotation. The most obvious solution was to place a JLabel for each arrow or symbol and use its \texttt{setIcon(BufferedImage img)} method to render a \texttt{BufferedImage img} of the arrows/symbols. Placing the labels on absolute x,y coordinates is done by using the \texttt{setBounds(x, y, width, height)} method with the mouse \texttt{x} and \texttt{y} coordinates and the picture \texttt{width} and \texttt{height}. Unfortunately there doesn't seem to be a way to rotate a JLabel itself, so another way had to be found. The next idea was to rotate the BufferedImage that is used and that did work quite well when calculating the new bounds of the JLabel based on the BufferedImage size.
+
+\subsection{Displaying of arrows/symbols}
+\label{sec:displaySymbols}
+As some arrows and symbols are quite complex it would be preferred to just use images of the arrows/symbols and place them over the  paper model (which only consists of simple lines). So the requirements were to display images with variable position, size and rotation. The most obvious solution was to place a JLabel for each arrow or symbol and use its \texttt{setIcon(BufferedImage img)} method to render a \texttt{BufferedImage img} of the arrows/symbols. Placing the labels on absolute x,y coordinates is done by using the \texttt{setBounds(x, y, width, height)} method with the mouse \texttt{x} and \texttt{y} coordinates and the picture \texttt{width} and \texttt{height}. Unfortunately there doesn't seem to be a way to rotate a JLabel itself, so another way had to be found. The next idea was to rotate the BufferedImage itself and that did work quite well after calculating the new bounds of the JLabel based on the BufferedImage size.
 
 While that solution did technically work, the outcome was not satisfactory as the image quality suffered a lot when scaling and zooming. Using vector graphics instead of .png files would avoid this quality loss, but natively there was no way to load a .svg file into the \texttt{Image} or \texttt{BufferedImage} class. To solve this problem the library Batik\footnote{\url{https://xmlgraphics.apache.org/batik//}} was used. This allowed to load vector graphics of all arrows and symbols. Then after scaling and rotating, the vector graphics can be rasterized (again, with Batik) in order to use them as ImageIcons of the previously mentioned labels. Unfortunately rotating the arrows and symbols turned out to be a problem now. As .svg files contain no explicit width or height values, calculating the updated bounds of the label after a rotation was not longer possible. As a result the rotated BufferedImage got cut off at the old bounds of its label. That is why the current implementation uses a unique vector graphic for every 22.5° rotation and loads them when necessary. The 22.5° angle was deliberately chosen as the paper in origami often gets folded at 90°, 45° or 22.5° angles.%source??????
 
@@ -33,6 +36,33 @@ So both of these problem can be traced back to the missing width and height valu
 
 The most flexible and accurate solution that solves every problem would still be to either rebuild all arrows and symbols by hand with the simple Shape objects inside Java or to transcode vector graphics into the Shapes. These two approaches could be used in the future but couldn't be tested yet as both solutions would take a considerable amount of time and rewriting of existing code.
 
+\subsection{Breaking calculations}
+\label{sec:breakingCalc}
+
+One problem in the current version of Origrammer affects user input. In case of the \emph{Equal Angle} symbol the user has to specify 3 vertices on the diagram in a specific order. The first selected vertex is always the corner point (blue vertex on Fig. \ref{fig:equalAngle1}), the second vertex has to lie vertically (the red vertex) and the last one has to lie horizontally (green vertex) towards the corner point. When using this order, the resulting symbol is drawn correctly for all four quadrants of a coordinate plane. Consequently the \emph{Equal Angle} symbol can be drawn facing the top left, top right, bottom left or bottom right while also providing settings for a custom amount of dividers.
+
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{equalAngle1}
+        \caption{Input}
+        \label{fig:equalAngle1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{equalAngle2}
+        \caption{Result}
+        \label{fig:equalAngle2}
+    \end{subfigure}
+    \caption{Equal Angle Symbol}
+\end{figure*}
+
+This reliance on correct user input could be reduced with a tooltip or small explaining text when selecting the input mode or by implementing a detailed input validation for each symbol. Though the focus while developing the Origrammer was set on increasing functionality over usability first. This approach allowed a quicker implementation of all required features in order to demonstrate how a finished diagramming program could look like.
+
+
+\subsection{Saving and Opening Files}
+
+Being able to save and open diagrams created with the Origrammer was imperative to the usefulness of the program.
 
 \begin{lstlisting}
 if (draw) {
