@@ -10,9 +10,9 @@ public class OriLine {
 	final public static int TYPE_XRAY = 4;
 	
 	private boolean isSelected;
-	public int type = TYPE_NONE;
-	public Vector2d p0 = new Vector2d();
-	public Vector2d p1 = new Vector2d();
+	private int type = TYPE_NONE;
+	private Vector2d p0 = new Vector2d();
+	private Vector2d p1 = new Vector2d();
 
 	public OriLine() {
 	}
@@ -34,9 +34,21 @@ public class OriLine {
 		this.p0.set(x0, y0);
 		this.p1.set(x1, y1);
 	}
-	
-	public Line getLine() {
-		return new Line(p0, new Vector2d(p1.x - p0.x, p1.y - p0.y));
+
+	public Vector2d getP0() {
+		return p0;
+	}
+
+	public void setP0(Vector2d p0) {
+		this.p0 = p0;
+	}
+
+	public Vector2d getP1() {
+		return p1;
+	}
+
+	public void setP1(Vector2d p1) {
+		this.p1 = p1;
 	}
 
 	public int getType() {

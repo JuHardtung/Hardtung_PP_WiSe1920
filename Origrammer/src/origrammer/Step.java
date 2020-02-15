@@ -12,9 +12,8 @@ import origrammer.geometry.OriEqualAnglSymbol;
 import origrammer.geometry.OriEqualDistSymbol;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriGeomSymbol;
-import origrammer.geometry.OriLeader;
+import origrammer.geometry.OriLeaderBox;
 import origrammer.geometry.OriLine;
-import origrammer.geometry.OriRepetitionBox;
 import origrammer.geometry.OriPicSymbol;
 import origrammer.geometry.OriPleatCrimpSymbol;
 import origrammer.geometry.OriVertex;
@@ -41,8 +40,7 @@ public class Step {
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
 	public ArrayList<OriFace> filledFaces = new ArrayList<>();
-	public ArrayList<OriLeader> leader = new ArrayList<>();
-	public ArrayList<OriRepetitionBox> repetitionBoxes = new ArrayList<>();
+	public ArrayList<OriLeaderBox> leaderBoxSymbols = new ArrayList<>();
 	public ArrayList<OriPicSymbol> picSymbols = new ArrayList<>();
 	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
 	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
@@ -116,7 +114,7 @@ public class Step {
 
 		//if new line crosses another one, split them up to smaller lines
 		for (OriLine line : tmpLines) {
-			if (inputLine.type == OriLine.TYPE_NONE && line.type != OriLine.TYPE_NONE) {
+			if (inputLine.getType() == OriLine.TYPE_NONE && line.getType() != OriLine.TYPE_NONE) {
 				continue;
 			}
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
@@ -127,37 +125,37 @@ public class Step {
 			crossingLines.add(line);
 			lines.remove(line);
 
-			if (GeometryUtil.Distance(line.p0,  crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p0, crossPoint, line.type));
+			if (GeometryUtil.Distance(line.getP0(),  crossPoint) > POINT_EPS) {
+				lines.add(new OriLine(line.getP0(), crossPoint, line.getType()));
 			}
-			if (GeometryUtil.Distance(line.p1, crossPoint) > POINT_EPS) {
-				lines.add(new OriLine(line.p1, crossPoint, line.type));
+			if (GeometryUtil.Distance(line.getP1(), crossPoint) > POINT_EPS) {
+				lines.add(new OriLine(line.getP1(), crossPoint, line.getType()));
 			}
 		}
 
 		ArrayList<Vector2d> points = new ArrayList<>();
-		points.add(inputLine.p0);
-		points.add(inputLine.p1);
+		points.add(inputLine.getP0());
+		points.add(inputLine.getP1());
 
 		//if the intersection is really close to the end of line --> do nothing
 		for (OriLine line : lines) {
-			if (GeometryUtil.Distance(inputLine.p0,  line.p0) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.getP0(),  line.getP0()) < POINT_EPS) {
 				continue;
 			}
-			if (GeometryUtil.Distance(inputLine.p0,  line.p1) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.getP0(),  line.getP1()) < POINT_EPS) {
 				continue;
 			}
-			if (GeometryUtil.Distance(inputLine.p1,  line.p0) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.getP1(),  line.getP0()) < POINT_EPS) {
 				continue;
 			}
-			if (GeometryUtil.Distance(inputLine.p1,  line.p1) < POINT_EPS) {
+			if (GeometryUtil.Distance(inputLine.getP1(),  line.getP1()) < POINT_EPS) {
 				continue;
 			}
-			if (GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
-				points.add(line.p0);
+			if (GeometryUtil.DistancePointToSegment(line.getP0(), inputLine.getP0(), inputLine.getP1()) < POINT_EPS) {
+				points.add(line.getP0());
 			}
-			if (GeometryUtil.DistancePointToSegment(line.p0, inputLine.p0, inputLine.p1) < POINT_EPS) {
-				points.add(line.p1);
+			if (GeometryUtil.DistancePointToSegment(line.getP0(), inputLine.getP0(), inputLine.getP1()) < POINT_EPS) {
+				points.add(line.getP1());
 			}
 
 			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
@@ -166,7 +164,7 @@ public class Step {
 			}
 		}
 
-		boolean sortByX = Math.abs(inputLine.p0.x - inputLine.p1.x) > Math.abs(inputLine.p0.y - inputLine.p1.y);
+		boolean sortByX = Math.abs(inputLine.getP0().x - inputLine.getP1().x) > Math.abs(inputLine.getP0().y - inputLine.getP1().y);
 		if (sortByX) {
 			Collections.sort(points, new PointComparatorX());
 		} else {
@@ -181,7 +179,7 @@ public class Step {
 				continue;
 			}
 			
-			lines.add(new OriLine(prePoint, p, inputLine.type));
+			lines.add(new OriLine(prePoint, p, inputLine.getType()));
 			prePoint = p;
 		}
 	}
@@ -199,16 +197,8 @@ public class Step {
 	 * Adds a new Leader to the current diagram step
 	 * @param inputLeader
 	 */
-	public void addLeader(OriLeader inputLeader) {
-		leader.add(inputLeader);
-	}
-	
-	/**
-	 * Adds a new RepetitionBox to the current diagram step
-	 * @param inputRepetitionBox
-	 */
-	public void addRepetitionBox(OriRepetitionBox inputRepetitionBox) {
-		repetitionBoxes.add(inputRepetitionBox);
+	public void addLeader(OriLeaderBox inputLeader) {
+		leaderBoxSymbols.add(inputLeader);
 	}
 	
 	/**
@@ -257,7 +247,6 @@ public class Step {
 		selectAllArrows();
 		selectAllFaces();
 		selectAllLeaders();
-		selectAllRepetitionBoxes();
 		selectAllPicSymbols();
 		selectAllGeomSymbols();
 		selectAllEqualDistSymbols();
@@ -284,14 +273,8 @@ public class Step {
 		}
 	}
 	public void selectAllLeaders() {
-		for (OriLeader l : leader) {
+		for (OriLeaderBox l : leaderBoxSymbols) {
 			l.setSelected(true);
-		}
-	}	
-	
-	public void selectAllRepetitionBoxes() {
-		for (OriRepetitionBox r : repetitionBoxes) {
-			r.setSelected(true);
 		}
 	}	
 	
@@ -330,7 +313,6 @@ public class Step {
 		unselectAllArrows();
 		unselectAllFaces();
 		unselectAllLeaders();
-		unselectAllRepetitionBoxes();
 		unselectAllPicSymbols();
 		unselectAllGeomSymbols();
 		unselectAllEqualDistSymbols();
@@ -357,14 +339,8 @@ public class Step {
 	}
 	
 	public void unselectAllLeaders() {
-		for (OriLeader l : leader) {
+		for (OriLeaderBox l : leaderBoxSymbols) {
 			l.setSelected(false);
-		}
-	}
-	
-	public void unselectAllRepetitionBoxes() {
-		for (OriRepetitionBox r : repetitionBoxes) {
-			r.setSelected(false);
 		}
 	}
 	
@@ -453,31 +429,15 @@ public class Step {
 	 * Deletes all selected leaders of the current diagram step
 	 */
 	public void deleteSelectedLeaders() {
-		ArrayList<OriLeader> selectedLeader = new ArrayList<>();
+		ArrayList<OriLeaderBox> selectedLeader = new ArrayList<>();
 		
-		for (OriLeader l : leader) {
+		for (OriLeaderBox l : leaderBoxSymbols) {
 			if (l.isSelected()) {
 				selectedLeader.add(l);
 			}
 		}
-		for (OriLeader l : selectedLeader) {
-			leader.remove(l);
-		}
-	}
-	
-	/**
-	 * Deletes all selected repetitionBoxes of the current diagram step
-	 */
-	public void deleteSelectedRepetitionBoxes() {
-		ArrayList<OriRepetitionBox> selectedRepe = new ArrayList<>();
-		
-		for (OriRepetitionBox r : repetitionBoxes) {
-			if (r.isSelected()) {
-				selectedRepe.add(r);
-			}
-		}
-		for (OriRepetitionBox r : selectedRepe) {
-			repetitionBoxes.remove(r);
+		for (OriLeaderBox l : selectedLeader) {
+			leaderBoxSymbols.remove(l);
 		}
 	}
 	

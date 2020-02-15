@@ -93,21 +93,17 @@ public class OriPleatCrimpSymbol {
 
 		Vector2d uvDiagonal;
 
-
 		Vector2d p0 = new Vector2d(position.x, position.y);
 		Vector2d p1 = new Vector2d();		   
 		Vector2d p2 = new Vector2d();
 		Vector2d p3 = new Vector2d();
 
 		if (isSwitchedDir) {
-			System.out.println("isswitched Top");
 			uvDiagonal = new Vector2d(1, -0.6);
 			uvHori = new Vector2d(-1, 0);
 			translatX = 20;
 			translatY = -5.5;
 		} else {
-			System.out.println("NotSwitched Top");
-
 			uvDiagonal = new Vector2d(-1, -0.6);
 			uvHori = new Vector2d(1, 0);
 			translatX = -20;
@@ -125,7 +121,6 @@ public class OriPleatCrimpSymbol {
 		 * 		   /
 		 * 		(p6)_____(p7)
 		 */
-
 
 		//top part
 		for (int i=0; i<layersCount; i++) {
@@ -146,8 +141,6 @@ public class OriPleatCrimpSymbol {
 			p3.x = p2.x + uvHori.x*35 + uvHori.x*20*i;
 			p3.y = p2.y + uvHori.y*35 + uvHori.y*20*i;
 			shapes.add(new Line2D.Double(p2.x, p2.y, p3.x, p3.y));
-//			System.out.println("PRE p0: " + p0.x + " " + p0.y + " | p1: " + p1.x + " " + p1.y 
-//					+ " p2: " + p2.x + " " + p2.y + " | p3: " + p3.x + " " + p3.y);
 		}
 		
 		if (type == TYPE_CRIMP)  {
@@ -158,15 +151,11 @@ public class OriPleatCrimpSymbol {
 			Vector2d p7 = new Vector2d();
 
 			if (isSwitchedDir) {
-				System.out.println("isswitched Bot");
-
 				uvDiagonal = new Vector2d(1, 0.6);
 				uvHori = new Vector2d(-1, 0);
 				translatX = 20;
 				translatY = 5.5;
 			} else {
-				System.out.println("notswitched bot");
-
 				uvDiagonal = new Vector2d(-1, 0.6);
 				uvHori = new Vector2d(1, 0);
 				translatX = -20;
@@ -182,7 +171,6 @@ public class OriPleatCrimpSymbol {
 				p5.y = p4.y + uvHori.y*55;
 				
 				double p0TransX = uvHori.x*20*(layersCount-1) - uvHori.x*20*(j+1);
-				//double p0TransY = uvHori.y*20*(layersCount-1) - uvHori.y*20*(j+1);
 				
 				shapes.add(new Line2D.Double(p4.x-p0TransX, p4.y, p5.x, p5.y));
 				
@@ -197,8 +185,6 @@ public class OriPleatCrimpSymbol {
 				shapes.add(new Line2D.Double(p6.x, p6.y, p7.x, p7.y));
 			}
 		}
-
-
 		return shapes;
 	}
 

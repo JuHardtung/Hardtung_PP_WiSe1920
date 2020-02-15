@@ -9,6 +9,12 @@ public class StepDataSet {
 	public OriLineProxy[] lines;
 	public OriArrowProxy[] arrows;
 	public OriFaceProxy[] faces;
+	public OriGeomSymbolProxy[] geomSymbols;
+	public OriPleatCrimpProxy[] pleatCrimpSymbols;
+	public OriEqualDistProxy[] equalDistSymbols;
+	public OriEqualAnglProxy[] equalAnglSymbols;
+	public OriPicProxy[] picSymbols;
+	public OriLeaderBoxProxy[] leaderBoxSymbols;
 	public String stepDescription;
 	public int stepNumber;
 
@@ -34,6 +40,43 @@ public class StepDataSet {
 		for (int i=0; i<faceCount; i++) {
 			faces[i] = new OriFaceProxy(s.filledFaces.get(i));
 		}
+		
+		int geomSymbolCount = s.geomSymbols.size();
+		geomSymbols = new OriGeomSymbolProxy[geomSymbolCount];
+		for (int i=0; i<geomSymbolCount; i++) {
+			geomSymbols[i] = new OriGeomSymbolProxy(s.geomSymbols.get(i));
+		}
+		
+		int pleatCrimpCount = s.pleatCrimpSymbols.size();
+		pleatCrimpSymbols = new OriPleatCrimpProxy[pleatCrimpCount];
+		for (int i=0; i<pleatCrimpCount; i++) {
+			pleatCrimpSymbols[i] = new OriPleatCrimpProxy(s.pleatCrimpSymbols.get(i));
+		}
+		
+		int equalDistCount = s.equalDistSymbols.size();
+		equalDistSymbols = new OriEqualDistProxy[equalDistCount];
+		for (int i=0; i<equalDistCount; i++) {
+			equalDistSymbols[i] = new OriEqualDistProxy(s.equalDistSymbols.get(i));
+		}
+		
+		int equalAnglCount = s.equalAnglSymbols.size();
+		equalAnglSymbols = new OriEqualAnglProxy[equalAnglCount];
+		for (int i=0; i<equalAnglCount; i++) {
+			equalAnglSymbols[i] = new OriEqualAnglProxy(s.equalAnglSymbols.get(i));
+		}
+		
+		int picSymbolCount = s.picSymbols.size();
+		picSymbols = new OriPicProxy[picSymbolCount];
+		for (int i=0; i<picSymbolCount; i++) {
+			picSymbols[i] = new OriPicProxy(s.picSymbols.get(i));
+		}
+		
+		int leaderBoxCount = s.leaderBoxSymbols.size();
+		leaderBoxSymbols = new OriLeaderBoxProxy[leaderBoxCount];
+		for (int i=0; i<leaderBoxCount; i++) {
+			leaderBoxSymbols[i] = new OriLeaderBoxProxy(s.leaderBoxSymbols.get(i));
+		}
+		
 		stepDescription = s.stepDescription;
 		stepNumber = s.stepNumber;
 	}
@@ -51,6 +94,31 @@ public class StepDataSet {
 		for (int i=0; i<faces.length; i++) {
 			s.filledFaces.add(faces[i].getFace());
 		}
+		s.geomSymbols.clear();
+		for(int i=0; i<geomSymbols.length; i++) {
+			s.geomSymbols.add(geomSymbols[i].getSymbol());
+		}
+		s.pleatCrimpSymbols.clear();
+		for(int i=0; i<pleatCrimpSymbols.length; i++) {
+			s.pleatCrimpSymbols.add(pleatCrimpSymbols[i].getSymbol());
+		}
+		s.equalDistSymbols.clear();
+		for (int i=0; i<equalDistSymbols.length; i++) {
+			s.equalDistSymbols.add(equalDistSymbols[i].getSymbol());
+		}
+		s.equalAnglSymbols.clear();
+		for (int i=0; i<equalAnglSymbols.length; i++) {
+			s.equalAnglSymbols.add(equalAnglSymbols[i].getSymbol());
+		}
+		s.picSymbols.clear();
+		for (int i=0; i<picSymbols.length; i++) {
+			s.picSymbols.add(picSymbols[i].getSymbol());
+		}
+		s.leaderBoxSymbols.clear();
+		for (int i=0; i<leaderBoxSymbols.length; i++) {
+			s.leaderBoxSymbols.add(leaderBoxSymbols[i].getSymbol());
+		}
+		
 		s.stepDescription = stepDescription;
 		s.stepNumber = stepNumber;
 	}
@@ -67,6 +135,25 @@ public class StepDataSet {
 		for (int i=0; i<faces.length; i++) {
 			tmpStep.filledFaces.add(faces[i].getFace());
 		}
+		for (int i=0; i<geomSymbols.length; i++) {
+			tmpStep.geomSymbols.add(geomSymbols[i].getSymbol());
+		}
+		for (int i=0; i<pleatCrimpSymbols.length; i++) {
+			tmpStep.pleatCrimpSymbols.add(pleatCrimpSymbols[i].getSymbol());
+		}
+		for (int i=0; i<equalDistSymbols.length; i++) {
+			tmpStep.equalDistSymbols.add(equalDistSymbols[i].getSymbol());		
+		}
+		for (int i=0; i<equalAnglSymbols.length; i++) {
+			tmpStep.equalAnglSymbols.add(equalAnglSymbols[i].getSymbol());
+		}
+		for (int i=0; i<picSymbols.length; i++) {
+			tmpStep.picSymbols.add(picSymbols[i].getSymbol());
+		}
+		for (int i=0; i<leaderBoxSymbols.length; i++) {
+			tmpStep.leaderBoxSymbols.add(leaderBoxSymbols[i].getSymbol());
+		}
+		
 		tmpStep.stepDescription = stepDescription;
 		tmpStep.stepNumber = stepNumber;
 		

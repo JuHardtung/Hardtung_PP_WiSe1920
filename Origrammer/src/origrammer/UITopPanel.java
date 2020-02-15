@@ -42,11 +42,10 @@ import origrammer.geometry.OriEqualAnglSymbol;
 import origrammer.geometry.OriEqualDistSymbol;
 import origrammer.geometry.OriFace;
 import origrammer.geometry.OriGeomSymbol;
-import origrammer.geometry.OriLeader;
+import origrammer.geometry.OriLeaderBox;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriPicSymbol;
 import origrammer.geometry.OriPleatCrimpSymbol;
-import origrammer.geometry.OriRepetitionBox;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
@@ -62,9 +61,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 	//INPUT LINES/ ARROWS/ SYMBOLS
 	private JPanel inputLinesPanel = new JPanel();
-	private JLabel linesLabel = new JLabel(Origrammer.res.getString("MenuLines"));
 	private JPanel inputArrowPanel = new JPanel();
-	private JLabel arrowsLabel = new JLabel(Origrammer.res.getString("MenuArrows"));
 	private JPanel inputSymbolsPanel = new JPanel();
 	private JComboBox<String> menuLineCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> menuArrowCB = new JComboBox<>(arrowInputOptions);
@@ -417,7 +414,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				screen.repaint();
 
 				//TODO: add preview pictures of arrow types
-				symbol.getLabel().setBounds((int) symbol.getxPos(), (int)symbol.getyPos(), 
+				symbol.getLabel().setBounds((int) symbol.getPosition().x, (int) symbol.getPosition().y, 
 												(int) Math.round(symbol.getWidth() * symbol.getScale()), 
 												(int) Math.round(symbol.getHeight() * symbol.getScale()));
 			}
@@ -449,9 +446,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				symbol.setDegrees(picSymbolRotSlider.getValue()/10);
 				screen.repaint();
 				
-				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getxPos(), symbol.getyPos(), symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getPosition().x, symbol.getPosition().y, symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
 				
-				symbol.getLabel().setBounds((int)symbol.getxPos(), (int)symbol.getyPos(), (int)rect.getWidth(), (int)rect.getHeight());
+				symbol.getLabel().setBounds((int)symbol.getPosition().x, (int)symbol.getPosition().y, (int)rect.getWidth(), (int)rect.getHeight());
 			}
 		}
 	}
@@ -594,15 +591,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				break;
 			}
 		}
-		for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+		for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
 			if (leader.isSelected()) {
 				selectedTypes += 0b0000001000;
-				break;
-			}
-		}
-		for (OriRepetitionBox repeBox : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-			if (repeBox.isSelected()) {
-				selectedTypes += 0b0000010000;
 				break;
 			}
 		}
@@ -756,7 +747,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			result = selectedTypes & picMask;
 			if (result == 0b0000100000) {
-				System.out.println("bruv");
 				picSymbolPanel.setVisible(true);
 				//sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
 			} else {
@@ -765,7 +755,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			result = selectedTypes & geoMask;
 			if (result == 0b0001000000) {
-				System.out.println("geoSymbols");
 				//TODO: editing options for geoSymbols
 			}
 			result = selectedTypes & equDistMask;

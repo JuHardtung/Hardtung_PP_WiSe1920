@@ -32,9 +32,9 @@ public class GeometryUtil {
 	
 	
 	public static boolean isSameLineSegment(OriLine l0, OriLine l1) {
-		if (Distance(l0.p0, l1.p0) < POINT_SNAP_VALUE && Distance(l0.p1, l1.p1) < POINT_SNAP_VALUE) {
+		if (Distance(l0.getP0(), l1.getP0()) < POINT_SNAP_VALUE && Distance(l0.getP1(), l1.getP1()) < POINT_SNAP_VALUE) {
 			return true;
-		} if (Distance(l0.p0, l1.p1) < POINT_SNAP_VALUE && Distance(l0.p1, l1.p0) < POINT_SNAP_VALUE) {
+		} if (Distance(l0.getP0(), l1.getP1()) < POINT_SNAP_VALUE && Distance(l0.getP1(), l1.getP0()) < POINT_SNAP_VALUE) {
 			return true;
 		}
 		return false;
@@ -43,12 +43,12 @@ public class GeometryUtil {
 	
 	public static Vector2d getCrossPoint(OriLine l0, OriLine l1) {
 		double epsilon = 1.0e-6;
-		Vector2d p0 = new Vector2d(l0.p0);
-		Vector2d p1 = new Vector2d(l0.p1);
+		Vector2d p0 = new Vector2d(l0.getP0());
+		Vector2d p1 = new Vector2d(l0.getP1());
 		
 		Vector2d d0 = new Vector2d(p1.x - p0.x, p1.y - p0.y);
-		Vector2d d1 = new Vector2d(l1.p1.x - l1.p0.x, l1.p1.y - l1.p0.y);
-		Vector2d diff = new Vector2d(l1.p0.x - p0.x, l1.p0.y - p0.y);
+		Vector2d d1 = new Vector2d(l1.getP1().x - l1.getP0().x, l1.getP1().y - l1.getP0().y);
+		Vector2d diff = new Vector2d(l1.getP0().x - p0.x, l1.getP0().y - p0.y);
 		double det = d1.x * d0.y - d1.y * d0.x;
 		
 		if (det * det > epsilon * d0.lengthSquared() * d1.lengthSquared()) {
@@ -62,8 +62,8 @@ public class GeometryUtil {
 				return null;
 			} else {
 				Vector2d cp = new Vector2d();
-				cp.x = (1.0 - t) * l1.p0.x + t * l1.p1.x;
-				cp.y = (1.0 - t) * l1.p0.y + t * l1.p1.y;
+				cp.x = (1.0 - t) * l1.getP0().x + t * l1.getP1().x;
+				cp.y = (1.0 - t) * l1.getP0().y + t * l1.getP1().y;
 				return cp;
 			}
 		}
@@ -145,8 +145,8 @@ public class GeometryUtil {
 	
 	public static boolean isMouseOverSymbol(Point2D.Double p, OriPicSymbol s) {
 		
-		double sX = s.getxPos();
-		double sY = s.getyPos();
+		double sX = s.getPosition().x;
+		double sY = s.getPosition().y;
 		double sXEnd = sX + (s.getWidth());
 		double sYEnd = sY + (s.getHeight());
 		
@@ -277,10 +277,10 @@ public class GeometryUtil {
 	
 	public static double measureAngle(OriLine l0, OriLine l1) {
 		
-		Vector2d l0p0 = l0.p0;
-		Vector2d l0p1 = l0.p1;
-		Vector2d l1p0 = l1.p0;
-		Vector2d l1p1 = l1.p1;
+		Vector2d l0p0 = l0.getP0();
+		Vector2d l0p1 = l0.getP1();
+		Vector2d l1p0 = l1.getP0();
+		Vector2d l1p1 = l1.getP1();
 		
 		Vector2d angleVertex;
 		Vector2d v0;
@@ -341,26 +341,26 @@ public class GeometryUtil {
 		lines.add(l2);
 
 		for(int i=1; i<lines.size(); i++) {
-			if (lines.get(0).p0.x == lines.get(i).p0.x && lines.get(0).p0.y == lines.get(i).p0.y) {
-			points.add(lines.get(0).p0);
-			} else if (lines.get(0).p0.x == lines.get(i).p1.x && lines.get(0).p0.y == lines.get(i).p1.y) {
-				points.add(lines.get(0).p0);
-			} else if (lines.get(0).p1.x == lines.get(i).p0.x && lines.get(0).p1.y == lines.get(i).p0.y) {
-				points.add(lines.get(0).p1);
-			} else if (lines.get(0).p1.x == lines.get(i).p1.x && lines.get(0).p1.y == lines.get(i).p1.y) {
-				points.add(lines.get(0).p1);
+			if (lines.get(0).getP0().x == lines.get(i).getP0().x && lines.get(0).getP0().y == lines.get(i).getP0().y) {
+			points.add(lines.get(0).getP0());
+			} else if (lines.get(0).getP0().x == lines.get(i).getP1().x && lines.get(0).getP0().y == lines.get(i).getP1().y) {
+				points.add(lines.get(0).getP0());
+			} else if (lines.get(0).getP1().x == lines.get(i).getP0().x && lines.get(0).getP1().y == lines.get(i).getP0().y) {
+				points.add(lines.get(0).getP1());
+			} else if (lines.get(0).getP1().x == lines.get(i).getP1().x && lines.get(0).getP1().y == lines.get(i).getP1().y) {
+				points.add(lines.get(0).getP1());
 			}
 		}
 		
 		for (int j=2; j<lines.size(); j++) {
-			if (lines.get(1).p0.x == lines.get(j).p0.x && lines.get(1).p0.y == lines.get(j).p0.y) {
-				points.add(lines.get(1).p0);
-			} else if (lines.get(1).p0.x == lines.get(j).p1.x && lines.get(1).p0.y == lines.get(j).p1.y) {
-				points.add(lines.get(1).p0);
-			} else if (lines.get(1).p1.x == lines.get(j).p0.x && lines.get(1).p1.y == lines.get(j).p0.y) {
-				points.add(lines.get(1).p1);
-			} else if (lines.get(1).p1.x == lines.get(j).p1.x && lines.get(1).p1.y == lines.get(j).p1.y) {
-				points.add(lines.get(1).p1);
+			if (lines.get(1).getP0().x == lines.get(j).getP0().x && lines.get(1).getP0().y == lines.get(j).getP0().y) {
+				points.add(lines.get(1).getP0());
+			} else if (lines.get(1).getP0().x == lines.get(j).getP1().x && lines.get(1).getP0().y == lines.get(j).getP1().y) {
+				points.add(lines.get(1).getP0());
+			} else if (lines.get(1).getP1().x == lines.get(j).getP0().x && lines.get(1).getP1().y == lines.get(j).getP0().y) {
+				points.add(lines.get(1).getP1());
+			} else if (lines.get(1).getP1().x == lines.get(j).getP1().x && lines.get(1).getP1().y == lines.get(j).getP1().y) {
+				points.add(lines.get(1).getP1());
 			}
 		}
 		

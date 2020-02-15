@@ -6,57 +6,37 @@ import origrammer.geometry.OriLine;
 
 public class OriLineProxy {
 	
-	private double x0;
-	private double y0;
-	private double x1;
-	private double y1;
+	private Vector2d p0;
+	private Vector2d p1;
 	private int type;
 	
 	public OriLineProxy() {
 	}
 	
 	public OriLineProxy(OriLine l) {
-		x0 = l.p0.x;
-		y0 = l.p0.y;
-		x1 = l.p1.x;
-		y1 = l.p1.y;
-		type = l.type;
+		this.p0 = l.getP0();
+		this.p1 = l.getP1();
+		this.type = l.getType();
 	}
 	
 	public OriLine getLine() {
-		return new OriLine(new Vector2d(x0,y0), new Vector2d(x1, y1), type);
+		return new OriLine(p0, p1, type);
 	}
 
-	public double getX0() {
-		return x0;
+	public Vector2d getP0() {
+		return p0;
 	}
 
-	public void setX0(double x0) {
-		this.x0 = x0;
+	public void setP0(Vector2d p0) {
+		this.p0 = p0;
 	}
 
-	public double getY0() {
-		return y0;
+	public Vector2d getP1() {
+		return p1;
 	}
 
-	public void setY0(double y0) {
-		this.y0 = y0;
-	}
-
-	public double getX1() {
-		return x1;
-	}
-
-	public void setX1(double x1) {
-		this.x1 = x1;
-	}
-
-	public double getY1() {
-		return y1;
-	}
-
-	public void setY1(double y1) {
-		this.y1 = y1;
+	public void setP1(Vector2d p1) {
+		this.p1 = p1;
 	}
 
 	public int getType() {
@@ -69,7 +49,7 @@ public class OriLineProxy {
 
 	@Override
 	public String toString() {
-		return "OriLineProxy [x0=" + x0 + ", y0=" + y0 + ", x1=" + x1 + ", y1=" + y1 + ", type=" + type + "]";
+		return "OriLineProxy [p0=" + p0 + ", p1=" + p1 + ", type=" + type + "]";
 	}
 
 }

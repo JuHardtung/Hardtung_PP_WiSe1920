@@ -1,6 +1,7 @@
 package origrammer.geometry;
 
 import javax.swing.JLabel;
+import javax.vecmath.Vector2d;
 
 public class OriPicSymbol {
 
@@ -14,8 +15,7 @@ public class OriPicSymbol {
 	
 	public JLabel label = new JLabel();
 	private int type = TYPE_NONE;
-	public double xPos;
-	public double yPos;
+	private Vector2d position;
 	private int width;
 	private int height;
 	private double scale = 0;
@@ -26,10 +26,17 @@ public class OriPicSymbol {
 		
 	}
 	
-	public OriPicSymbol(double x, double y, int type) {
-		xPos = x;
-		yPos = y;
+	public OriPicSymbol(Vector2d position, int type) {
+		this.position = position;
 		this.type = type;
+	}
+	
+	public OriPicSymbol(Vector2d position, int width, int height, double scale, double degrees) {
+		this.position = position;
+		this.width = width;
+		this.height = height;
+		this.scale = scale;
+		this.degrees = degrees;
 	}
 
 	public JLabel getLabel() {
@@ -63,21 +70,29 @@ public class OriPicSymbol {
 	public void setType(int type) {
 		this.type = type;
 	}
+	
+//	public double getxPos() {
+//		return xPos;
+//	}
+//
+//	public void setxPos(double xPos) {
+//		this.xPos = xPos;
+//	}
+//
+//	public double getyPos() {
+//		return yPos;
+//	}
+//
+//	public void setyPos(double yPos) {
+//		this.yPos = yPos;
+//	}
 
-	public double getxPos() {
-		return xPos;
+	public Vector2d getPosition() {
+		return position;
 	}
 
-	public void setxPos(double xPos) {
-		this.xPos = xPos;
-	}
-
-	public double getyPos() {
-		return yPos;
-	}
-
-	public void setyPos(double yPos) {
-		this.yPos = yPos;
+	public void setPosition(Vector2d position) {
+		this.position = position;
 	}
 
 	public int getWidth() {

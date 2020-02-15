@@ -26,13 +26,17 @@ public class OriEqualDistSymbol {
 		this.dividerCount = dividerCount;
 	}
 	
+	public OriEqualDistSymbol(Vector2d p0, Vector2d p1, double translationDist, int dividerCount) {
+		this.p0 = p0;
+		this.p1 = p1;
+		this.translationDist = translationDist;
+		this.dividerCount = dividerCount;
+	}
+	
 	public ArrayList<Shape> getShapesForDrawing() {
-
 		ArrayList<Shape> shapes = new ArrayList<>();
-
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		Vector2d nv = GeometryUtil.getNormalVector(uv);
-		
 		Vector2d p0Pos = getP0Pos();
 		double dist = GeometryUtil.Distance(p0, p1);
 		double trans = dist/dividerCount;
@@ -62,7 +66,6 @@ public class OriEqualDistSymbol {
 		}
 		return shapes;
 	}
-	
 	
 	public Vector2d getP0Pos() {
 		Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(p0, p1));

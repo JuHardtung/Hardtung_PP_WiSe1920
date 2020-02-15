@@ -1,12 +1,11 @@
 package origrammer;
-import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -49,10 +47,8 @@ import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.util.SVGConstants;
 import org.apache.commons.io.FileUtils;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import origrammer.geometry.*;
+
 public class MainScreen extends JPanel 
 		implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ComponentListener {
 	
@@ -80,10 +76,8 @@ public class MainScreen extends JPanel
 	private OriEqualDistSymbol selectedCandidateEDS = null;
 	private OriEqualAnglSymbol selectedCandidateEAS = null;
 	private OriPleatCrimpSymbol selectedCandidatePleat = null;
-	private OriLeader selectedCandidateLeader = null;
-	private OriRepetitionBox selectedCandidateRepeBox = null;
-	private OriLeader tmpLeader = new OriLeader();
-	private OriRepetitionBox tmpRepetitionBox = new OriRepetitionBox();
+	private OriLeaderBox selectedCandidateLeader = null;
+	private OriLeaderBox tmpLeader = new OriLeaderBox();
 	
 	private boolean dispGrid = true;
 	//Affine transformation info
@@ -154,7 +148,7 @@ public class MainScreen extends JPanel
     	
     	for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
     		//render lines according to their LINE_TYPE
-    		switch(line.type) {
+    		switch(line.getType()) {
     		case OriLine.TYPE_VALLEY:
     			g2d.setColor(Config.LINE_COLOR_VALLEY);
     			g2d.setStroke(Config.STROKE_VALLEY);
@@ -188,7 +182,7 @@ public class MainScreen extends JPanel
     			g2d.setColor(Config.LINE_COLOR_SELECTED);
     			g2d.setStroke(Config.STROKE_SELECTED);
     		}
-    		g2d.draw(new Line2D.Double(line.p0.x, line.p0.y, line.p1.x, line.p1.y));
+    		g2d.draw(new Line2D.Double(line.getP0().x, line.getP0().y, line.getP1().x, line.getP1().y));
     	}
        
        //RENDER ALL ARROWS
@@ -231,7 +225,7 @@ public class MainScreen extends JPanel
     	   int newSymbolLabelHeight = (int) Math.round(bimg.getHeight()/2*s.getScale());
     	   s.setWidth(newSymbolLabelWidth);
     	   s.setHeight(newSymbolLabelHeight);
-    	   s.getLabel().setSize(s.getWidth(), s.getHeight());
+    	   s.getLabel().setBounds((int) s.getPosition().x, (int) s.getPosition().y, s.getWidth(), s.getHeight());
     	   
     	   Image dimg = bimg.getScaledInstance(s.getLabel().getWidth(), s.getLabel().getHeight(), Image.SCALE_SMOOTH);
     	   ImageIcon symbolImageIcon = new ImageIcon(dimg);
@@ -254,10 +248,7 @@ public class MainScreen extends JPanel
 	   
 	   
 	   //RENDER ALL LEADERS
-	   renderAllOriLeaders();
-
-	   //RENDER ALL REPETITION BOXES
-	   renderAllOriRepetitionBoxes();
+	   renderAllOriLeaderBoxes();
 	   
 	   //RENDER ALL ORI_GEOM_SYMBOLS
 	   renderAllOriGeomSymbols();
@@ -279,8 +270,8 @@ public class MainScreen extends JPanel
     	   g2d.setColor(Color.BLACK);
     	   double vertexDrawSize = 3.0;
     	   for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-    		   Vector2d v0 = line.p0;
-    		   Vector2d v1 = line.p1;
+    		   Vector2d v0 = line.getP0();
+    		   Vector2d v1 = line.getP1();
     		   g2d.fill(new Rectangle2D.Double(v0.x - vertexDrawSize / scale,
     				   v0.y - vertexDrawSize / scale, vertexDrawSize * 2 / scale,
     				   vertexDrawSize * 2 / scale));
@@ -360,8 +351,8 @@ public class MainScreen extends JPanel
     		   g2d.setColor(Color.MAGENTA);
     		   
     		   for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).crossLines) {
-    			   Vector2d v0 = line.p0;
-    			   Vector2d v1 = line.p1;
+    			   Vector2d v0 = line.getP0();
+    			   Vector2d v1 = line.getP1();
     			   
     			   g2d.draw(new Line2D.Double(v0.x, v0.y, v1.x, v1.y));
     		   }
@@ -422,8 +413,8 @@ public class MainScreen extends JPanel
        }   
     }
     
-    private void renderAllOriLeaders() {
- 	   for (OriLeader l : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+    private void renderAllOriLeaderBoxes() {
+ 	   for (OriLeaderBox l : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
  		   
  		   if (l.isSelected() || selectedCandidateLeader == l) {
      		   g2d.setColor(Config.LINE_COLOR_SELECTED);
@@ -434,27 +425,32 @@ public class MainScreen extends JPanel
      		   g2d.setStroke(Config.STROKE_EDGE);
  			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
  		   }
+ 		   
+ 		   if (l.getType() == OriLeaderBox.TYPE_LEADER) {
+ 			   l.getLabel().setBorder(BorderFactory.createEmptyBorder());
+ 		   }
+ 		   
  		   add(l.getLabel());
-     	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
+     	   g2d.draw(new Line2D.Double(l.line.getP0().x, l.line.getP0().y, l.line.getP1().x, l.line.getP1().y));
  	   }
     }
     
-    private void renderAllOriRepetitionBoxes() {
-	   for (OriRepetitionBox l : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-		   
-		   if (l.isSelected() || selectedCandidateRepeBox == l) {
-    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-    		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
-		   } else {
-			   g2d.setColor(Config.LINE_COLOR_EDGE);
-    		   g2d.setStroke(Config.STROKE_EDGE);
-			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
-		   }
-		   add(l.getLabel());
-    	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
-	   }
-    }
+//    private void renderAllOriRepetitionBoxes() {
+//	   for (OriRepetitionBox l : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
+//		   
+//		   if (l.isSelected() || selectedCandidateRepeBox == l) {
+//    		   g2d.setColor(Config.LINE_COLOR_SELECTED);
+//    		   g2d.setStroke(Config.STROKE_EDGE);
+//    		   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, Color.GREEN, getBackground().brighter()));
+//		   } else {
+//			   g2d.setColor(Config.LINE_COLOR_EDGE);
+//    		   g2d.setStroke(Config.STROKE_EDGE);
+//			   l.getLabel().setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
+//		   }
+//		   add(l.getLabel());
+//    	   g2d.draw(new Line2D.Double(l.line.p0.x, l.line.p0.y, l.line.p1.x, l.line.p1.y));
+//	   }
+//    }
     
     private void renderAllOriGeomSymbols() {
 	   for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
@@ -621,7 +617,7 @@ public class MainScreen extends JPanel
     	selectedCandidateA = null;
     	selectedCandidateLeader = null;
     	selectedCandidatePS = null;
-    	tmpLeader = new OriLeader();
+    	tmpLeader = new OriLeaderBox();
     	crossPoints.clear();    	
     }
     
@@ -791,15 +787,15 @@ public class MainScreen extends JPanel
     	Vector2d minPosition = new Vector2d();
     	
     	for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-    		double dist0 = p.distance(line.p0.x, line.p0.y);
+    		double dist0 = p.distance(line.getP0().x, line.getP0().y);
     		if(dist0 < minDistance) {
     			minDistance = dist0;
-    			minPosition.set(line.p0);
+    			minPosition.set(line.getP0());
     		}
-    		double dist1 = p.distance(line.p1.x, line.p1.y);
+    		double dist1 = p.distance(line.getP1().x, line.getP1().y);
     		if (dist1 < minDistance) {
     			minDistance = dist1;
-    			minPosition.set(line.p1);
+    			minPosition.set(line.getP1());
     		}
     	}
     	
@@ -830,7 +826,7 @@ public class MainScreen extends JPanel
     	OriLine bestLine = null;
     	
     	for(OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-    		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), line.p0, line.p1);
+    		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), line.getP0(), line.getP1());
     		if (dist < minDistance) {
     			minDistance = dist;
     			bestLine = line;
@@ -878,15 +874,15 @@ public class MainScreen extends JPanel
     	}
     }
     
-    private OriLeader pickLeader(Point2D.Double p) {
+    private OriLeaderBox pickLeader(Point2D.Double p) {
     	double minDistance = Double.MAX_VALUE;
-    	OriLeader bestLeader = null;
-    	for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+    	OriLeaderBox bestLeader = null;
+    	for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
     		
     		if (GeometryUtil.isMouseOverRectangle(p, leader.getLabel().getBounds())) {
     			return leader;
     		} else {
-        		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), leader.line.p0, leader.line.p1);
+        		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), leader.line.getP0(), leader.line.getP1());
         		if (dist < minDistance) {
         			minDistance = dist;
         			bestLeader = leader;
@@ -896,30 +892,6 @@ public class MainScreen extends JPanel
     	
     	if (minDistance / scale < 10) {
     		return bestLeader;
-    	} else {
-    		return null;
-    	}
-    }
-    
-    private OriRepetitionBox pickRepetitionBox(Point2D.Double p) {
-    	double minDistance = Double.MAX_VALUE;
-    	OriRepetitionBox bestRepetitionBox = null;
-    	for (OriRepetitionBox repe : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-    		
-    		
-    		if (GeometryUtil.isMouseOverRectangle(p, repe.getLabel().getBounds())) {
-    			return repe;
-    		} else {
-        		double dist = GeometryUtil.DistancePointToSegment(new Vector2d(p.x, p.y), repe.line.p0, repe.line.p1);
-        		if (dist < minDistance) {
-        			minDistance = dist;
-        			bestRepetitionBox = repe;
-        		}
-    		}
-    	}
-    	
-    	if (minDistance / scale < 10) {
-    		return bestRepetitionBox;
     	} else {
     		return null;
     	}
@@ -1042,15 +1014,15 @@ public class MainScreen extends JPanel
 		}		
 	}
 	
-	private void createLeader(Point2D.Double clickPoint) {
+	private void createLeaderBox(Point2D.Double clickPoint) {
 		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
 		if (firstSelectedV == null) {
 			firstSelectedV = tmp;
 		} else if (secondSelectedV == null) {
 			Rectangle tmpRect = new Rectangle();
 			secondSelectedV = tmp;
-			tmpLeader.line.p0 = firstSelectedV;
-			tmpLeader.line.p1 = secondSelectedV;
+			tmpLeader.line.setP0(firstSelectedV);
+			tmpLeader.line.setP1(secondSelectedV);
 			tmpLeader.setText(Origrammer.mainFrame.uiTopPanel.inputLeaderText.getText());
 			tmpLeader.setSelected(false);
 			
@@ -1063,72 +1035,30 @@ public class MainScreen extends JPanel
 				double width =  labelBounds.getWidth()+10;
 				double height = labelBounds.getHeight();
 				
-				if (tmpLeader.line.p0.y < tmpLeader.line.p1.y) {
-					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
+				if (tmpLeader.line.getP0().y < tmpLeader.line.getP1().y) {
+					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
 						//bottom right
-						tmpRect.setRect(tmpLeader.line.p1.x, tmpLeader.line.p1.y+1, width, height+2);
+						tmpRect.setRect(tmpLeader.line.getP1().x, tmpLeader.line.getP1().y+1, width, height+2);
 					} else {
 						//bottom left
-						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y+1, width, height+2);
+						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y+1, width, height+2);
 					}
 				} else {
-					if (tmpLeader.line.p0.x < tmpLeader.line.p1.x) {
+					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
 						//top right
-						tmpRect.setRect(tmpLeader.line.p1.x+1, tmpLeader.line.p1.y-height, width, height+2);
+						tmpRect.setRect(tmpLeader.line.getP1().x+1, tmpLeader.line.getP1().y-height, width, height+2);
 					} else {
 						//top left
-						tmpRect.setRect(tmpLeader.line.p1.x-width+1, tmpLeader.line.p1.y-height, width, height+2);
+						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y-height, width, height+2);
 					}
 				}
 				tmpLeader.setPosition(tmpRect);
-				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
-			}
-			
-			firstSelectedV = null;
-			secondSelectedV = null;
-		}
-	}
-	
-	private void createRepetitionBox(Point2D.Double clickPoint) {
-		Vector2d tmp = new Vector2d(clickPoint.x, clickPoint.y);
-		if (firstSelectedV == null) {
-			firstSelectedV = tmp;
-		} else if (secondSelectedV == null) {
-			Rectangle tmpRect = new Rectangle();
-			secondSelectedV = tmp;
-			tmpRepetitionBox.line.p0 = firstSelectedV;
-			tmpRepetitionBox.line.p1 = secondSelectedV;
-			tmpRepetitionBox.setText(Origrammer.mainFrame.uiTopPanel.inputRepetitionText.getText());
-			tmpRepetitionBox.setSelected(false);
-						
-			if (tmpRepetitionBox.getLabel().getText().length() == 0) {
-				JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyRepetitionTextField"),
-						"Error_EmptyRepetitionTextField", 
-						JOptionPane.ERROR_MESSAGE);
-			} else {
-				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpRepetitionBox.getLabel().getText(), g2d);
-				double width =  labelBounds.getWidth()+10;
-				double height = labelBounds.getHeight();
-				
-				if (tmpRepetitionBox.line.p0.y < tmpRepetitionBox.line.p1.y) {
-					if (tmpRepetitionBox.line.p0.x < tmpRepetitionBox.line.p1.x) {
-						//bottom right
-						tmpRect.setRect(tmpRepetitionBox.line.p1.x, tmpRepetitionBox.line.p1.y+1, width, height+2);
-					} else {
-						//bottom left
-						tmpRect.setRect(tmpRepetitionBox.line.p1.x-width+1, tmpRepetitionBox.line.p1.y+1, width, height+2);
-					}
-				} else {
-					if (tmpRepetitionBox.line.p0.x < tmpRepetitionBox.line.p1.x) {
-						//top right
-						tmpRect.setRect(tmpRepetitionBox.line.p1.x+1, tmpRepetitionBox.line.p1.y-height, width, height+2);
-					} else {
-						//top left
-						tmpRect.setRect(tmpRepetitionBox.line.p1.x-width+1, tmpRepetitionBox.line.p1.y-height, width, height+2);
-					}
+				if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
+					tmpLeader.setType(OriLeaderBox.TYPE_LEADER);
+				} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
+					tmpLeader.setType(OriLeaderBox.TYPE_REPETITION);
 				}
-				tmpRepetitionBox.setPosition(tmpRect);
-				Origrammer.diagram.steps.get(Globals.currentStep).addRepetitionBox(tmpRepetitionBox);
+				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
 			}
 			
 			firstSelectedV = null;
@@ -1289,7 +1219,7 @@ public class MainScreen extends JPanel
 		}
 		
 		//select OriLeader or unselect all OriLeader if clicked on nothing
-		OriLeader leader = pickLeader(clickPoint);
+		OriLeaderBox leader = pickLeader(clickPoint);
 		if (leader != null) {
 			if (!leader.isSelected()) {
 				leader.setSelected(true);
@@ -1298,18 +1228,6 @@ public class MainScreen extends JPanel
 			}
 		} else {
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllLeaders();
-		}
-		
-		//select OriRepetitionBox or unselect all OriRepetitionBoxs if clicked on nothing
-		OriRepetitionBox repe = pickRepetitionBox(clickPoint);
-		if (repe != null) {
-			if (!repe.isSelected()) {
-				repe.setSelected(true);
-			} else if (!isPressedOverSymbol) {
-				repe.setSelected(false);
-			}
-		} else {
-			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllRepetitionBoxes();
 		}
 		
 		//select OriPicSymbol or unselect all OriPicSymbols if clicked on nothing
@@ -1391,7 +1309,7 @@ public class MainScreen extends JPanel
 		//MEASURE LENGTH (OriLine.v0 - OriLine.v1)
 		OriLine l = pickLine(clickPoint);
 		if (v == null && l != null) {
-			double length = GeometryUtil.measureLength(l.p0, l.p1);
+			double length = GeometryUtil.measureLength(l.getP0(), l.getP1());
 			Origrammer.mainFrame.uiSidePanel.measureLengthTF.setValue(length);;
 			firstSelectedL = null;
 		}
@@ -1470,7 +1388,7 @@ public class MainScreen extends JPanel
 						if (l != null) {
 							v = new Vector2d();
 							Vector2d cp = new Vector2d(clickPoint.x, clickPoint.y);
-							GeometryUtil.DistancePointToSegment(cp, l.p0, l.p1, v);
+							GeometryUtil.DistancePointToSegment(cp, l.getP0(), l.getP1(), v);
 						}
 					}
 				}
@@ -1487,11 +1405,10 @@ public class MainScreen extends JPanel
 				createTriangleInsector(clickPoint);
 			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
-			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
-				createLeader(clickPoint);
-			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
-				createRepetitionBox(clickPoint);
-			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER ||
+					Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
+				createLeaderBox(clickPoint);
+			}else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
 				createEqualDistSymbol(clickPoint);
 			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL) {
 				createEqualAnglSymbol(clickPoint);
@@ -1576,8 +1493,9 @@ public class MainScreen extends JPanel
 			int type = Globals.inputSymbolType;
 			double xPos = (double) (preMousePoint.getX()-400) / scale;
 			double yPos = (double) (preMousePoint.getY()-400) / scale;
+			Vector2d pos = new Vector2d(xPos, yPos);
 			preMousePoint = e.getPoint();
-			tmpOriSymbol = new OriPicSymbol(xPos, yPos, type);
+			tmpOriSymbol = new OriPicSymbol(pos, type);
 
 			//get correct Symbol Image
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriSymbol);
@@ -1597,8 +1515,8 @@ public class MainScreen extends JPanel
 			tmpSymbolLabel.setIcon(symbolImageIcon);
 			//set bounds of tmpArowLabel
 			tmpOriSymbol.setLabel(tmpSymbolLabel);
-			tmpOriSymbol.getLabel().setBounds((int) tmpOriSymbol.getxPos(), 
-					(int) tmpOriSymbol.getyPos(), 
+			tmpOriSymbol.getLabel().setBounds((int) tmpOriSymbol.getPosition().x, 
+					(int) tmpOriSymbol.getPosition().y, 
 					(int) tmpOriSymbol.getWidth(),
 					(int) tmpOriSymbol.getHeight());
 			repaint();
@@ -1637,7 +1555,7 @@ public class MainScreen extends JPanel
 				}
 			}
 
-			OriLeader pickedLeader = pickLeader(affineMouseDraggingPoint);
+			OriLeaderBox pickedLeader = pickLeader(affineMouseDraggingPoint);
 			if (pickLeader(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 
@@ -1647,29 +1565,10 @@ public class MainScreen extends JPanel
 					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
 					preMousePoint = e.getPoint();
 
-					for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+					for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
 						//if selected, move to new position
 						if (leader.isSelected()) {
 							leader.moveBy(xTrans, yTrans);
-						}
-					}
-				}
-			}
-
-			OriRepetitionBox pickedRepetition = pickRepetitionBox(affineMouseDraggingPoint);
-			if (pickRepetitionBox(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
-				isMovingSymbols = true;
-
-				if (pickedRepetition != null) {
-
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
-					preMousePoint = e.getPoint();
-
-					for (OriRepetitionBox repe : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-						//if selected, move to new position
-						if (repe.isSelected()) {
-							repe.moveBy(xTrans, yTrans);
 						}
 					}
 				}
@@ -1686,10 +1585,11 @@ public class MainScreen extends JPanel
 					for (OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 						//if selected, move to new position
 						if (symbol.isSelected()) {
-							int newX = (int) Math.round(symbol.getxPos() + xTrans);
-							int newY = (int) Math.round(symbol.getyPos() + yTrans);
-							symbol.setxPos(newX);
-							symbol.setyPos(newY);
+							int newX = (int) Math.round(symbol.getPosition().x + xTrans);
+							int newY = (int) Math.round(symbol.getPosition().y + yTrans);
+							
+							Vector2d newPos = new Vector2d(newX, newY);
+							symbol.setPosition(newPos);
 							symbol.getLabel().setBounds(newX, newY, 
 									(int) Math.round(symbol.getWidth() * symbol.getScale()), 
 									(int) Math.round(symbol.getHeight() * symbol.getScale()));
@@ -1762,7 +1662,7 @@ public class MainScreen extends JPanel
 						if (l != null) {
 							selectedCandidateV = new Vector2d();
 							Vector2d cp = new Vector2d(currentMousePointLogic.x, currentMousePointLogic.y);
-							GeometryUtil.DistancePointToSegment(cp,  l.p0, l.p1, selectedCandidateV);
+							GeometryUtil.DistancePointToSegment(cp,  l.getP0(), l.getP1(), selectedCandidateV);
 						}
 					}
 				}
@@ -1789,15 +1689,9 @@ public class MainScreen extends JPanel
 				repaint();
 			}
 
-			OriLeader preLeader = selectedCandidateLeader;
+			OriLeaderBox preLeader = selectedCandidateLeader;
 			selectedCandidateLeader = pickLeader(currentMousePointLogic);
 			if (preLeader != selectedCandidateLeader) {
-				repaint();
-			}
-
-			OriRepetitionBox preRepeBox = selectedCandidateRepeBox;
-			selectedCandidateRepeBox = pickRepetitionBox(currentMousePointLogic);
-			if (preRepeBox != selectedCandidateRepeBox) {
 				repaint();
 			}
 
@@ -1868,16 +1762,9 @@ public class MainScreen extends JPanel
 				repaint();
 			}
 			
-			OriLeader pickedLeader = pickLeader(currentMousePointLogic);
+			OriLeaderBox pickedLeader = pickLeader(currentMousePointLogic);
 			if (pickedLeader != null) {
 				pickedLeader.setSelected(true);
-				isPressedOverSymbol = true;
-				repaint();
-			}
-			
-			OriRepetitionBox pickedRepeBox = pickRepetitionBox(currentMousePointLogic);
-			if (pickedRepeBox != null) {
-				pickedRepeBox.setSelected(true);
 				isPressedOverSymbol = true;
 				repaint();
 			}
@@ -1949,7 +1836,8 @@ public class MainScreen extends JPanel
 			double yPos = 0;
 			xPos += (double) (preMousePoint.getX()-400) / scale;
 			yPos += (double) (preMousePoint.getY()-400) / scale;
-			Origrammer.diagram.steps.get(Globals.currentStep).addPicSymbol(new OriPicSymbol(xPos, yPos, type));
+			Vector2d pos = new Vector2d(xPos, yPos);
+			Origrammer.diagram.steps.get(Globals.currentStep).addPicSymbol(new OriPicSymbol(pos, type));
 			//get last added OriSymbol
 			OriPicSymbol symbol = Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.get(Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.size()-1);
 			//get correct Symbol Image
@@ -1969,8 +1857,8 @@ public class MainScreen extends JPanel
 			symbolLabel.setIcon(symbolImageIcon);
 			//set bounds of symbolLabel
 			symbol.setLabel(symbolLabel);
-			symbol.getLabel().setBounds((int)symbol.getxPos(), 
-					(int)symbol.getyPos(), 
+			symbol.getLabel().setBounds((int)symbol.getPosition().x, 
+					(int)symbol.getPosition().y, 
 					(int) Math.round(symbol.getWidth()*symbol.getScale()), 
 					(int) Math.round(symbol.getHeight()*symbol.getScale()));
 			repaint();		
@@ -2022,7 +1910,7 @@ public class MainScreen extends JPanel
 		
 			//Check if there is a line in the selection rectangle
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-				Line2D tmpL = new Line2D.Double(l.p0.x, l.p0.y, l.p1.x, l.p1.y);
+				Line2D tmpL = new Line2D.Double(l.getP0().x, l.getP0().y, l.getP1().x, l.getP1().y);
 				if (tmpL.intersects(selectRect)) {
 					l.setSelected(true);
 				} else {
@@ -2052,8 +1940,8 @@ public class MainScreen extends JPanel
 			
 			//Check if there is a symbol in the selection rectangle
 			for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
-				Rectangle tmpR2 = new Rectangle((int) Math.round(s.getxPos()), 
-						(int) Math.round(s.getyPos()), s.getWidth(), s.getHeight());
+				Rectangle tmpR2 = new Rectangle((int) Math.round(s.getPosition().x), 
+						(int) Math.round(s.getPosition().y), s.getWidth(), s.getHeight());
 				if (tmpR2.intersects(selectRect)) {
 					s.setSelected(true);
 				} else {
@@ -2072,10 +1960,11 @@ public class MainScreen extends JPanel
 			}
 			
 			//Check if there is a leader in the selection rectangle
-			for (OriLeader leader : Origrammer.diagram.steps.get(Globals.currentStep).leader) {
+			for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
 
 				Rectangle tmpR3 = leader.getLabel().getBounds();
-				Line2D tmpL2 = new Line2D.Double(leader.line.p0.x, leader.line.p0.y, leader.line.p1.x, leader.line.p1.y);
+				Line2D tmpL2 = new Line2D.Double(leader.line.getP0().x, leader.line.getP0().y, 
+												leader.line.getP1().x, leader.line.getP1().y);
 
 				if (tmpR3.intersects(selectRect)) {
 					leader.setSelected(true);
@@ -2083,21 +1972,6 @@ public class MainScreen extends JPanel
 					leader.setSelected(true);
 				} else {
 					leader.setSelected(false);
-				}
-			}
-			
-			//Check if there is a repetitionBox in the selection rectangle
-			for (OriRepetitionBox repe : Origrammer.diagram.steps.get(Globals.currentStep).repetitionBoxes) {
-
-				Rectangle tmpR4 = repe.getLabel().getBounds();
-				Line2D tmpL3 = new Line2D.Double(repe.line.p0.x, repe.line.p0.y, repe.line.p1.x, repe.line.p1.y);
-
-				if (tmpR4.intersects(selectRect)) {
-					repe.setSelected(true);
-				} else if (tmpL3.intersects(selectRect)) {
-					repe.setSelected(true);
-				} else {
-					repe.setSelected(false);
 				}
 			}
 			
