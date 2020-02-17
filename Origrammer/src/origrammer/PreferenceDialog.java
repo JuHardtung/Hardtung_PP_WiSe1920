@@ -6,6 +6,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -27,8 +28,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	private JComboBox<String> outsideReverseCB = new JComboBox<>(outsideReverseOptions);
 	private JComboBox<String> rabbitEarCB = new JComboBox<>(rabbitEarOptions);
 	
-	private JTextField recPaperWidthTF;
-	private JTextField recPaperHeightTF;
+	private JCheckBox isColoredLines = new JCheckBox();
 
 	private JButton applyButton = new JButton(Origrammer.res.getString("Pref_applyButton"));
 	private JButton okButton = new JButton(Origrammer.res.getString("Pref_okButton"));
@@ -36,7 +36,6 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 	private JPanel jContentPane = null;
 	
 	JButton button;
-	JColorChooser colorChooser;
 	JPanel preferencePanel;
 	MainScreen __screen;
 	
@@ -71,7 +70,13 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 				rabbitEarCB.setSelectedIndex(0);
 			} else if (Globals.rabbitEarStyle == Constants.RabbitEarStyle.BAOM_BAOM_BAOM) {
 				rabbitEarCB.setSelectedIndex(1);
-			}			
+			}
+			
+			if (Globals.dispColoredLines) {
+				isColoredLines.setSelected(true);
+			} else {
+				isColoredLines.setSelected(false);
+			}
 
 			applyButton.addActionListener(this);
 			okButton.addActionListener(this);
@@ -87,6 +92,9 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			JLabel rabbitEarLabel = new JLabel("Rabbit Ear Style: ", JLabel.TRAILING);
 			rabbitEarLabel.setLabelFor(rabbitEarCB);
 			
+			JLabel isColoredLinesLabel = new JLabel("Use colored Lines: ", JLabel.TRAILING);
+			isColoredLinesLabel.setLabelFor(isColoredLines);
+			
 			preferencePanel = new JPanel();
 			SpringLayout preferenceLayout = new SpringLayout();
 
@@ -97,9 +105,11 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			preferencePanel.add(outsideReverseCB);
 			preferencePanel.add(rabbitEarLabel);
 			preferencePanel.add(rabbitEarCB);
+			preferencePanel.add(isColoredLinesLabel);
+			preferencePanel.add(isColoredLines);
 
 			preferencePanel.setLayout(preferenceLayout);
-			SpringUtilities.makeCompactGrid(preferencePanel, 3, 2, 6, 6, 6, 6);
+			SpringUtilities.makeCompactGrid(preferencePanel, 4, 2, 6, 6, 6, 6);
 			
 		
 			JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -162,9 +172,7 @@ public class PreferenceDialog extends JDialog implements ActionListener, Compone
 			Globals.rabbitEarStyle = Constants.RabbitEarStyle.BAOM_BAOM_BAOM;
 		}
 		
-		Globals.DEFAULT_PAPER_COLOR = colorChooser.getSelectionModel().getSelectedColor();
-		Origrammer.diagram.recPaperWidth = Integer.parseInt(recPaperWidthTF.getText());
-		Origrammer.diagram.recPaperHeight = Integer.parseInt(recPaperHeightTF.getText());
+		Globals.dispColoredLines = isColoredLines.isSelected();
 		__screen.repaint();
 	}
 	

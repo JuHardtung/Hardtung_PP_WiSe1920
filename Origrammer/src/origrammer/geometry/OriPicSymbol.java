@@ -8,10 +8,9 @@ public class OriPicSymbol {
 	
 	final public static int TYPE_NONE = 0;
 	final public static int TYPE_ROTATION = 1;
-	final public static int TYPE_XRAY_CIRCLE = 2;
-	final public static int TYPE_HOLD = 3;
-	final public static int TYPE_HOLD_AND_PULL = 4;
-	final public static int TYPE_NEXT_VIEW_HERE = 5;
+	final public static int TYPE_HOLD = 2;
+	final public static int TYPE_HOLD_AND_PULL = 3;
+	final public static int TYPE_NEXT_VIEW_HERE = 4;
 	
 	public JLabel label = new JLabel();
 	private int type = TYPE_NONE;
@@ -70,22 +69,6 @@ public class OriPicSymbol {
 	public void setType(int type) {
 		this.type = type;
 	}
-	
-//	public double getxPos() {
-//		return xPos;
-//	}
-//
-//	public void setxPos(double xPos) {
-//		this.xPos = xPos;
-//	}
-//
-//	public double getyPos() {
-//		return yPos;
-//	}
-//
-//	public void setyPos(double yPos) {
-//		this.yPos = yPos;
-//	}
 
 	public Vector2d getPosition() {
 		return position;

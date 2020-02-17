@@ -872,40 +872,28 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				
 				if (inputSymbol == "Leader") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.LEADER;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Repetition Box") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.REPETITION_BOX;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Equal Distances") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_DIST;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Equal Angles") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.EQUAL_ANGL;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Rotations") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.ROTATIONS;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_ROTATION;
 				} else if (inputSymbol == "X-Ray Circle") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.X_RAY_CIRCLE;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_XRAY_CIRCLE;
 				} else if (inputSymbol == "Fold over and over") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.FOLD_OVER_AND_OVER;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Next View Here") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.NEXT_VIEW;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NEXT_VIEW_HERE;
 				} else if (inputSymbol == "Hold Here") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_HOLD;
 				} else if (inputSymbol == "Hold Here and Pull") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.HOLD_HERE_AND_PULL;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_HOLD_AND_PULL;
 				} else if (inputSymbol == "Crimping & Pleating") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.CRIMPING_PLEATING;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				} else if (inputSymbol == "Sinks") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.SINKS;
-					Globals.inputSymbolType = OriPicSymbol.TYPE_NONE;
 				}
 				modeChanged();
 			}

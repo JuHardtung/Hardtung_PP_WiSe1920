@@ -68,10 +68,8 @@ public class NewFileDialog  extends JDialog implements ActionListener, Component
 	JLabel faceUpLabel = new JLabel("Face Up:");
 	JLabel faceDownLabel = new JLabel("Face Down:");
 	
-	//JLabel faceUpColor = new JLabel();
 	JButton faceUpColor = new JButton();
 	JButton switchColors = new JButton("Switch");
-	//JLabel faceDownColor = new JLabel();
 	JButton faceDownColor = new JButton();
 
 	private JButton okButton = new JButton(Origrammer.res.getString("Pref_okButton"));

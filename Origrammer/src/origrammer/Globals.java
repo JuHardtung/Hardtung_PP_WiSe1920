@@ -26,10 +26,9 @@ public class Globals {
 	public static boolean dispVertex = true;
 	public static boolean dispFilledFaces = true;
 	public static boolean bDispCrossLine = false;
+	public static boolean dispColoredLines = false;
 	public static int inputLineType = OriLine.TYPE_VALLEY;
 	public static int inputArrowType = OriArrow.TYPE_VALLEY;
-	public static int inputSymbolType = OriPicSymbol.TYPE_NONE;
-	//TODO: remove either inputSymbolType or inputSymbolMode to make things straight forward
 	
 	public static int currentStep = 0;
 	

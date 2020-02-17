@@ -91,7 +91,6 @@ public class Step {
 			lines.add(l1);
 			lines.add(l2);
 			lines.add(l3);
-			
 		}
 
 	}

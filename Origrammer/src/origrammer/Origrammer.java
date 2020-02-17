@@ -1,5 +1,6 @@
 package origrammer;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -25,11 +26,11 @@ public class Origrammer {
 		
 		res = ResourceBundle.getBundle("origrammer.StringResource", Locale.ENGLISH);
 		
-		TITLE = Origrammer.res.getString("Title") + "  v0.01";
+		TITLE = Origrammer.res.getString("Title") + "  v1.00";
 		
 		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
 		//TODO: get the real faceUp and faceDown Colors
-		diagram = new Diagram(size, Globals.DEFAULT_PAPER_COLOR, Globals.DEFAULT_PAPER_COLOR); 
+		diagram = new Diagram(size, Color.WHITE, Globals.DEFAULT_PAPER_COLOR); 
 		step = new Step();
 		diagram.steps.add(step);
 		Globals.newStepOptions = Constants.NewStepOptions.COPY_LAST_STEP;
