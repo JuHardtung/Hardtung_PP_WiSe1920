@@ -86,7 +86,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		pack();
 		setVisible(true);
-        setTitle("Origrammer Alpha v0.01");
+        setTitle("Origrammer v1.00");
         
         //setSize(1010, 800);
         setLocationRelativeTo(null);

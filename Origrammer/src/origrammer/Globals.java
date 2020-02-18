@@ -31,6 +31,7 @@ public class Globals {
 	public static int inputArrowType = OriArrow.TYPE_VALLEY;
 	
 	public static int currentStep = 0;
+	public static double SCALE = 1.0;
 	
 	public static Color DEFAULT_PAPER_COLOR = new Color(133, 133, 133);
 

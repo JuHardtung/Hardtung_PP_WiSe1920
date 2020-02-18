@@ -12,6 +12,8 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -25,6 +27,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
+import javax.swing.text.PlainDocument;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 
@@ -58,6 +63,13 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	private JButton gridDoubleButton = new JButton(Origrammer.res.getString("UI_gridDouble"));
 	private JButton gridSetButton = new JButton(Origrammer.res.getString("UI_gridSet"));
 	private JFormattedTextField gridTextField;
+	
+	//SCALING
+	public JFormattedTextField scalingCustomTF;
+	private JLabel percentLabel = new JLabel("%");
+	private JButton scalingCustomButton = new JButton("Set");
+	private JButton scalingMinus = new JButton("-");
+	private JButton scalingPlus = new JButton("+");
 	
 	private JCheckBox dispVerticesCB = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
 	private JCheckBox dispFilledFacedCB = new JCheckBox(Origrammer.res.getString("UI_ShowFilledFaces"), true);
@@ -114,6 +126,11 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		gridDoubleButton.addActionListener(this);
 		gridSetButton.addActionListener(this);
 		
+		//SCALING ActionListener
+		scalingCustomButton.addActionListener(this);
+		scalingMinus.addActionListener(this);
+		scalingPlus.addActionListener(this);
+		
 		//DISPL VERTICES ActionListener
 		dispVerticesCB.addActionListener(this);
 		dispVerticesCB.setSelected(true);
@@ -143,7 +160,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		add(lineInputPanel);
 		
 
-		
 		//MEASURING OPTIONS Panel and positioning
 		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
 		
@@ -192,6 +208,46 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		//gridPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Grid"));
 		add(gridPanel);
 		
+		//SCALING Panel and positioning
+		scalingCustomTF = new JFormattedTextField(new DecimalFormat("###.#"));
+     
+		scalingCustomTF.setColumns(4);
+		scalingCustomTF.setValue(100);
+		scalingCustomTF.setHorizontalAlignment(JTextField.RIGHT);
+		PlainDocument docScalingCustom = (PlainDocument) scalingCustomTF.getDocument();
+		docScalingCustom.setDocumentFilter(new IntFilter());
+		
+		
+		JPanel scalingCustomPanel = new JPanel();
+		scalingCustomPanel.add(scalingCustomTF);
+		scalingCustomPanel.add(percentLabel);
+		scalingCustomPanel.add(scalingCustomButton);
+		//scalingCustomPanel.setLayout(new BoxLayout(scalingCustomPanel, BoxLayout.LINE_AXIS));
+		
+		JPanel scalingButtonsPanel = new JPanel();
+		scalingButtonsPanel.add(scalingMinus);
+		scalingButtonsPanel.add(scalingPlus);
+
+		//scalingButtonsPanel.setLayout(new BoxLayout(scalingButtonsPanel, BoxLayout.LINE_AXIS));
+		JPanel scalingCustom = new JPanel();
+		scalingCustom.add(scalingCustomTF);
+		scalingCustom.add(percentLabel);
+		
+		
+		JPanel scalingPanel = new JPanel();
+		scalingPanel.add(scalingCustom);
+		scalingPanel.add(scalingCustomButton);
+		scalingPanel.add(scalingMinus);
+		scalingPanel.add(scalingPlus);
+
+		scalingPanel.setLayout(new GridLayout(2, 2, 5, 5));
+		
+		scalingPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Scaling"));
+		
+		add(scalingPanel);
+		
+		
+		
 		//Buttons Panel and positioning
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(dispVerticesCB);
@@ -221,6 +277,22 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			modeChanged();
 		} else if (e.getSource() == fillToolRB) {
 			Globals.toolbarMode = Constants.ToolbarMode.FILL_TOOL;
+			modeChanged();
+		} else if (e.getSource() == scalingCustomButton) {
+			
+			double newScale = Double.parseDouble(scalingCustomTF.getText());
+			if (newScale < 1000 && newScale > 0) {
+				Globals.SCALE = newScale/100;
+				screen.repaint();
+			} else {
+				scalingCustomTF.setValue(Globals.SCALE*100);
+			}
+			
+		} else if (e.getSource() == scalingMinus) {
+			Globals.SCALE -= 0.1;
+			modeChanged();
+		} else if (e.getSource() == scalingPlus) {
+			Globals.SCALE += 0.1;
 			modeChanged();
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
 				&& e.getSource() == lineInputTwoVerticesRB) {
@@ -302,6 +374,8 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		} else {
 			measureOptionsPanel.setVisible(false);		
 		}
+		
+		scalingCustomTF.setValue(Globals.SCALE*100);
 		
 		uiTopPanel.modeChanged();
 		screen.modeChanged();

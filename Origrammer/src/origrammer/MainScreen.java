@@ -57,7 +57,7 @@ public class MainScreen extends JPanel
 	private Point2D preMousePoint;
 	private Point2D currentMouseDraggingPoint = null;
 	private Point2D.Double currentMousePointLogic = new Point2D.Double();
-	private double scale;
+	//private double Globals.SCALE;
 	private double transX;
 	private double transY;
 	
@@ -106,7 +106,7 @@ public class MainScreen extends JPanel
 		addMouseWheelListener(this);
 		addComponentListener(this);
 		
-		scale = 1.0;
+		Globals.SCALE = 1.0;
 		setBackground(Color.white);
 		setPreferredSize(new Dimension(800, 800));
 		setLayout(null);
@@ -219,20 +219,20 @@ public class MainScreen extends JPanel
        
        if (secondSelectedV != null) {
     	   g2d.setColor(Color.RED);
-    	   g2d.fill(new Rectangle2D.Double(secondSelectedV.x - 5.0 / scale,
-    			   secondSelectedV.y - 5.0 / scale, 10.0 / scale, 10.0 / scale));
+    	   g2d.fill(new Rectangle2D.Double(secondSelectedV.x - 5.0 / Globals.SCALE,
+    			   secondSelectedV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
        }
        
        if (thirdSelectedV != null) {
     	   g2d.setColor(Color.RED);
-    	   g2d.fill(new Rectangle2D.Double(thirdSelectedV.x - 5.0 / scale,
-    			   thirdSelectedV.y - 5.0 / scale, 10.0 / scale, 10.0 / scale));
+    	   g2d.fill(new Rectangle2D.Double(thirdSelectedV.x - 5.0 / Globals.SCALE,
+    			   thirdSelectedV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
        }
        
        if (selectedCandidateV != null) {
     	   g2d.setColor(Color.GREEN);
-    	   g2d.fill( new Rectangle2D.Double(selectedCandidateV.x - 5.0 / scale,
-    			   selectedCandidateV.y - 5.0 / scale, 10.0 / scale, 10.0 / scale));
+    	   g2d.fill( new Rectangle2D.Double(selectedCandidateV.x - 5.0 / Globals.SCALE,
+    			   selectedCandidateV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
        }
        
        //draw RECTANGULAR selection
@@ -349,8 +349,8 @@ public class MainScreen extends JPanel
      		   g2d.setColor(Config.LINE_COLOR_EDGE);
      	   }
      	   
-     	   g2d.fill(new Rectangle2D.Double(firstSelectedV.x - 5.0 / scale,
-     			   firstSelectedV.y - 5.0 / scale, 10.0 / scale, 10.0 / scale));
+     	   g2d.fill(new Rectangle2D.Double(firstSelectedV.x - 5.0 / Globals.SCALE,
+     			   firstSelectedV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
      	   
      	   if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
          	   if (Globals.lineEditMode == Constants.LineInputMode.INPUT_LINE) {
@@ -494,12 +494,12 @@ public class MainScreen extends JPanel
      	   for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
      		   Vector2d v0 = line.getP0();
      		   Vector2d v1 = line.getP1();
-     		   g2d.fill(new Rectangle2D.Double(v0.x - vertexDrawSize / scale,
-     				   v0.y - vertexDrawSize / scale, vertexDrawSize * 2 / scale,
-     				   vertexDrawSize * 2 / scale));
-     		   g2d.fill(new Rectangle2D.Double(v1.x - vertexDrawSize / scale,
-     				   v1.y - vertexDrawSize / scale, vertexDrawSize * 2 / scale,
-     				   vertexDrawSize * 2 / scale));
+     		   g2d.fill(new Rectangle2D.Double(v0.x - vertexDrawSize / Globals.SCALE,
+     				   v0.y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
+     				   vertexDrawSize * 2 / Globals.SCALE));
+     		   g2d.fill(new Rectangle2D.Double(v1.x - vertexDrawSize / Globals.SCALE,
+     				   v1.y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
+     				   vertexDrawSize * 2 / Globals.SCALE));
      	   }
         }
     }
@@ -624,7 +624,7 @@ public class MainScreen extends JPanel
     //update the AffineTransform
     private void updateAffineTransform(Graphics2D g2d) {
     	affineTransform.setToTranslation(getWidth()*0.5+transX, getHeight()*0.5+transY);
-    	affineTransform.scale(scale, scale);
+    	affineTransform.scale(Globals.SCALE, Globals.SCALE);
         //affineTransform.setToTranslation(Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_PAPER_SIZE);
     	g2d.transform(affineTransform);
     }
@@ -811,7 +811,7 @@ public class MainScreen extends JPanel
     		}
     	}
     	
-    	if (minDistance < 10.0 / scale) {
+    	if (minDistance < 10.0 / Globals.SCALE) {
     		return minPosition;
     	} else {
     		return null;
@@ -830,7 +830,7 @@ public class MainScreen extends JPanel
     		}
     	}
     	
-    	if (minDistance / scale < 10) {
+    	if (minDistance / Globals.SCALE < 10) {
     		return bestLine;
     	} else {
     		return null;
@@ -887,7 +887,7 @@ public class MainScreen extends JPanel
     		}
     	}
     	
-    	if (minDistance / scale < 10) {
+    	if (minDistance / Globals.SCALE < 10) {
     		return bestLeader;
     	} else {
     		return null;
@@ -1344,6 +1344,7 @@ public class MainScreen extends JPanel
 	//############## MOUSE LISTENER ##############
 	//############################################
 	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//if right clicked, remove any selected vertices
@@ -1434,17 +1435,17 @@ public class MainScreen extends JPanel
 				(e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 			//scale diagram with CTRL + dragging mouse
 			double moved = e.getX() - preMousePoint.getX() + e.getY() - preMousePoint.getY();
-			scale += moved / 150.0;
-			if (scale < 0.01) {
-				scale = 0.01;
+			Globals.SCALE += moved / 150.0;
+			if (Globals.SCALE < 0.01) {
+				Globals.SCALE = 0.01;
 			}
 			preMousePoint = e.getPoint();
 			updateAffineTransform(g2d);
 			repaint();
 		} else if ((e.getModifiers() & MouseEvent.BUTTON3_MASK) != 0) {
 			//translate diagram with right click + dragging mouse
-			transX += (double) (e.getX() - preMousePoint.getX()) / scale;
-			transY += (double) (e.getY() - preMousePoint.getY()) / scale;
+			transX += (double) (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+			transY += (double) (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 			preMousePoint = e.getPoint();
 			updateAffineTransform(g2d);
 			repaint();
@@ -1453,8 +1454,8 @@ public class MainScreen extends JPanel
 			//ADD new OriArrow on MousePoint
 			isReleased = false;
 			int type = Globals.inputArrowType;
-			double xPos = (double) (preMousePoint.getX()-400) / scale;
-			double yPos = (double) (preMousePoint.getY()-400) / scale;
+			double xPos = (double) (preMousePoint.getX()-400) / Globals.SCALE;
+			double yPos = (double) (preMousePoint.getY()-400) / Globals.SCALE;
 			preMousePoint = e.getPoint();
 			tmpOriArrow = new OriArrow(new Vector2d(xPos, yPos), type);
 
@@ -1500,8 +1501,8 @@ public class MainScreen extends JPanel
 			} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.NEXT_VIEW) {
 				type = OriPicSymbol.TYPE_NEXT_VIEW_HERE;
 			}
-			double xPos = (double) (preMousePoint.getX()-400) / scale;
-			double yPos = (double) (preMousePoint.getY()-400) / scale;
+			double xPos = (double) (preMousePoint.getX()-400) / Globals.SCALE;
+			double yPos = (double) (preMousePoint.getY()-400) / Globals.SCALE;
 			Vector2d pos = new Vector2d(xPos, yPos);
 			preMousePoint = e.getPoint();
 			tmpOriSymbol = new OriPicSymbol(pos, type);
@@ -1547,8 +1548,8 @@ public class MainScreen extends JPanel
 				isMovingSymbols = true;
 				if (pickedArrow != null) {
 
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 						//if selected, move to new position
@@ -1570,8 +1571,8 @@ public class MainScreen extends JPanel
 
 				if (pickedLeader != null) {
 
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 
 					for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
@@ -1588,8 +1589,8 @@ public class MainScreen extends JPanel
 				isMovingSymbols = true;
 				if (pickedSymbol != null) {
 
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 						//if selected, move to new position
@@ -1612,8 +1613,8 @@ public class MainScreen extends JPanel
 				isMovingSymbols = true;
 				if (pickedGeomSymbol != null) {
 
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 						//if selected, move to new position
@@ -1631,8 +1632,8 @@ public class MainScreen extends JPanel
 				isMovingSymbols = true;
 				if (pickedPleatSymbol != null) {
 
-					double xTrans = (e.getX() - preMousePoint.getX()) / scale;
-					double yTrans = (e.getY() - preMousePoint.getY()) / scale;
+					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriPleatCrimpSymbol p : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 						//if selected, move to new position
@@ -1808,8 +1809,8 @@ public class MainScreen extends JPanel
 			int type = Globals.inputArrowType;
 			double xPos = 0;
 			double yPos = 0;
-			xPos += (double) (preMousePoint.getX()-400) / scale;
-			yPos += (double) (preMousePoint.getY()-400) / scale;
+			xPos += (double) (preMousePoint.getX()-400) / Globals.SCALE;
+			yPos += (double) (preMousePoint.getY()-400) / Globals.SCALE;
 			Origrammer.diagram.steps.get(Globals.currentStep).addArrow(new OriArrow(new Vector2d(xPos, yPos), type));
 			//get last added OriArrow
 			OriArrow arrow = Origrammer.diagram.steps.get(Globals.currentStep).arrows.get(Origrammer.diagram.steps.get(Globals.currentStep).arrows.size()-1);
@@ -1855,8 +1856,8 @@ public class MainScreen extends JPanel
 			}
 			double xPos = 0;
 			double yPos = 0;
-			xPos += (double) (preMousePoint.getX()-400) / scale;
-			yPos += (double) (preMousePoint.getY()-400) / scale;
+			xPos += (double) (preMousePoint.getX()-400) / Globals.SCALE;
+			yPos += (double) (preMousePoint.getY()-400) / Globals.SCALE;
 			Vector2d pos = new Vector2d(xPos, yPos);
 			Origrammer.diagram.steps.get(Globals.currentStep).addPicSymbol(new OriPicSymbol(pos, type));
 			//get last added OriSymbol
@@ -2079,7 +2080,23 @@ public class MainScreen extends JPanel
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		//zoom on diagram with mouseWheel
 		double scale_ = (100.0 - e.getWheelRotation() * 5) / 100.0;
-		scale *= scale_;
+		Globals.SCALE *= scale_;
+		
+		
+//		double newScale = Double.parseDouble(Origrammer.mainFrame.uiSidePanel.scalingCustomTF.set());
+//		if (newScale < 1000 && newScale > 0) {
+//			Globals.SCALE = newScale/100;
+//			screen.repaint();
+//		} else {
+//			scalingCustomTF.setValue(Globals.SCALE*100);
+//		}
+		
+		
+		Origrammer.mainFrame.uiSidePanel.scalingCustomTF.setValue(Globals.SCALE*100);
+		
+		
+		
+		
 		//updateAffineTransform(g2d);
 		repaint();
 	}

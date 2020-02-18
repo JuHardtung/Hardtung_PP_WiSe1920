@@ -35,7 +35,6 @@ class PointComparatorY implements Comparator<Object> {
 
 public class Step {
 	
-	public ArrayList<OriLine> crossLines = new ArrayList<>();
 	public ArrayList<OriLine> lines = new ArrayList<>();
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
@@ -62,38 +61,62 @@ public class Step {
 	
 	public void initFirstStep() {
 		
-		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
-			//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
-			OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0, size/2.0, OriLine.TYPE_EDGE);
-			OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0, -size/2.0, OriLine.TYPE_EDGE);
-			OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0, -size/2.0, OriLine.TYPE_EDGE);
-			OriLine l3 = new OriLine(-size/2.0, -size/2.0, -size/2.0, size/2.0, OriLine.TYPE_EDGE);
-			lines.add(l0);
-			lines.add(l1);
-			lines.add(l2);
-			lines.add(l3);
-		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
-			double width = Origrammer.diagram.recPaperWidth;
-			double height = Origrammer.diagram.recPaperHeight;
-			double ratio = 0;
-			
-			if (width > height) {
-				ratio =  height / width;
-			} else {
-				ratio = width / height;
-			}
-			
-			OriLine l0 = new OriLine(-size/2.0, size/2.0*ratio, size/2.0,  size/2.0*ratio, OriLine.TYPE_EDGE);
-			OriLine l1 = new OriLine(size/2.0, size/2.0*ratio, size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
-			OriLine l2 = new OriLine(size/2.0, -size/2.0*ratio, -size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
-			OriLine l3 = new OriLine(-size/2.0, -size/2.0*ratio, -size/2.0,size/2.0*ratio, OriLine.TYPE_EDGE);
-			lines.add(l0);
-			lines.add(l1);
-			lines.add(l2);
-			lines.add(l3);
-		}
+		lines.addAll(getEdgeLines());
 
 	}
+	
+	public ArrayList<OriLine> getEdgeLines() {
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
+			return getSquareEdgeLines();
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			return getRectEdgeLines();
+		} else {
+			return null;
+		}
+	}
+	
+	public ArrayList<OriLine> getSquareEdgeLines() {
+		ArrayList<OriLine> newLines = new ArrayList<>();
+		
+		OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0, size/2.0, OriLine.TYPE_EDGE);
+		OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0, -size/2.0, OriLine.TYPE_EDGE);
+		OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0, -size/2.0, OriLine.TYPE_EDGE);
+		OriLine l3 = new OriLine(-size/2.0, -size/2.0, -size/2.0, size/2.0, OriLine.TYPE_EDGE);
+		newLines.add(l0);
+		newLines.add(l1);
+		newLines.add(l2);
+		newLines.add(l3);
+		return newLines;
+	}
+	
+	
+	public ArrayList<OriLine> getRectEdgeLines() {
+		ArrayList<OriLine> newLines = new ArrayList<>();
+		
+		double width = Origrammer.diagram.recPaperWidth;
+		double height = Origrammer.diagram.recPaperHeight;
+		double ratio = 0;
+		
+		if (width > height) {
+			ratio =  height / width;
+		} else {
+			ratio = width / height;
+		}
+		
+		OriLine l0 = new OriLine(-size/2.0, size/2.0*ratio, size/2.0,  size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l1 = new OriLine(size/2.0, size/2.0*ratio, size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l2 = new OriLine(size/2.0, -size/2.0*ratio, -size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l3 = new OriLine(-size/2.0, -size/2.0*ratio, -size/2.0,size/2.0*ratio, OriLine.TYPE_EDGE);
+		newLines.add(l0);
+		newLines.add(l1);
+		newLines.add(l2);
+		newLines.add(l3);
+		
+		return newLines;
+	}
+	
+	
 	
 	/**Adds a new OriLine and checks for intersections with others
 	 * 
@@ -551,7 +574,7 @@ public class Step {
 
 	@Override
 	public String toString() {
-		return "Step [crossLines=" + crossLines + ", lines=" + lines + ", vertices=" + vertices + ", arrows=" + arrows
+		return "Step [lines=" + lines + ", vertices=" + vertices + ", arrows=" + arrows
 				+ ", stepDescription=" + stepDescription + ", stepNumber=" + stepNumber + "]";
 	}
 	
