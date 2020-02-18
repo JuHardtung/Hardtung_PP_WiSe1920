@@ -26,8 +26,6 @@ public class OriArrow {
 	private int type = TYPE_NONE;
 	private boolean isSelected;
 
-
-
 	private JLabel arrowLabel = new JLabel();
 	
 	

@@ -154,15 +154,42 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 						tmpArrow.setWidth(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getWidth());
 						tmpArrow.setHeight(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getHeight());
 						tmpArrow.setType(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getType());
-						tmpArrow.setScale(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getAdjustedScale());
+						tmpArrow.setScale(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getScale());
 						tmpArrow.setDegrees(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getDegrees());
 						tmpArrow.setSelected(Origrammer.diagram.steps.get(prevStep).arrows.get(i).isSelected());
 						tmpArrow.setLabel(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getLabel());
 
 						newStep.arrows.add(tmpArrow);
 					}
-					//TODO: include every symbol
-
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).filledFaces.size(); i++) {
+						newStep.filledFaces.add(Origrammer.diagram.steps.get(prevStep).filledFaces.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).leaderBoxSymbols.size(); i++) {
+						newStep.leaderBoxSymbols.add(Origrammer.diagram.steps.get(prevStep).leaderBoxSymbols.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).picSymbols.size(); i++) {
+						newStep.picSymbols.add(Origrammer.diagram.steps.get(prevStep).picSymbols.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).geomSymbols.size(); i++) {
+						newStep.geomSymbols.add(Origrammer.diagram.steps.get(prevStep).geomSymbols.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).equalDistSymbols.size(); i++) {
+						newStep.equalDistSymbols.add(Origrammer.diagram.steps.get(prevStep).equalDistSymbols.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).equalAnglSymbols.size(); i++) {
+						newStep.equalAnglSymbols.add(Origrammer.diagram.steps.get(prevStep).equalAnglSymbols.get(i));
+					}
+					
+					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).pleatCrimpSymbols.size(); i++) {
+						newStep.pleatCrimpSymbols.add(Origrammer.diagram.steps.get(prevStep).pleatCrimpSymbols.get(i));
+					}
+					
 					
 				} else if (newBaseShapeStep.isSelected()) {
 					//new step with previously chosen paper shape
