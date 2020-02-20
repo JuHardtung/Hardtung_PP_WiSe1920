@@ -4,49 +4,60 @@
 \label{sec:conventions}
 
 
-In order to define the concrete requirements of the planned diagramming program, all commonly used diagramming symbols and conventions have to be collected and categorized. After that groundwork a plan can be established on how to implement these findings in a desktop application.
-
-The very fundamentals of Origami diagramming were developed and proposed by Akira Yoshizawa in his book \emph{Atarashi Origami Geijutsu (New Origami Art)}\cite{Yoshizawa} in 1954, which introduced a system of folding notation. Yoshizawas diagramming system is still widely used today and most commonly known as the  \emph{Yoshizawa–Randlett system}.
-
-Despite its high popularity, different nuances and slight changes were made by different origami diagrammers.  To avoid further confusion, especially for beginners, american physicist and origami artist Robert J. Lang compiled notations that were in use by different folders and proposed a standard for all different folding sequences. In order to support his claims, Lang sent \enquote{a questionnaire to 25 diagrammers around the world}\cite{Lang} and tried to coherently argue in favour of, or against the various results.
-
+In order to define the concrete requirements of the planned diagramming program, all commonly used diagramming symbols and conventions have to be collected and categorized. After that groundwork a plan can be established on how to implement these findings in a desktop application.\\
+The very fundamentals of Origami diagramming were developed and proposed by Akira Yoshizawa in his book \emph{Atarashi Origami Geijutsu (New Origami Art)}\cite{Yoshizawa} in 1954, which introduced a system of folding notation. Yoshizawas diagramming system is still widely used today and after refining by Samuel Randlett and Robert Harbin most commonly known as the \emph{Yoshizawa–Randlett system}.\\
+Despite its high popularity, different nuances and slight changes were made by different origami diagrammers over the years.  To avoid further confusion, especially for beginners, american physicist and origami artist Robert J. Lang compiled notations that were in use by different folders and proposed a standard for all different folding sequences. In order to support his claims, Lang sent \enquote{a questionnaire to 25 diagrammers around the world}\cite{Lang} and tried to coherently argue in favour of, or against the various results.\\
 Langs efforts were made under the assumption, that \enquote{[...] unless there is pressing reason otherwise, we should use the standard notation developed by Yoshizawa} \cite{Lang}.\\
-
-To start off we have to define what exact components a diagram consists of. 
-Most importantly, there always is a visual representation of the paper in the current step. This representation should show all or most creases, flaps, edges and layers to accurately show how the actual paper model would look like (see Section \ref{sec:generalRules} on exceptions).
+\\
+To start off we have to define what exact components a diagram consists of. Most importantly, there always is a visual representation of the paper in the current step. This representation should show all or most creases, flaps, edges and layers to accurately show how the actual paper model would look like (see Section \ref{sec:generalRules} on exceptions).\\
 Secondly, there has to be a description of the actual folding sequence for one step. This description is comprised of a textual explanation and a visual display of the step with the diagramming symbols (Section \ref{sec:notation}). Both the verbal and the visual instructions should be able to stand for themselves, although that might not always be possible for complex steps. More detailed rules and specific terms for the verbal instructions are described on Section \ref{sec:generalRules}.
 
-\subsection{General diagramming rules}
+\subsection{General Diagramming Rules}
 \label{sec:generalRules}
 These following rules are general factors to keep in mind when creating origami diagrams. Some aspects here are not necessarily fulfilled by a specific feature within the planned program, but rather depend on the experience of the designer.\\
-
-\textbf{Be consistent}
-	
+\\
+\textbf{Be consistent}\\
 For consistency's sake the artist should stick with one notation within a diagram. One example would be the different ways to symbolize a \gls{mountainFold}. These folds can either be drawn by a \emph{dash dot} line or by a \emph{dash dot dot} line.\\
-	
-\textbf{Use the right origami grammar}
-
+\\
+\textbf{Use the right origami grammar}\\
 As earlier established there should be an explanatory text for each folding step. But in order to precisely and clearly describe a fold you must use a consistent grammar. An important rule is defined by R. Lang: \enquote{origami nouns are not hyphenated, but verbs are} \cite{Lang}. This means that one \emph{reverse-folds} a flap into the interior but on the other hand flattens out a reverse fold.
 Furthermore one should capitalize only those origami moves that \enquote{ [...] incorporate names, such as Elias-stretch (verb) or Elias stretch (noun) [...]} \cite{Lang}. The common origami bases like the Bird Base, Waterbomb Base or other are to be entirely capitalized.\\
-
-\textbf{Distort the model to show all the layers}
-
-Slightly distorting the model to show otherwise hidden layers might be one of the most important general rules, as this one aspect increases the readability and clarity of a diagram hugely.\\
-	
-\textbf{Creases should not contact the edges}
-
- that the creases end upon; DO touch edges that they go under\\
-	
-\textbf{Show one white and one colored side of the paper}
-	
-When using different coloured sides for the paper in a diagram\\
-	
-\textbf{Enlarging the model in a step}
-
- with a circle or just by common sense with good diagrams\\
-	
-\textbf{Correct numbering of steps}
-
+\\
+\textbf{Distort the model to show all the layers}\\
+Slightly distorting the model to show otherwise hidden layers might be one of the most important general rules, as this one aspect hugely increases the readability and clarity of a diagram.\\
+\\
+\textbf{Creases should not contact the edges}\\
+Already existing creases from previous steps should not contact the edges of the paper (see Figure \ref{fig:creasesTouchEdge}). The only exception is when the creases go under a layer of paper. In this case the line that represents the crease does touch the edge of the upper layer.\\
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{CreasesTouchEdge1}
+        \caption{Folds made}
+        \label{fig:creasesTouchEdge1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{CreasesTouchEdge2}
+        \caption{Wrong way}
+        \label{fig:creasesTouchEdge2}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{CreasesTouchEdge3}
+        \caption{Correct way}
+        \label{fig:creasesTouchEdge3}
+    \end{subfigure}
+    \caption{Correct way to draw existing creases}\label{fig:creasesTouchEdge}
+\end{figure*}
+\\
+\textbf{Show one white and one colored side of the paper}\\
+When using different coloured sides for the paper, the artist can create clearer diagrams. Especially once the instructions get more complex, every additional reference point is helpful.\\
+\\
+\textbf{Enlarging the model in a step}\\
+Enlarging the view on a model in a specific step can be accomplished by two methods. The first method mentioned by Lang is marking the area of focus with a circle before enlarging the view. This is especially helpful when focusing on smaller parts during shaping, such as the head. Alternatively the model can simply be enlarged, \enquote{because if you've drawn the diagrams neatly, it is obvious when the drawing has changed scale (and most people won't notice it, anyhow)} \cite{Lang}.\\
+ \\
+ \textbf{Show the result of complex folding steps}\\
+When giving complex folding instructions for a single step (especially when these folds get unfolded in the next step), one should always show the result of said folding sequence. Even though this approach may seem counterproductive as it increases the workload, but once again, the goal is to maximize clarity and remove any ambiguity when creating origami diagrams.\\
+\\
+\textbf{Correct numbering of steps}\\
  1,2,3,4 and 1a,1b,1c to explain hard steps (ony to elaborate on a single step)\\
 
 \newpage
@@ -59,7 +70,6 @@ As there are quite a few simple and self-explanatory symbols, there will only be
 \label{sec:folds}
 
 Starting with the very basics in origami, there has to be a differentiation between the types of folds. Generally, there are 2 different kinds, namely the \gls{valleyFold} and \gls{mountainFold}, which are shown in Figure \ref{fig:valleyFold} and Figure \ref{fig:mountainFold} respectively. Additionally the so called \gls{x-rayLine} is shown in Figure \ref{fig:x-rayLine}. Even though it is not a real fold, it was added here to show the three different forms a line can be drawn in origami diagrams. In order to indicate what kind of fold the X-Ray line is representing, you should extend the line past the paper and use a valley fold or mountain fold line.
-
 \begin{figure*}[h]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
@@ -79,16 +89,14 @@ Starting with the very basics in origami, there has to be a differentiation betw
     \end{subfigure}
     \caption{Different Lines in Origami Diagramming}\label{fig:origamiLines}
 \end{figure*}
-
+\\
 Important for the displaying of lines is, that they don't start or end with a gap. This method ensures that there isn't any ambiguity on what reference points are needed for the fold.
-
 
 \subsubsection{Arrows}
 \label{sec:arrows}
 
 In order to show the folding steps unambiguously, there have to be arrows that indicate the direction the paper has to be folded. Showing only a valley or mountain fold leaves room for interpretation, which gets eliminated by the addition of these specific arrows. In origami diagramming there are two groups, the \gls{arrowsOfMotion} and \gls{arrowsOfAction}.
 While the arrows of motion describe where the paper is folded to, the arrows of action indicate an action perfomed on the paper itself.
-
 \begin{figure*}[h]
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
@@ -109,6 +117,7 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
     \caption{Arrows of Motion}
     \label{fig:arrowsOfMotion}
 \end{figure*}
+\\
 The unfolding arrow can either stand alone and signalize an unfolding action, or be combined with a valley/mountain fold and indicate a folding and unfolding procedure.
 \begin{figure*}[h]
 	\centering
@@ -149,7 +158,7 @@ The unfolding arrow can either stand alone and signalize an unfolding action, or
 
 \newpage
 
-\subsubsection{Clarifying diagrams}
+\subsubsection{Clarifying Diagrams}
 
 \textbf{Leader}
 \begin{figure}[h]
@@ -174,7 +183,8 @@ The unfolding arrow can either stand alone and signalize an unfolding action, or
 	\includegraphics[width=0.3\textwidth]{EqualAngles}
 	\caption{Equal Angles}
 	\label{fig:equalAngles}
-\end{figure}\\
+\end{figure}
+\newpage
 %
 \textbf{Rotations }
 \begin{figure}[h]
@@ -184,7 +194,6 @@ The unfolding arrow can either stand alone and signalize an unfolding action, or
 	\caption{Rotation Symbol}
 	\label{fig:rotation}
 \end{figure}\\
-\newpage
 %
 \textbf{X-Ray View}
 \begin{figure}[h]
@@ -211,8 +220,7 @@ For complicated repetitions you should show the result of the first fold that is
 	\caption{Repetition Box}
 	\label{fig:repeatBox}
 \end{figure}\\
-The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to be repeated and how many times.
-\newpage
+The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to be repeated and how many times.\newpage
 \textbf{Next view here}
 \begin{figure}[h]
 	\centering
@@ -220,8 +228,8 @@ The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to
 	\import{./images/}{NextViewHere.pdf_tex}
 	\caption{Next View Here}
 	\label{fig:nextViewHere}
-\end{figure}\\
-%
+\end{figure}
+\\
 \textbf{Hold here}
 \begin{figure}[h]
 	\centering
@@ -236,29 +244,27 @@ The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to
 Lang gives two valid methods to visualize a \gls{rabbitEar}. While Figure \ref{fig:rabbitEarA} technically shows the more accurate format (according to the previously defined rules in Section \ref{sec:generalRules}), method B (see Figure \ref{fig:rabbitEarB}) is also desireable, as it shows the overall motion of the paper.
 \begin{figure*}[h]
     \centering
-    \begin{subfigure}[b]{0.4\textwidth}
+    \begin{subfigure}[b]{0.27\textwidth}
         \includegraphics[width=\textwidth]{RabbitEarA}
-        \caption{Rabbit Ear Method A}
+        \caption{Rabbit Ear A}
         \label{fig:rabbitEarA}
     \end{subfigure}
-    \begin{subfigure}[b]{0.52\textwidth}
+    \begin{subfigure}[b]{0.35\textwidth}
         \includegraphics[width=\textwidth]{RabbitEarB}
-        \caption{Rabbit Ear Method B}
+        \caption{Rabbit Ear B}
         \label{fig:rabbitEarB}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.33\textwidth}
+	\includegraphics[width=\textwidth]{RabbitEarResult}
+	\caption{Rabbit Ear Result}
+	\label{fig:rabbitEarResult}
     \end{subfigure}
     \caption{Both methods show a rabbit ear fold}
     \label{fig:rabbitEarMethods}
 \end{figure*}
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\textwidth]{RabbitEarResult}
-	\caption{Rabbit Ear Result}
-	\label{fig:rabbitEarResult}
-\end{figure}\\
-\newpage
+\\
 \textbf{Reverse Folds}\\
 Although Lang proposes two valid notations for outside reverse folds, for consistency's sake Method A should be used (see Figure \ref{fig:outsideReverseFoldA}).
-
 \begin{figure*}[h]
 	\centering
 	\begin{subfigure}[b]{0.3\textwidth}
@@ -279,8 +285,8 @@ Although Lang proposes two valid notations for outside reverse folds, for consis
 	\caption{Different reverse folds}
 	\label{fig:reverseFoldMethods}
 \end{figure*}
-
-\textbf{Crimping and Pleating}\\
+\newpage
+\textbf{Crimping and Pleating}
 \begin{figure*}
 	\centering
 	\begin{subfigure}[h]{0.49\textwidth}
@@ -294,8 +300,8 @@ Although Lang proposes two valid notations for outside reverse folds, for consis
 		\label{fig:pleating}
 	\end{subfigure}
 \end{figure*}
-
-\textbf{Sinks}\\
+\\
+\textbf{Sinks}
 \begin{figure*}
 	\centering
 	\begin{subfigure}[h]{0.49\textwidth}
