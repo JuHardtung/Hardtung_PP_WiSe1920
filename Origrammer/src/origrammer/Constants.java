@@ -10,16 +10,21 @@ public class Constants {
 		CHANGE_LINE_TYPE
 	};
 	
+	public static enum VertexInputMode {
+		NONE,
+		ABSOLUTE,
+		FRACTION_OF_LINE
+	}
+	
 	public static enum ToolbarMode {
 		NONE,
 		SELECTION_TOOL,
 		INPUT_LINE,
+		INPUT_VERTEX,
 		INPUT_ARROW,
 		INPUT_SYMBOL,
 		MEASURE_TOOL,
-		FILL_TOOL,
-		ADD_VERTEX,
-		DELETE_VERTEX
+		FILL_TOOL
 	}
 	
 	public static enum InputSymbolMode {

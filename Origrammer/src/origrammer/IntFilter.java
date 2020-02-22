@@ -62,7 +62,8 @@ public class IntFilter extends DocumentFilter {
 		if (test(sb.toString())) {
 			super.remove(fb, offset, length);
 		} else {
-			System.out.println("paperSize can't be null (can't remove last digit)");
+			super.replace(fb, offset, length, "0", null);
+			System.out.println("paperSize can't be null (can't remove last digit, but replaced it with 0)");
 		}
 
 	}

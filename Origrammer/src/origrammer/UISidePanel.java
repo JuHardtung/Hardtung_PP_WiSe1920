@@ -12,8 +12,6 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -27,14 +25,13 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import javax.swing.text.PlainDocument;
 
 public class UISidePanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {	
 
 	public JRadioButton selectionToolRB = new JRadioButton(Origrammer.res.getString("UI_selectionTool"), false);
 	private JRadioButton lineInputToolRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTool"), true);
+	private JRadioButton vertexInputToolRB = new JRadioButton(Origrammer.res.getString("UI_vertexInputTool"), false);
 	private JRadioButton arrowInputToolRB = new JRadioButton(Origrammer.res.getString("UI_arrowInputTool"), false);
 	private JRadioButton symbolInputToolRB = new JRadioButton(Origrammer.res.getString("UI_symbolInputTool"), false);
 
@@ -53,9 +50,16 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	public JFormattedTextField measureAngleTF;
 	
 	//INPUT LINE MODE
+	public 	JPanel lineInputPanel = new JPanel();
 	private JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
 	private JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
 	private ButtonGroup lineInputGroup;
+	
+	//INPUT VERTEX MODE
+	public 	JPanel vertexInputPanel = new JPanel();
+	private JRadioButton vertexInputAbsoluteRB = new JRadioButton(Origrammer.res.getString("UI_vertexInputAbsolute"), true);
+	private JRadioButton vertexInputFractionOfLineRB = new JRadioButton(Origrammer.res.getString("UI_vertexInputFractionOfLine"), false);
+	private ButtonGroup vertexInputGroup;
 	
 	//Grid
 	public JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
@@ -86,6 +90,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		//TOOLBAR Button Group
 		toolbarGroup = new ButtonGroup();
 		toolbarGroup.add(lineInputToolRB);
+		toolbarGroup.add(vertexInputToolRB);
 		toolbarGroup.add(arrowInputToolRB);
 		toolbarGroup.add(symbolInputToolRB);
 		toolbarGroup.add(fillToolRB);
@@ -96,6 +101,11 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		lineInputGroup = new ButtonGroup();
 		lineInputGroup.add(lineInputTwoVerticesRB);
 		lineInputGroup.add(lineInputIncenterRB);
+		
+		//VERTEX INPUT ButtonGroup
+		vertexInputGroup = new ButtonGroup();
+		vertexInputGroup.add(vertexInputAbsoluteRB);
+		vertexInputGroup.add(vertexInputFractionOfLineRB);
 				
 		//MEASURE Button Group
 		measureGroup = new ButtonGroup();
@@ -105,6 +115,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		//TOOLBAR ActionListener
 		selectionToolRB.addActionListener(this);
 		lineInputToolRB.addActionListener(this);
+		vertexInputToolRB.addActionListener(this);
 		arrowInputToolRB.addActionListener(this);
 		symbolInputToolRB.addActionListener(this);
 		measureToolRB.addActionListener(this);
@@ -113,6 +124,10 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		//LINE INPUT ActionListener
 		lineInputTwoVerticesRB.addActionListener(this);
 		lineInputIncenterRB.addActionListener(this);
+		
+		//VERTEX INPUT ActionListener
+		vertexInputAbsoluteRB.addActionListener(this);
+		vertexInputFractionOfLineRB.addActionListener(this);
 		
 		//MEASURE OPTIONS ActionListener
 		measureLengthRB.addActionListener(this);
@@ -145,20 +160,25 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		JPanel toolbarPanel = new JPanel();
 		toolbarPanel.add(selectionToolRB);
 		toolbarPanel.add(lineInputToolRB);
+		toolbarPanel.add(vertexInputToolRB);
 		toolbarPanel.add(arrowInputToolRB);
 		toolbarPanel.add(symbolInputToolRB);
 		toolbarPanel.add(measureToolRB);
 		toolbarPanel.add(fillToolRB);
-		toolbarPanel.setLayout(new GridLayout(6, 1, 10, 2));
+		toolbarPanel.setLayout(new GridLayout(7, 1, 10, 2));
 		add(toolbarPanel);
 		
 		//LINE INPUT Panel and positioning
-		JPanel lineInputPanel = new JPanel();
 		lineInputPanel.add(lineInputTwoVerticesRB);
 		lineInputPanel.add(lineInputIncenterRB);
 		lineInputPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(lineInputPanel);
 		
+		//VERTEX INPUT Panel and positioning
+		vertexInputPanel.add(vertexInputAbsoluteRB);
+		vertexInputPanel.add(vertexInputFractionOfLineRB);
+		vertexInputPanel.setLayout(new GridLayout(2, 1, 10, 2));
+		add(vertexInputPanel);
 
 		//MEASURING OPTIONS Panel and positioning
 		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
@@ -247,7 +267,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		add(scalingPanel);
 		
 		
-		
 		//Buttons Panel and positioning
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(dispVerticesCB);
@@ -265,6 +284,9 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			modeChanged();
 		} else if (e.getSource() == lineInputToolRB) {
 			Globals.toolbarMode = Constants.ToolbarMode.INPUT_LINE;
+			modeChanged();
+		} else if (e.getSource() == vertexInputToolRB) {
+			Globals.toolbarMode = Constants.ToolbarMode.INPUT_VERTEX;
 			modeChanged();
 		} else if (e.getSource() == arrowInputToolRB) {
 			Globals.toolbarMode = Constants.ToolbarMode.INPUT_ARROW;
@@ -294,14 +316,22 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		} else if (e.getSource() == scalingPlus) {
 			Globals.SCALE += 0.1;
 			modeChanged();
-		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
-				&& e.getSource() == lineInputTwoVerticesRB) {
-			Globals.lineEditMode = Constants.LineInputMode.INPUT_LINE;
-			modeChanged();
-		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE 
-				&& e.getSource() == lineInputIncenterRB) {
-			Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
-			modeChanged();
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
+				if (e.getSource() == lineInputTwoVerticesRB) {
+					Globals.lineEditMode = Constants.LineInputMode.INPUT_LINE;
+					modeChanged();
+				} else if (e.getSource() == lineInputIncenterRB) {
+					Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
+					modeChanged();
+				}
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX) {
+			if (e.getSource() == vertexInputAbsoluteRB) {
+				Globals.vertexInputMode = Constants.VertexInputMode.ABSOLUTE;
+				modeChanged();
+			} else if (e.getSource() == vertexInputFractionOfLineRB) {
+				Globals.vertexInputMode = Constants.VertexInputMode.FRACTION_OF_LINE;
+				modeChanged();
+			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			if (e.getSource() == measureLengthRB) {
 				Globals.measureMode = Constants.MeasureMode.MEASURE_LENGTH;
@@ -362,11 +392,19 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	
 	public void modeChanged() {
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
-			lineInputTwoVerticesRB.setEnabled(true);
-			lineInputIncenterRB.setEnabled(true);
+//			lineInputTwoVerticesRB.setEnabled(true);
+//			lineInputIncenterRB.setEnabled(true);
+			lineInputPanel.setVisible(true);
 		} else {
-			lineInputTwoVerticesRB.setEnabled(false);
-			lineInputIncenterRB.setEnabled(false);
+//			lineInputTwoVerticesRB.setEnabled(false);
+//			lineInputIncenterRB.setEnabled(false);
+			lineInputPanel.setVisible(false);
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX) {
+			vertexInputPanel.setVisible(true);
+		} else {
+			vertexInputPanel.setVisible(false);
 		}
 			
 		if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {

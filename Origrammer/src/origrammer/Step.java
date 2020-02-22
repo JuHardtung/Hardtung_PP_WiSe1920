@@ -205,6 +205,26 @@ public class Step {
 			prePoint = p;
 		}
 	}
+	
+	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
+		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
+		if (incenter == null) {
+			System.out.println("Failed to calculate the incenter of the triangle");
+		}
+		
+		addLine(new OriLine(incenter, v0, Globals.inputLineType));
+		addLine(new OriLine(incenter, v1, Globals.inputLineType));
+		addLine(new OriLine(incenter, v2, Globals.inputLineType));
+
+	}
+	
+	/**
+	 * Adds a new Vertex to the current diagram step
+	 * @param inputVertex
+	 */
+	public void addVertex(Vector2d inputVertex) {
+		vertices.add(new OriVertex(inputVertex));
+	}
 
 
 	/** Adds a new Arrow to the current diagram step
@@ -266,6 +286,7 @@ public class Step {
 	
 	public void selectAll() {
 		selectAllLines();
+		selectAllVertices();
 		selectAllArrows();
 		selectAllFaces();
 		selectAllLeaders();
@@ -280,6 +301,12 @@ public class Step {
 	public void selectAllLines() {
 		for (OriLine l : lines) {
 			l.setSelected(true);
+		}
+	}
+	
+	public void selectAllVertices() {
+		for (OriVertex v : vertices) {
+			v.setSelected(true);
 		}
 	}
 
@@ -332,6 +359,7 @@ public class Step {
 
 	public void unselectAll() {
 		unselectAllLines();
+		unselectAllVertices();
 		unselectAllArrows();
 		unselectAllFaces();
 		unselectAllLeaders();
@@ -347,7 +375,13 @@ public class Step {
 			l.setSelected(false);
 		}
 	}
-
+	
+	public void unselectAllVertices() {
+		for (OriVertex v : vertices) {
+			v.setSelected(false);
+		}
+	}
+ 
 	public void unselectAllArrows() {
 		for (OriArrow a : arrows) {
 			a.setSelected(false);
@@ -395,6 +429,20 @@ public class Step {
 			pleat.setSelected(false);
 		}
 	}
+	
+	
+	public void deleteAllSelectedObjects() {
+		deleteSelectedLines();
+		deleteSelectedVertices();
+		deleteSelectedArrows();
+		deleteSelectedFaces();
+		deleteSelectedLeaderBoxes();
+		deleteSelectedPicSymbols();
+		deleteSelectedGeomSymbols();
+		deleteSelectedEqualDistSymbols();
+		deleteSelectedEqualAnglSymbols();
+		deleteSelectedPleatSymbols();
+	}
 
 	/**
 	 * Deletes all selected lines of the current diagram step
@@ -413,6 +461,23 @@ public class Step {
 		}
 	}
 	
+	/**
+	 * Deletes all selected vertices of the current diagram step
+	 */
+	public void deleteSelectedVertices() {
+		ArrayList<OriVertex> selectedVertices = new ArrayList<>();
+		
+		for (OriVertex v : vertices) {
+			if (v.isSelected()) {
+				selectedVertices.add(v);
+			}
+		}
+		
+		for (OriVertex v : selectedVertices) {
+			vertices.remove(v);
+		}
+	}
+ 	
 	
 	/**
 	 * Deletes all selected arrows of the current diagram step
@@ -450,7 +515,7 @@ public class Step {
 	/**
 	 * Deletes all selected leaders of the current diagram step
 	 */
-	public void deleteSelectedLeaders() {
+	public void deleteSelectedLeaderBoxes() {
 		ArrayList<OriLeaderBox> selectedLeader = new ArrayList<>();
 		
 		for (OriLeaderBox l : leaderBoxSymbols) {
@@ -541,19 +606,6 @@ public class Step {
 		for (OriPleatCrimpSymbol pleat : selectedPleatS) {
 			pleatCrimpSymbols.remove(pleat);
 		}
-	}
-	
-
-	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
-		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
-		if (incenter == null) {
-			System.out.println("Failed to calculate the incenter of the triangle");
-		}
-		
-		addLine(new OriLine(incenter, v0, Globals.inputLineType));
-		addLine(new OriLine(incenter, v1, Globals.inputLineType));
-		addLine(new OriLine(incenter, v2, Globals.inputLineType));
-
 	}
 
 	public String getStepDescription() {

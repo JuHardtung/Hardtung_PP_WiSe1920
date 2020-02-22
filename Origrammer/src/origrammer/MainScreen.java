@@ -70,6 +70,7 @@ public class MainScreen extends JPanel
 	private OriLine secondSelectedL = null;
 	private OriLine thirdSelectedL = null;
 	private OriLine selectedCandidateL = null;
+	private OriVertex selectedCandidateVertex = null;
 	private OriArrow selectedCandidateA = null;
 	private OriFace selectedCandidateF = null;
 	private OriPicSymbol selectedCandidatePS = null;
@@ -132,7 +133,6 @@ public class MainScreen extends JPanel
     	
     	//RENDER ALL LINES
     	renderAllLines();
-
        
     	//RENDER ALL ARROWS
     	tmpArrowLabel.setBorder(new EtchedBorder(BevelBorder.RAISED, Color.RED, getBackground().brighter()));
@@ -217,6 +217,12 @@ public class MainScreen extends JPanel
        //draw temp LINE on firstSelectedV and currentMousePoint
 	   renderAllTempLines();
        
+	   if (firstSelectedV != null) {
+    	   g2d.setColor(Color.RED);
+    	   g2d.fill(new Rectangle2D.Double(firstSelectedV.x - 5.0 / Globals.SCALE,
+    			   firstSelectedV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
+       }
+	   
        if (secondSelectedV != null) {
     	   g2d.setColor(Color.RED);
     	   g2d.fill(new Rectangle2D.Double(secondSelectedV.x - 5.0 / Globals.SCALE,
@@ -245,7 +251,7 @@ public class MainScreen extends JPanel
        if (selectedCandidateV != null ) {
     	   g.setColor(Color.BLACK);
     	   g.drawString("(" + selectedCandidateV.x + ", " + selectedCandidateV.y + ")", -325, -325);
-       }   
+       }
     }
     
     private void renderAllFilledFaces() {
@@ -486,9 +492,7 @@ public class MainScreen extends JPanel
     }
     
     private void renderAllVertices() {
-        if (Globals.toolbarMode == Constants.ToolbarMode.ADD_VERTEX 
-     		   || Globals.toolbarMode == Constants.ToolbarMode.DELETE_VERTEX
-     		   || Globals.dispVertex) {
+        if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX || Globals.dispVertex) {
      	   g2d.setColor(Color.BLACK);
      	   double vertexDrawSize = 3.0;
      	   for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
@@ -500,6 +504,18 @@ public class MainScreen extends JPanel
      		   g2d.fill(new Rectangle2D.Double(v1.x - vertexDrawSize / Globals.SCALE,
      				   v1.y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
      				   vertexDrawSize * 2 / Globals.SCALE));
+     	   }
+     	   
+     	   for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
+     		   if (v.isSelected() || v.p == selectedCandidateV) {
+     			   g2d.setColor(Config.LINE_COLOR_SELECTED);
+     			   vertexDrawSize = 5.0;
+     		   } else {
+     			   g2d.setColor(Config.LINE_COLOR_EDGE);
+     		   }
+     		  g2d.fill(new Rectangle2D.Double(v.p.x - vertexDrawSize / Globals.SCALE,
+    				   v.p.y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
+    				   vertexDrawSize * 2 / Globals.SCALE));
      	   }
         }
     }
@@ -793,6 +809,14 @@ public class MainScreen extends JPanel
     		if (dist1 < minDistance) {
     			minDistance = dist1;
     			minPosition.set(line.getP1());
+    		}
+    	}
+    	
+    	for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
+    		double dist = p.distance(v.p.x, v.p.y);
+    		if (dist < minDistance) {
+    			minDistance = dist;
+    			minPosition.set(v.p);
     		}
     	}
     	
@@ -1174,6 +1198,36 @@ public class MainScreen extends JPanel
 		}
 	}
 	
+    private void createVertexAbsolutePos(Point2D.Double clickPoint) {
+    	Vector2d p = new Vector2d(clickPoint.x, clickPoint.y);
+    	Origrammer.diagram.steps.get(Globals.currentStep).addVertex(p);
+    }
+    
+    private void createVertexFractionOfLine(Point2D.Double clickPoint) {
+    	OriLine l = pickLine(clickPoint);
+    	
+    	if (firstSelectedL == null) {
+    		firstSelectedL = l;
+    		
+    		double fraction = Double.parseDouble(Origrammer.mainFrame.uiTopPanel.inputVertexFractionTF.getText());
+    		double dist = GeometryUtil.Distance(l.getP0(), l.getP1());
+    		Vector2d uv = GeometryUtil.getUnitVector(l.getP0(), l.getP1());
+    		
+    		double newX = l.getP0().x + uv.x * (dist*(fraction/100)); 
+    		double newY = l.getP0().y + uv.y * (dist*(fraction/100));
+    		
+    		Vector2d newVertex = new Vector2d(newX, newY);
+    		
+	   		OriLine first = new OriLine(l.getP0(), newVertex, l.getType());
+    		OriLine second = new OriLine(newVertex, l.getP1(), l.getType());
+    		Origrammer.diagram.steps.get(Globals.currentStep).addLine(first);
+    		Origrammer.diagram.steps.get(Globals.currentStep).addLine(second);
+    		Origrammer.diagram.steps.get(Globals.currentStep).lines.remove(l);
+ 
+    	}
+    	firstSelectedL = null;
+    }
+	
     //#######################################################################################
     //#######################################################################################
 
@@ -1189,6 +1243,24 @@ public class MainScreen extends JPanel
 			}
 		} else {
 			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllLines();
+		}
+		
+		//select OriVertex or unselect all OriVertices if clicked on nothing
+		Vector2d p = pickVertex(clickPoint);
+		if (p != null) {
+			for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
+				if (v.p.x == p.x && v.p.y == p.y) {
+					if (v != null) {
+						if (!v.isSelected()) {
+							v.setSelected(true);
+						} else {
+							v.setSelected(false);
+						}
+					} 
+				} 
+			}
+		} else {
+			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllVertices();
 		}
 		
 		//select OriArrow or unselect all OriArrows if clicked on nothing
@@ -1401,6 +1473,12 @@ public class MainScreen extends JPanel
 				}
 			}  else if (Globals.lineEditMode == Constants.LineInputMode.TRIANGLE_INSECTOR) {
 				createTriangleInsector(clickPoint);
+			}
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX) {
+			if (Globals.vertexInputMode == Constants.VertexInputMode.ABSOLUTE) {
+				createVertexAbsolutePos(clickPoint);
+			} else if (Globals.vertexInputMode == Constants.VertexInputMode.FRACTION_OF_LINE) {
+				createVertexFractionOfLine(clickPoint);
 			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
 			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER ||
@@ -1652,7 +1730,6 @@ public class MainScreen extends JPanel
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-
 		try {
 			affineTransform.inverseTransform(e.getPoint(), currentMousePointLogic);
 		} catch (Exception ex) {
@@ -1686,6 +1763,13 @@ public class MainScreen extends JPanel
 			if (preLine != selectedCandidateL) {
 				repaint();
 			}
+
+			Vector2d preVertex = selectedCandidateV;
+			selectedCandidateV = pickVertex(currentMousePointLogic);
+			if (preVertex != selectedCandidateV) {
+				repaint();
+			}
+			
 
 			OriArrow preArrow = selectedCandidateA;
 			selectedCandidateA = pickArrow(currentMousePointLogic);
@@ -1754,6 +1838,10 @@ public class MainScreen extends JPanel
 				&& (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST 
 					|| Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_ANGL))) {
 			selectedCandidateV = this.pickVertex(currentMousePointLogic);
+			repaint();
+		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX 
+				&& Globals.vertexInputMode == Constants.VertexInputMode.FRACTION_OF_LINE) {
+			selectedCandidateL = this.pickLine(currentMousePointLogic);
 			repaint();
 		}
 	}

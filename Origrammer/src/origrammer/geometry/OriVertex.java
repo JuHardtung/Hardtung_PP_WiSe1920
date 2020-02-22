@@ -10,6 +10,7 @@ public class OriVertex {
 	public Vector2d preP = new Vector2d();
 	public Vector2d tmpVec = new Vector2d();
 	public ArrayList<OriEdge> edges = new ArrayList<>();
+	private boolean isSelected = false;
 
 	public OriVertex(Vector2d p) {
 		this.p.set(p);
@@ -48,4 +49,11 @@ public class OriVertex {
 		return Math.atan2(dir.y,  dir.x);
 	}
 
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
 }

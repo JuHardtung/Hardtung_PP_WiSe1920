@@ -3,7 +3,6 @@ package origrammer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +19,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -28,6 +28,7 @@ import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -46,6 +47,7 @@ import origrammer.geometry.OriLeaderBox;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriPicSymbol;
 import origrammer.geometry.OriPleatCrimpSymbol;
+import origrammer.geometry.OriVertex;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
@@ -66,6 +68,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<String> menuLineCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> menuArrowCB = new JComboBox<>(arrowInputOptions);
 	private JComboBox<Object> symbolInputCB = new JComboBox<>(symbolInputOptions);
+	
+	//INPUT VERTICES FRACTION_OF_LINE
+	private JPanel inputVertexFractionPanel = new JPanel();
+	private JSlider inputVertexFractionSlider = new JSlider(0, 100);
+	public JTextField inputVertexFractionTF = new JTextField();
 	
 	//INPUT SYMBOL LEADER
 	private JPanel inputSymbolLeaderPanel = new JPanel();
@@ -157,6 +164,56 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 								new EtchedBorder(BevelBorder.RAISED, 
 											getBackground().darker(), 
 											getBackground().brighter()), "Change Line Type"));
+		
+		
+		//-----------------------------------------------------------------------------------------
+		
+		//##### VERTEX FRACTION_OF_LINE
+		inputVertexFractionSlider.setMajorTickSpacing(10);
+		//inputVertexFractionSlider.setSnapToTicks(true);
+		inputVertexFractionSlider.setPaintTicks(true);
+		inputVertexFractionSlider.addChangeListener(e -> sliderVertexFraction());
+		inputVertexFractionTF.setPreferredSize(new Dimension(30, 30));
+		PlainDocument docInputVertexFraction = (PlainDocument) inputVertexFractionTF.getDocument();
+		docInputVertexFraction.setDocumentFilter(new IntFilter());
+		docInputVertexFraction.addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				//setVertexFractionSlider();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				setVertexFractionSlider();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				setVertexFractionSlider();
+			}
+			
+			private void setVertexFractionSlider() {
+				Runnable doSetVertexFractionSlider = new Runnable() {
+					@Override
+					public void run() {
+						String text = inputVertexFractionTF.getText();
+						int value = Integer.parseInt(text);
+
+						inputVertexFractionSlider.setValue(value);
+					}
+				};       
+				SwingUtilities.invokeLater(doSetVertexFractionSlider);
+			}
+		});
+		inputVertexFractionTF.setText(Integer.toString(inputVertexFractionSlider.getValue()));
+		inputVertexFractionPanel.add(inputVertexFractionSlider);
+		inputVertexFractionPanel.add(inputVertexFractionTF);
+		inputVertexFractionPanel.setBorder(new TitledBorder(
+									new EtchedBorder(BevelBorder.RAISED, 
+													getBackground().darker(), 
+													getBackground().brighter()), "Input Vertex"));
+		
 		
 		//-----------------------------------------------------------------------------------------
 		//##### ARROW INPUT TYPE #####
@@ -314,6 +371,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(changeArrowPanel);
 		add(faceDirectionPanel);
 		add(inputLinesPanel);
+		add(inputVertexFractionPanel);
 		add(inputArrowPanel);
 		add(inputSymbolsPanel);
 		add(picSymbolPanel);
@@ -326,6 +384,13 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 		modeChanged();
 	}
+	
+//	private void setVertexFractionSlider() {
+//		String text = inputVertexFractionTF.getText();
+//		int value = Integer.parseInt(text);
+//				
+//		inputVertexFractionSlider.setValue(value);
+//	}
 	
 	private void setEqualDistanceDividerCount() {
 		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
@@ -380,6 +445,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			screen.repaint();
 		}
+	}
+	
+	
+	private void sliderVertexFraction() {
+		inputVertexFractionTF.setText(Integer.toString(inputVertexFractionSlider.getValue()));
 	}
 
 
@@ -539,6 +609,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		} else if (e.getSource() == crimpRB) {
 			changeToCrimp();
 		}
+//		else if (e.getSource() == inputVertexFractionTF) {
+//			inputVertexFractionSlider.setValue(Integer.parseInt(inputVertexFractionTF.getText()));
+//		}
 
 
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
@@ -636,6 +709,13 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			inputLinesPanel.setVisible(true);
 		} else {
 			inputLinesPanel.setVisible(false);
+		}
+		
+		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX
+				&& Globals.vertexInputMode == Constants.VertexInputMode.FRACTION_OF_LINE) {
+			inputVertexFractionPanel.setVisible(true);
+		} else {
+			inputVertexFractionPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {

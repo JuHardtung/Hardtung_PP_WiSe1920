@@ -11,6 +11,7 @@ public class Globals {
 	
 	public static Constants.ToolbarMode toolbarMode = Constants.ToolbarMode.INPUT_LINE;
 	public static Constants.LineInputMode lineEditMode = Constants.LineInputMode.INPUT_LINE;
+	public static Constants.VertexInputMode vertexInputMode = Constants.VertexInputMode.ABSOLUTE;
 	public static Constants.InputSymbolMode inputSymbolMode = Constants.InputSymbolMode.LEADER;
 	public static Constants.MeasureMode measureMode = Constants.MeasureMode.MEASURE_LENGTH;
 	
