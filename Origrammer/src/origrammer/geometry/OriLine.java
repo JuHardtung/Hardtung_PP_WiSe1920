@@ -14,8 +14,8 @@ public class OriLine {
 	private int type = TYPE_NONE;
 	private Vector2d p0 = new Vector2d();
 	private Vector2d p1 = new Vector2d();
-	private boolean isStartTransl;
-	private boolean isEndTransl;
+	private boolean isStartOffset;
+	private boolean isEndOffset;
 
 	public OriLine() {
 	}
@@ -42,8 +42,8 @@ public class OriLine {
 		this.type = type;
 		this.p0 = p0;
 		this.p1 = p1;
-		this.isStartTransl = isStartTrans;
-		this.isEndTransl = isEndTrans;
+		this.isStartOffset = isStartTrans;
+		this.isEndOffset = isEndTrans;
 	}
 	
 	
@@ -95,26 +95,26 @@ public class OriLine {
 		this.isSelected = isSelected;
 	}
 
-	public boolean isStartTransl() {
-		return isStartTransl;
+	public boolean isStartOffset() {
+		return isStartOffset;
 	}
 
-	public void setStartTransl(boolean isStartTransl) {
-		this.isStartTransl = isStartTransl;
+	public void setStartOffset(boolean isStartOffset) {
+		this.isStartOffset = isStartOffset;
 	}
 
-	public boolean isEndTransl() {
-		return isEndTransl;
+	public boolean isEndOffset() {
+		return isEndOffset;
 	}
 
-	public void setEndTransl(boolean isEndTransl) {
-		this.isEndTransl = isEndTransl;
+	public void setEndOffset(boolean isEndOffset) {
+		this.isEndOffset = isEndOffset;
 	}
 
 	@Override
 	public String toString() {
-		return "OriLine [isSelected=" + isSelected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + ", isStartTransl="
-				+ isStartTransl + ", isEndTransl=" + isEndTransl + "]";
+		return "OriLine [isSelected=" + isSelected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + ", isStartOffset="
+				+ isStartOffset + ", isEndOffset=" + isEndOffset + "]";
 	}
 	
 }

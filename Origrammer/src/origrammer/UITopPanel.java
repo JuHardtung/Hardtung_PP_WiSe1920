@@ -558,9 +558,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (l.isSelected()) {
 				if (startCreaseCB.isSelected()) {
-					l.setStartTransl(true);
+					l.setStartOffset(true);
 				} else if (!startCreaseCB.isSelected()) {
-					l.setStartTransl(false);
+					l.setStartOffset(false);
 				}
 			}
 		}
@@ -570,9 +570,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (l.isSelected()) {
 				if (endCreaseCB.isSelected()) {
-					l.setEndTransl(true);
+					l.setEndOffset(true);
 				} else if (!endCreaseCB.isSelected()) {
-					l.setEndTransl(false);
+					l.setEndOffset(false);
 				}
 			}
 		}

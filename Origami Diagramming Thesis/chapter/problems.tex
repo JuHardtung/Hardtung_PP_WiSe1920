@@ -63,19 +63,17 @@ if (draw) {
 \end{lstlisting}
 
 
+\subsection{Crossing Lines}
 
-Can move, scale but not rotate (either override the paintComponent method) or use graphics2d.rotate();)
-Both doesn't work for my setup
+When inputting several overlapping lines, the lines should be split up and create a new addressable vertex at their crossing points. Implementing this feature by itself was done relatively quickly. However, when paired with the endpoint offsets of existing creases (see Section \ref{sec:generalRules} \emph{Creases should not contact the edges}) more variables had to be kept in mind. As the user can freely draw lines and in random order, a lot of different edge cases have to be considered.
 
-dirty solution--> load different, already rotated images depending on OriArrow rotation.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{CrossingLines}
+	\caption{Crossing Lines Possibilities}
+	\label{fig:crossingLines}
+\end{figure}
 
-
-
-
-calculations are sometimes breaking depending on user input
-|
---> for example OriEqualAnglSymbol: 	firstV	--> point of angle
-						scndV	--> verticalVertex			if verticalVertex and horizontalVertex are switched, everything breaks
-						thirdV --> horizontalVertex
-						
+existing crease lines with offset for both line ends
+really annoying to calculate correctly especially with line splitting
 						

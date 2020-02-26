@@ -327,12 +327,12 @@ public class MainScreen extends JPanel
     		Vector2d p1 = line.getP1();
 
     		if (line.getType() == OriLine.TYPE_CREASE) {
-    			if (line.isStartTransl()) {
+    			if (line.isStartOffset()) {
     				p0 = line.getTranslatedP0();
     			} else {
     				p0 = line.getP0();
     			}
-    			if (line.isEndTransl()) {
+    			if (line.isEndOffset()) {
     				p1 = line.getTranslatedP1();
     			} else {
     				p1 = line.getP1();
@@ -1491,13 +1491,14 @@ public class MainScreen extends JPanel
 						OriLine line = new OriLine(firstSelectedV, v, Globals.inputLineType);
 						if (Globals.inputLineType == OriLine.TYPE_CREASE) {
 							if (Origrammer.mainFrame.uiTopPanel.startCreaseCB.isSelected()) {
+								line.setStartOffset(true);
 							} else {
-								line.setStartTransl(false);
+								line.setStartOffset(false);
 							}
 							if (Origrammer.mainFrame.uiTopPanel.endCreaseCB.isSelected()) {
-								line.setEndTransl(true);
+								line.setEndOffset(true);
 							} else {
-								line.setEndTransl(false);
+								line.setEndOffset(false);
 							}
 						}
 						Origrammer.diagram.steps.get(Globals.currentStep).addLine(line);

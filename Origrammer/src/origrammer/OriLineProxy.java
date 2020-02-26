@@ -19,8 +19,8 @@ public class OriLineProxy {
 		this.p0 = l.getP0();
 		this.p1 = l.getP1();
 		this.type = l.getType();
-		this.isStartTransl = l.isStartTransl();
-		this.isEndTransl = l.isEndTransl();
+		this.isStartTransl = l.isStartOffset();
+		this.isEndTransl = l.isEndOffset();
 	}
 	
 	public OriLine getLine() {

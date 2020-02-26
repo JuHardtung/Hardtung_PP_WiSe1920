@@ -134,56 +134,64 @@ public class Step {
 	 * 
 	 * @param inputLine
 	 */
-	
 	public void addLine(OriLine inputLine) {
-		System.out.println("PRE: " + inputLine.toString());
-		ArrayList<OriLine> crossingLines = new ArrayList<>();
-		ArrayList<OriLine> tmpLines = new ArrayList<>();
-		tmpLines.addAll(lines);
-		
-		//check if line already exists
-		for (OriLine l : tmpLines) {
+
+		//don't add the line if it already exists
+		for (OriLine l : lines) {
 			if (GeometryUtil.isSameLineSegment(l, inputLine)) {
 				return;
 			}
 		}
 		
-		//if new line crosses another one, split them up to smaller lines
-		for (OriLine l : tmpLines) {
-			Vector2d crossPoint = GeometryUtil.getCrossPoint(l, inputLine);
-			if (crossPoint == null) {
-				continue;
-			}
-			crossingLines.add(l);
-			lines.remove(l);
-			
-			//splitting existing line (OriLine l) at crossPoint with new inputLine
-			if (l.getP0().x < l.getP1().x || ((l.getP0().x == l.getP1().x) && (l.getP0().y < l.getP1().y))) {				
-				if (GeometryUtil.Distance(l.getP0(), crossPoint) > POINT_EPS) {
-					lines.add(new OriLine(l.getP0(), crossPoint, l.getType(), l.isStartTransl(), false));
-				}
-				if (GeometryUtil.Distance(crossPoint, l.getP1()) > POINT_EPS) {
-					lines.add(new OriLine(crossPoint, l.getP1(), l.getType(), false, l.isEndTransl()));
-				}
-				
-				
-			} else if (l.getP1().x < l.getP0().x || ((l.getP1().x == l.getP1().x) && (l.getP1().y < l.getP0().y))) {				
-				if (GeometryUtil.Distance(l.getP1(), crossPoint) > POINT_EPS) {
-					lines.add(new OriLine(l.getP1(), crossPoint, l.getType(), l.isStartTransl(), false));
-				}
-				if (GeometryUtil.Distance(crossPoint, l.getP0()) > POINT_EPS) {
-					lines.add(new OriLine(crossPoint, l.getP0(), l.getType(), false, l.isEndTransl()));
-				}
-			}
-		}
+		splitExistingLines(inputLine);
 			
 		//points contains p0 and p1 of inputLine
 		ArrayList<Vector2d> points = new ArrayList<>();
 		points.add(inputLine.getP0());
 		points.add(inputLine.getP1());
+		points.addAll(splitInputLine(inputLine));
 
-		//if inputLine.p0 or inputLine.p1 is really close to either line.p0 or line.p1 --> do nothing
-		//if distance between inputLine.p0 and line or between inputLine.p1 and line
+		//sort ArrayList<Vector2d> points
+		boolean sortByX = Math.abs(inputLine.getP0().x - inputLine.getP1().x) > Math.abs(inputLine.getP0().y - inputLine.getP1().y);
+		if (sortByX) {
+			Collections.sort(points, new PointComparatorX());
+		} else {
+			Collections.sort(points, new PointComparatorY());
+		}
+		
+		addInputLine(points, inputLine);
+	}
+	
+	public void addInputLine(ArrayList<Vector2d> points, OriLine inputLine) {
+		Vector2d prePoint = points.get(0);
+
+		for (int i = 1; i < points.size(); i++) {
+			Vector2d p = points.get(i);
+			if (GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
+				continue;
+			}
+			
+			OriLine newLine = new OriLine(prePoint, p, inputLine.getType());
+			
+			//update isStartOffset and isEndOffset if p0 and p1 got switched after sorting
+			if (prePoint == inputLine.getP0()) {
+				newLine.setStartOffset(inputLine.isStartOffset());
+			} else if (prePoint == inputLine.getP1()) {
+				newLine.setStartOffset(inputLine.isEndOffset());
+			}
+			if (p == inputLine.getP0()) {
+				newLine.setEndOffset(inputLine.isStartOffset());
+			} else if (p == inputLine.getP1()) {
+				newLine.setEndOffset(inputLine.isEndOffset());
+			}
+			lines.add(newLine);
+			prePoint = p;
+		}
+	}
+	
+	public ArrayList<Vector2d> splitInputLine(OriLine inputLine) {
+		ArrayList<Vector2d> points = new ArrayList<>();
+		//split up the inputLine where it crosses existing lines
 		for (OriLine line : lines) {
 			if (GeometryUtil.Distance(inputLine.getP0(),  line.getP0()) < POINT_EPS) {
 				continue;
@@ -209,116 +217,63 @@ public class Step {
 				points.add(crossPoint);
 			}
 		}
-		
-		//how to sort ArrayList<Vector2d> points
-		boolean sortByX = Math.abs(inputLine.getP0().x - inputLine.getP1().x) > Math.abs(inputLine.getP0().y - inputLine.getP1().y);
-		if (sortByX) {
-			Collections.sort(points, new PointComparatorX());
-		} else {
-			Collections.sort(points, new PointComparatorY());
-		}
-		
+		return points;
+	}
+	
+	/** Checks if the inputLine crosses any existing lines and splits them if necessary.
+	 *  Also checks the correct direction in combination with the start and end offset for OriLine TYPE_CREASES
+	 * @param inputLine The entered Line
+	 */
+	public void splitExistingLines(OriLine inputLine) {
+		ArrayList<OriLine> tmpLines = new ArrayList<>();
+		tmpLines.addAll(lines);
 
-		Vector2d prePoint = points.get(0);
-
-		for (int i = 1; i < points.size(); i++) {
-			Vector2d p = points.get(i);
-			if (GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
+		//if new line crosses another one, split them up to smaller lines
+		for (OriLine l : tmpLines) {
+			Vector2d crossPoint = GeometryUtil.getCrossPoint(l, inputLine);
+			if (crossPoint == null) {
 				continue;
 			}
-			
-			if (prePoint.x < p.x || ((prePoint.x == p.x) && (prePoint.y < p.y))) {
-				lines.add(new OriLine(prePoint, p, inputLine.getType(), inputLine.isStartTransl(), inputLine.isEndTransl()));
 
-			} else if (p.x < prePoint.x || ((p.x == p.x) && (p.y < prePoint.y))) {
-				lines.add(new OriLine(prePoint, p, inputLine.getType(), inputLine.isStartTransl(), inputLine.isEndTransl()));
+			lines.remove(l);
+
+			//when splitting lines, check what direction the existing line is facing --> according to that disregard some of the offsetFlafs for the endPoints
+			if (l.getP0().x < l.getP1().x || ((l.getP0().x == l.getP1().x) && (l.getP0().y < l.getP1().y))) {
+				if (GeometryUtil.Distance(l.getP0(), crossPoint) > POINT_EPS) {
+					//when inputLine only shares an endpoint of an existing line (and not crossing it), don't disregard the offsetFlag for the endPoint
+					//the side of a split up line where the crossPoint is should not have an offset, except for when the crossPoint equals one of the inputLine points
+					if (crossPoint.equals(inputLine.getP0()) || crossPoint.equals(inputLine.getP1())) {
+						lines.add(new OriLine(l.getP0(), crossPoint, l.getType(), l.isStartOffset(), l.isEndOffset()));
+					} else {
+						lines.add(new OriLine(l.getP0(), crossPoint, l.getType(), l.isStartOffset(), false));
+					}
+				}
+				if (GeometryUtil.Distance(crossPoint, l.getP1()) > POINT_EPS) {
+					if (crossPoint.equals(inputLine.getP0()) || crossPoint.equals(inputLine.getP1())) {
+						lines.add(new OriLine(crossPoint, l.getP1(), l.getType(), l.isStartOffset(), l.isEndOffset()));
+					} else {
+						lines.add(new OriLine(crossPoint, l.getP1(), l.getType(), false, l.isEndOffset()));
+					}
+				}
+			} else if (l.getP1().x < l.getP0().x || ((l.getP1().x == l.getP1().x) && (l.getP1().y < l.getP0().y))) {
+				if (GeometryUtil.Distance(l.getP1(), crossPoint) > POINT_EPS) {
+					if (crossPoint.equals(inputLine.getP0()) || crossPoint.equals(inputLine.getP1())) {
+						lines.add(new OriLine(crossPoint, l.getP1(), l.getType(), l.isStartOffset(), l.isEndOffset()));
+					} else {
+						lines.add(new OriLine(crossPoint, l.getP1(), l.getType(), false, l.isEndOffset()));
+					}
+				}
+				if (GeometryUtil.Distance(crossPoint, l.getP0()) > POINT_EPS) {
+					if (crossPoint.equals(inputLine.getP0()) || crossPoint.equals(inputLine.getP1())) {
+						lines.add(new OriLine(l.getP0(), crossPoint, l.getType(), l.isStartOffset(), l.isEndOffset()));
+					} else {
+						lines.add(new OriLine(l.getP0(), crossPoint, l.getType(), l.isStartOffset(), false));
+					}
+				}
 			}
-			//lines.add(new OriLine(prePoint, p, inputLine.getType(), inputLine.isStartTransl(), inputLine.isEndTransl()));
-			prePoint = p;
 		}
 	}
-//	public void addLine(OriLine inputLine) {
-//		ArrayList<OriLine> crossingLines = new ArrayList<>();
-//		ArrayList<OriLine> tmpLines = new ArrayList<>();
-//		tmpLines.addAll(lines);
-//		
-//		//check if the line already exists
-//		for (OriLine line : tmpLines) {
-//			if (GeometryUtil.isSameLineSegment(line, inputLine)) {
-//				return;
-//			}
-//		}
-//
-//		//if new line crosses another one, split them up to smaller lines
-//		for (OriLine line : tmpLines) {
-//			if (inputLine.getType() == OriLine.TYPE_NONE && line.getType() != OriLine.TYPE_NONE) {
-//				continue;
-//			}
-//			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
-//			if (crossPoint == null) {
-//				continue;
-//			}
-//
-//			crossingLines.add(line);
-//			lines.remove(line);
-//
-//			if (GeometryUtil.Distance(line.getP0(), crossPoint) > POINT_EPS) {
-//				lines.add(new OriLine(line.getP0(), crossPoint, line.getType(), line.isStartTransl(), false));
-//			}
-//			if (GeometryUtil.Distance(line.getP1(), crossPoint) > POINT_EPS) {
-//				lines.add(new OriLine(line.getP1(), crossPoint, line.getType(), false, line.isEndTransl()));
-//			}
-//		}
-//
-//		ArrayList<Vector2d> points = new ArrayList<>();
-//		points.add(inputLine.getP0());
-//		points.add(inputLine.getP1());
-//
-//		//if the intersection is really close to the end of line --> do nothing
-//		for (OriLine line : lines) {
-//			if (GeometryUtil.Distance(inputLine.getP0(),  line.getP0()) < POINT_EPS) {
-//				continue;
-//			}
-//			if (GeometryUtil.Distance(inputLine.getP0(),  line.getP1()) < POINT_EPS) {
-//				continue;
-//			}
-//			if (GeometryUtil.Distance(inputLine.getP1(),  line.getP0()) < POINT_EPS) {
-//				continue;
-//			}
-//			if (GeometryUtil.Distance(inputLine.getP1(),  line.getP1()) < POINT_EPS) {
-//				continue;
-//			}
-//			if (GeometryUtil.DistancePointToSegment(line.getP0(), inputLine.getP0(), inputLine.getP1()) < POINT_EPS) {
-//				points.add(line.getP0());
-//			}
-//			if (GeometryUtil.DistancePointToSegment(line.getP0(), inputLine.getP0(), inputLine.getP1()) < POINT_EPS) {
-//				points.add(line.getP1());
-//			}
-//
-//			Vector2d crossPoint = GeometryUtil.getCrossPoint(inputLine, line);
-//			if (crossPoint != null) {
-//				points.add(crossPoint);
-//			}
-//		}
-//		boolean sortByX = Math.abs(inputLine.getP0().x - inputLine.getP1().x) > Math.abs(inputLine.getP0().y - inputLine.getP1().y);
-//		if (sortByX) {
-//			Collections.sort(points, new PointComparatorX());
-//		} else {
-//			Collections.sort(points, new PointComparatorY());
-//		}
-//
-//		Vector2d prePoint = points.get(0);
-//
-//		for (int i = 1; i < points.size(); i++) {
-//			Vector2d p = points.get(i);
-//			if (GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
-//				continue;
-//			}
-//			
-//			lines.add(new OriLine(prePoint, p, inputLine.getType(), inputLine.isStartTransl(), inputLine.isEndTransl()));
-//			prePoint = p;
-//		}
-//	}
+	
 	
 	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
 		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
