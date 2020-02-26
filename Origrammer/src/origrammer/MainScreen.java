@@ -297,9 +297,12 @@ public class MainScreen extends JPanel
     		case OriLine.TYPE_EDGE:
     			g2d.setColor(Config.LINE_COLOR_EDGE);
     			g2d.setStroke(Config.STROKE_EDGE);
-    			break; 
+    			break;
+    		case OriLine.TYPE_CREASE:
+    			g2d.setColor(Config.LINE_COLOR_CREASE);
+    			g2d.setStroke(Config.STROKE_CREASE);
     		}
-    		
+
     		if (!Globals.dispColoredLines) {
     			g2d.setColor(Config.LINE_COLOR_EDGE);
     		}
@@ -312,6 +315,7 @@ public class MainScreen extends JPanel
     			g2d.setColor(Config.LINE_COLOR_SELECTED);
     			g2d.setStroke(Config.STROKE_SELECTED);
     		}
+    		
     		if (line == firstSelectedL || line == secondSelectedL || line == thirdSelectedL) {
     			g2d.setColor(Color.RED);
     			g2d.setStroke(Config.STROKE_SELECTED);
@@ -319,7 +323,22 @@ public class MainScreen extends JPanel
     			g2d.setColor(Config.LINE_COLOR_SELECTED);
     			g2d.setStroke(Config.STROKE_SELECTED);
     		}
-    		g2d.draw(new Line2D.Double(line.getP0().x, line.getP0().y, line.getP1().x, line.getP1().y));
+    		Vector2d p0 = line.getP0();
+    		Vector2d p1 = line.getP1();
+
+    		if (line.getType() == OriLine.TYPE_CREASE) {
+    			if (line.isStartTransl()) {
+    				p0 = line.getTranslatedP0();
+    			} else {
+    				p0 = line.getP0();
+    			}
+    			if (line.isEndTransl()) {
+    				p1 = line.getTranslatedP1();
+    			} else {
+    				p1 = line.getP1();
+    			}
+    		}
+    		g2d.draw(new Line2D.Double(p0.x, p0.y, p1.x, p1.y));
     	}
     }
     
@@ -350,6 +369,9 @@ public class MainScreen extends JPanel
      	   			g2d.setColor(Config.LINE_COLOR_EDGE);
      	   			g2d.setStroke(Config.STROKE_EDGE);
      	   			break;
+     	   		case OriLine.TYPE_CREASE:
+     	   			g2d.setColor(Config.LINE_COLOR_CREASE);
+     	   			g2d.setStroke(Config.STROKE_CREASE);
      	   }
      	   if (!Globals.dispColoredLines) {
      		   g2d.setColor(Config.LINE_COLOR_EDGE);
@@ -1206,7 +1228,7 @@ public class MainScreen extends JPanel
     private void createVertexFractionOfLine(Point2D.Double clickPoint) {
     	OriLine l = pickLine(clickPoint);
     	
-    	if (firstSelectedL == null) {
+    	if (firstSelectedL == null && (l != null)) {
     		firstSelectedL = l;
     		
     		double fraction = Double.parseDouble(Origrammer.mainFrame.uiTopPanel.inputVertexFractionTF.getText());
@@ -1463,11 +1485,23 @@ public class MainScreen extends JPanel
 					}
 				}
 				if (v != null) {
-					if(firstSelectedV == null) {
+					if (firstSelectedV == null) {
 						firstSelectedV = v;
 					} else {
 						OriLine line = new OriLine(firstSelectedV, v, Globals.inputLineType);
+						if (Globals.inputLineType == OriLine.TYPE_CREASE) {
+							if (Origrammer.mainFrame.uiTopPanel.startCreaseCB.isSelected()) {
+							} else {
+								line.setStartTransl(false);
+							}
+							if (Origrammer.mainFrame.uiTopPanel.endCreaseCB.isSelected()) {
+								line.setEndTransl(true);
+							} else {
+								line.setEndTransl(false);
+							}
+						}
 						Origrammer.diagram.steps.get(Globals.currentStep).addLine(line);
+
 						firstSelectedV = null;
 					}
 				}

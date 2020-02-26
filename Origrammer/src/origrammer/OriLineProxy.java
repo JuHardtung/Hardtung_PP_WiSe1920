@@ -9,6 +9,8 @@ public class OriLineProxy {
 	private Vector2d p0;
 	private Vector2d p1;
 	private int type;
+	private boolean isStartTransl;
+	private boolean isEndTransl;
 	
 	public OriLineProxy() {
 	}
@@ -17,10 +19,12 @@ public class OriLineProxy {
 		this.p0 = l.getP0();
 		this.p1 = l.getP1();
 		this.type = l.getType();
+		this.isStartTransl = l.isStartTransl();
+		this.isEndTransl = l.isEndTransl();
 	}
 	
 	public OriLine getLine() {
-		return new OriLine(p0, p1, type);
+		return new OriLine(p0, p1, type, isStartTransl, isEndTransl);
 	}
 
 	public Vector2d getP0() {
@@ -45,6 +49,22 @@ public class OriLineProxy {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public boolean isStartTransl() {
+		return isStartTransl;
+	}
+
+	public void setStartTransl(boolean isStartTransl) {
+		this.isStartTransl = isStartTransl;
+	}
+
+	public boolean isEndTransl() {
+		return isEndTransl;
+	}
+
+	public void setEndTransl(boolean isEndTransl) {
+		this.isEndTransl = isEndTransl;
 	}
 
 	@Override

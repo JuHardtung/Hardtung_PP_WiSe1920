@@ -108,17 +108,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Origrammer.diagram.steps.get(Globals.currentStep).deleteAllSelectedObjects();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedLines();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedVertices();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedArrows();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedFaces();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedLeaderBoxes();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedPicSymbols();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedGeomSymbols();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedEqualDistSymbols();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedEqualAnglSymbols();
-//				Origrammer.diagram.steps.get(Globals.currentStep).deleteSelectedPleatSymbols();
-
 				mainScreen.repaint();
 			}
 		});

@@ -19,7 +19,6 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -47,11 +46,10 @@ import origrammer.geometry.OriLeaderBox;
 import origrammer.geometry.OriLine;
 import origrammer.geometry.OriPicSymbol;
 import origrammer.geometry.OriPleatCrimpSymbol;
-import origrammer.geometry.OriVertex;
 
 public class UITopPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
-	private String[] lineInputOptions = {"Valley Fold", "Mountain Fold", "X-Ray Fold", "Edge Line"};
+	private String[] lineInputOptions = {"Valley Fold", "Mountain Fold", "X-Ray Fold", "Edge Line", "Existing Crease"};
 	private Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
 									new JSeparator(JSeparator.HORIZONTAL),
 									"Push here", "Pull out", "Inflate here"};
@@ -94,6 +92,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<Object> changeArrowTypeCB = new JComboBox<>(arrowInputOptions);
 	private JButton changeLineButton = new JButton("Set");
 	private JButton changeArrowButton = new JButton("Set");
+	
+	//Change Existing Crease ends
+	private JPanel changeCreaseEndsPanel = new JPanel();
+	public JCheckBox startCreaseCB = new JCheckBox("Start");
+	public JCheckBox endCreaseCB = new JCheckBox("End");
 	
 	//EQUAL DISTANCE SETTINGS
 	private JPanel equalDistPanel = new JPanel();
@@ -164,6 +167,16 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 								new EtchedBorder(BevelBorder.RAISED, 
 											getBackground().darker(), 
 											getBackground().brighter()), "Change Line Type"));
+		
+		//##### CHANGE EXISTING CREASE ENDS
+		startCreaseCB.addActionListener(this);
+		endCreaseCB.addActionListener(this);
+		changeCreaseEndsPanel.add(startCreaseCB);
+		changeCreaseEndsPanel.add(endCreaseCB);
+		changeCreaseEndsPanel.setBorder(new TitledBorder(
+										new EtchedBorder(BevelBorder.RAISED, 
+															getBackground().darker(), 
+															getBackground().brighter()), "Existing Crease Settingss"));
 		
 		
 		//-----------------------------------------------------------------------------------------
@@ -368,6 +381,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 		//add all panels to UITopPanel
 		add(changeLinePanel);
+		add(changeCreaseEndsPanel);
 		add(changeArrowPanel);
 		add(faceDirectionPanel);
 		add(inputLinesPanel);
@@ -384,13 +398,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 		modeChanged();
 	}
-	
-//	private void setVertexFractionSlider() {
-//		String text = inputVertexFractionTF.getText();
-//		int value = Integer.parseInt(text);
-//				
-//		inputVertexFractionSlider.setValue(value);
-//	}
 	
 	private void setEqualDistanceDividerCount() {
 		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
@@ -547,11 +554,32 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 	}
 	
-		
+	private void creaseStartTranslation() {
+		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+			if (l.isSelected()) {
+				if (startCreaseCB.isSelected()) {
+					l.setStartTransl(true);
+				} else if (!startCreaseCB.isSelected()) {
+					l.setStartTransl(false);
+				}
+			}
+		}
+	}
+
+	private void creaseEndTranslation() {
+		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+			if (l.isSelected()) {
+				if (endCreaseCB.isSelected()) {
+					l.setEndTransl(true);
+				} else if (!endCreaseCB.isSelected()) {
+					l.setEndTransl(false);
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		modeChanged();
-
 		if (e.getSource() == changeLineButton) {
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 				if (l.isSelected()) {
@@ -565,6 +593,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 						l.setType(OriLine.TYPE_XRAY);
 					} else if (lineType == "Edge Line") {
 						l.setType(OriLine.TYPE_EDGE);
+					} else if (lineType == "Existing Crease") {
+						l.setType(OriLine.TYPE_CREASE);
 					}
 				}
 			}
@@ -608,10 +638,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			changeToPleat();
 		} else if (e.getSource() == crimpRB) {
 			changeToCrimp();
+		} else if (e.getSource() == startCreaseCB) {
+			creaseStartTranslation();				
+		} else if (e.getSource() == endCreaseCB) {
+			creaseEndTranslation();
 		}
-//		else if (e.getSource() == inputVertexFractionTF) {
-//			inputVertexFractionSlider.setValue(Integer.parseInt(inputVertexFractionTF.getText()));
-//		}
 
 
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
@@ -625,26 +656,35 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				Globals.inputLineType = OriLine.TYPE_XRAY;
 			} else if (selectedLine == "Edge Line") {
 				Globals.inputLineType = OriLine.TYPE_EDGE;
-			}			
+			} else if (selectedLine == "Existing Crease") {
+				Globals.inputLineType = OriLine.TYPE_CREASE;
+			}
 		}
+		modeChanged();
 	}
 	
 	private int getSelectedTypes() {
 		
-		//	00 0000 0001	LINES
-		//	00 0000 0010	ARROWS
-		//  00 0000 0100	FILLED_FACES
-		//  00 0000 1000	LEADER
-		//  00 0001 0000	REPE_BOXES
-		//  00 0010 0000	PIC_SYMBOLS
-		//  00 0100 0000	GEO_SYMBOLS
-		//  00 1000 0000	EQUAL_DIST_SYMBOLS
-		//  01 1000 0000	EQUAL_ANGL_SYMBOLS
-		//  10 1000 0000	PLEAT
+		//  000 0000 0001	CREASES
+		//	000 0000 0010	LINES
+		//	000 0000 0100	ARROWS
+		//  000 0000 1000	FILLED_FACES
+		//  000 0001 0000	LEADER
+		//  000 0010 0000	REPE_BOXES
+		//  000 0100 0000	PIC_SYMBOLS
+		//  000 1000 0000	GEO_SYMBOLS
+		//  001 0000 0000	EQUAL_DIST_SYMBOLS
+		//  011 0000 0000	EQUAL_ANGL_SYMBOLS
+		//  101 0000 0000	PLEAT
 
 		
 		int selectedTypes = 0b0000000000;
-		
+//		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+//			if (line.isSelected() && line.getType() == OriLine.TYPE_CREASE) {
+//				selectedTypes += 0b00000000001;
+//				break;
+//			}
+//		}
 		
 		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (line.isSelected()) {
@@ -707,8 +747,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			inputLinesPanel.setVisible(true);
+			if (Globals.inputLineType == OriLine.TYPE_CREASE) {
+				changeCreaseEndsPanel.setVisible(true);
+			} else {
+				changeCreaseEndsPanel.setVisible(false);
+			}
 		} else {
 			inputLinesPanel.setVisible(false);
+			changeCreaseEndsPanel.setVisible(false);
 		}
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX
@@ -768,18 +814,20 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			
-			//	00 0000 0001	LINES
-			//	00 0000 0010	ARROWS
-			//  00 0000 0100	FILLED_FACES
-			//  00 0000 1000	LEADER
-			//  00 0001 0000	REPE_BOXES
-			//  00 0010 0000	PIC_SYMBOLS
-			//  00 0100 0000	GEO_SYMBOLS
-			//  00 1000 0000	EQUAL_DIST_SYMBOLS
-			//  01 1000 0000	EQUAL_ANGL_SYMBOLS
-			//  10 1000 0000	PLEAT
+			//  000 0000 0010	CREASE
+			//	000 0000 0010	LINES
+			//	000 0000 0100	ARROWS
+			//  000 0000 1000	FILLED_FACES
+			//  000 0001 0000	LEADER
+			//  000 0010 0000	REPE_BOXES
+			//  000 0100 0000	PIC_SYMBOLS
+			//  000 1000 0000	GEO_SYMBOLS
+			//  001 0000 0000	EQUAL_DIST_SYMBOLS
+			//  011 0000 0000	EQUAL_ANGL_SYMBOLS
+			//  101 0000 0000	PLEAT
 			int selectedTypes = getSelectedTypes();
 			
+			//int creaseMask  = 0b00000000001;
 			int lineMask 	= 0b0000000001;
 			int arrowMask 	= 0b0000000010;
 			int faceMask	= 0b0000000100;
@@ -789,13 +837,27 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			int geoMask		= 0b0001000000;
 			int equDistMask = 0b0010000000;
 			int equAnglMask = 0b0100000000;
-			int pleatMask = 0b1000000000;
+			int pleatMask 	= 0b1000000000;
 
+//			int result = selectedTypes & creaseMask;
+//			
+//			if (result == 0b00000000001) {
+//				changeCreaseEndsPanel.setVisible(true);
+//				
+//			} else {
+//				changeCreaseEndsPanel.setVisible(false);
+//			}
 			int result = selectedTypes & lineMask;
-			
-			
 			if (result == 0b0000000001) {
 				changeLinePanel.setVisible(true);
+				for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+					if (l.isSelected() && l.getType() == OriLine.TYPE_CREASE) {
+						changeCreaseEndsPanel.setVisible(true);
+						break;
+					} else {
+						changeCreaseEndsPanel.setVisible(false);
+					}
+				}
 			} else {
 				changeLinePanel.setVisible(false);
 			}
@@ -862,6 +924,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			sliderEqualAngl.setVisible(false);
 			sliderPanel.setVisible(false);
 			changeLinePanel.setVisible(false);
+			//changeCreaseEndsPanel.setVisible(false);
 			changeArrowPanel.setVisible(false);
 			picSymbolPanel.setVisible(false);
 		}
@@ -946,7 +1009,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				} else if (selectedArrow == "Inflate here") {
 					Globals.inputArrowType = OriArrow.TYPE_INFLATE_HERE;
 				}
-				modeChanged();
 			} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
 				Object inputSymbol = symbolInputCB.getSelectedItem();
 				
@@ -975,8 +1037,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				} else if (inputSymbol == "Sinks") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.SINKS;
 				}
-				modeChanged();
 			}
+			modeChanged();
 
 		}
 	}

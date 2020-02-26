@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector2d;
 
-import javafx.scene.shape.Circle;
-
 public class GeometryUtil {
 
 	public final static double POINT_SNAP_VALUE = 0.00001f;
@@ -71,27 +69,27 @@ public class GeometryUtil {
 	}
 	
 	public static double DistancePointToSegment(Vector2d p, Vector2d sp, Vector2d ep) {
-		double x0 = sp.x;
-		double y0 = sp.y;
-		double x1 = ep.x;
-		double y1 = ep.y;
-		double px = p.x;
-		double py = p.y;
+		//double x0 = sp.x;
+		//double y0 = sp.y;
+		//double x1 = ep.x;
+		//double y1 = ep.y;
+		//double px = p.x;
+		//double py = p.y;
 		Vector2d sub0, sub, sub0b;
 		
-		sub0 = new Vector2d(x0 - px, y0 - py);
+		sub0 = new Vector2d(sp.x - p.x, sp.y - p.y);
 		sub0b = new Vector2d(-sub0.x, -sub0.y);
-		sub = new Vector2d(x1 - x0, y1 - y0);
+		sub = new Vector2d(ep.x - sp.x, ep.y - sp.y);
+		
 		
 		double t = ((sub.x * sub0b.x) + (sub.y * sub0b.y)) 
 				/ ((sub.x * sub.x) + (sub.y * sub.y));
-		
-		if(t < 0.0) {
-			return Distance(px, py, x0, y0);
+		if (t < 0.0) {
+			return Distance(p.x, p.y, sp.x, sp.y);
 		} else if (t > 1.0) {
-			return Distance(px, py, x1, y1);
+			return Distance(p.x, p.y, ep.x, ep.y);
 		} else {
-			return Distance(x0 + t * sub.x, y0 + t * sub.y, px, py);
+			return Distance(sp.x + t * sub.x, sp.y + t * sub.y, p.x, p.y);
 		}
 	}
 	

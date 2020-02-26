@@ -8,11 +8,14 @@ public class OriLine {
 	final public static int TYPE_MOUNTAIN = 2;
 	final public static int TYPE_VALLEY = 3;
 	final public static int TYPE_XRAY = 4;
+	final public static int TYPE_CREASE = 5;
 	
 	private boolean isSelected;
 	private int type = TYPE_NONE;
 	private Vector2d p0 = new Vector2d();
 	private Vector2d p1 = new Vector2d();
+	private boolean isStartTransl;
+	private boolean isEndTransl;
 
 	public OriLine() {
 	}
@@ -33,6 +36,31 @@ public class OriLine {
 		this.type = type;
 		this.p0.set(x0, y0);
 		this.p1.set(x1, y1);
+	}
+	
+	public OriLine(Vector2d p0, Vector2d p1, int type, boolean isStartTrans, boolean isEndTrans) {
+		this.type = type;
+		this.p0 = p0;
+		this.p1 = p1;
+		this.isStartTransl = isStartTrans;
+		this.isEndTransl = isEndTrans;
+	}
+	
+	
+	public Vector2d getTranslatedP0() {
+		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
+		
+		double newX = p0.x + uv.x*25;
+		double newY = p0.y + uv.y*25;
+		return new Vector2d(newX, newY);
+	}
+	
+	public Vector2d getTranslatedP1() {
+		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
+		
+		double newX = p1.x - uv.x*25;
+		double newY = p1.y - uv.y*25;
+		return new Vector2d(newX, newY);
 	}
 
 	public Vector2d getP0() {
@@ -67,9 +95,26 @@ public class OriLine {
 		this.isSelected = isSelected;
 	}
 
+	public boolean isStartTransl() {
+		return isStartTransl;
+	}
+
+	public void setStartTransl(boolean isStartTransl) {
+		this.isStartTransl = isStartTransl;
+	}
+
+	public boolean isEndTransl() {
+		return isEndTransl;
+	}
+
+	public void setEndTransl(boolean isEndTransl) {
+		this.isEndTransl = isEndTransl;
+	}
+
 	@Override
 	public String toString() {
-		return "OriLine [selected=" + isSelected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + "]";
+		return "OriLine [isSelected=" + isSelected + ", type=" + type + ", p0=" + p0 + ", p1=" + p1 + ", isStartTransl="
+				+ isStartTransl + ", isEndTransl=" + isEndTransl + "]";
 	}
 	
 }
