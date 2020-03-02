@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -130,7 +131,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JSlider picSymbolRotSlider = new JSlider(0, 3600);
 	
 	MainScreen screen;
-	
+		
 	public UITopPanel(MainScreen __screen) {
 		this.screen = __screen;
 		setPreferredSize(new Dimension(1000, 70));
@@ -249,19 +250,29 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(), 
 												getBackground().brighter()), "Change Arrow Type"));
 		//##### ARROW SETTINGS #####
-		arrowScaleSlider.setMajorTickSpacing(10);
+		arrowScaleSlider.setMajorTickSpacing(20);
+		arrowScaleSlider.setMinorTickSpacing(10);
 		arrowScaleSlider.setPaintTicks(true);
-		//sliderScaleIcon.setPaintLabels(true);
+		arrowScaleSlider.setPaintLabels(true);
 		arrowScaleSlider.addChangeListener(e -> sliderArrowScale());
 		arrowScaleSlider.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
 												getBackground().brighter()), "Scale Arrow"));
-		arrowRotSlider.setMajorTickSpacing(225);
+		
+		Hashtable<Integer, JLabel> labels = new Hashtable<>();
+		labels.put(0,  new JLabel("0"));
+		labels.put(900, new JLabel("90°"));
+		labels.put(1800, new JLabel("180°"));
+		labels.put(2700, new JLabel("270°"));
+		labels.put(3600, new JLabel("360°"));
+		arrowRotSlider.setLabelTable(labels);
+		arrowRotSlider.setMajorTickSpacing(900);
+		arrowRotSlider.setMinorTickSpacing(225);
 		arrowRotSlider.setPaintTicks(true);
-		//sliderRotIcon.setPaintLabels(true);
+		arrowRotSlider.setPaintLabels(true);
 		arrowRotSlider.setSnapToTicks(true);
-		arrowRotSlider.addChangeListener(e -> sliderRotChanged());
+		arrowRotSlider.addChangeListener(e -> sliderArrowRotChanged());
 		arrowRotSlider.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
@@ -475,11 +486,12 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int)arrow.getPosition().y, 
-												(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
-												(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
+						(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
+						(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
 			}
 		}
 	}
+
 	
 	/**
 	 * changes the scale for all selected OriPicSymbol
@@ -501,7 +513,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	/**
 	 * Sets the rotation of all selected OriArrows
 	 */
-	private void sliderRotChanged() {
+	private void sliderArrowRotChanged() {
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
 				arrow.setDegrees(arrowRotSlider.getValue()/10);
@@ -509,7 +521,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				
 				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
 				
-				arrow.getLabel().setBounds((int)arrow.getPosition().x, (int)arrow.getPosition().y, (int)rect.getWidth(), (int)rect.getHeight());
+				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, (int) rect.getWidth(), (int) rect.getHeight());
 			}
 		}
 	}
@@ -662,6 +674,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 		modeChanged();
 	}
+	
 	
 	private int getSelectedTypes() {
 		
@@ -827,7 +840,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			//  101 0000 0000	PLEAT
 			int selectedTypes = getSelectedTypes();
 			
-			//int creaseMask  = 0b00000000001;
 			int lineMask 	= 0b0000000001;
 			int arrowMask 	= 0b0000000010;
 			int faceMask	= 0b0000000100;
@@ -839,14 +851,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			int equAnglMask = 0b0100000000;
 			int pleatMask 	= 0b1000000000;
 
-//			int result = selectedTypes & creaseMask;
-//			
-//			if (result == 0b00000000001) {
-//				changeCreaseEndsPanel.setVisible(true);
-//				
-//			} else {
-//				changeCreaseEndsPanel.setVisible(false);
-//			}
 			int result = selectedTypes & lineMask;
 			if (result == 0b0000000001) {
 				changeLinePanel.setVisible(true);

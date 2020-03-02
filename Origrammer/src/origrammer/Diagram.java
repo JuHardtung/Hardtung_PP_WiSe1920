@@ -16,6 +16,7 @@ public class Diagram {
 	public String dataFilePath = "";
 	
 	public Diagram() {
+		this.paperSize = Constants.DEFAULT_PAPER_SIZE;
 	}
 	
 	public Diagram(double paperSize, Color faceUpColor, Color faceDownColor) {

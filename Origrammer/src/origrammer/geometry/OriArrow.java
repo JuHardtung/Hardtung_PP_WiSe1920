@@ -90,17 +90,17 @@ public class OriArrow {
 	
 	public double getAdjustedScale() {
 		if (type == TYPE_VALLEY) {
-			return scale + 1.5;
+			return scale + 0.75;
 		} else if (type == TYPE_MOUNTAIN) {
-			return scale + 0.8;
+			return scale + 0.4;
 		} else if (type == TYPE_TURN_OVER) {
-			return scale + 1.5;
+			return scale + 0.75;
 		} else if (type == TYPE_PUSH_HERE) {
-			return scale + 0.8;
+			return scale + 0.4;
 		} else if (type == TYPE_PULL_HERE) {
-			return scale + 1.0;
+			return scale + 0.5;
 		} else if (type == TYPE_INFLATE_HERE) {
-			return scale + 1.0;
+			return scale + 0.5;
 		} else {
 			return scale;
 		}

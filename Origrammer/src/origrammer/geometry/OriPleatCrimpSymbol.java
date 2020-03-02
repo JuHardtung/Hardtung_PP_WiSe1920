@@ -28,62 +28,12 @@ public class OriPleatCrimpSymbol {
 		this.layersCount = layersCount;
 	}
 	
-//	public ArrayList<Shape> getShapesForDrawing() {
-//		ArrayList<Shape> shapes = new ArrayList<>();
-//		Vector2d p0 = new Vector2d(position.x, position.y);
-//		Vector2d uvHori = new Vector2d(1,0);
-//		double translatX;
-//		double translatY;
-//
-//		Vector2d uvDiagonal;
-//
-//		/**		  
-//		 * 		(p2)______(p3)	|  (p3)______(p2)
-//		 *         \			|			 /
-//		 * 		   	\			|			/
-//		 *      	 \			| 		   /
-//		 * (p0)______(p1)		|		(p1)_______(p0)
-//		 */
-//
-//		Vector2d p1 = new Vector2d();		   
-//		Vector2d p2 = new Vector2d();
-//		Vector2d p3 = new Vector2d();
-//
-//		if (isSwitchedDir) {
-//			uvDiagonal = new Vector2d(1, -0.6);
-//			uvHori = new Vector2d(-1, 0);
-//			translatX = 20;
-//			translatY = -5.5;
-//		} else {
-//			uvDiagonal = new Vector2d(-1, -0.6);
-//			uvHori = new Vector2d(1, 0);
-//			translatX = -20;
-//			translatY = -5.5;
-//
-//		}
-//
-//		for (int i=0; i<layersCount; i++) {
-//			p0.x += translatX;
-//			p0.y += translatY;
-//			p1.x = p0.x + uvHori.x*55;
-//			p1.y = p0.y + uvHori.y*55;
-//
-//			double p0TransX = uvHori.x*20*(layersCount-1) - uvHori.x*20*(i+1);
-//			double p0TransY = uvHori.y*20*(layersCount-1) - uvHori.y*20*(i+1);
-//
-//			shapes.add(new Line2D.Double(p0.x-p0TransX, p0.y-p0TransY, p1.x, p1.y));
-//
-//			p2.x = p1.x + uvDiagonal.x*25;
-//			p2.y = p1.y + uvDiagonal.y*25;
-//			shapes.add(new Line2D.Double(p1.x, p1.y, p2.x, p2.y));
-//
-//			p3.x = p2.x + uvHori.x*35 + uvHori.x*20*i;
-//			p3.y = p2.y + uvHori.y*35 + uvHori.y*20*i;
-//			shapes.add(new Line2D.Double(p2.x, p2.y, p3.x, p3.y));
-//		}
-//
-//		return shapes;
-//	}
+	public OriPleatCrimpSymbol(Vector2d position, boolean isSwitchedDir, int layersCount, int type) {
+		this.position = position;
+		this.isSwitchedDir = isSwitchedDir;
+		this.layersCount = layersCount;
+		this.type = type;
+	}
 	
 	public ArrayList<Shape> getShapesForDrawing() {
 		ArrayList<Shape> shapes = new ArrayList<>();

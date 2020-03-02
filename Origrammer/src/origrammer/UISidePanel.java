@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -72,6 +73,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	public JFormattedTextField scalingCustomTF;
 	private JLabel percentLabel = new JLabel("%");
 	private JButton scalingCustomButton = new JButton("Set");
+	private JButton scaling100 = new JButton("100%");
 	private JButton scalingMinus = new JButton("-");
 	private JButton scalingPlus = new JButton("+");
 	
@@ -143,6 +145,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 		//SCALING ActionListener
 		scalingCustomButton.addActionListener(this);
+		scaling100.addActionListener(this);
 		scalingMinus.addActionListener(this);
 		scalingPlus.addActionListener(this);
 		
@@ -237,30 +240,35 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		PlainDocument docScalingCustom = (PlainDocument) scalingCustomTF.getDocument();
 		docScalingCustom.setDocumentFilter(new IntFilter());
 		
-		
-		JPanel scalingCustomPanel = new JPanel();
-		scalingCustomPanel.add(scalingCustomTF);
-		scalingCustomPanel.add(percentLabel);
-		scalingCustomPanel.add(scalingCustomButton);
-		//scalingCustomPanel.setLayout(new BoxLayout(scalingCustomPanel, BoxLayout.LINE_AXIS));
-		
-		JPanel scalingButtonsPanel = new JPanel();
-		scalingButtonsPanel.add(scalingMinus);
-		scalingButtonsPanel.add(scalingPlus);
-
-		//scalingButtonsPanel.setLayout(new BoxLayout(scalingButtonsPanel, BoxLayout.LINE_AXIS));
 		JPanel scalingCustom = new JPanel();
 		scalingCustom.add(scalingCustomTF);
 		scalingCustom.add(percentLabel);
 		
+		JPanel scalingCustomPanel = new JPanel();
+		//scalingCustomPanel.add(scalingCustomTF);
+		scalingCustomPanel.add(scalingCustom);
+		scalingCustomPanel.add(scalingCustomButton);
+		scalingCustomPanel.setLayout(new BoxLayout(scalingCustomPanel, BoxLayout.LINE_AXIS));
 		
-		JPanel scalingPanel = new JPanel();
-		scalingPanel.add(scalingCustom);
-		scalingPanel.add(scalingCustomButton);
-		scalingPanel.add(scalingMinus);
-		scalingPanel.add(scalingPlus);
+		JPanel scalingButtonsPanel = new JPanel();
+		scalingButtonsPanel.add(scaling100);
+		scalingButtonsPanel.add(scalingMinus);
+		scalingButtonsPanel.add(scalingPlus);
+		scalingButtonsPanel.setLayout(new BoxLayout(scalingButtonsPanel, BoxLayout.LINE_AXIS));
+		
 
-		scalingPanel.setLayout(new GridLayout(2, 2, 5, 5));
+		JPanel scalingPanel = new JPanel();
+		scalingPanel.add(scalingCustomPanel);
+		scalingPanel.add(scalingButtonsPanel);
+		scalingPanel.setLayout(new BoxLayout(scalingPanel, BoxLayout.PAGE_AXIS));
+
+//		scalingPanel.add(scalingCustom);
+//		scalingPanel.add(scalingCustomButton);
+//		scalingPanel.add(scaling100);
+//		scalingPanel.add(scalingMinus);
+//		scalingPanel.add(scalingPlus);
+
+		//scalingPanel.setLayout(new GridLayout(2, 3, 5, 5));
 		
 		scalingPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Scaling"));
 		
@@ -310,6 +318,9 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				scalingCustomTF.setValue(Globals.SCALE*100);
 			}
 			
+		} else if (e.getSource() == scaling100) {
+			Globals.SCALE = 1.0;
+			modeChanged();
 		} else if (e.getSource() == scalingMinus) {
 			Globals.SCALE -= 0.1;
 			modeChanged();
@@ -358,7 +369,9 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				}
 
 			}
-		} else if (e.getSource() == dispGridCheckBox) {
+		}
+		
+		if (e.getSource() == dispGridCheckBox) {
 			screen.setDispGrid(dispGridCheckBox.isSelected());
 		} else if (e.getSource() == gridSetButton) {
 			int customGrid = new Integer(gridTextField.getText());

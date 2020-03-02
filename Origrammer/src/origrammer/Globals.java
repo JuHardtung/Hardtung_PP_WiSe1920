@@ -5,7 +5,6 @@ import java.awt.Color;
 
 import origrammer.geometry.OriArrow;
 import origrammer.geometry.OriLine;
-import origrammer.geometry.OriPicSymbol;
 
 public class Globals {
 	

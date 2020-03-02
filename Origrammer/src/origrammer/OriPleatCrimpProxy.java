@@ -23,7 +23,7 @@ public class OriPleatCrimpProxy {
 	}
 	
 	public OriPleatCrimpSymbol getSymbol() {
-		return new OriPleatCrimpSymbol(position, isSwitchedDir, layersCount);
+		return new OriPleatCrimpSymbol(position, isSwitchedDir, layersCount, type);
 	}
 
 	public Vector2d getPosition() {

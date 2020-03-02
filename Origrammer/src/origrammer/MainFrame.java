@@ -149,8 +149,8 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
         
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
-        menuBar.add(menuObject);
-        menuBar.add(menuType);
+//        menuBar.add(menuObject);
+//        menuBar.add(menuType); //TODO: object and type menuItem
         menuBar.add(menuSelect);
         menuBar.add(menuAbout);
         setJMenuBar(menuBar);       

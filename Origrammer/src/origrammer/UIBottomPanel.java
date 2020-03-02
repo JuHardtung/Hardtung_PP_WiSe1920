@@ -2,7 +2,6 @@ package origrammer;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,9 +33,7 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 	
 	private JButton stepBack = new JButton("<");
 	private JFormattedTextField currentStepTF = new JFormattedTextField(new DecimalFormat("###"));
-	private JButton stepForth = new JButton(">");
-	private Step newStep = new Step();
-	
+	private JButton stepForth = new JButton(">");	
 	
 	private JPanel newStepPanel = new JPanel();
 	private JRadioButton newEmptyStep = new JRadioButton("Empty Step", false);
