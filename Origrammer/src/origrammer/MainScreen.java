@@ -131,6 +131,7 @@ public class MainScreen extends JPanel
 		renderAllLines();
 		renderAllArrows();
 
+		//Symbols
 		renderAllPicSymbols();
 		renderAllOriLeaderBoxes();
 		renderAllOriGeomSymbols();
@@ -140,14 +141,10 @@ public class MainScreen extends JPanel
 
 		renderAllVertices();
 
+		//temporary stuff
 		renderAllTempLines();
-
 		renderSelectedVertices();
-
-		//draw RECTANGULAR selection
 		renderRectSelection();
-
-		//draw tmp OriGeomSymbol
 		renderTempOriGeomSymbol();
 
 		//show coordinates of selected Vertex
@@ -509,6 +506,7 @@ public class MainScreen extends JPanel
      			   g2d.setColor(Config.LINE_COLOR_SELECTED);
      			   vertexDrawSize = 5.0;
      		   } else {
+     			   vertexDrawSize = 3.0;
      			   g2d.setColor(Config.LINE_COLOR_EDGE);
      		   }
      		  g2d.fill(new Rectangle2D.Double(v.getP().x - vertexDrawSize / Globals.SCALE,
@@ -642,6 +640,13 @@ public class MainScreen extends JPanel
     	affineTransform.scale(Globals.SCALE, Globals.SCALE);
         //affineTransform.setToTranslation(Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_PAPER_SIZE);
     	g2d.transform(affineTransform);
+    }
+    
+    public void resetView() {
+    	transX = 0;
+    	transY = 0;
+    	updateAffineTransform(g2d);
+    	repaint();
     }
     
     public BufferedImage getBufImgByTypeAndRot(OriPicSymbol s) {
@@ -1048,36 +1053,12 @@ public class MainScreen extends JPanel
 			tmpLeader.line.setP1(secondSelectedV);
 			tmpLeader.setText(Origrammer.mainFrame.uiTopPanel.inputLeaderText.getText());
 			tmpLeader.setSelected(false);
-			
+
 			if (tmpLeader.getLabel().getText().length() == 0) {
 				JOptionPane.showMessageDialog(this,  Origrammer.res.getString("Error_EmptyLeaderTextField"),
 						"Error_EmptyLeaderTextField", 
 						JOptionPane.ERROR_MESSAGE);
 			} else {
-//				//get JLabel size that fits the text
-//				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpLeader.getLabel().getText(), g2d);
-//				double width =  labelBounds.getWidth()+10;
-//				double height = labelBounds.getHeight();
-//				
-//				//get JLabel placement depending on the line
-//				if (tmpLeader.line.getP0().y < tmpLeader.line.getP1().y) {
-//					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
-//						//bottom right
-//						tmpRect.setRect(tmpLeader.line.getP1().x, tmpLeader.line.getP1().y+1, width, height+2);
-//					} else {
-//						//bottom left
-//						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y+1, width, height+2);
-//					}
-//				} else {
-//					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
-//						//top right
-//						tmpRect.setRect(tmpLeader.line.getP1().x+1, tmpLeader.line.getP1().y-height, width, height+2);
-//					} else {
-//						//top left
-//						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y-height, width, height+2);
-//					}
-//				}
-				//tmpLeader.getLabelBounds()
 				tmpLeader.setLabelBounds(tmpLeader.getLabelBounds(g2d));
 				if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
 					tmpLeader.setType(OriLeaderBox.TYPE_LEADER);
@@ -1086,7 +1067,7 @@ public class MainScreen extends JPanel
 				}
 				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
 			}
-			
+
 			firstSelectedV = null;
 			secondSelectedV = null;
 		}
@@ -1281,17 +1262,19 @@ public class MainScreen extends JPanel
 		}
 		
 		//select OriFace or unselect all OriFaces if clicked on nothing
-		OriFace f = pickFace(clickPoint);
-		if (f != null) {
-			if (!f.isSelected()) {
-				f.setSelected(true);
+		if (Globals.dispFilledFaces) {
+			OriFace f = pickFace(clickPoint);
+			if (f != null) {
+				if (!f.isSelected()) {
+					f.setSelected(true);
+				} else {
+					f.setSelected(false);
+				}
 			} else {
-				f.setSelected(false);
+				Origrammer.diagram.steps.get(Globals.currentStep).unselectAllFaces();
 			}
-		} else {
-			Origrammer.diagram.steps.get(Globals.currentStep).unselectAllFaces();
 		}
-		
+
 		//select OriLeader or unselect all OriLeader if clicked on nothing
 		OriLeaderBox leader = pickLeader(clickPoint);
 		if (leader != null) {
@@ -1943,11 +1926,12 @@ public class MainScreen extends JPanel
 					(int) Math.round(arrow.getHeight()*arrow.getAdjustedScale()));
 			repaint();		
 		} else if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 
+				&& (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL
 				&& (Globals.inputSymbolMode == Constants.InputSymbolMode.ROTATIONS
 				|| Globals.inputSymbolMode == Constants.InputSymbolMode.NEXT_VIEW
 				|| Globals.inputSymbolMode == Constants.InputSymbolMode.HOLD_HERE
-				|| Globals.inputSymbolMode == Constants.InputSymbolMode.HOLD_HERE_AND_PULL)) {
-			
+				|| Globals.inputSymbolMode == Constants.InputSymbolMode.HOLD_HERE_AND_PULL))) {
+						
 			isReleased = true;
 			int type = OriPicSymbol.TYPE_NONE;
 
@@ -2046,6 +2030,15 @@ public class MainScreen extends JPanel
 				}
 			}
 			
+			//Check if there is a line in the selection rectangle
+			for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
+				if (selectRect.contains(new Point2D.Double(v.getP().x, v.getP().y))) {
+					v.setSelected(true);
+				} else {
+					v.setSelected(false);
+				}
+			}
+			
 			//Check if there is an arrow in the selection rectangle
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(a.getPosition().x), 
@@ -2057,15 +2050,17 @@ public class MainScreen extends JPanel
 				}
 			}
 			
-			//Check if there is a OriFace in the selection rectangle
-			for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
-				if (f.path.intersects(selectRect)) {
-					f.setSelected(true);
-				} else {
-					f.setSelected(false);
-				}
+			//Check if there is a OriFace in the selection rectangle (only if filledFaces are rendered)
+			if (Globals.dispFilledFaces) {
+				for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
+					if (f.path.intersects(selectRect)) {
+						f.setSelected(true);
+					} else {
+						f.setSelected(false);
+					}
+				}	
 			}
-			
+
 			//Check if there is a symbol in the selection rectangle
 			for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(s.getPosition().x), 
@@ -2182,27 +2177,15 @@ public class MainScreen extends JPanel
 		repaint();
 		
 	}
+	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		//zoom on diagram with mouseWheel
 		double scale_ = (100.0 - e.getWheelRotation() * 5) / 100.0;
 		Globals.SCALE *= scale_;
-		
-		
-//		double newScale = Double.parseDouble(Origrammer.mainFrame.uiSidePanel.scalingCustomTF.set());
-//		if (newScale < 1000 && newScale > 0) {
-//			Globals.SCALE = newScale/100;
-//			screen.repaint();
-//		} else {
-//			scalingCustomTF.setValue(Globals.SCALE*100);
-//		}
-		
-		
+
 		Origrammer.mainFrame.uiSidePanel.scalingCustomTF.setValue(Globals.SCALE*100);
-		
-		
-		
-		
+
 		//updateAffineTransform(g2d);
 		repaint();
 	}

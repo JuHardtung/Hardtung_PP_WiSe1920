@@ -84,8 +84,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JButton changeSymbolLeaderButton = new JButton("Set");
 	
 	//INPUT SYMBOL REPETITION BOX
-	private JPanel inputSymbolRepetitionPanel = new JPanel();
-	public JTextField inputRepetitionText = new JTextField();
+//	private JPanel inputSymbolRepetitionPanel = new JPanel();
+//	public JTextField inputRepetitionText = new JTextField();
 	
 	//FACE UP/ FACE DOWN COLOR
 	private JPanel faceDirectionPanel = new JPanel();
@@ -303,24 +303,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		inputSymbolLeaderPanel.setBorder(new TitledBorder(
 								new EtchedBorder(BevelBorder.RAISED, 
 												getBackground().darker(), 
-												getBackground().brighter()), "Input Leader Text"));
+												getBackground().brighter()), "Input Text"));
 		
 		//##### CHANGE SYMBOL LEADER #####
+		changeLeaderText.setPreferredSize(new Dimension(150, 25));
 		changeSymbolLeaderPanel.add(changeLeaderText);
 		changeSymbolLeaderPanel.add(changeSymbolLeaderButton);
 		changeSymbolLeaderButton.addActionListener(this);
 		changeSymbolLeaderPanel.setBorder(new TitledBorder(
 										new EtchedBorder(BevelBorder.RAISED, 
 														getBackground().darker(), 
-														getBackground().brighter()), "Change Leader Text"));
-		
-		//##### INPUT SYMBOL REPETITION BOX #####
-		inputRepetitionText.setPreferredSize(new Dimension(150, 25));
-		inputSymbolRepetitionPanel.add(inputRepetitionText);
-		inputSymbolRepetitionPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Input Repetition Text"));
+														getBackground().brighter()), "Change Text"));
 	
 		//##### ORI_PIC_SYMBOL SETTINGS #####
 		picSymbolScaleSlider.setMajorTickSpacing(10);
@@ -416,7 +409,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(picSymbolPanel);
 		add(inputSymbolLeaderPanel);
 		add(changeSymbolLeaderPanel);
-		add(inputSymbolRepetitionPanel);
 		add(equalDistPanel);
 		add(equalAnglPanel);
 		add(pleatPanel);
@@ -704,78 +696,70 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	
 	private int getSelectedTypes() {
 		
-		//  000 0000 0001	CREASES
-		//	000 0000 0010	LINES
-		//	000 0000 0100	ARROWS
-		//  000 0000 1000	FILLED_FACES
-		//  000 0001 0000	LEADER
-		//  000 0010 0000	REPE_BOXES
-		//  000 0100 0000	PIC_SYMBOLS
-		//  000 1000 0000	GEO_SYMBOLS
-		//  001 0000 0000	EQUAL_DIST_SYMBOLS
-		//  011 0000 0000	EQUAL_ANGL_SYMBOLS
-		//  101 0000 0000	PLEAT
+		//	0 0000 0001	LINES
+		//	0 0000 0010	ARROWS
+		//  0 0000 0100	FILLED_FACES
+		//  0 0000 1000	LEADER
+		//  0 0001 0000	PIC_SYMBOLS
+		//  0 0010 0000	GEO_SYMBOLS
+		//  0 0100 0000	EQUAL_DIST_SYMBOLS
+		//  0 1000 0000	EQUAL_ANGL_SYMBOLS
+		//  1 0000 0000	PLEAT
 
 		
-		int selectedTypes = 0b0000000000;
-//		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
-//			if (line.isSelected() && line.getType() == OriLine.TYPE_CREASE) {
-//				selectedTypes += 0b00000000001;
-//				break;
-//			}
-//		}
+		int selectedTypes = 0b000000000;
 		
 		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (line.isSelected()) {
-				selectedTypes += 0b0000000001;
+				selectedTypes += 0b000000001;
 				break;
 			}
 		}
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				selectedTypes += 0b0000000010;
+				selectedTypes += 0b000000010;
 				break;
 			}
 		}
 		for (OriFace face : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
 			if (face.isSelected()) {
-				selectedTypes += 0b0000000100;
+				selectedTypes += 0b000000100;
 				break;
 			}
 		}
 		for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
 			if (leader.isSelected()) {
-				selectedTypes += 0b0000001000;
+				selectedTypes += 0b000001000;
 				break;
 			}
 		}
 		for (OriPicSymbol picS : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 			if (picS.isSelected()) {
-				selectedTypes += 0b0000100000;
+				selectedTypes += 0b000010000;
 				break;
 			}
 		}
 		for (OriGeomSymbol geoS : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 			if (geoS.isSelected()) {
-				selectedTypes += 0b0001000000;
+				selectedTypes += 0b000100000;
 				break;
 			}
 		}
 		for (OriEqualDistSymbol equalDist : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 			if (equalDist.isSelected()) {
-				selectedTypes += 0b0010000000;
+				selectedTypes += 0b001000000;
 				break;
 			}
 		}
 		for (OriEqualAnglSymbol equalAngl : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
 			if (equalAngl.isSelected()) {
-				selectedTypes += 0b0100000000;
+				selectedTypes += 0b010000000;
 				break;
 			}
 		}
 		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 			if (pleat.isSelected()) {
-				selectedTypes += 0b1000000000;
+				selectedTypes += 0b100000000;
 				break;
 			}
 		}
@@ -811,15 +795,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
 			inputSymbolsPanel.setVisible(true);
-			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
+			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER 
+				|| Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
 				inputSymbolLeaderPanel.setVisible(true);
 			} else {
 				inputSymbolLeaderPanel.setVisible(false);
-			}
-			if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
-				inputSymbolRepetitionPanel.setVisible(true);
-			} else {
-				inputSymbolRepetitionPanel.setVisible(false);
 			}
 			if (Globals.inputSymbolMode == Constants.InputSymbolMode.EQUAL_DIST) {
 				equalDistPanel.setVisible(true);
@@ -840,7 +820,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
 			changeSymbolLeaderPanel.setVisible(false);
-			inputSymbolRepetitionPanel.setVisible(false);
+			//inputSymbolRepetitionPanel.setVisible(false);
 			equalDistPanel.setVisible(false);
 			equalAnglPanel.setVisible(false);
 			pleatPanel.setVisible(false);
@@ -854,32 +834,29 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
 			
-			//  000 0000 0010	CREASE
-			//	000 0000 0010	LINES
-			//	000 0000 0100	ARROWS
-			//  000 0000 1000	FILLED_FACES
-			//  000 0001 0000	LEADER
-			//  000 0010 0000	REPE_BOXES
-			//  000 0100 0000	PIC_SYMBOLS
-			//  000 1000 0000	GEO_SYMBOLS
-			//  001 0000 0000	EQUAL_DIST_SYMBOLS
-			//  011 0000 0000	EQUAL_ANGL_SYMBOLS
-			//  101 0000 0000	PLEAT
+			//	0 0000 0001	LINES
+			//  0 0000 0010	ARROWS
+			//  0 0000 0100	FILLED_FACES
+			//  0 0000 1000	LEADER
+			//  0 0001 0000	PIC_SYMBOLS
+			//  0 0010 0000	GEO_SYMBOLS
+			//  0 0100 0000	EQUAL_DIST_SYMBOLS
+			//  0 1000 0000	EQUAL_ANGL_SYMBOLS
+			//  1 0000 0000	PLEAT
 			int selectedTypes = getSelectedTypes();
 			
-			int lineMask 	= 0b0000000001;
-			int arrowMask 	= 0b0000000010;
-			int faceMask	= 0b0000000100;
-			int leaderMask	= 0b0000001000;
-			int repeMask	= 0b0000010000;
-			int picMask		= 0b0000100000;
-			int geoMask		= 0b0001000000;
-			int equDistMask = 0b0010000000;
-			int equAnglMask = 0b0100000000;
-			int pleatMask 	= 0b1000000000;
+			int lineMask 	= 0b000000001;
+			int arrowMask 	= 0b000000010;
+			int faceMask	= 0b000000100;
+			int leaderMask	= 0b000001000;
+			int picMask		= 0b000010000;
+			int geoMask		= 0b000100000;
+			int equDistMask = 0b001000000;
+			int equAnglMask = 0b010000000;
+			int pleatMask 	= 0b100000000;
 
 			int result = selectedTypes & lineMask;
-			if (result == 0b0000000001) {
+			if (result == 0b000000001) {
 				changeLinePanel.setVisible(true);
 				for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 					if (l.isSelected() && l.getType() == OriLine.TYPE_CREASE) {
@@ -893,7 +870,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				changeLinePanel.setVisible(false);
 			}
 			result = selectedTypes & arrowMask;
-			if (result == 0b0000000010) {
+			if (result == 0b000000010) {
 				changeArrowPanel.setVisible(true);
 				sliderPanel.setVisible(true);
 			} else {
@@ -901,27 +878,21 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & faceMask;
-			if (result == 0b0000000100) {
+			if (result == 0b000000100) {
 				faceDirectionPanel.setVisible(true);
 			} else {
 				faceDirectionPanel.setVisible(false);
 			}
 			result = selectedTypes & leaderMask;
-			if (result == 0b0000001000) {
+			if (result == 0b000001000) {
 				//inputSymbolLeaderPanel.setVisible(true);
 				changeSymbolLeaderPanel.setVisible(true);
 			} else {
 				//inputSymbolLeaderPanel.setVisible(false);
 				changeSymbolLeaderPanel.setVisible(false);
 			}
-			result = selectedTypes & repeMask;
-			if (result == 0b0000010000) {
-				inputSymbolRepetitionPanel.setVisible(true);
-			} else {
-				inputSymbolRepetitionPanel.setVisible(false);
-			}
 			result = selectedTypes & picMask;
-			if (result == 0b0000100000) {
+			if (result == 0b000010000) {
 				picSymbolPanel.setVisible(true);
 				//sliderPanel.setVisible(true); //TODO: MAYBE OWN SLIDER FOR PIC_SYMBOLS
 			} else {
@@ -929,17 +900,17 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				//sliderPanel.setVisible(false);
 			}
 			result = selectedTypes & geoMask;
-			if (result == 0b0001000000) {
+			if (result == 0b000100000) {
 				//TODO: editing options for geoSymbols
 			}
 			result = selectedTypes & equDistMask;
-			if (result == 0b0010000000) {
+			if (result == 0b001000000) {
 				equalDistPanel.setVisible(true);
 			} else {
 				equalDistPanel.setVisible(false);
 			}
 			result = selectedTypes & equAnglMask;
-			if (result == 0b0100000000) {
+			if (result == 0b010000000) {
 				sliderEqualAngl.setVisible(true);
 				equalAnglPanel.setVisible(true);
 			} else {
@@ -947,7 +918,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				equalAnglPanel.setVisible(false);
 			}
 			result = selectedTypes & pleatMask;
-			if (result == 0b1000000000) {
+			if (result == 0b100000000) {
 				pleatPanel.setVisible(true);
 			} else {
 				pleatPanel.setVisible(false);

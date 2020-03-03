@@ -77,6 +77,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	private JButton scalingMinus = new JButton("-");
 	private JButton scalingPlus = new JButton("+");
 	
+	private JButton resetViewButton = new JButton("Reset View");
 	private JCheckBox dispVerticesCB = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
 	private JCheckBox dispFilledFacedCB = new JCheckBox(Origrammer.res.getString("UI_ShowFilledFaces"), true);
 
@@ -148,6 +149,10 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		scaling100.addActionListener(this);
 		scalingMinus.addActionListener(this);
 		scalingPlus.addActionListener(this);
+		
+		
+		//RESET VIEW BUTTON ActionListener
+		resetViewButton.addActionListener(this);
 		
 		//DISPL VERTICES ActionListener
 		dispVerticesCB.addActionListener(this);
@@ -277,9 +282,10 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		
 		//Buttons Panel and positioning
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.add(resetViewButton);
 		buttonsPanel.add(dispVerticesCB);
 		buttonsPanel.add(dispFilledFacedCB);
-		buttonsPanel.setLayout(new GridLayout(2, 1, 10, 2));
+		buttonsPanel.setLayout(new GridLayout(3, 1, 10, 2));
 		add(buttonsPanel);
 		
 		modeChanged();
@@ -370,7 +376,9 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 
 			}
 		}
-		
+		if (e.getSource() == resetViewButton) {
+			screen.resetView();
+		}
 		if (e.getSource() == dispGridCheckBox) {
 			screen.setDispGrid(dispGridCheckBox.isSelected());
 		} else if (e.getSource() == gridSetButton) {

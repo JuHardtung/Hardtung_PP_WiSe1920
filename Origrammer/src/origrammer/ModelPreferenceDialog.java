@@ -353,8 +353,14 @@ public class ModelPreferenceDialog extends JDialog implements ActionListener, Co
 		Origrammer.diagram.setTitle(titleTF.getText());
 		Origrammer.diagram.setAuthor(authorTF.getText());
 		Origrammer.diagram.setComments(commentsTF.getText());
-		Origrammer.diagram.setPaperWidth(Integer.parseInt(paperSizeTF.getText()));
-		Origrammer.diagram.setPaperHeight(Integer.parseInt(paperSizeTF.getText()));
+		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
+			Origrammer.diagram.setPaperWidth(Integer.parseInt(paperSizeTF.getText()));
+			Origrammer.diagram.setPaperHeight(Integer.parseInt(paperSizeTF.getText()));	
+		} else if (Globals.paperShape == Constants.PaperShape.RECTANGLE) {
+			Origrammer.diagram.setPaperWidth(Integer.parseInt(paperWidthTF.getText()));
+			Origrammer.diagram.setPaperHeight(Integer.parseInt(paperHeightTF.getText()));	
+		}
+
 
 		Origrammer.diagram.setFaceUpColor(faceUpColor.getBackground());
 		Origrammer.diagram.setFaceDownColor(faceDownColor.getBackground());
