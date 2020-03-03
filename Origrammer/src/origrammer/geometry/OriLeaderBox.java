@@ -1,6 +1,8 @@
 package origrammer.geometry;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JLabel;
 
@@ -42,7 +44,39 @@ public class OriLeaderBox {
 		label.setBounds(oldBounds.x + (int) x, oldBounds.y + (int) y, 
 				oldBounds.width, oldBounds.height);
 	}
+	
+	public Rectangle getLabelBounds(Graphics2D g2d) {
+		//get JLabel size that fits the text
+		Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(getLabel().getText(), g2d);
+		Rectangle tmpRect = new Rectangle();
+		double width =  labelBounds.getWidth()+10;
+		double height = labelBounds.getHeight();
+		
+		//get JLabel placement depending on the line
+		if (line.getP0().y < line.getP1().y) {
+			if (line.getP0().x < line.getP1().x) {
+				//bottom right
+				tmpRect.setRect(line.getP1().x, line.getP1().y+1, width, height+2);
+			} else {
+				//bottom left
+				tmpRect.setRect(line.getP1().x-width+1, line.getP1().y+1, width, height+2);
+			}
+		} else {
+			if (line.getP0().x < line.getP1().x) {
+				//top right
+				tmpRect.setRect(line.getP1().x+1, line.getP1().y-height, width, height+2);
+			} else {
+				//top left
+				tmpRect.setRect(line.getP1().x-width+1, line.getP1().y-height, width, height+2);
+			}
+		}
+		return tmpRect;
+	}
 
+	public void setLabelBounds(Rectangle rect) {
+		label.setBounds(rect);
+	}
+	
 	public OriLine getLine() {
 		return line;
 	}
@@ -62,10 +96,6 @@ public class OriLeaderBox {
 	public void setText(String leaderText) {
 		label.setText(leaderText);
 	}
-	
-	public void setPosition(Rectangle rect) {
-		label.setBounds(rect);
-	}
 
 	public int getType() {
 		return type;
@@ -82,5 +112,10 @@ public class OriLeaderBox {
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "OriLeaderBox [line=" + line + ", label=" + label + ", type=" + type + ", isSelected=" + isSelected
+				+ "]";
+	}	
 }

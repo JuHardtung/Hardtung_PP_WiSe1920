@@ -22,7 +22,7 @@ public class OriGeomSymbolProxy {
 	}
 	
 	public OriGeomSymbol getSymbol() {
-		return new OriGeomSymbol(position, radius);
+		return new OriGeomSymbol(position, radius, type);
 	}
 
 	public Vector2d getPosition() {

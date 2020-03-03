@@ -4,7 +4,7 @@ import javax.vecmath.Vector2d;
 
 import origrammer.geometry.OriPicSymbol;
 
-public class OriPicProxy {
+public class OriPicSymbolProxy {
 	
 	private Vector2d position;
 	private int width;
@@ -13,11 +13,11 @@ public class OriPicProxy {
 	private double degrees;
 	private int type;
 	
-	public OriPicProxy() {
+	public OriPicSymbolProxy() {
 		
 	}
 	
-	public OriPicProxy(OriPicSymbol s) {
+	public OriPicSymbolProxy(OriPicSymbol s) {
 		this.position = s.getPosition();
 		this.width = s.getWidth();
 		this.height = s.getHeight();
@@ -27,7 +27,7 @@ public class OriPicProxy {
 	}
 	
 	public OriPicSymbol getSymbol() {
-		return new OriPicSymbol(position, width, height, scale, degrees);
+		return new OriPicSymbol(position, width, height, scale, degrees, type);
 	}
 
 	public Vector2d getPosition() {

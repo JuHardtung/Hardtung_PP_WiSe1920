@@ -24,11 +24,11 @@ public class OriGeomSymbol {
 		this.radius = radius;
 	}
 	
-//	public OriGeomSymbol(Vector2d position, double width, double height) {
-//		this.position = position;
-//		this.width = width;
-//		this.height = height;
-//	}
+	public OriGeomSymbol(Vector2d position, double radius, int type) {
+		this.position = position;
+		this.radius = radius;
+		this.type = type;
+	}
 
 	public int getType() {
 		return type;
@@ -78,4 +78,9 @@ public class OriGeomSymbol {
 		this.isSelected = isSelected;
 	}
 
+	@Override
+	public String toString() {
+		return "OriGeomSymbol [type=" + type + ", position=" + position + ", radius=" + radius + ", isSelected="
+				+ isSelected + "]";
+	}
 }

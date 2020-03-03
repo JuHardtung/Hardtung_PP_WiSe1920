@@ -3,6 +3,7 @@ package origrammer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -77,6 +78,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JPanel inputSymbolLeaderPanel = new JPanel();
 	public JTextField inputLeaderText = new JTextField();
 	
+	//CHANGE SYMBOL LEADER
+	private JPanel changeSymbolLeaderPanel = new JPanel();
+	private JTextField changeLeaderText = new JTextField();
+	private JButton changeSymbolLeaderButton = new JButton("Set");
+	
 	//INPUT SYMBOL REPETITION BOX
 	private JPanel inputSymbolRepetitionPanel = new JPanel();
 	public JTextField inputRepetitionText = new JTextField();
@@ -136,7 +142,6 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		this.screen = __screen;
 		setPreferredSize(new Dimension(1000, 70));
 		setBackground(new Color(230, 230, 230));
-		
 		
 		//##### FACE UP / FACE DOWN INPUT
 		ButtonGroup faceDirectionInput = new ButtonGroup();
@@ -300,6 +305,15 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 												getBackground().darker(), 
 												getBackground().brighter()), "Input Leader Text"));
 		
+		//##### CHANGE SYMBOL LEADER #####
+		changeSymbolLeaderPanel.add(changeLeaderText);
+		changeSymbolLeaderPanel.add(changeSymbolLeaderButton);
+		changeSymbolLeaderButton.addActionListener(this);
+		changeSymbolLeaderPanel.setBorder(new TitledBorder(
+										new EtchedBorder(BevelBorder.RAISED, 
+														getBackground().darker(), 
+														getBackground().brighter()), "Change Leader Text"));
+		
 		//##### INPUT SYMBOL REPETITION BOX #####
 		inputRepetitionText.setPreferredSize(new Dimension(150, 25));
 		inputSymbolRepetitionPanel.add(inputRepetitionText);
@@ -401,6 +415,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(inputSymbolsPanel);
 		add(picSymbolPanel);
 		add(inputSymbolLeaderPanel);
+		add(changeSymbolLeaderPanel);
 		add(inputSymbolRepetitionPanel);
 		add(equalDistPanel);
 		add(equalAnglPanel);
@@ -408,6 +423,15 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		add(sliderPanel);
 	
 		modeChanged();
+	}
+	
+	private void changeOriLeaderBoxText() {
+		for (OriLeaderBox s : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
+			if (s.isSelected()) {
+				s.getLabel().setText(changeLeaderText.getText());
+				s.setLabelBounds(s.getLabelBounds((Graphics2D) screen.getGraphics()));
+			}
+		}
 	}
 	
 	private void setEqualDistanceDividerCount() {
@@ -504,8 +528,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				symbol.getLabel().setBounds((int) symbol.getPosition().x, (int) symbol.getPosition().y, 
-												(int) Math.round(symbol.getWidth() * symbol.getScale()), 
-												(int) Math.round(symbol.getHeight() * symbol.getScale()));
+												(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
+												(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
 			}
 		}
 	}	
@@ -634,6 +658,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			screen.repaint();
 
+		} else if (e.getSource() == changeSymbolLeaderButton) {
+			changeOriLeaderBoxText();
 		} else if (e.getSource() == faceUpInput) {
 			Globals.faceInputDirection = Constants.FaceInputDirection.FACE_UP;
 		} else if (e.getSource() == faceDownInput) {
@@ -813,6 +839,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		} else {
 			inputSymbolsPanel.setVisible(false);
 			inputSymbolLeaderPanel.setVisible(false);
+			changeSymbolLeaderPanel.setVisible(false);
 			inputSymbolRepetitionPanel.setVisible(false);
 			equalDistPanel.setVisible(false);
 			equalAnglPanel.setVisible(false);
@@ -881,9 +908,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 			result = selectedTypes & leaderMask;
 			if (result == 0b0000001000) {
-				inputSymbolLeaderPanel.setVisible(true);
+				//inputSymbolLeaderPanel.setVisible(true);
+				changeSymbolLeaderPanel.setVisible(true);
 			} else {
-				inputSymbolLeaderPanel.setVisible(false);
+				//inputSymbolLeaderPanel.setVisible(false);
+				changeSymbolLeaderPanel.setVisible(false);
 			}
 			result = selectedTypes & repeMask;
 			if (result == 0b0000010000) {

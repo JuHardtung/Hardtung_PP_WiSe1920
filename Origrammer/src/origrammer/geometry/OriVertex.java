@@ -6,10 +6,10 @@ import javax.vecmath.Vector2d;
 
 public class OriVertex {
 	
-	public Vector2d p = new Vector2d();
-	public Vector2d preP = new Vector2d();
-	public Vector2d tmpVec = new Vector2d();
-	public ArrayList<OriEdge> edges = new ArrayList<>();
+	private Vector2d p = new Vector2d();
+	private Vector2d preP = new Vector2d();
+	private Vector2d tmpVec = new Vector2d();
+	private ArrayList<OriEdge> edges = new ArrayList<>();
 	private boolean isSelected = false;
 
 	public OriVertex(Vector2d p) {
@@ -47,6 +47,14 @@ public class OriVertex {
 			dir.set(edge.sv.p.x - this.p.x, edge.sv.p.y - this.p.y);
 		}
 		return Math.atan2(dir.y,  dir.x);
+	}
+
+	public Vector2d getP() {
+		return p;
+	}
+
+	public void setP(Vector2d p) {
+		this.p = p;
 	}
 
 	public boolean isSelected() {

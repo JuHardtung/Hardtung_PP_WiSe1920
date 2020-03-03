@@ -78,7 +78,6 @@ public class MainScreen extends JPanel
 	private OriEqualAnglSymbol selectedCandidateEAS = null;
 	private OriPleatCrimpSymbol selectedCandidatePleat = null;
 	private OriLeaderBox selectedCandidateLeader = null;
-	private OriLeaderBox tmpLeader = new OriLeaderBox();
 	
 	private boolean dispGrid = true;
 	//Affine transformation info
@@ -260,8 +259,8 @@ public class MainScreen extends JPanel
         for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 
      	   BufferedImage bimg = getBufImgByTypeAndRot(s);
-     	   int newSymbolLabelWidth = (int) Math.round(bimg.getWidth()/2*s.getScale());
-     	   int newSymbolLabelHeight = (int) Math.round(bimg.getHeight()/2*s.getScale());
+     	   int newSymbolLabelWidth = (int) Math.round(bimg.getWidth() / 2 * s.getAdjustedScale());
+     	   int newSymbolLabelHeight = (int) Math.round(bimg.getHeight() / 2 * s.getAdjustedScale());
      	   s.setWidth(newSymbolLabelWidth);
      	   s.setHeight(newSymbolLabelHeight);
      	   s.getLabel().setBounds((int) s.getPosition().x, (int) s.getPosition().y, s.getWidth(), s.getHeight());
@@ -506,14 +505,14 @@ public class MainScreen extends JPanel
      	   }
      	   
      	   for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
-     		   if (v.isSelected() || v.p == selectedCandidateV) {
+     		   if (v.isSelected() || v.getP() == selectedCandidateV) {
      			   g2d.setColor(Config.LINE_COLOR_SELECTED);
      			   vertexDrawSize = 5.0;
      		   } else {
      			   g2d.setColor(Config.LINE_COLOR_EDGE);
      		   }
-     		  g2d.fill(new Rectangle2D.Double(v.p.x - vertexDrawSize / Globals.SCALE,
-    				   v.p.y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
+     		  g2d.fill(new Rectangle2D.Double(v.getP().x - vertexDrawSize / Globals.SCALE,
+    				   v.getP().y - vertexDrawSize / Globals.SCALE, vertexDrawSize * 2 / Globals.SCALE,
     				   vertexDrawSize * 2 / Globals.SCALE));
      	   }
         }
@@ -635,7 +634,6 @@ public class MainScreen extends JPanel
     	selectedCandidateA = null;
     	selectedCandidateLeader = null;
     	selectedCandidatePS = null;
-    	tmpLeader = new OriLeaderBox();
     }
     
     //update the AffineTransform
@@ -815,10 +813,10 @@ public class MainScreen extends JPanel
     	}
     	
     	for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
-    		double dist = p.distance(v.p.x, v.p.y);
+    		double dist = p.distance(v.getP().x, v.getP().y);
     		if (dist < minDistance) {
     			minDistance = dist;
-    			minPosition.set(v.p);
+    			minPosition.set(v.getP());
     		}
     	}
     	
@@ -1043,6 +1041,8 @@ public class MainScreen extends JPanel
 			firstSelectedV = tmp;
 		} else if (secondSelectedV == null) {
 			Rectangle tmpRect = new Rectangle();
+			OriLeaderBox tmpLeader = new OriLeaderBox();
+
 			secondSelectedV = tmp;
 			tmpLeader.line.setP0(firstSelectedV);
 			tmpLeader.line.setP1(secondSelectedV);
@@ -1054,28 +1054,31 @@ public class MainScreen extends JPanel
 						"Error_EmptyLeaderTextField", 
 						JOptionPane.ERROR_MESSAGE);
 			} else {
-				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpLeader.getLabel().getText(), g2d);
-				double width =  labelBounds.getWidth()+10;
-				double height = labelBounds.getHeight();
-				
-				if (tmpLeader.line.getP0().y < tmpLeader.line.getP1().y) {
-					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
-						//bottom right
-						tmpRect.setRect(tmpLeader.line.getP1().x, tmpLeader.line.getP1().y+1, width, height+2);
-					} else {
-						//bottom left
-						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y+1, width, height+2);
-					}
-				} else {
-					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
-						//top right
-						tmpRect.setRect(tmpLeader.line.getP1().x+1, tmpLeader.line.getP1().y-height, width, height+2);
-					} else {
-						//top left
-						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y-height, width, height+2);
-					}
-				}
-				tmpLeader.setPosition(tmpRect);
+//				//get JLabel size that fits the text
+//				Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(tmpLeader.getLabel().getText(), g2d);
+//				double width =  labelBounds.getWidth()+10;
+//				double height = labelBounds.getHeight();
+//				
+//				//get JLabel placement depending on the line
+//				if (tmpLeader.line.getP0().y < tmpLeader.line.getP1().y) {
+//					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
+//						//bottom right
+//						tmpRect.setRect(tmpLeader.line.getP1().x, tmpLeader.line.getP1().y+1, width, height+2);
+//					} else {
+//						//bottom left
+//						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y+1, width, height+2);
+//					}
+//				} else {
+//					if (tmpLeader.line.getP0().x < tmpLeader.line.getP1().x) {
+//						//top right
+//						tmpRect.setRect(tmpLeader.line.getP1().x+1, tmpLeader.line.getP1().y-height, width, height+2);
+//					} else {
+//						//top left
+//						tmpRect.setRect(tmpLeader.line.getP1().x-width+1, tmpLeader.line.getP1().y-height, width, height+2);
+//					}
+//				}
+				//tmpLeader.getLabelBounds()
+				tmpLeader.setLabelBounds(tmpLeader.getLabelBounds(g2d));
 				if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
 					tmpLeader.setType(OriLeaderBox.TYPE_LEADER);
 				} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
@@ -1251,7 +1254,7 @@ public class MainScreen extends JPanel
 		Vector2d p = pickVertex(clickPoint);
 		if (p != null) {
 			for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
-				if (v.p.x == p.x && v.p.y == p.y) {
+				if (v.getP().x == p.x && v.getP().y == p.y) {
 					if (v != null) {
 						if (!v.isSelected()) {
 							v.setSelected(true);
@@ -1604,8 +1607,8 @@ public class MainScreen extends JPanel
 			BufferedImage img = getBufImgByTypeAndRot(tmpOriSymbol);
 
 			//get updated label width & height
-			int newSymbolLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriSymbol.getScale());
-			int newSymbolLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriSymbol.getScale());
+			int newSymbolLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriSymbol.getAdjustedScale());
+			int newSymbolLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriSymbol.getAdjustedScale());
 
 			//set width & height of symbolLabel and OriSymbol
 			tmpSymbolLabel = new JLabel();
@@ -1694,8 +1697,8 @@ public class MainScreen extends JPanel
 							Vector2d newPos = new Vector2d(newX, newY);
 							symbol.setPosition(newPos);
 							symbol.getLabel().setBounds(newX, newY, 
-									(int) Math.round(symbol.getWidth() * symbol.getScale()), 
-									(int) Math.round(symbol.getHeight() * symbol.getScale()));
+									(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
+									(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
 						}
 					}
 				}
@@ -1969,8 +1972,8 @@ public class MainScreen extends JPanel
 			BufferedImage img = null;
 			img = getBufImgByTypeAndRot(symbol);
 			//get updated label width & height
-			int newSymbolLabelWidth = (int) Math.round(img.getWidth()/2*symbol.getScale());
-			int newSymbolLabelHeight = (int) Math.round(img.getHeight()/2*symbol.getScale());
+			int newSymbolLabelWidth = (int) Math.round(img.getWidth()/2*symbol.getAdjustedScale());
+			int newSymbolLabelHeight = (int) Math.round(img.getHeight()/2*symbol.getAdjustedScale());
 			//set width & height of symbolLabel and OriSymbol
 			JLabel symbolLabel = new JLabel();
 			symbolLabel.setSize(newSymbolLabelWidth, newSymbolLabelHeight);
@@ -1984,8 +1987,8 @@ public class MainScreen extends JPanel
 			symbol.setLabel(symbolLabel);
 			symbol.getLabel().setBounds((int)symbol.getPosition().x, 
 					(int)symbol.getPosition().y, 
-					(int) Math.round(symbol.getWidth()*symbol.getScale()), 
-					(int) Math.round(symbol.getHeight()*symbol.getScale()));
+					(int) Math.round(symbol.getWidth()*symbol.getAdjustedScale()), 
+					(int) Math.round(symbol.getHeight()*symbol.getAdjustedScale()));
 			repaint();		
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL
 				&& Globals.inputSymbolMode == Constants.InputSymbolMode.X_RAY_CIRCLE

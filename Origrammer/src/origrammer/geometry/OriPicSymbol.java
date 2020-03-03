@@ -30,12 +30,13 @@ public class OriPicSymbol {
 		this.type = type;
 	}
 	
-	public OriPicSymbol(Vector2d position, int width, int height, double scale, double degrees) {
+	public OriPicSymbol(Vector2d position, int width, int height, double scale, double degrees, int type) {
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.scale = scale;
 		this.degrees = degrees;
+		this.type = type;
 	}
 
 	public JLabel getLabel() {
@@ -94,7 +95,7 @@ public class OriPicSymbol {
 		this.height = height;
 	}
 
-	public double getScale() {
+	public double getAdjustedScale() {
 		if (type == TYPE_ROTATION) {
 			return scale + 0.5;
 		} else if (type == TYPE_NEXT_VIEW_HERE) {
@@ -106,6 +107,10 @@ public class OriPicSymbol {
 		} else {
 			return scale;
 		}
+	}
+	
+	public double getScale() {
+		return scale;
 	}
 
 	public void setScale(double scale) {
