@@ -35,6 +35,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
@@ -606,7 +607,7 @@ public class MainScreen extends JPanel
     									step * i - paperSize, paperSize));
     		g2d.draw(new Line2D.Double(-paperSize, step * i - paperSize,
     									paperSize, step * i - paperSize));
-    	}    	
+    	}
     }
     
     public void setDispGrid(boolean dispGrid) {
@@ -645,6 +646,7 @@ public class MainScreen extends JPanel
     public void resetView() {
     	transX = 0;
     	transY = 0;
+    	Globals.SCALE = 1.0;
     	updateAffineTransform(g2d);
     	repaint();
     }
@@ -825,19 +827,23 @@ public class MainScreen extends JPanel
     		}
     	}
     	
-    	if (dispGrid) {//TODO: fix grid when selecting vertex
-    		double step = Origrammer.diagram.paperSize / Globals.gridDivNum;
-    		for (int ix = 0; ix < Globals.gridDivNum +1; ix++) {
-    			for (int iy = 0; iy < Globals.gridDivNum + 1; iy++) {
-    				double x = -Origrammer.diagram.paperSize / 2 + step * ix;
-    				double y = -Origrammer.diagram.paperSize / 2 + step * iy;
-    				double dist = p.distance(x, y);
-    				if (dist < minDistance) {
-    					minDistance = dist;
-    					minPosition.set(x, y);
-    				}
-    			}	
-    		}
+    	if (dispGrid) {	
+        	int lineNum = Globals.gridDivNum;
+        	double step = Origrammer.diagram.steps.get(Globals.currentStep).size / lineNum;
+        	double paperSize = Origrammer.diagram.paperSize;        	
+    		
+        	for (int ix=-2; ix <lineNum*2-1; ix++) {
+        		for (int iy=-2; iy < lineNum*2-1; iy++) {
+        			double x = -paperSize / 2 + step * ix;
+    				double y = -paperSize / 2 + step * iy;
+        			double dist = p.distance(x, y);
+        			
+        			if (dist < minDistance) {
+        				minDistance = dist;
+        				minPosition.set(x, y);
+        			}
+        		}
+        	}
     	}
     	
     	if (minDistance < 10.0 / Globals.SCALE) {
@@ -1051,6 +1057,7 @@ public class MainScreen extends JPanel
 			secondSelectedV = tmp;
 			tmpLeader.line.setP0(firstSelectedV);
 			tmpLeader.line.setP1(secondSelectedV);
+
 			tmpLeader.setText(Origrammer.mainFrame.uiTopPanel.inputLeaderText.getText());
 			tmpLeader.setSelected(false);
 
@@ -1060,6 +1067,7 @@ public class MainScreen extends JPanel
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				tmpLeader.setLabelBounds(tmpLeader.getLabelBounds(g2d));
+				
 				if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER) {
 					tmpLeader.setType(OriLeaderBox.TYPE_LEADER);
 				} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {

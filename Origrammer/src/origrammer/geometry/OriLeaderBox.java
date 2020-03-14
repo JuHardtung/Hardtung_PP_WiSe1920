@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class OriLeaderBox {
 
