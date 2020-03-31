@@ -1,5 +1,12 @@
-
 \documentclass[11pt, a4paper, titlepage, oneside]{article}
+
+\pdfminorversion = 6
+
+\showboxbreadth\maxdimen\showboxdepth\maxdimen
+\setlength\headheight{13.6pt}
+
+%for arbitrary font sizes
+\usepackage{lmodern}
 
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
@@ -21,11 +28,14 @@
 %package for graphics
 \usepackage{graphicx}
 \usepackage{subcaption}
-\usepackage{caption}
-\newcommand{\source}[1]{\caption*{Source: {#1}} }
+%\usepackage{caption}
+%\newcommand{\source}[1]{\caption*{Source: {#1}} }
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+
+%package for line spacing(onehalfspace, singlespace)
+\usepackage{setspace}
 
 %Hyperlinks Setup
 \usepackage{hyperref}
@@ -56,11 +66,9 @@
 \makenoidxglossaries
 \loadglsentries{glossary}
 
-%package for line spacing(onehalfspace, singlespace)
-\usepackage{setspace}
-
 %package for automated quotationmarks with \enquote
-\usepackage[babel, english=american]{csquotes}
+%\usepackage[english]{babel}
+\usepackage[english=american, strict]{csquotes}
 
 %package for code highlighting
 \usepackage{listings}

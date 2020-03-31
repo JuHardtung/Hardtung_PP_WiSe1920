@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{eGami}
+Jack Fastag.
+\newblock egami: Virtual paperfolding and diagramming software.
+\newblock In Robert~J. Lang, editor, {\em Origami 4}, pages 273--284. 2006.
+
+\bibitem{Hudson}
+Anrew Hudson.
+\newblock Crane, 2011.
+\newblock \url{https://ahudsonorigami.files.wordpress.com/2011/11/tsuru.pdf}
+  [Online; accessed March 21, 2020].
+
+\bibitem{Lang}
+Robert~J. Lang.
+\newblock Origami diagramming conventions, 2011.
+\newblock
+  \url{http://www.langorigami.com/article/origami-diagramming-conventions}
+  [Online; accessed March 21, 2020].
+
+\bibitem{origamiSimulation}
+Robert~J. Lang.
+\newblock Origami simulation.
+\newblock 2015.
+\newblock \url{http://www.langorigami.com/article/origami-simulation} [Online;
+  accessed March 21, 2020].
+
+\bibitem{foldinator}
+John Szinger.
+\newblock The foldinator project, 2009.
+\newblock \url{http://zingman.com/origami/foldinator.php} [Online; accessed
+  March 21, 2020].
+
+\bibitem{Yoshizawa}
+Akira Yoshizawa.
+\newblock {\em Atarashi origami geijutsu}.
+\newblock Origami Geijutsu-Sha, Tokyo, 1954.
+\newblock no ISBN.
+
+\end{thebibliography}
