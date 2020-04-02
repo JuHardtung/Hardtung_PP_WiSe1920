@@ -73,13 +73,20 @@ When inputting several overlapping lines, they should be split up and a new addr
 	\caption{Crossing Lines Input Possibilities}
 	\label{fig:crossingLines}
 \end{figure}
-So once two lines intersect each other, they have to be split up into four shorter lines. In order to accomplish this their \texttt{crossingPoint} is calculated and the new lines are created (see Fig. \ref{fig:crossingLinesExample}). Important here is, that the endpoint that contains the crossingPoint can not have an offset. This is also the point where the previously shown variety of different user inputs has to be taken into consideration. The start- and endpoints of a line change depending on what direction the user inputs them. Consequently a test had to be implemented that checks which direction a line in question is facing and that adjusts following calculations accordingly. Otherwise the offsets would be either drawn in the wrong order or too many offsets in general would be drawn. Additional complexity arises once an input line crosses multiple existing lines. In this case the input line has to be split into multiple smaller lines - at each crossing point of another existing line.
+So once two lines intersect each other, they have to be split up into four shorter ones. In order to accomplish this their \texttt{crossingPoint} is calculated and the new lines are created. Important here is, that the endpoint that contains the crossingPoint can not have an offset. This is also the point where the previously shown variety of different user inputs has to be taken into consideration. The start- and endpoints of a line change depending on what direction the user inputs them. Consequently a test had to be implemented that checks which direction a line in question is facing and that adjusts following calculations accordingly. Otherwise the offsets would be either drawn in the wrong order or too many offsets in general would be drawn. Additional complexity arises once an input line crosses multiple existing lines. In this case the input line has to be split into multiple smaller lines - at each crossing point of another existing line (see Fig. \ref{fig:doubleCrossingLinesExample}).
+
+%\begin{figure}[htbp]
+%	\centering
+%	\includegraphics[width=0.9\textwidth]{CrossingLinesExample}
+%	\caption{Crossing Lines Example}
+%	\label{fig:crossingLinesExample}
+%\end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.9\textwidth]{CrossingLinesExample}
-	\caption{Crossing Lines Example}
-	\label{fig:crossingLinesExample}
+	\includegraphics[width=0.9\textwidth]{DoubleCrossingLinesExample}
+	\caption{Double Crossing Lines Example}
+	\label{fig:doubleCrossingLinesExample}
 \end{figure}
 
 						
