@@ -31,7 +31,7 @@ Furthermore one should capitalize only those origami moves that \enquote{[...] i
 Slightly distorting the model to show otherwise hidden layers might be one of the most important general rules, as this one aspect hugely increases the readability and clarity of a diagram. Offering as many reference points as possible makes following a diagram easier and reduces confusion.
 
 \subsubsection*{Creases should not contact the edges}
-Already existing creases from previous steps should be drawn with a thin, continuous line and \textbf{not} contact the edges of the paper (see Figure \ref{fig:creasesTouchEdge}). The only exception is when the creases go under a layer of paper. In this case the line that represents the crease does touch the edge of the upper layer.
+Already existing creases from previous steps should be drawn with a thin, continuous line and \textbf{not} contact the edges of the paper (see Figure \ref{fig:creasesTouchEdge}). The only exception is when the creases go under a layer of paper. In this case the line that represents the crease does touch the edge of the upper layer. This approach increases the claritiy of a diagram by giving an indication over the order of layers.
 \begin{figure*}[htbp]
     \centering
     \begin{subfigure}{0.3\textwidth}
@@ -133,7 +133,7 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
 		\caption{Fold and unfold}
 		\label{fig:foldAndUnfold}
 	\end{subfigure}
-	\caption{Unfolding arrows}
+	\caption{Unfolding Arrows}
 	\label{fig:unfoldingArrows}
 \end{figure*}
 %
@@ -198,33 +198,53 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
 \noindent The rotation symbol consists of a circle with arrowheads pointing in the rotational direction and a fraction in its center to specify how far to rotate the model.
 
 \subsubsection*{X-Ray View}
-\begin{figure}[htbp]
-	\centering
-	\def\svgwidth{0.7\textwidth}
-	\import{./images/}{X-RayView.pdf_tex}
-	\caption{The X-Ray View shows hidden layers}
-	\label{fig:x-rayView}
-\end{figure}
-
+\begin{figure*}[htbp]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{X-RayViewCP}
+        \caption{Folds to be made}
+        \label{fig:x-rayViewCP}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{X-RayViewProcess}
+        \caption{Folding Process}
+        \label{fig:x-rayViewProcess}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth}
+        \includegraphics[width=\textwidth]{X-RayView}
+        \caption{X-RayView}
+        \label{fig:x-rayViewFinal}
+    \end{subfigure}
+    \caption{X-Ray View}
+    \label{fig:x-rayView}
+\end{figure*}
+\noindent The X-Ray View consists of a circle that removes upper layers of the paper so that hidden layers underneath can be shown.
+\newpage
 \subsubsection*{Repetitions }
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{FoldOverAndOver}
-	\caption{Fold over and over}
-	\label{fig:foldOverAndOver}
-\end{figure}
+
 \noindent For complicated repetitions you should show the result of the first fold that is to be repeated.
 
-\begin{figure}[htbp]
-	\centering
-	\def\svgwidth{0.3\textwidth}
-	\import{./images/}{RepeatBox.pdf_tex}
+
+
+\begin{figure*}[htbp]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{FoldOverAndOver}
+        \caption{Fold Over and Over}
+        \label{fig:foldOverAndOver}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+	\includegraphics[width=\textwidth]{RepeatBox}
 	\caption{Repetition Box}
 	\label{fig:repeatBox}
-\end{figure}
+    \end{subfigure}
+    \caption{Repetitions}
+    \label{fig:holdHerePlusPull}
+\end{figure*}
+
 \noindent The repetition box from Figure \ref{fig:repeatBox} shows what exact steps are to be repeated and how many times.
 
-\subsubsection*{Next view here}
+\subsubsection*{Next View Here}
 \begin{figure}[htbp]
 	\centering
 	\def\svgwidth{0.6\textwidth}
@@ -233,13 +253,22 @@ While the arrows of motion describe where the paper is folded to, the arrows of 
 	\label{fig:nextViewHere}
 \end{figure}
 
-\subsubsection*{Hold here}
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{HoldHere}
-	\caption{Hold here + hold here and pull}
-	\label{fig:holdHere}
-\end{figure}
+\subsubsection*{Hold Here}
+\begin{figure*}[htbp]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{holdHere}
+        \caption{Hold Here}
+        \label{fig:holdHere}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{holdHereAndPull}
+        \caption{Hold Here and Pull}
+        \label{fig:holdHereAndPull}
+    \end{subfigure}
+    \caption{Hold Here + Hold Here and Pull Symbols}
+    \label{fig:holdHerePlusPull}
+\end{figure*}
 
 \newpage
 \subsubsection{Folding Procedures}
@@ -263,12 +292,28 @@ and create a new flap. This is done by creating three folds at the bisectors of 
 	\caption{Rabbit Ear Result}
 	\label{fig:rabbitEarResult}
     \end{subfigure}
-    \caption{Both methods show a rabbit ear fold}
+    \caption{Both methods show a Rabbit Ear Fold}
     \label{fig:rabbitEarMethods}
 \end{figure*}
 
-\subsubsection*{Reverse Folds}
+\subsubsection*{Crimping and Pleating}
+\begin{figure*}[htbp]
+	\centering
+	\begin{subfigure}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{Crimping}
+		\caption{Crimping}
+		\label{fig:crimping}
+	\end{subfigure}
+	\begin{subfigure}{0.49\textwidth}
+		\includegraphics[width=\textwidth]{Pleating}
+		\caption{Pleating}
+		\label{fig:pleating}
+	\end{subfigure}
+\end{figure*}
 
+\newpage
+
+\subsubsection*{Reverse Folds}
 \begin{figure*}[htbp]
 	\centering
 	\begin{subfigure}{0.4\textwidth}
@@ -284,7 +329,7 @@ and create a new flap. This is done by creating three folds at the bisectors of 
 	\caption{Inside Reverse Fold}
 	\label{fig:insideReverseFold}
 \end{figure*}
-\begin{figure*}
+\begin{figure*}[htbp]
 	\begin{subfigure}{0.3\textwidth}
 		\includegraphics[width=\textwidth]{OutsideReverseFoldA}
 		\caption{Notation A}
@@ -306,35 +351,20 @@ and create a new flap. This is done by creating three folds at the bisectors of 
 \noindent Although Lang proposes two valid notations for Outside Reverse Folds, for consistency's sake Notation A should be used (see Figure \ref{fig:outsideReverseFoldA}).
 
 \newpage
-\subsubsection*{Crimping and Pleating}
-\begin{figure*}[htbp]
-	\centering
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width=\textwidth]{Crimping}
-		\caption{Crimping}
-		\label{fig:crimping}
-	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
-		\includegraphics[width=\textwidth]{Pleating}
-		\caption{Pleating}
-		\label{fig:pleating}
-	\end{subfigure}
-\end{figure*}
-
 \subsubsection*{Sinks}
 \begin{figure*}[htbp]
 	\centering
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.7\textwidth}
 		\includegraphics[width=\textwidth]{OpenSink}
 		\caption{Open Sink}
 		\label{fig:openSink}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.7\textwidth}
 		\includegraphics[width=\textwidth]{MixedSink}
 		\caption{Mixed Sink}
 		\label{fig:mixedSink}
 	\end{subfigure}
-	\begin{subfigure}{0.49\textwidth}
+	\begin{subfigure}{0.7\textwidth}
 		\includegraphics[width=\textwidth]{ClosedSink}
 		\caption{Closed Sink}
 		\label{fig:closedSink}
