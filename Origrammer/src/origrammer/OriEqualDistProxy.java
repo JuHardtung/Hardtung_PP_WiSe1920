@@ -11,8 +11,8 @@ public class OriEqualDistProxy {
 	private double translationDist;
 	private int dividerCount;
 	
+	
 	public OriEqualDistProxy() {
-		
 	}
 	
 	public OriEqualDistProxy(OriEqualDistSymbol s) {

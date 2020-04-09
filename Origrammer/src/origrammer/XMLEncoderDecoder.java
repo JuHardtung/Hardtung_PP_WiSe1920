@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 public class XMLEncoderDecoder {
 
 	public XMLEncoderDecoder() {
-
 	}
 
 	public boolean serializeToXML(DiagramDataSet dataset, String filePath) {
@@ -37,7 +36,6 @@ public class XMLEncoderDecoder {
 		}
 		return true;
 	}
-
 
 	public DiagramDataSet deserializeFromXML(String filePath) {
 		DiagramDataSet decodedDiagram;

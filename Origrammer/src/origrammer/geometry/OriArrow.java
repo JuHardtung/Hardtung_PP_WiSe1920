@@ -30,7 +30,6 @@ public class OriArrow {
 	
 	
 	public OriArrow() {
-		
 	}
 	
 	public OriArrow(OriArrow a) {
@@ -38,7 +37,6 @@ public class OriArrow {
 		this.width = a.width;
 		this.height = a.height;
 		this.type = a.type;
-		
 	}
 
 	public OriArrow(Vector2d position, int type) {
@@ -88,6 +86,10 @@ public class OriArrow {
 		this.height = height;
 	}
 	
+	/**
+	 * 
+	 * @return The adjusted base scale for each different Type of OriArrow
+	 */
 	public double getAdjustedScale() {
 		if (type == TYPE_VALLEY) {
 			return scale + 0.75;
@@ -152,5 +154,4 @@ public class OriArrow {
 				+ height + ", scale=" + scale + ", selected=" + isSelected + ", degrees=" + degrees + "]";
 	}
 	
-
 }

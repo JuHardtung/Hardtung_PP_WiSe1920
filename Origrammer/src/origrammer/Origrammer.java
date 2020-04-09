@@ -38,11 +38,5 @@ public class Origrammer {
 		mainFrame = new MainFrame();
 
 	}
-	
-	
-	
-	public void initFirstStep() {
-		
-	}
 
 }

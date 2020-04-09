@@ -46,9 +46,7 @@ public class IntFilter extends DocumentFilter {
 		} else {
 			// warn the user and don't allow the insert
 			System.out.println("Can't replace digits with letters");
-
 		}
-
 	}
 
 	@Override

@@ -46,7 +46,7 @@ class PointComparatorY implements Comparator<Object> {
 
 
 public class Step {
-	
+
 	public ArrayList<OriLine> lines = new ArrayList<>();
 	public ArrayList<OriVertex> vertices = new ArrayList<>();
 	public ArrayList<OriArrow> arrows = new ArrayList<>();
@@ -59,10 +59,11 @@ public class Step {
 	public ArrayList<OriPleatCrimpSymbol> pleatCrimpSymbols = new ArrayList<>();
 	public String stepDescription;
 	public int stepNumber;
-	
+
 	public static final double POINT_EPS = 1.0e-6;
-	
+
 	public double size = Constants.DEFAULT_PAPER_SIZE;
+
 
 	public Step() {
 		if (Globals.newStepOptions == Constants.NewStepOptions.PASTE_DEFAULT_PAPER) {
@@ -70,13 +71,11 @@ public class Step {
 		}
 		stepNumber = Globals.currentStep;
 	}
-	
-	public void initFirstStep() {
-		
-		lines.addAll(getEdgeLines());
 
+	public void initFirstStep() {
+		lines.addAll(getEdgeLines());
 	}
-	
+
 	public ArrayList<OriLine> getEdgeLines() {
 		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
 			//TODO: this is setup for default square paper --> todo for different shapes like octagonal etc.
@@ -87,10 +86,10 @@ public class Step {
 			return null;
 		}
 	}
-	
+
 	public ArrayList<OriLine> getSquareEdgeLines() {
 		ArrayList<OriLine> newLines = new ArrayList<>();
-		
+
 		OriLine l0 = new OriLine(-size/2.0, size/2.0, size/2.0, size/2.0, OriLine.TYPE_EDGE);
 		OriLine l1 = new OriLine(size/2.0, size/2.0, size/2.0, -size/2.0, OriLine.TYPE_EDGE);
 		OriLine l2 = new OriLine(size/2.0, -size/2.0, -size/2.0, -size/2.0, OriLine.TYPE_EDGE);
@@ -101,35 +100,35 @@ public class Step {
 		newLines.add(l3);
 		return newLines;
 	}
-	
-	
+
+
 	public ArrayList<OriLine> getRectEdgeLines() {
 		ArrayList<OriLine> newLines = new ArrayList<>();
-		
+
 		double width = Origrammer.diagram.recPaperWidth;
 		double height = Origrammer.diagram.recPaperHeight;
 		double ratio = 0;
-		
+
 		if (width > height) {
 			ratio =  height / width;
 		} else {
 			ratio = width / height;
 		}
-		
-		OriLine l0 = new OriLine(-size/2.0, size/2.0*ratio, size/2.0,  size/2.0*ratio, OriLine.TYPE_EDGE);
-		OriLine l1 = new OriLine(size/2.0, size/2.0*ratio, size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
-		OriLine l2 = new OriLine(size/2.0, -size/2.0*ratio, -size/2.0,-size/2.0*ratio, OriLine.TYPE_EDGE);
-		OriLine l3 = new OriLine(-size/2.0, -size/2.0*ratio, -size/2.0,size/2.0*ratio, OriLine.TYPE_EDGE);
+
+		OriLine l0 = new OriLine(-size/2.0, size/2.0*ratio, size/2.0, size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l1 = new OriLine(size/2.0, size/2.0*ratio, size/2.0, -size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l2 = new OriLine(size/2.0, -size/2.0*ratio, -size/2.0, -size/2.0*ratio, OriLine.TYPE_EDGE);
+		OriLine l3 = new OriLine(-size/2.0, -size/2.0*ratio, -size/2.0, size/2.0*ratio, OriLine.TYPE_EDGE);
 		newLines.add(l0);
 		newLines.add(l1);
 		newLines.add(l2);
 		newLines.add(l3);
-		
+
 		return newLines;
 	}
-	
-	
-	
+
+
+
 	/**Adds a new OriLine and checks for intersections with others
 	 * 
 	 * @param inputLine
@@ -142,9 +141,9 @@ public class Step {
 				return;
 			}
 		}
-		
+
 		splitExistingLines(inputLine);
-			
+
 		//points contains p0 and p1 of inputLine
 		ArrayList<Vector2d> points = new ArrayList<>();
 		points.add(inputLine.getP0());
@@ -158,10 +157,10 @@ public class Step {
 		} else {
 			Collections.sort(points, new PointComparatorY());
 		}
-		
+
 		addInputLine(points, inputLine);
 	}
-	
+
 	public void addInputLine(ArrayList<Vector2d> points, OriLine inputLine) {
 		Vector2d prePoint = points.get(0);
 
@@ -170,9 +169,9 @@ public class Step {
 			if (GeometryUtil.Distance(prePoint, p) < POINT_EPS) {
 				continue;
 			}
-			
+
 			OriLine newLine = new OriLine(prePoint, p, inputLine.getType());
-			
+
 			//update isStartOffset and isEndOffset if p0 and p1 got switched after sorting
 			if (prePoint == inputLine.getP0()) {
 				newLine.setStartOffset(inputLine.isStartOffset());
@@ -188,7 +187,7 @@ public class Step {
 			prePoint = p;
 		}
 	}
-	
+
 	public ArrayList<Vector2d> splitInputLine(OriLine inputLine) {
 		ArrayList<Vector2d> points = new ArrayList<>();
 		//split up the inputLine where it crosses existing lines
@@ -219,7 +218,7 @@ public class Step {
 		}
 		return points;
 	}
-	
+
 	/** Checks if the inputLine crosses any existing lines and splits them if necessary.
 	 *  Also checks the correct direction in combination with the start and end offset for OriLine TYPE_CREASES
 	 * @param inputLine The entered Line
@@ -273,20 +272,20 @@ public class Step {
 			}
 		}
 	}
-	
-	
+
+
 	public void addTriangleInsectorLines(Vector2d v0, Vector2d v1, Vector2d v2) {
 		Vector2d incenter = GeometryUtil.getIncenter(v0,v1,v2);
 		if (incenter == null) {
 			System.out.println("Failed to calculate the incenter of the triangle");
 		}
-		
+
 		addLine(new OriLine(incenter, v0, Globals.inputLineType));
 		addLine(new OriLine(incenter, v1, Globals.inputLineType));
 		addLine(new OriLine(incenter, v2, Globals.inputLineType));
 
 	}
-	
+
 	/**
 	 * Adds a new Vertex to the current diagram step
 	 * @param inputVertex
@@ -295,7 +294,6 @@ public class Step {
 		vertices.add(new OriVertex(inputVertex));
 	}
 
-
 	/** Adds a new Arrow to the current diagram step
 	 * 
 	 * @param inputArrow
@@ -303,7 +301,7 @@ public class Step {
 	public void addArrow(OriArrow inputArrow) {
 		arrows.add(inputArrow);
 	}
-	
+
 	/**
 	 * Adds a new Leader to the current diagram step
 	 * @param inputLeader
@@ -311,7 +309,7 @@ public class Step {
 	public void addLeader(OriLeaderBox inputLeader) {
 		leaderBoxSymbols.add(inputLeader);
 	}
-	
+
 	/**
 	 * Adds a new OriPicSymbol to the current diagram step
 	 * @param inputSymbol
@@ -319,7 +317,7 @@ public class Step {
 	public void addPicSymbol(OriPicSymbol inputSymbol) {
 		picSymbols.add(inputSymbol);
 	}
-	
+
 	/**
 	 * Adds a new OriGeomSymbol to the current diagram step
 	 * @param inputSymbol
@@ -327,7 +325,7 @@ public class Step {
 	public void addGeomSymbol(OriGeomSymbol inputSymbol) {
 		geomSymbols.add(inputSymbol);
 	}
-	
+
 	/**
 	 * Adds a new OriEqualDistSymbol to the current diagram step
 	 * @param inputSymbol
@@ -335,7 +333,7 @@ public class Step {
 	public void addEqualDistSymbol(OriEqualDistSymbol inputSymbol) {
 		equalDistSymbols.add(inputSymbol);
 	}
-	
+
 	/**
 	 * Adds a new OriEqualAngleSymbol to the current diagram step
 	 * @param inputSymbol
@@ -343,7 +341,7 @@ public class Step {
 	public void addEqualAngleSymbol(OriEqualAnglSymbol inputSymbol) {
 		equalAnglSymbols.add(inputSymbol);
 	}
-	
+
 	/**
 	 * Adds a new OriPleatSymbol to the current diagram step
 	 * @param inputSymbol
@@ -351,8 +349,7 @@ public class Step {
 	public void addPleatSymbol(OriPleatCrimpSymbol inputSymbol) {
 		pleatCrimpSymbols.add(inputSymbol);
 	}
-	
-	
+
 	public void selectAll() {
 		selectAllLines();
 		selectAllVertices();
@@ -364,7 +361,6 @@ public class Step {
 		selectAllEqualDistSymbols();
 		selectAllEqualAnglSymbols();
 		selectAllPleatSymbols();
-
 	}
 
 	public void selectAllLines() {
@@ -372,7 +368,7 @@ public class Step {
 			l.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllVertices() {
 		for (OriVertex v : vertices) {
 			v.setSelected(true);
@@ -384,7 +380,7 @@ public class Step {
 			a.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllFaces() {
 		for (OriArrow a : arrows) {
 			a.setSelected(true);
@@ -395,31 +391,31 @@ public class Step {
 			l.setSelected(true);
 		}
 	}	
-	
+
 	public void selectAllPicSymbols() {
 		for (OriPicSymbol s : picSymbols) {
 			s.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllGeomSymbols() {
 		for (OriGeomSymbol s : geomSymbols) {
 			s.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllEqualDistSymbols() {
 		for (OriEqualDistSymbol eds : equalDistSymbols) {
 			eds.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllEqualAnglSymbols() {
 		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
 			eas.setSelected(true);
 		}
 	}
-	
+
 	public void selectAllPleatSymbols() {
 		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
 			pleat.setSelected(true);
@@ -444,62 +440,62 @@ public class Step {
 			l.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllVertices() {
 		for (OriVertex v : vertices) {
 			v.setSelected(false);
 		}
 	}
- 
+
 	public void unselectAllArrows() {
 		for (OriArrow a : arrows) {
 			a.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllFaces() {
 		for (OriFace f : filledFaces) {
 			f.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllLeaders() {
 		for (OriLeaderBox l : leaderBoxSymbols) {
 			l.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllPicSymbols() {
 		for (OriPicSymbol s : picSymbols) {
 			s.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllGeomSymbols() {
 		for (OriGeomSymbol s : geomSymbols) {
 			s.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllEqualDistSymbols() {
 		for (OriEqualDistSymbol eds : equalDistSymbols) {
 			eds.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllEqualAnglSymbols() {
 		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
 			eas.setSelected(false);
 		}
 	}
-	
+
 	public void unselectAllPleatSymbols() {
 		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
 			pleat.setSelected(false);
 		}
 	}
-	
-	
+
+
 	public void deleteAllSelectedObjects() {
 		deleteSelectedLines();
 		deleteSelectedVertices();
@@ -518,59 +514,58 @@ public class Step {
 	 */
 	public void deleteSelectedLines() {
 		ArrayList<OriLine> selectedLines = new ArrayList<>();
-		
+
 		for (OriLine line : lines) {
 			if (line.isSelected()) {
 				selectedLines.add(line);
 			}
 		}
-		
+
 		for (OriLine line : selectedLines) {
 			lines.remove(line);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected vertices of the current diagram step
 	 */
 	public void deleteSelectedVertices() {
 		ArrayList<OriVertex> selectedVertices = new ArrayList<>();
-		
+
 		for (OriVertex v : vertices) {
 			if (v.isSelected()) {
 				selectedVertices.add(v);
 			}
 		}
-		
+
 		for (OriVertex v : selectedVertices) {
 			vertices.remove(v);
 		}
 	}
- 	
-	
+
 	/**
 	 * Deletes all selected arrows of the current diagram step
 	 */
 	public void deleteSelectedArrows() {
 		ArrayList<OriArrow> selectedArrows = new ArrayList<>();
-		
+
 		for (OriArrow arrow : arrows) {
 			if(arrow.isSelected()) {
 				selectedArrows.add(arrow);
 			}
 		}
-		
+
 		for (OriArrow arrow : selectedArrows) {
 			arrows.remove(arrow);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected faces of the current diagram step
 	 */
 	public void deleteSelectedFaces() {
 		ArrayList<OriFace> selectedFaces = new ArrayList<>();
-		
+
 		for (OriFace face : filledFaces) {
 			if (face.isSelected()) {
 				selectedFaces.add(face);
@@ -580,13 +575,13 @@ public class Step {
 			filledFaces.remove(face);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected leaders of the current diagram step
 	 */
 	public void deleteSelectedLeaderBoxes() {
 		ArrayList<OriLeaderBox> selectedLeader = new ArrayList<>();
-		
+
 		for (OriLeaderBox l : leaderBoxSymbols) {
 			if (l.isSelected()) {
 				selectedLeader.add(l);
@@ -596,13 +591,13 @@ public class Step {
 			leaderBoxSymbols.remove(l);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected OriPicSymbols of the current diagram step
 	 */
 	public void deleteSelectedPicSymbols() {
 		ArrayList<OriPicSymbol> selectedPicS = new ArrayList<>();
-		
+
 		for (OriPicSymbol ps : picSymbols) {
 			if (ps.isSelected()) {
 				selectedPicS.add(ps);
@@ -612,13 +607,13 @@ public class Step {
 			picSymbols.remove(ps);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected OriGeomSymbols of the current diagram step
 	 */
 	public void deleteSelectedGeomSymbols() {
 		ArrayList<OriGeomSymbol> selectedGeomS = new ArrayList<>();
-		
+
 		for (OriGeomSymbol gs : geomSymbols) {
 			if (gs.isSelected()) {
 				selectedGeomS.add(gs);
@@ -628,13 +623,13 @@ public class Step {
 			geomSymbols.remove(gs);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected OriEqualDistSymbols of the current diagram step
 	 */
 	public void deleteSelectedEqualDistSymbols() {
 		ArrayList<OriEqualDistSymbol> selectedEqualDistS = new ArrayList<>();
-		
+
 		for (OriEqualDistSymbol eds : equalDistSymbols) {
 			if (eds.isSelected()) {
 				selectedEqualDistS.add(eds);
@@ -644,13 +639,13 @@ public class Step {
 			equalDistSymbols.remove(eds);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected OriEqualAnglSymbols of the current diagram step
 	 */
 	public void deleteSelectedEqualAnglSymbols() {
 		ArrayList<OriEqualAnglSymbol> selectedEqualAnglS = new ArrayList<>();
-		
+
 		for (OriEqualAnglSymbol eas : equalAnglSymbols) {
 			if (eas.isSelected()) {
 				selectedEqualAnglS.add(eas);
@@ -660,13 +655,13 @@ public class Step {
 			equalAnglSymbols.remove(eas);
 		}
 	}
-	
+
 	/**
 	 * Deletes all selected OriPleatSymbols of the current diagram step
 	 */
 	public void deleteSelectedPleatSymbols() {
 		ArrayList<OriPleatCrimpSymbol> selectedPleatS = new ArrayList<>();
-		
+
 		for (OriPleatCrimpSymbol pleat : pleatCrimpSymbols) {
 			if (pleat.isSelected()) {
 				selectedPleatS.add(pleat);
@@ -698,5 +693,5 @@ public class Step {
 		return "Step [lines=" + lines + ", vertices=" + vertices + ", arrows=" + arrows
 				+ ", stepDescription=" + stepDescription + ", stepNumber=" + stepNumber + "]";
 	}
-	
+
 }

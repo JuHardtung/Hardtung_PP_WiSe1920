@@ -11,8 +11,8 @@ public class OriLeaderBoxProxy {
 	private JLabel label;
 	private int type;
 	
+	
 	public OriLeaderBoxProxy() {
-		
 	}
 	
 	public OriLeaderBoxProxy(OriLeaderBox s) {

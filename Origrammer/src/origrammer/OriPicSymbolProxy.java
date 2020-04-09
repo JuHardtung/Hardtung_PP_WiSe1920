@@ -13,8 +13,8 @@ public class OriPicSymbolProxy {
 	private double degrees;
 	private int type;
 	
+	
 	public OriPicSymbolProxy() {
-		
 	}
 	
 	public OriPicSymbolProxy(OriPicSymbol s) {

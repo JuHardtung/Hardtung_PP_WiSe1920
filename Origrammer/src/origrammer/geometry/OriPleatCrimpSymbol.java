@@ -18,8 +18,8 @@ public class OriPleatCrimpSymbol {
 	private	int layersCount;
 	private boolean isSelected;
 
+	
 	public OriPleatCrimpSymbol() {
-		
 	}
 	
 	public OriPleatCrimpSymbol(Vector2d position, boolean isSwitchedDir, int layersCount) {
@@ -35,6 +35,10 @@ public class OriPleatCrimpSymbol {
 		this.type = type;
 	}
 	
+	/**
+	 * 
+	 * @return The Shapes for rendering the OriPleatCrimpSymbol
+	 */
 	public ArrayList<Shape> getShapesForDrawing() {
 		ArrayList<Shape> shapes = new ArrayList<>();
 		Vector2d uvHori = new Vector2d(1,0);
@@ -73,28 +77,27 @@ public class OriPleatCrimpSymbol {
 		 */
 
 		//top part
-		for (int i=0; i<layersCount; i++) {
+		for (int i = 0; i < layersCount; i++) {
 			p0.x += translatX;
 			p0.y += translatY;
-			p1.x = p0.x + uvHori.x*55;
-			p1.y = p0.y + uvHori.y*55;
+			p1.x = p0.x + uvHori.x * 55;
+			p1.y = p0.y + uvHori.y * 55;
 
-			double p0TransX = uvHori.x*20*(layersCount-1) - uvHori.x*20*(i+1);
-			double p0TransY = uvHori.y*20*(layersCount-1) - uvHori.y*20*(i+1);
+			double p0TransX = uvHori.x * 20 * (layersCount - 1) - uvHori.x * 20 * (i + 1);
+			double p0TransY = uvHori.y * 20 * (layersCount - 1) - uvHori.y * 20 * (i + 1);
 
-			shapes.add(new Line2D.Double(p0.x-p0TransX, p0.y, p1.x, p1.y));
+			shapes.add(new Line2D.Double(p0.x - p0TransX, p0.y, p1.x, p1.y));
 
-			p2.x = p1.x + uvDiagonal.x*25;
-			p2.y = p1.y + uvDiagonal.y*25;
+			p2.x = p1.x + uvDiagonal.x * 25;
+			p2.y = p1.y + uvDiagonal.y * 25;
 			shapes.add(new Line2D.Double(p1.x, p1.y, p2.x, p2.y));
 
-			p3.x = p2.x + uvHori.x*35 + uvHori.x*20*i;
-			p3.y = p2.y + uvHori.y*35 + uvHori.y*20*i;
+			p3.x = p2.x + uvHori.x * 35 + uvHori.x * 20 * i;
+			p3.y = p2.y + uvHori.y * 35 + uvHori.y * 20 * i;
 			shapes.add(new Line2D.Double(p2.x, p2.y, p3.x, p3.y));
 		}
 		
 		if (type == TYPE_CRIMP)  {
-			
 			Vector2d p4 = new Vector2d(position.x, position.y);
 			Vector2d p5 = new Vector2d();		   
 			Vector2d p6 = new Vector2d();
@@ -112,26 +115,24 @@ public class OriPleatCrimpSymbol {
 				translatY = 5.5;
 			}
 			
-			for (int j=0; j<layersCount; j++) {
-				
+			for (int j = 0; j < layersCount; j++) {
 				//starting line with length 55 = Distance(p4,p5)
 				p4.x += translatX;
 				p4.y += translatY;
-				p5.x = p4.x + uvHori.x*55;
-				p5.y = p4.y + uvHori.y*55;
+				p5.x = p4.x + uvHori.x * 55;
+				p5.y = p4.y + uvHori.y * 55;
 				
-				double p0TransX = uvHori.x*20*(layersCount-1) - uvHori.x*20*(j+1);
-				
-				shapes.add(new Line2D.Double(p4.x-p0TransX, p4.y, p5.x, p5.y));
+				double p0TransX = uvHori.x * 20 * (layersCount - 1) - uvHori.x * 20 * (j + 1);
+				shapes.add(new Line2D.Double(p4.x - p0TransX, p4.y, p5.x, p5.y));
 				
 				//diagonal line
-				p6.x = p5.x + uvDiagonal.x*25;
-				p6.y = p5.y + uvDiagonal.y*25;
+				p6.x = p5.x + uvDiagonal.x * 25;
+				p6.y = p5.y + uvDiagonal.y * 25;
 				shapes.add(new Line2D.Double(p5.x, p5.y, p6.x, p6.y));
 				
 				//35 minimal endLine length + 20 for each additional layer
-				p7.x = p6.x + uvHori.x*35 + uvHori.x*20*j;
-				p7.y = p6.y + uvHori.y*35 + uvHori.y*20*j;
+				p7.x = p6.x + uvHori.x * 35 + uvHori.x * 20 * j;
+				p7.y = p6.y + uvHori.y * 35 + uvHori.y * 20 * j;
 				shapes.add(new Line2D.Double(p6.x, p6.y, p7.x, p7.y));
 			}
 		}

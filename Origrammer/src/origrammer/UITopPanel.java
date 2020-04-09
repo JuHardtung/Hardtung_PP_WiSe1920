@@ -53,14 +53,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 	private String[] lineInputOptions = {"Valley Fold", "Mountain Fold", "X-Ray Fold", "Edge Line", "Existing Crease"};
 	private Object[] arrowInputOptions = {"Valley Fold", "Mountain Fold", "Turn over", 
-									new JSeparator(JSeparator.HORIZONTAL),
-									"Push here", "Pull out", "Inflate here"};
+			new JSeparator(JSeparator.HORIZONTAL),
+			"Push here", "Pull out", "Inflate here"};
 	private Object[] symbolInputOptions = {"Leader", "Repetition Box", "Next View Here", "Rotations", 
 			"Hold Here", "Hold Here and Pull", new JSeparator(JSeparator.HORIZONTAL),  
 			"X-Ray Circle", "Fold over and over", "Equal Distances", "Equal Angles", 
 			new JSeparator(JSeparator.HORIZONTAL),  "Crimping & Pleating", "Sinks"};
 
-	
+
 	//INPUT LINES/ ARROWS/ SYMBOLS
 	private JPanel inputLinesPanel = new JPanel();
 	private JPanel inputArrowPanel = new JPanel();
@@ -68,30 +68,30 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<String> menuLineCB = new JComboBox<>(lineInputOptions);
 	private JComboBox<Object> menuArrowCB = new JComboBox<>(arrowInputOptions);
 	private JComboBox<Object> symbolInputCB = new JComboBox<>(symbolInputOptions);
-	
+
 	//INPUT VERTICES FRACTION_OF_LINE
 	private JPanel inputVertexFractionPanel = new JPanel();
 	private JSlider inputVertexFractionSlider = new JSlider(0, 100);
 	public JTextField inputVertexFractionTF = new JTextField();
-	
+
 	//INPUT SYMBOL LEADER
 	private JPanel inputSymbolLeaderPanel = new JPanel();
 	public JTextField inputLeaderText = new JTextField();
-	
+
 	//CHANGE SYMBOL LEADER
 	private JPanel changeSymbolLeaderPanel = new JPanel();
 	private JTextField changeLeaderText = new JTextField();
 	private JButton changeSymbolLeaderButton = new JButton("Set");
-	
+
 	//INPUT SYMBOL REPETITION BOX
-//	private JPanel inputSymbolRepetitionPanel = new JPanel();
-//	public JTextField inputRepetitionText = new JTextField();
-	
+	//private JPanel inputSymbolRepetitionPanel = new JPanel();
+	//public JTextField inputRepetitionText = new JTextField();
+
 	//FACE UP/ FACE DOWN COLOR
 	private JPanel faceDirectionPanel = new JPanel();
 	private JRadioButton faceUpInput = new JRadioButton("Face Up", false);
 	private JRadioButton faceDownInput = new JRadioButton("Face Down", true);
-	
+
 	//CHANGE LINE/ARROW TYPE
 	private JPanel changeLinePanel = new JPanel();
 	private JPanel changeArrowPanel = new JPanel();
@@ -99,28 +99,28 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JComboBox<Object> changeArrowTypeCB = new JComboBox<>(arrowInputOptions);
 	private JButton changeLineButton = new JButton("Set");
 	private JButton changeArrowButton = new JButton("Set");
-	
+
 	//Change Existing Crease ends
 	private JPanel changeCreaseEndsPanel = new JPanel();
 	public JCheckBox startCreaseCB = new JCheckBox("Start");
 	public JCheckBox endCreaseCB = new JCheckBox("End");
-	
+
 	//EQUAL DISTANCE SETTINGS
 	private JPanel equalDistPanel = new JPanel();
 	public JSlider sliderEqualDist = new JSlider(-50, 50);
 	public JTextField equalDistDividerTF = new JTextField();
 	public JButton equalDistButton = new JButton("Set");
-	
+
 	//EQUAL ANGLE SETTINGS
 	private JPanel equalAnglPanel = new JPanel();
 	private JSlider sliderEqualAngl = new JSlider(50,600);
 	public JTextField equalAnglDividerTF = new JTextField();
 	private JButton equalAnglButton = new JButton("Set");
-	
+
 	//PLEATNG/CRIMPING SETTINGS
 	public JRadioButton pleatRB = new JRadioButton("Pleat", true);
 	public JRadioButton crimpRB = new JRadioButton("Crimp");
-	
+
 	private JPanel pleatPanel = new JPanel();
 	public JCheckBox pleatCB = new JCheckBox("reverseDir");
 	public JTextField pleatTF = new JTextField();
@@ -130,64 +130,108 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JPanel sliderPanel = new JPanel();
 	private JSlider arrowScaleSlider = new JSlider(0, 100);
 	private JSlider arrowRotSlider = new JSlider(0, 3600);
-	
+
 	//ROTATE/SCALE ORI_PIC_SYMBOLS
 	private JPanel picSymbolPanel = new JPanel();
 	private JSlider picSymbolScaleSlider = new JSlider(0, 100);
 	private JSlider picSymbolRotSlider = new JSlider(0, 3600);
-	
+
 	MainScreen screen;
-		
+
+
 	public UITopPanel(MainScreen __screen) {
 		this.screen = __screen;
 		setPreferredSize(new Dimension(1000, 70));
 		setBackground(new Color(230, 230, 230));
-		
-		//##### FACE UP / FACE DOWN INPUT
+
+		addFilledFacePanel();
+
+		addLineInputPanel();
+		addLineTypeChangePanel();
+		addChangeExistingCreaseEndsPanel();
+		addVertexFractionOfLinePanel();
+
+		addArrowInputPanel();
+		addArrowTypeChangePanel();
+		addArrowSettingsPanel();
+
+		addSymbolInputPanel();
+		addSymbolLeaderPanel();
+		addSymbolLeaderChangePanel();
+		addOriPicSymbolPanel();
+		addEqualDistSymbolPanel();
+		addEqualAnglSymbolPanel();
+		addPleatCrimpSymbolPanel();
+
+
+		//add all panels to UITopPanel
+		add(changeLinePanel);
+		add(changeCreaseEndsPanel);
+		add(changeArrowPanel);
+		add(faceDirectionPanel);
+		add(inputLinesPanel);
+		add(inputVertexFractionPanel);
+		add(inputArrowPanel);
+		add(inputSymbolsPanel);
+		add(picSymbolPanel);
+		add(inputSymbolLeaderPanel);
+		add(changeSymbolLeaderPanel);
+		add(equalDistPanel);
+		add(equalAnglPanel);
+		add(pleatPanel);
+		add(sliderPanel);
+
+		modeChanged();
+	}
+
+
+	private void addFilledFacePanel() {
+		faceUpInput.addActionListener(this);
+		faceDownInput.addActionListener(this);
+
 		ButtonGroup faceDirectionInput = new ButtonGroup();
 		faceDirectionInput.add(faceUpInput);
 		faceDirectionInput.add(faceDownInput);
-		
+
 		faceDirectionPanel.add(faceUpInput);
 		faceDirectionPanel.add(faceDownInput);
 		faceDirectionPanel.setLayout(new BoxLayout(faceDirectionPanel, BoxLayout.PAGE_AXIS));
-		
-		faceUpInput.addActionListener(this);
-		faceDownInput.addActionListener(this);
-				
-		//##### LINE INPUT TYPE #####		
+	}
+
+	private void addLineInputPanel() {
 		menuLineCB.setRenderer(new IndentedRenderer());
 		menuLineCB.setSelectedIndex(0);
 		menuLineCB.addActionListener(this);
-		
+
 		inputLinesPanel.add(menuLineCB);
 		inputLinesPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Input Line Type"));
-		//##### CHANGE LINE TYPE #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Input Line Type"));
+	}
+
+	private void addLineTypeChangePanel() {
 		changeLineButton.addActionListener(this);
 		changeLinePanel.add(changeLineTypeCB);
 		changeLinePanel.add(changeLineButton);
 		changeLinePanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-											getBackground().darker(), 
-											getBackground().brighter()), "Change Line Type"));
-		
-		//##### CHANGE EXISTING CREASE ENDS
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Change Line Type"));
+	}
+
+	private void addChangeExistingCreaseEndsPanel() {
 		startCreaseCB.addActionListener(this);
 		endCreaseCB.addActionListener(this);
 		changeCreaseEndsPanel.add(startCreaseCB);
 		changeCreaseEndsPanel.add(endCreaseCB);
 		changeCreaseEndsPanel.setBorder(new TitledBorder(
-										new EtchedBorder(BevelBorder.RAISED, 
-															getBackground().darker(), 
-															getBackground().brighter()), "Existing Crease Settingss"));
-		
-		
-		//-----------------------------------------------------------------------------------------
-		
-		//##### VERTEX FRACTION_OF_LINE
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Existing Crease Settingss"));
+	}
+
+	private void addVertexFractionOfLinePanel() {
 		inputVertexFractionSlider.setMajorTickSpacing(10);
 		//inputVertexFractionSlider.setSnapToTicks(true);
 		inputVertexFractionSlider.setPaintTicks(true);
@@ -196,22 +240,22 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		PlainDocument docInputVertexFraction = (PlainDocument) inputVertexFractionTF.getDocument();
 		docInputVertexFraction.setDocumentFilter(new IntFilter());
 		docInputVertexFraction.addDocumentListener(new DocumentListener() {
-			
+
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				//setVertexFractionSlider();
 			}
-			
+
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				setVertexFractionSlider();
 			}
-			
+
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				setVertexFractionSlider();
 			}
-			
+
 			private void setVertexFractionSlider() {
 				Runnable doSetVertexFractionSlider = new Runnable() {
 					@Override
@@ -229,42 +273,46 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		inputVertexFractionPanel.add(inputVertexFractionSlider);
 		inputVertexFractionPanel.add(inputVertexFractionTF);
 		inputVertexFractionPanel.setBorder(new TitledBorder(
-									new EtchedBorder(BevelBorder.RAISED, 
-													getBackground().darker(), 
-													getBackground().brighter()), "Input Vertex"));
-		
-		
-		//-----------------------------------------------------------------------------------------
-		//##### ARROW INPUT TYPE #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Input Vertex"));
+	}
+
+	private void addArrowInputPanel() {
 		menuArrowCB.setRenderer(new SeparatorComboBoxRenderer());
 		menuArrowCB.setSelectedIndex(0);
 		menuArrowCB.addActionListener(new SeparatorComboBoxListener(menuArrowCB));
-		
+
 		inputArrowPanel.add(menuArrowCB);
 		inputArrowPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Input Arrow Type"));
-		//##### CHANGE ARROW TYPE #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Input Arrow Type"));
+
+	}
+
+	private void addArrowTypeChangePanel() {
 		changeArrowButton.addActionListener(this);
 		changeArrowTypeCB.setRenderer(new SeparatorComboBoxRenderer());
 		changeArrowPanel.add(changeArrowTypeCB);
 		changeArrowPanel.add(changeArrowButton);
 		changeArrowPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Change Arrow Type"));
-		//##### ARROW SETTINGS #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Change Arrow Type"));
+	}
+
+	private void addArrowSettingsPanel() {
 		arrowScaleSlider.setMajorTickSpacing(20);
 		arrowScaleSlider.setMinorTickSpacing(10);
 		arrowScaleSlider.setPaintTicks(true);
 		arrowScaleSlider.setPaintLabels(true);
 		arrowScaleSlider.addChangeListener(e -> sliderArrowScale());
 		arrowScaleSlider.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Scale Arrow"));
-		
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Scale Arrow"));
+
 		Hashtable<Integer, JLabel> labels = new Hashtable<>();
 		labels.put(0,  new JLabel("0"));
 		labels.put(900, new JLabel("90°"));
@@ -279,64 +327,68 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		arrowRotSlider.setSnapToTicks(true);
 		arrowRotSlider.addChangeListener(e -> sliderArrowRotChanged());
 		arrowRotSlider.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Rotate Arrow"));
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Rotate Arrow"));
 		sliderPanel.add(arrowScaleSlider);
 		sliderPanel.add(arrowRotSlider);
+	}
 
-		//-----------------------------------------------------------------------------------------
-		//##### SYMBOL INPUT TYPE #####
+	private void addSymbolInputPanel() {
 		symbolInputCB.setRenderer(new SeparatorComboBoxRenderer());
 		symbolInputCB.setSelectedIndex(0);
 		symbolInputCB.addActionListener(new SeparatorComboBoxListener(symbolInputCB));
-		
+
 		inputSymbolsPanel.add(symbolInputCB);
 		inputSymbolsPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Input Symbol Type"));
-		
-		//##### INPUT SYMBOL LEADER #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Input Symbol Type"));
+	}
+
+	private void addSymbolLeaderPanel() {
 		inputLeaderText.setPreferredSize(new Dimension(150, 25));
 		inputSymbolLeaderPanel.add(inputLeaderText);
 		inputSymbolLeaderPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Input Text"));
-		
-		//##### CHANGE SYMBOL LEADER #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Input Text"));
+	}
+
+	private void addSymbolLeaderChangePanel() {
 		changeLeaderText.setPreferredSize(new Dimension(150, 25));
 		changeSymbolLeaderPanel.add(changeLeaderText);
 		changeSymbolLeaderPanel.add(changeSymbolLeaderButton);
 		changeSymbolLeaderButton.addActionListener(this);
 		changeSymbolLeaderPanel.setBorder(new TitledBorder(
-										new EtchedBorder(BevelBorder.RAISED, 
-														getBackground().darker(), 
-														getBackground().brighter()), "Change Text"));
-	
-		//##### ORI_PIC_SYMBOL SETTINGS #####
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Change Text"));
+	}
+
+	private void addOriPicSymbolPanel() {
 		picSymbolScaleSlider.setMajorTickSpacing(10);
 		picSymbolScaleSlider.setPaintTicks(true);
 		//picSymbolScaleSlider.setPaintLabels(true);
 		picSymbolScaleSlider.addChangeListener(e -> sliderPicSymbolScale());
 		picSymbolScaleSlider.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Scale Symbol"));
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Scale Symbol"));
 		picSymbolRotSlider.setMajorTickSpacing(225);
 		picSymbolRotSlider.setPaintTicks(true);
 		//sliderRotIcon.setPaintLabels(true);
 		picSymbolRotSlider.setSnapToTicks(true);
 		picSymbolRotSlider.addChangeListener(e -> sliderPicSymbolRot());
 		picSymbolRotSlider.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(), 
-												getBackground().brighter()), "Rotate Symbol"));
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(), 
+						getBackground().brighter()), "Rotate Symbol"));
 		picSymbolPanel.add(picSymbolScaleSlider);
 		picSymbolPanel.add(picSymbolRotSlider);
-		
-		//##### EQUAL DIST SETTINGS
+	}
+
+	private void addEqualDistSymbolPanel() {
 		sliderEqualDist.setMajorTickSpacing(10);
 		sliderEqualDist.setPaintTicks(true);
 		sliderEqualDist.addChangeListener(e -> sliderEqualDistChanged());
@@ -349,11 +401,12 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		equalDistPanel.add(equalDistDividerTF);
 		equalDistPanel.add(equalDistButton);
 		equalDistPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(),
-												getBackground().brighter()), "Equal Distance"));
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(),
+						getBackground().brighter()), "Equal Distance"));
+	}
 
-		//##### EQUAL ANGLE SETTINGS
+	private void addEqualAnglSymbolPanel() {
 		sliderEqualAngl.setMajorTickSpacing(50);
 		sliderEqualAngl.setSnapToTicks(true);
 		sliderEqualAngl.setPaintTicks(true);
@@ -368,11 +421,12 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		equalAnglPanel.add(equalAnglDividerTF);
 		equalAnglPanel.add(equalAnglButton);
 		equalAnglPanel.setBorder(new TitledBorder(
-								new EtchedBorder(BevelBorder.RAISED, 
-												getBackground().darker(),
-												getBackground().brighter()), "Equal Angle"));
-		
-		//##### PLEATS/CRIMPS SETTINGS
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(),
+						getBackground().brighter()), "Equal Angle"));
+	}
+
+	private void addPleatCrimpSymbolPanel() {
 		ButtonGroup pleatCrimpGroup = new ButtonGroup();
 		pleatCrimpGroup.add(pleatRB);
 		pleatCrimpGroup.add(crimpRB);
@@ -393,30 +447,13 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		pleatPanel.add(pleatTF);
 		pleatPanel.add(pleatButton);
 		pleatPanel.setBorder(new TitledBorder(
-							new EtchedBorder(BevelBorder.RAISED, 
-											getBackground().darker(),
-											getBackground().brighter()), "Pleating"));
-
-		//add all panels to UITopPanel
-		add(changeLinePanel);
-		add(changeCreaseEndsPanel);
-		add(changeArrowPanel);
-		add(faceDirectionPanel);
-		add(inputLinesPanel);
-		add(inputVertexFractionPanel);
-		add(inputArrowPanel);
-		add(inputSymbolsPanel);
-		add(picSymbolPanel);
-		add(inputSymbolLeaderPanel);
-		add(changeSymbolLeaderPanel);
-		add(equalDistPanel);
-		add(equalAnglPanel);
-		add(pleatPanel);
-		add(sliderPanel);
-	
-		modeChanged();
+				new EtchedBorder(BevelBorder.RAISED, 
+						getBackground().darker(),
+						getBackground().brighter()), "Pleating"));
 	}
-	
+
+
+
 	private void changeOriLeaderBoxText() {
 		for (OriLeaderBox s : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
 			if (s.isSelected()) {
@@ -425,7 +462,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 		}
 	}
-	
+
 	private void setEqualDistanceDividerCount() {
 		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
 			if (eds.isSelected()) {
@@ -434,7 +471,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 		}
 	}
-	
+
 	private void setEqualAngleDividerCount() {
 		for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
 			if (eas.isSelected()) {
@@ -444,7 +481,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 		}
 	}
-	
+
 	private void setPleatLayerCount() {
 		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 			if (pleat.isSelected()) {
@@ -453,7 +490,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 		}
 	}
-	
+
 	private void setPleatIsSwitchedDir() {
 		for (OriPleatCrimpSymbol pleat : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 			if (pleat.isSelected()) {
@@ -462,7 +499,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 		}
 	}
-	
+
 	private void changeToPleat() {
 		for(OriPleatCrimpSymbol pc : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 			if (pc.isSelected()) {
@@ -471,7 +508,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 		}
 	}
-	
+
 	private void changeToCrimp() {
 		for(OriPleatCrimpSymbol pc : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 			if (pc.isSelected()) {
@@ -480,8 +517,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 		}
 	}
-	
-	
+
+
 	private void sliderVertexFraction() {
 		inputVertexFractionTF.setText(Integer.toString(inputVertexFractionSlider.getValue()));
 	}
@@ -508,7 +545,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 	}
 
-	
+
 	/**
 	 * changes the scale for all selected OriPicSymbol
 	 */
@@ -520,12 +557,12 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				symbol.getLabel().setBounds((int) symbol.getPosition().x, (int) symbol.getPosition().y, 
-												(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
-												(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
+						(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
+						(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
 			}
 		}
 	}	
-	
+
 	/**
 	 * Sets the rotation of all selected OriArrows
 	 */
@@ -534,14 +571,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			if (arrow.isSelected()) {
 				arrow.setDegrees(arrowRotSlider.getValue()/10);
 				screen.repaint();
-				
+
 				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
-				
+
 				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, (int) rect.getWidth(), (int) rect.getHeight());
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the rotation of all selected OriPicSymbols
 	 */
@@ -550,14 +587,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			if (symbol.isSelected()) {
 				symbol.setDegrees(picSymbolRotSlider.getValue()/10);
 				screen.repaint();
-				
+
 				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getPosition().x, symbol.getPosition().y, symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
-				
+
 				symbol.getLabel().setBounds((int)symbol.getPosition().x, (int)symbol.getPosition().y, (int)rect.getWidth(), (int)rect.getHeight());
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the translation distance of equalDistanceSymbol
 	 */
@@ -569,7 +606,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the translation distance of equalDistanceSymbol
 	 */
@@ -581,7 +618,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 		}
 	}
-	
+
 	private void creaseStartTranslation() {
 		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (l.isSelected()) {
@@ -605,14 +642,14 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			}
 		}
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == changeLineButton) {
 			for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 				if (l.isSelected()) {
 					String lineType = changeLineTypeCB.getSelectedItem().toString();
-					
+
 					if (lineType == "Valley Fold") {
 						l.setType(OriLine.TYPE_VALLEY);
 					} else if (lineType == "Mountain Fold") {
@@ -632,7 +669,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 				if (a.isSelected()) {
 					String arrowType = changeArrowTypeCB.getSelectedItem().toString();
-					
+
 					if (arrowType == "Valley Fold") {
 						a.setType(OriArrow.TYPE_VALLEY);
 					} else if (arrowType == "Mountain Fold") {
@@ -677,7 +714,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			Object selectedLine = menuLineCB.getSelectedItem();
-			
+
 			if (selectedLine == "Valley Fold") {
 				Globals.inputLineType = OriLine.TYPE_VALLEY;
 			} else if (selectedLine == "Mountain Fold") {
@@ -692,10 +729,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 		modeChanged();
 	}
-	
-	
+
+
 	private int getSelectedTypes() {
-		
+
 		//	0 0000 0001	LINES
 		//	0 0000 0010	ARROWS
 		//  0 0000 0100	FILLED_FACES
@@ -706,9 +743,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		//  0 1000 0000	EQUAL_ANGL_SYMBOLS
 		//  1 0000 0000	PLEAT
 
-		
+
 		int selectedTypes = 0b000000000;
-		
+
 		for (OriLine line : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			if (line.isSelected()) {
 				selectedTypes += 0b000000001;
@@ -765,9 +802,9 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 		return selectedTypes;
 	}
-	
+
 	public void modeChanged() {
-			
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
 			inputLinesPanel.setVisible(true);
 			if (Globals.inputLineType == OriLine.TYPE_CREASE) {
@@ -779,24 +816,24 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			inputLinesPanel.setVisible(false);
 			changeCreaseEndsPanel.setVisible(false);
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX
 				&& Globals.vertexInputMode == Constants.VertexInputMode.FRACTION_OF_LINE) {
 			inputVertexFractionPanel.setVisible(true);
 		} else {
 			inputVertexFractionPanel.setVisible(false);
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
 			inputArrowPanel.setVisible(true);			
 		} else {
 			inputArrowPanel.setVisible(false);			
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
 			inputSymbolsPanel.setVisible(true);
 			if (Globals.inputSymbolMode == Constants.InputSymbolMode.LEADER 
-				|| Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
+					|| Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
 				inputSymbolLeaderPanel.setVisible(true);
 			} else {
 				inputSymbolLeaderPanel.setVisible(false);
@@ -825,15 +862,15 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			equalAnglPanel.setVisible(false);
 			pleatPanel.setVisible(false);
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.FILL_TOOL) {
 			faceDirectionPanel.setVisible(true);
 		} else {
 			faceDirectionPanel.setVisible(false);
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.SELECTION_TOOL) {
-			
+
 			//	0 0000 0001	LINES
 			//  0 0000 0010	ARROWS
 			//  0 0000 0100	FILLED_FACES
@@ -844,7 +881,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			//  0 1000 0000	EQUAL_ANGL_SYMBOLS
 			//  1 0000 0000	PLEAT
 			int selectedTypes = getSelectedTypes();
-			
+
 			int lineMask 	= 0b000000001;
 			int arrowMask 	= 0b000000010;
 			int faceMask	= 0b000000100;
@@ -923,7 +960,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			} else {
 				pleatPanel.setVisible(false);
 			}
-			
+
 		} else {
 			sliderEqualAngl.setVisible(false);
 			sliderPanel.setVisible(false);
@@ -934,51 +971,51 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 		screen.modeChanged();
 	}
-	
+
 	//Indents JComboBox entries
 	class IndentedRenderer extends DefaultListCellRenderer {
 		public Component getListCellRendererComponent(JList list, Object value,
-                int index,boolean isSelected,boolean cellHasFocus) {
-			   JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			   lbl.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
-			   return lbl;
+				int index,boolean isSelected,boolean cellHasFocus) {
+			JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			lbl.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+			return lbl;
 		}
 	}
-	
+
 	//source: http://esus.com/creating-a-jcombobox-with-a-divider-separator-line/
 	class SeparatorComboBoxRenderer extends BasicComboBoxRenderer implements ListCellRenderer {
-	   public SeparatorComboBoxRenderer() {
-	      super();
-	   }
-	    
-	   public Component getListCellRendererComponent(JList list,
-	       Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		   JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		   lbl.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
-	      if (isSelected) {
-	          setBackground(list.getSelectionBackground());
-	          setForeground(list.getSelectionForeground());
-	      }
-	      else {
-	          setBackground(list.getBackground());
-	          setForeground(list.getForeground());
-	      }
-	  
-	      setFont(list.getFont());
-	      if (value instanceof Icon) {
-	         setIcon((Icon)value);
-	      }
-	      if (value instanceof JSeparator) {
-	         return (Component) value;
-	      }
-	      else {
-	         setText((value == null) ? "" : value.toString());
-	      }
-	  
-	      return lbl;
-	  } 
+		public SeparatorComboBoxRenderer() {
+			super();
+		}
+
+		public Component getListCellRendererComponent(JList list,
+				Object value, int index, boolean isSelected, boolean cellHasFocus) {
+			JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			lbl.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+			if (isSelected) {
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			}
+			else {
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+
+			setFont(list.getFont());
+			if (value instanceof Icon) {
+				setIcon((Icon)value);
+			}
+			if (value instanceof JSeparator) {
+				return (Component) value;
+			}
+			else {
+				setText((value == null) ? "" : value.toString());
+			}
+
+			return lbl;
+		} 
 	}
-	
+
 	//source: http://esus.com/creating-a-jcombobox-with-a-divider-separator-line/
 	class SeparatorComboBoxListener implements ActionListener {
 		JComboBox<Object> combobox;
@@ -991,7 +1028,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			
+
 			if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_ARROW) {
 				Object selectedArrow = menuArrowCB.getSelectedItem();
 
@@ -1015,7 +1052,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				}
 			} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_SYMBOL) {
 				Object inputSymbol = symbolInputCB.getSelectedItem();
-				
+
 				if (inputSymbol == "Leader") {
 					Globals.inputSymbolMode = Constants.InputSymbolMode.LEADER;
 				} else if (inputSymbol == "Repetition Box") {
@@ -1046,7 +1083,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent arg0) {		
 	}

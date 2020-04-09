@@ -8,8 +8,8 @@ public class OriFace {
 	private boolean selected;
 	private boolean isFaceUp;
 	
+	
 	public OriFace() {
-		
 	}
 	
 	public OriFace(GeneralPath path, boolean isFaceUp) {

@@ -16,7 +16,6 @@ public class OriEqualDistSymbol {
 
 	
 	public OriEqualDistSymbol() {
-		
 	}
 	
 	public OriEqualDistSymbol(Vector2d p0, Vector2d p1, int dividerCount) {
@@ -32,34 +31,38 @@ public class OriEqualDistSymbol {
 		this.dividerCount = dividerCount;
 	}
 	
+	/**
+	 * 
+	 * @return The Shapes required for rendering the OriEqualDistSymbol
+	 */
 	public ArrayList<Shape> getShapesForDrawing() {
 		ArrayList<Shape> shapes = new ArrayList<>();
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		Vector2d nv = GeometryUtil.getNormalVector(uv);
 		Vector2d p0Pos = getP0Pos();
 		double dist = GeometryUtil.Distance(p0, p1);
-		double trans = dist/dividerCount;
+		double trans = dist / dividerCount;
 
 		//main line 
-		for (int j=1; j<=dividerCount; j++) {
-			double slp0x = p0Pos.x + trans*(j-1)*uv.x + 10*uv.x;
-			double slp0y = p0Pos.y + trans*(j-1)*uv.y + 10*uv.y;
-			double slp1x = p0Pos.x + trans*j*uv.x - 10*uv.x;
-			double slp1y = p0Pos.y + trans*j*uv.y - 10*uv.y;
+		for (int j = 1; j <= dividerCount; j++) {
+			double slp0x = p0Pos.x + trans * (j - 1) * uv.x + 10 * uv.x;
+			double slp0y = p0Pos.y + trans * (j - 1) * uv.y + 10 * uv.y;
+			double slp1x = p0Pos.x + trans * j * uv.x - 10 * uv.x;
+			double slp1y = p0Pos.y + trans * j * uv.y - 10 * uv.y;
 
 			shapes.add(new Line2D.Double(slp0x, slp0y, slp1x, slp1y));
 		}
 
 		//small divider lines
-		for (int i=0; i<=dividerCount; i++) {
-			double tmpX = p0Pos.x + ((trans*i)*uv.x);
-			double tmpY = p0Pos.y + ((trans*i)*uv.y);
+		for (int i = 0; i <= dividerCount; i++) {
+			double tmpX = p0Pos.x + ((trans * i) * uv.x);
+			double tmpY = p0Pos.y + ((trans * i) * uv.y);
 
-			double x5 = tmpX + (15*nv.x);
-			double y5 = tmpY + (15*nv.y);
+			double x5 = tmpX + (15 * nv.x);
+			double y5 = tmpY + (15 * nv.y);
 
-			double x6 = tmpX - (15*nv.x);
-			double y6 = tmpY - (15*nv.y);
+			double x6 = tmpX - (15 * nv.x);
+			double y6 = tmpY - (15 * nv.y);
 
 			shapes.add(new Line2D.Double(x5, y5, x6, y6));
 		}

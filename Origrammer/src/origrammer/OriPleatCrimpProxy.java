@@ -11,8 +11,8 @@ public class OriPleatCrimpProxy {
 	private int layersCount;
 	private int type;
 	
+	
 	public OriPleatCrimpProxy() {
-		
 	}
 	
 	public OriPleatCrimpProxy(OriPleatCrimpSymbol s) {

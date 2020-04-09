@@ -15,6 +15,7 @@ public class Diagram {
 	public ArrayList<Step> steps = new ArrayList<>();
 	public String dataFilePath = "";
 	
+	
 	public Diagram() {
 		this.paperSize = Constants.DEFAULT_PAPER_SIZE;
 	}

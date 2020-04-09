@@ -8,7 +8,6 @@ public class OriVertex {
 	
 	private Vector2d p = new Vector2d();
 	private Vector2d preP = new Vector2d();
-	private Vector2d tmpVec = new Vector2d();
 	private ArrayList<OriEdge> edges = new ArrayList<>();
 	private boolean isSelected = false;
 
@@ -26,7 +25,8 @@ public class OriVertex {
 		double angle = getAngle(edge);
 		int egNum = edges.size();
 		boolean added = false;
-		for (int i=0; i<egNum; i++) {
+		
+		for (int i = 0; i < egNum; i++) {
 			double tmpAngle = getAngle(edges.get(i));
 			if (tmpAngle > angle) {
 				edges.add(i, edge);

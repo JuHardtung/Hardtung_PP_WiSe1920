@@ -7,7 +7,6 @@ public class OriEdge {
 	public int type = 0;
 	
 	public OriEdge() {
-		
 	}
 	
 	public OriEdge(OriVertex sv, OriVertex ev, int type) {

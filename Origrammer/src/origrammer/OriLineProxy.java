@@ -12,6 +12,7 @@ public class OriLineProxy {
 	private boolean isStartTransl;
 	private boolean isEndTransl;
 	
+	
 	public OriLineProxy() {
 	}
 	

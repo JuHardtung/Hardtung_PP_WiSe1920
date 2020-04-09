@@ -21,8 +21,8 @@ public class OriPicSymbol {
 	private boolean isSelected;
 	private double degrees = 0;
 	
+	
 	public OriPicSymbol() {
-		
 	}
 	
 	public OriPicSymbol(Vector2d position, int type) {
@@ -95,6 +95,10 @@ public class OriPicSymbol {
 		this.height = height;
 	}
 
+	/**
+	 * 
+	 * @return The adjusted base scale for each different Type of OriPicSymbol
+	 */
 	public double getAdjustedScale() {
 		if (type == TYPE_ROTATION) {
 			return scale + 0.5;

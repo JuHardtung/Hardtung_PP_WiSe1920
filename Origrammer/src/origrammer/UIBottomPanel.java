@@ -30,11 +30,17 @@ import origrammer.geometry.OriLine;
 public class UIBottomPanel extends JPanel implements ActionListener, PropertyChangeListener, KeyListener {
 
 	private JFormattedTextField foldDescr = new JFormattedTextField();
-	
+
 	private JButton stepBack = new JButton("<");
 	private JFormattedTextField currentStepTF = new JFormattedTextField(new DecimalFormat("###"));
-	private JButton stepForth = new JButton(">");	
-	
+	private JButton stepForth = new JButton(">");
+
+	//FOLD INSTRUCTION
+	private JPanel foldDescrPanel = new JPanel();
+
+	//STEP NAVIGATION
+	private JPanel stepNavigation = new JPanel();
+
 	private JPanel newStepPanel = new JPanel();
 	private JRadioButton newEmptyStep = new JRadioButton("Empty Step", false);
 	private JRadioButton newCopiedStep = new JRadioButton("Copy last Step", true);
@@ -42,47 +48,27 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 	private ButtonGroup newStepGroup;
 
 	private MainScreen screen;
-	
+
 	public UIBottomPanel(MainScreen __screen) {
 		this.screen = __screen;
 		setPreferredSize(new Dimension(500, 100));
 		setBackground(new Color(230, 230, 230));
-		
+
 		//ActionListener
 		stepBack.addActionListener(this);
 		stepForth.addActionListener(this);
-		
-		
-		//FOLD DESCRIPTION panel and positioning
-		JLabel foldDescrTitel = new JLabel("Fold Description", SwingConstants.CENTER);
-		JPanel foldDescrPanel = new JPanel();
-		foldDescr.setPreferredSize(new Dimension(400, 20));	
-		foldDescrPanel.add(foldDescrTitel);
-		foldDescrPanel.add(foldDescr);
-		foldDescrPanel.setLayout(new GridLayout(2, 1, 10, 2));
-		//foldDescrPanel.setLayout(new BoxLayout(foldDescrPanel, BoxLayout.Y_AXIS));
-		
-		//STEP NAVIGATION panel and positioning
-		JPanel stepNavigation = new JPanel();
-		stepBack.setPreferredSize(new Dimension(30, 10));
-		stepForth.setPreferredSize(new Dimension(30, 10));
-		currentStepTF.setHorizontalAlignment(JFormattedTextField.CENTER);
-		currentStepTF.setPreferredSize(new Dimension(30, 10));
-		currentStepTF.setMaximumSize(new Dimension(30, 10));
-		currentStepTF.setValue(Globals.currentStep);
-		stepNavigation.add(stepBack);
-		stepNavigation.add(currentStepTF);
-		stepNavigation.add(stepForth);
-		stepNavigation.setLayout(new GridLayout(1, 3, 100, 2));
-		
+
+		addFoldInstructionPanel();
+		addStepNavigationPanel();
+
 		JPanel stepDescrAndNavPanel = new JPanel();
 		stepDescrAndNavPanel.add(foldDescrPanel);
 		stepDescrAndNavPanel.add(stepNavigation);
 		stepDescrAndNavPanel.setLayout(new GridLayout(2, 1, 10, 2));
-		
+
 		add(Box.createRigidArea(new Dimension(190,70)));
 		add(stepDescrAndNavPanel);
-		
+
 		foldDescr.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -97,26 +83,48 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 			public void removeUpdate(DocumentEvent e) {
 				changed();
 			}
-			
+
 			public void changed() {
 				Origrammer.diagram.steps.get(Globals.currentStep).stepDescription = foldDescr.getText();
 			}
 		});
-		
+
 		newStepGroup = new ButtonGroup();
 		newStepGroup.add(newEmptyStep);
 		newStepGroup.add(newBaseShapeStep);
 		newStepGroup.add(newCopiedStep);
-		
+
 		newStepPanel.add(newEmptyStep);
 		newStepPanel.add(newCopiedStep);
 		newStepPanel.add(newBaseShapeStep);
 		newStepPanel.setLayout(new BoxLayout(newStepPanel, BoxLayout.PAGE_AXIS));
-		
+
 		add(newStepPanel);
-		
-		
+
 		stepChanged();
+	}
+
+	private void addFoldInstructionPanel() {
+
+		JLabel foldDescrTitle = new JLabel("Fold Instruction", SwingConstants.CENTER);
+		foldDescr.setPreferredSize(new Dimension(400, 20));	
+		foldDescrPanel.add(foldDescrTitle);
+		foldDescrPanel.add(foldDescr);
+		foldDescrPanel.setLayout(new GridLayout(2, 1, 10, 2));
+		//foldDescrPanel.setLayout(new BoxLayout(foldDescrPanel, BoxLayout.Y_AXIS));
+	}
+
+	private void addStepNavigationPanel() {
+		stepBack.setPreferredSize(new Dimension(30, 10));
+		stepForth.setPreferredSize(new Dimension(30, 10));
+		currentStepTF.setHorizontalAlignment(JFormattedTextField.CENTER);
+		currentStepTF.setPreferredSize(new Dimension(30, 10));
+		currentStepTF.setMaximumSize(new Dimension(30, 10));
+		currentStepTF.setValue(Globals.currentStep);
+		stepNavigation.add(stepBack);
+		stepNavigation.add(currentStepTF);
+		stepNavigation.add(stepForth);
+		stepNavigation.setLayout(new GridLayout(1, 3, 100, 2));
 	}
 
 	@Override
@@ -133,19 +141,19 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 			Globals.currentStep += 1;
 
 			//copy last step
-			if ((int) currentStepTF.getValue() == Origrammer.diagram.steps.size()-1) {
+			if ((int) currentStepTF.getValue() == Origrammer.diagram.steps.size() - 1) {
 				Step newStep = new Step();
 
 				if (newCopiedStep.isSelected()) {
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).lines.size(); i++) {
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).lines.size(); i++) {
 						newStep.lines.add(Origrammer.diagram.steps.get(prevStep).lines.get(i));
 					}
 
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).vertices.size(); i++) {
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).vertices.size(); i++) {
 						newStep.vertices.add(Origrammer.diagram.steps.get(prevStep).vertices.get(i));
 					}		
 
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
 						OriArrow tmpArrow = new OriArrow();
 						tmpArrow.setPosition(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getPosition());
 						tmpArrow.setWidth(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getWidth());
@@ -158,36 +166,36 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 
 						newStep.arrows.add(tmpArrow);
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).filledFaces.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).filledFaces.size(); i++) {
 						newStep.filledFaces.add(Origrammer.diagram.steps.get(prevStep).filledFaces.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).leaderBoxSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).leaderBoxSymbols.size(); i++) {
 						newStep.leaderBoxSymbols.add(Origrammer.diagram.steps.get(prevStep).leaderBoxSymbols.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).picSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).picSymbols.size(); i++) {
 						newStep.picSymbols.add(Origrammer.diagram.steps.get(prevStep).picSymbols.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).geomSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).geomSymbols.size(); i++) {
 						newStep.geomSymbols.add(Origrammer.diagram.steps.get(prevStep).geomSymbols.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).equalDistSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).equalDistSymbols.size(); i++) {
 						newStep.equalDistSymbols.add(Origrammer.diagram.steps.get(prevStep).equalDistSymbols.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).equalAnglSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).equalAnglSymbols.size(); i++) {
 						newStep.equalAnglSymbols.add(Origrammer.diagram.steps.get(prevStep).equalAnglSymbols.get(i));
 					}
-					
-					for (int i=0; i<Origrammer.diagram.steps.get(prevStep).pleatCrimpSymbols.size(); i++) {
+
+					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).pleatCrimpSymbols.size(); i++) {
 						newStep.pleatCrimpSymbols.add(Origrammer.diagram.steps.get(prevStep).pleatCrimpSymbols.get(i));
 					}
-					
-					
+
+
 				} else if (newBaseShapeStep.isSelected()) {
 					//new step with previously chosen paper shape
 					ArrayList<OriLine> newLines = Origrammer.diagram.steps.get(Globals.currentStep-1).getEdgeLines();
@@ -204,21 +212,20 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 			stepChanged();
 		}
 	}
-	
-	
+
+
 	public void stepChanged() {
 		if (Origrammer.diagram.steps.get(Globals.currentStep).stepDescription == null) {
 			foldDescr.setValue("");
 		} else {
 			foldDescr.setValue(Origrammer.diagram.steps.get(Globals.currentStep).stepDescription);
 		}
-		
-		if (Origrammer.diagram.steps.size() == Globals.currentStep+1) {
+
+		if (Origrammer.diagram.steps.size() == Globals.currentStep + 1) {
 			//newStepPanel.setVisible(true);
 			newEmptyStep.setEnabled(true);
 			newCopiedStep.setEnabled(true);
 			newBaseShapeStep.setEnabled(true);
-			
 		} else {
 			//newStepPanel.setVisible(false);
 			newEmptyStep.setEnabled(false);
@@ -228,7 +235,7 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 		currentStepTF.setValue(Globals.currentStep);
 		screen.modeChanged();
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent arg0) {		
 	}

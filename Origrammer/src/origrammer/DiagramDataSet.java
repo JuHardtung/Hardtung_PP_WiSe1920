@@ -13,15 +13,15 @@ public class DiagramDataSet {
 	public Color faceDownColor;
 	public StepDataSet[] steps;
 	
+	
 	public DiagramDataSet() {
-		
 	}
 	
 	public DiagramDataSet(Diagram d) {
 		int stepsNum = d.steps.size();
 		steps = new StepDataSet[stepsNum];
 		
-		for (int i=0; i<stepsNum; i++) {
+		for (int i = 0; i < stepsNum; i++) {
 			steps[i] = new StepDataSet(d.steps.get(i));
 		}
 		
@@ -38,7 +38,7 @@ public class DiagramDataSet {
 	public void recover(Diagram d) {
 		d.steps.clear();
 		
-		for (int i=0; i<steps.length; i++) {
+		for (int i = 0; i < steps.length; i++) {
 			d.steps.add(steps[i].getStep());
 		}		
 		

@@ -62,22 +62,21 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	private JMenuItem[] mruFilesMenuItem = new JMenuItem[Config.MRUFILE_NUM];
 	
 
-	
 	MainFrame(){
 		mainScreen = new MainScreen();
 		addWindowListener(this);
-		
+
 		uiTopPanel = new UITopPanel(mainScreen);
 		uiSidePanel = new UISidePanel(mainScreen, uiTopPanel);
 		uiBottomPanel = new UIBottomPanel(mainScreen);
-		
+
 		try {
 			BufferedImage img = ImageIO.read(new File("./images/origrammer.gif"));
 			this.setIconImage(img);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(uiTopPanel, BorderLayout.PAGE_START);
 		getContentPane().add(uiSidePanel, BorderLayout.LINE_START);
@@ -86,36 +85,36 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		pack();
 		setVisible(true);
-        setTitle("Origrammer v1.00");
-        
-        //setSize(1010, 800);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("Origrammer v1.00");
 
-        initMainScreen();
-        
-        menuItemNew.addActionListener(this);
-        menuItemOpen.addActionListener(this);  
-        menuItemSave.addActionListener(this);
-        menuItemSaveAs.addActionListener(this);
-        
-        menuItemUndo.addActionListener(this);
-        menuItemRedo.addActionListener(this);
-        menuItemCut.addActionListener(this);
-        menuItemCopy.addActionListener(this);
-        menuItemPaste.addActionListener(this);
-        menuItemDeleteSelected.addActionListener(new ActionListener() {
+		//setSize(1010, 800);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+		initMainScreen();
+
+		menuItemNew.addActionListener(this);
+		menuItemOpen.addActionListener(this);  
+		menuItemSave.addActionListener(this);
+		menuItemSaveAs.addActionListener(this);
+
+		menuItemUndo.addActionListener(this);
+		menuItemRedo.addActionListener(this);
+		menuItemCut.addActionListener(this);
+		menuItemCopy.addActionListener(this);
+		menuItemPaste.addActionListener(this);
+		menuItemDeleteSelected.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Origrammer.diagram.steps.get(Globals.currentStep).deleteAllSelectedObjects();
 				mainScreen.repaint();
 			}
 		});
-        menuItemDeleteSelected.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-        menutItemModelPreferences.addActionListener(this);
-        menuItemOrigrammerPreferences.addActionListener(this);
-        
-        menuItemSelectAll.addActionListener(new ActionListener() {
+		menuItemDeleteSelected.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		menutItemModelPreferences.addActionListener(this);
+		menuItemOrigrammerPreferences.addActionListener(this);
+
+		menuItemSelectAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Origrammer.diagram.steps.get(Globals.currentStep).selectAll();
@@ -124,11 +123,11 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 				uiSidePanel.modeChanged();
 				mainScreen.repaint();
 			}
-        	
-        });
-        menuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
-        
-        menuItemUnselectAll.addActionListener(new ActionListener() {
+
+		});
+		menuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK));
+
+		menuItemUnselectAll.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Origrammer.diagram.steps.get(Globals.currentStep).unselectAll();
@@ -138,44 +137,44 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 				mainScreen.repaint();
 			}
 		});
-        menuItemUnselectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
-        
-        
-        //##### MENU BAR #####
-        JMenuBar menuBar = new JMenuBar();
-        buildMenuFile();
-        buildMenuEdit();
-        buildMenuSelect();
-        
-        menuBar.add(menuFile);
-        menuBar.add(menuEdit);
-//        menuBar.add(menuObject);
-//        menuBar.add(menuType); //TODO: object and type menuItem
-        menuBar.add(menuSelect);
-        menuBar.add(menuAbout);
-        setJMenuBar(menuBar);       
+		menuItemUnselectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK | KeyEvent.SHIFT_MASK));
+
+
+		//##### MENU BAR #####
+		JMenuBar menuBar = new JMenuBar();
+		buildMenuFile();
+		buildMenuEdit();
+		buildMenuSelect();
+
+		menuBar.add(menuFile);
+		menuBar.add(menuEdit);
+		//        menuBar.add(menuObject);
+		//        menuBar.add(menuType); //TODO: object and type menuItem
+		menuBar.add(menuSelect);
+		menuBar.add(menuAbout);
+		setJMenuBar(menuBar);       
 	}
-	
+
 	private void buildMenuFile() {
 		menuFile.removeAll();
-		
+
 		menuFile.add(menuItemNew);
 		menuFile.add(menuItemOpen);
 		menuFile.addSeparator();
 		menuFile.add(menuItemSave);
 		menuFile.add(menuItemSaveAs);
-		
-		
-//        for (int i=0; i<Config.MRUFILE_NUM; i++) {
-//        	int index = mruFiles.size() - 1 - i;
-//        	if (index >= 0) {
-//        		String path = mruFiles.get(index);
-//        		mruFilesMenuItem[i].setText(path);
-//        		menuFile.add(mruFilesMenuItem[i]);
-//        	} else {
-//        		mruFilesMenuItem[i].setText("");
-//        	}
-//        }
+
+
+		//        for (int i=0; i<Config.MRUFILE_NUM; i++) {
+		//        	int index = mruFiles.size() - 1 - i;
+		//        	if (index >= 0) {
+		//        		String path = mruFiles.get(index);
+		//        		mruFilesMenuItem[i].setText(path);
+		//        		menuFile.add(mruFilesMenuItem[i]);
+		//        	} else {
+		//        		mruFilesMenuItem[i].setText("");
+		//        	}
+		//        }
 	}
 	
 	private void buildMenuEdit() {
@@ -257,7 +256,6 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		diaDataSet.recover(diagram);
 		Origrammer.diagram = diagram;
 		Origrammer.diagram.dataFilePath = filePath;
-			
 	}
 	
 	private void saveFile() {
@@ -313,9 +311,8 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 		//check the last opened files
-		for (int i=0; i<Config.MRUFILE_NUM; i++) {
+		for (int i = 0; i < Config.MRUFILE_NUM; i++) {
 			if (e.getSource() == mruFilesMenuItem[i]) {
 				try {
 					String filePath = mruFilesMenuItem[i].getText();
@@ -374,7 +371,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		@Override
 		public boolean accept(File f) {
-			for (int i=0; i < extensions.length; i++) {
+			for (int i = 0; i < extensions.length; i++) {
 				if (f.isDirectory()) {
 					return true;
 				}

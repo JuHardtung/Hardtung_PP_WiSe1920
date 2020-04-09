@@ -13,8 +13,8 @@ public class OriFaceProxy {
 	private double[][] pathPoints; 
 	private boolean isFaceUp;
 
+	
 	public OriFaceProxy() {
-		
 	}
 	
 	public OriFaceProxy(OriFace f) {
@@ -60,7 +60,7 @@ public class OriFaceProxy {
 	public OriFace getFace() {
 		GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD, pathPoints.length);
 		path.moveTo(pathPoints[0][0], pathPoints[0][1]);
-		for (int i=0; i<pathPoints.length; i++) {
+		for (int i = 0; i < pathPoints.length; i++) {
 			path.lineTo(pathPoints[i][0], pathPoints[i][1]);
 		}
 		path.closePath();

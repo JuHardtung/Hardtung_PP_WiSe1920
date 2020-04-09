@@ -18,8 +18,8 @@ public class OriLeaderBox {
 	private int type = TYPE_NONE;
 	private boolean isSelected;
 	
+	
 	public OriLeaderBox() {
-		
 	}
 	
 	public OriLeaderBox(OriLine line, JLabel label) {
@@ -50,25 +50,25 @@ public class OriLeaderBox {
 		//get JLabel size that fits the text
 		Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(getLabel().getText(), g2d);
 		Rectangle tmpRect = new Rectangle();
-		double width =  labelBounds.getWidth()+10;
+		double width =  labelBounds.getWidth() + 10;
 		double height = labelBounds.getHeight();
 		
 		//get JLabel placement depending on the line
 		if (line.getP0().y < line.getP1().y) {
 			if (line.getP0().x < line.getP1().x) {
 				//bottom right
-				tmpRect.setRect(line.getP1().x, line.getP1().y+1, width, height+2);
+				tmpRect.setRect(line.getP1().x, line.getP1().y + 1, width, height + 2);
 			} else {
 				//bottom left
-				tmpRect.setRect(line.getP1().x-width+1, line.getP1().y+1, width, height+2);
+				tmpRect.setRect(line.getP1().x - width + 1, line.getP1().y + 1, width, height + 2);
 			}
 		} else {
 			if (line.getP0().x < line.getP1().x) {
 				//top right
-				tmpRect.setRect(line.getP1().x+1, line.getP1().y-height, width, height+2);
+				tmpRect.setRect(line.getP1().x + 1, line.getP1().y-height, width, height + 2);
 			} else {
 				//top left
-				tmpRect.setRect(line.getP1().x-width+1, line.getP1().y-height, width, height+2);
+				tmpRect.setRect(line.getP1().x - width + 1, line.getP1().y - height, width, height + 2);
 			}
 		}
 		return tmpRect;

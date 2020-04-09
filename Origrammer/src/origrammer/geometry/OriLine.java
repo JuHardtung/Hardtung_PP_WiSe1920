@@ -17,6 +17,7 @@ public class OriLine {
 	private boolean isStartOffset;
 	private boolean isEndOffset;
 
+	
 	public OriLine() {
 	}
 	
@@ -50,16 +51,16 @@ public class OriLine {
 	public Vector2d getTranslatedP0() {
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		
-		double newX = p0.x + uv.x*25;
-		double newY = p0.y + uv.y*25;
+		double newX = p0.x + uv.x * 25;
+		double newY = p0.y + uv.y * 25;
 		return new Vector2d(newX, newY);
 	}
 	
 	public Vector2d getTranslatedP1() {
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		
-		double newX = p1.x - uv.x*25;
-		double newY = p1.y - uv.y*25;
+		double newX = p1.x - uv.x * 25;
+		double newY = p1.y - uv.y * 25;
 		return new Vector2d(newX, newY);
 	}
 

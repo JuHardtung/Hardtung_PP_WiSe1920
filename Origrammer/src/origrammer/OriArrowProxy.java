@@ -15,7 +15,6 @@ public class OriArrowProxy {
 
 	
 	public OriArrowProxy() {
-		
 	}
 	
 	public OriArrowProxy(OriArrow a) {

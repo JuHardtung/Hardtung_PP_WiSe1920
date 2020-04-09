@@ -8,8 +8,8 @@ public class OriVertexProxy {
 
 	private Vector2d p;
 	
+	
 	public OriVertexProxy() {
-		
 	}
 	
 	public OriVertexProxy(OriVertex v) {

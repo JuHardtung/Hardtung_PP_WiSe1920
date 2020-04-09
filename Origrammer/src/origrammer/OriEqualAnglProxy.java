@@ -11,8 +11,8 @@ public class OriEqualAnglProxy {
 	private Vector2d b;
 	private int dividerCount;
 	
+	
 	public OriEqualAnglProxy() {
-		
 	}
 	
 	public OriEqualAnglProxy(OriEqualAnglSymbol s) {

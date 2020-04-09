@@ -5,7 +5,7 @@ import java.util.ListResourceBundle;
 public class StringResource extends ListResourceBundle {
 
 	static final Object[][] strings = {
-			{"Title", "Origrammer: An origami diagramming tool"},
+			{"Title", "Origrammer: An Origami Diagramming Tool"},
 			{"UI_selectionTool", "Selection Tool"},
 			{"UI_lineInputTool", "Line Input Tool"},
 			{"UI_vertexInputTool", "Vertex Input Tool"},
@@ -15,7 +15,7 @@ public class StringResource extends ListResourceBundle {
 			{"UI_fillTool", "Fill Tool"},
 			{"UI_measureLength", "Measure Length"},
 			{"UI_measureAngle", "Measure Angle"},
-			{"UI_lineInputTwoVertices", "Input 2 endpoints"},
+			{"UI_lineInputTwoVertices", "Input 2 Endpoints"},
 			{"UI_lineInputIncenter", "Rabbit Ear (Triangle Incenter)"},
 			{"UI_vertexInputAbsolute", "Absolute Position"},
 			{"UI_vertexInputFractionOfLine", "Fraction of Line"},
@@ -23,7 +23,7 @@ public class StringResource extends ListResourceBundle {
 			{"UI_gridHalf", "x2"},
 			{"UI_gridDouble", "x1/2"},
 			{"UI_gridSet", "Set"},
-			{"UI_ShowVertices", "Show vertices"},
+			{"UI_ShowVertices", "Show Vertices"},
 			{"UI_ShowFilledFaces", "Show Filled Faces"},
 			{"Pref_applyButton", "Apply"},
 			{"Pref_okButton", "Ok"},
@@ -38,20 +38,19 @@ public class StringResource extends ListResourceBundle {
 			{"MenuArrows", "Arrows"},
 			{"TT_LineCB", "Choose the type of line you want to place."},
 			{"TT_ArrowCB", "Choose the type of arrow you want to place."},
-			{"Origrammer_File", "Origrammer file"},
+			{"Origrammer_File", "Origrammer File"},
 			{"DefaultFileName", "No Title"},
 			{"Error_FileLoadFailed", "Error: Loading File failed"},
 			{"Error_FileSaveFailed", "Error: Saving File failed"},
 			{"Error_EmptyTitle", "Error: Title can't be empty!"},
-			{"Error_EmptySideLength", "Error: Side Length can't be empty!"},
-			{"Error_EmptyWidth", "Error: Paper Width can't be empty!"},
-			{"Error_EmptyHeight", "Error: Paper Height can't be empty!"},
+			{"Error_EmptySideLength", "Error: Side length can't be empty!"},
+			{"Error_EmptyWidth", "Error: Paper width can't be empty!"},
+			{"Error_EmptyHeight", "Error: Paper height can't be empty!"},
 			{"Error_EmptyLeaderTextField", "Error: The TextField for a leader can't be empty!"},
 			{"Error_EmptyRepetitionTextField", "Error: The TextField for a RepetitionBox can't be empty!"},
 			{"Warning_SameNameFileExists", "Warning: File with the same name already exists!"},
 			{"DialogTitle_FileSave", "Save!"}
 	};
-	
 	
 	protected Object[][] getContents() {
 		return strings;

@@ -12,7 +12,6 @@ public class OriGeomSymbolProxy {
 
 	
 	public OriGeomSymbolProxy() {
-
 	}
 	
 	public OriGeomSymbolProxy (OriGeomSymbol g) {

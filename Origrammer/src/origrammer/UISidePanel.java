@@ -39,7 +39,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	private JRadioButton measureToolRB = new JRadioButton(Origrammer.res.getString("UI_measureTool"), false);
 	private JRadioButton fillToolRB = new JRadioButton(Origrammer.res.getString("UI_fillTool"), false);
 	private ButtonGroup toolbarGroup;
-	
+
 	//MEASURE PANEL
 	private JPanel measureOptionsPanel = new JPanel();
 	private JRadioButton measureLengthRB = new JRadioButton(Origrammer.res.getString("UI_measureLength"), true);
@@ -49,26 +49,26 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	private ButtonGroup measureGroup;
 	public JFormattedTextField measureLengthTF;
 	public JFormattedTextField measureAngleTF;
-	
+
 	//INPUT LINE MODE
 	public 	JPanel lineInputPanel = new JPanel();
 	private JRadioButton lineInputTwoVerticesRB = new JRadioButton(Origrammer.res.getString("UI_lineInputTwoVertices"), true);
 	private JRadioButton lineInputIncenterRB = new JRadioButton(Origrammer.res.getString("UI_lineInputIncenter"), true);
 	private ButtonGroup lineInputGroup;
-	
+
 	//INPUT VERTEX MODE
 	public 	JPanel vertexInputPanel = new JPanel();
 	private JRadioButton vertexInputAbsoluteRB = new JRadioButton(Origrammer.res.getString("UI_vertexInputAbsolute"), true);
 	private JRadioButton vertexInputFractionOfLineRB = new JRadioButton(Origrammer.res.getString("UI_vertexInputFractionOfLine"), false);
 	private ButtonGroup vertexInputGroup;
-	
+
 	//Grid
 	public JCheckBox dispGridCheckBox = new JCheckBox(Origrammer.res.getString("UI_ShowGrid"), true);
 	private JButton gridHalfButton = new JButton(Origrammer.res.getString("UI_gridHalf"));
 	private JButton gridDoubleButton = new JButton(Origrammer.res.getString("UI_gridDouble"));
 	private JButton gridSetButton = new JButton(Origrammer.res.getString("UI_gridSet"));
 	private JFormattedTextField gridTextField;
-	
+
 	//SCALING
 	public JFormattedTextField scalingCustomTF;
 	private JLabel percentLabel = new JLabel("%");
@@ -76,21 +76,40 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	private JButton scaling100 = new JButton("100%");
 	private JButton scalingMinus = new JButton("-");
 	private JButton scalingPlus = new JButton("+");
-	
+
 	private JButton resetViewButton = new JButton("Reset View");
 	private JCheckBox dispVerticesCB = new JCheckBox(Origrammer.res.getString("UI_ShowVertices"), true);
 	private JCheckBox dispFilledFacedCB = new JCheckBox(Origrammer.res.getString("UI_ShowFilledFaces"), true);
 
 	private MainScreen screen;
 	private UITopPanel uiTopPanel;
-	
+
 	public UISidePanel(MainScreen __screen, UITopPanel __uiTopPanel) {
 		this.screen = __screen;
 		this.uiTopPanel = __uiTopPanel;
 		setPreferredSize(new Dimension(200, 400));
 		setBackground(new Color(230, 230, 230));
+
+		addToolbarPanel();
+		addLineInputPanel();
+		addVertexInputPanel();
+		addMeasurePanel();
+		addGridPanel();
+		addScalingPanel();
+		addButtonsPanel();
+
+		modeChanged();
+	}
+	
+	private void addToolbarPanel() {
+		selectionToolRB.addActionListener(this);
+		lineInputToolRB.addActionListener(this);
+		vertexInputToolRB.addActionListener(this);
+		arrowInputToolRB.addActionListener(this);
+		symbolInputToolRB.addActionListener(this);
+		measureToolRB.addActionListener(this);
+		fillToolRB.addActionListener(this);
 		
-		//TOOLBAR Button Group
 		toolbarGroup = new ButtonGroup();
 		toolbarGroup.add(lineInputToolRB);
 		toolbarGroup.add(vertexInputToolRB);
@@ -100,71 +119,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		toolbarGroup.add(selectionToolRB);
 		toolbarGroup.add(measureToolRB);
 		
-		//LINE INPUT Button Group
-		lineInputGroup = new ButtonGroup();
-		lineInputGroup.add(lineInputTwoVerticesRB);
-		lineInputGroup.add(lineInputIncenterRB);
-		
-		//VERTEX INPUT ButtonGroup
-		vertexInputGroup = new ButtonGroup();
-		vertexInputGroup.add(vertexInputAbsoluteRB);
-		vertexInputGroup.add(vertexInputFractionOfLineRB);
-				
-		//MEASURE Button Group
-		measureGroup = new ButtonGroup();
-		measureGroup.add(measureLengthRB);
-		measureGroup.add(measureAngleRB);
-		
-		//TOOLBAR ActionListener
-		selectionToolRB.addActionListener(this);
-		lineInputToolRB.addActionListener(this);
-		vertexInputToolRB.addActionListener(this);
-		arrowInputToolRB.addActionListener(this);
-		symbolInputToolRB.addActionListener(this);
-		measureToolRB.addActionListener(this);
-		fillToolRB.addActionListener(this);
-		
-		//LINE INPUT ActionListener
-		lineInputTwoVerticesRB.addActionListener(this);
-		lineInputIncenterRB.addActionListener(this);
-		
-		//VERTEX INPUT ActionListener
-		vertexInputAbsoluteRB.addActionListener(this);
-		vertexInputFractionOfLineRB.addActionListener(this);
-		
-		//MEASURE OPTIONS ActionListener
-		measureLengthRB.addActionListener(this);
-		measureAngleRB.addActionListener(this);
-		copyMeasuredLength.addActionListener(this);
-		copyMeasuredAngle.addActionListener(this);
-		
-		//GRID ActionListener
-		dispGridCheckBox.addActionListener(this);
-		gridHalfButton.addActionListener(this);
-		gridDoubleButton.addActionListener(this);
-		gridSetButton.addActionListener(this);
-		
-		//SCALING ActionListener
-		scalingCustomButton.addActionListener(this);
-		scaling100.addActionListener(this);
-		scalingMinus.addActionListener(this);
-		scalingPlus.addActionListener(this);
-		
-		
-		//RESET VIEW BUTTON ActionListener
-		resetViewButton.addActionListener(this);
-		
-		//DISPL VERTICES ActionListener
-		dispVerticesCB.addActionListener(this);
-		dispVerticesCB.setSelected(true);
-		Globals.dispVertex = true;
-		
-		//DISPL FILLED FACES ActionListener
-		dispFilledFacedCB.addActionListener(this);
-		dispFilledFacedCB.setSelected(true);
-		Globals.dispFilledFaces = true;
-					
-		//TOOLBAR Panel and positioning
 		JPanel toolbarPanel = new JPanel();
 		toolbarPanel.add(selectionToolRB);
 		toolbarPanel.add(lineInputToolRB);
@@ -175,22 +129,48 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		toolbarPanel.add(fillToolRB);
 		toolbarPanel.setLayout(new GridLayout(7, 1, 10, 2));
 		add(toolbarPanel);
+	}
+	
+	private void addLineInputPanel() {
+		lineInputTwoVerticesRB.addActionListener(this);
+		lineInputIncenterRB.addActionListener(this);
 		
-		//LINE INPUT Panel and positioning
+		lineInputGroup = new ButtonGroup();
+		lineInputGroup.add(lineInputTwoVerticesRB);
+		lineInputGroup.add(lineInputIncenterRB);
+		
 		lineInputPanel.add(lineInputTwoVerticesRB);
 		lineInputPanel.add(lineInputIncenterRB);
 		lineInputPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(lineInputPanel);
+	}
+	
+	private void addVertexInputPanel() {
+		vertexInputAbsoluteRB.addActionListener(this);
+		vertexInputFractionOfLineRB.addActionListener(this);
 		
-		//VERTEX INPUT Panel and positioning
+		vertexInputGroup = new ButtonGroup();
+		vertexInputGroup.add(vertexInputAbsoluteRB);
+		vertexInputGroup.add(vertexInputFractionOfLineRB);
+		
 		vertexInputPanel.add(vertexInputAbsoluteRB);
 		vertexInputPanel.add(vertexInputFractionOfLineRB);
 		vertexInputPanel.setLayout(new GridLayout(2, 1, 10, 2));
 		add(vertexInputPanel);
-
-		//MEASURING OPTIONS Panel and positioning
-		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
+	}
+	
+	private void addMeasurePanel() {
+		measureLengthRB.addActionListener(this);
+		measureAngleRB.addActionListener(this);
+		copyMeasuredLength.addActionListener(this);
+		copyMeasuredAngle.addActionListener(this);
 		
+		measureGroup = new ButtonGroup();
+		measureGroup.add(measureLengthRB);
+		measureGroup.add(measureAngleRB);
+		
+		JLabel measureLabel = new JLabel("Measure", SwingConstants.CENTER);
+
 		JPanel measureLengthPanel = new JPanel();
 		measureLengthTF = new JFormattedTextField(new DecimalFormat("###.##cm"));
 		measureLengthPanel.setMaximumSize(new Dimension(50,30));
@@ -198,22 +178,28 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		measureLengthPanel.add(measureLengthTF);
 		measureLengthPanel.add(copyMeasuredLength);
 		measureLengthPanel.setLayout(new GridLayout(1, 3, 2, 2));
-		
+
 		measureAngleTF = new JFormattedTextField(new DecimalFormat("##.##°"));
 		JPanel measureAnglePanel = new JPanel();
 		measureAnglePanel.add(measureAngleRB);
 		measureAnglePanel.add(measureAngleTF);
 		measureAnglePanel.add(copyMeasuredAngle);
 		measureAnglePanel.setLayout(new GridLayout(1, 3, 2, 2));
-		
+
 		measureOptionsPanel.add(measureLabel);
 		measureOptionsPanel.add(measureLengthPanel);
 		measureOptionsPanel.add(measureAnglePanel);
 		measureOptionsPanel.setLayout(new GridLayout(3, 1, 10, 2));
 		add(measureOptionsPanel);
-		measureOptionsPanel.setVisible(false);		
+		measureOptionsPanel.setVisible(false);	
+	}
 
-		//GRID Panel and positioning
+	private void addGridPanel() {
+		dispGridCheckBox.addActionListener(this);
+		gridHalfButton.addActionListener(this);
+		gridDoubleButton.addActionListener(this);
+		gridSetButton.addActionListener(this);
+		
 		JPanel gridPanel = new JPanel();
 		gridTextField = new JFormattedTextField(new DecimalFormat("#"));
 		gridTextField.setColumns(3);
@@ -222,75 +208,84 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		JPanel gridCustomPanel = new JPanel();
 		gridCustomPanel.add(gridTextField);
 		gridCustomPanel.add(gridSetButton);
-		
+
 		JPanel gridHalfDoublePanel = new JPanel();
 		gridHalfDoublePanel.add(gridHalfButton);
 		gridHalfDoublePanel.add(gridDoubleButton);
-		
+
 		gridPanel.add(dispGridCheckBox);
 		gridPanel.add(gridCustomPanel);
 		gridPanel.add(gridHalfDoublePanel);
-		
+
 		gridPanel.setLayout(new GridLayout(3, 1, 10, 2));
 		gridPanel.setBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()));
 		//gridPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Grid"));
 		add(gridPanel);
+	}
+
+	private void addScalingPanel() {
+		scalingCustomButton.addActionListener(this);
+		scaling100.addActionListener(this);
+		scalingMinus.addActionListener(this);
+		scalingPlus.addActionListener(this);
 		
-		//SCALING Panel and positioning
 		scalingCustomTF = new JFormattedTextField(new DecimalFormat("###.#"));
-     
 		scalingCustomTF.setColumns(4);
 		scalingCustomTF.setValue(100);
 		scalingCustomTF.setHorizontalAlignment(JTextField.RIGHT);
 		PlainDocument docScalingCustom = (PlainDocument) scalingCustomTF.getDocument();
 		docScalingCustom.setDocumentFilter(new IntFilter());
-		
+
 		JPanel scalingCustom = new JPanel();
 		scalingCustom.add(scalingCustomTF);
 		scalingCustom.add(percentLabel);
-		
+
 		JPanel scalingCustomPanel = new JPanel();
 		//scalingCustomPanel.add(scalingCustomTF);
 		scalingCustomPanel.add(scalingCustom);
 		scalingCustomPanel.add(scalingCustomButton);
 		scalingCustomPanel.setLayout(new BoxLayout(scalingCustomPanel, BoxLayout.LINE_AXIS));
-		
+
 		JPanel scalingButtonsPanel = new JPanel();
 		scalingButtonsPanel.add(scaling100);
 		scalingButtonsPanel.add(scalingMinus);
 		scalingButtonsPanel.add(scalingPlus);
 		scalingButtonsPanel.setLayout(new BoxLayout(scalingButtonsPanel, BoxLayout.LINE_AXIS));
-		
 
 		JPanel scalingPanel = new JPanel();
 		scalingPanel.add(scalingCustomPanel);
 		scalingPanel.add(scalingButtonsPanel);
 		scalingPanel.setLayout(new BoxLayout(scalingPanel, BoxLayout.PAGE_AXIS));
 
-//		scalingPanel.add(scalingCustom);
-//		scalingPanel.add(scalingCustomButton);
-//		scalingPanel.add(scaling100);
-//		scalingPanel.add(scalingMinus);
-//		scalingPanel.add(scalingPlus);
-
+		//scalingPanel.add(scalingCustom);
+		//scalingPanel.add(scalingCustomButton);
+		//scalingPanel.add(scaling100);
+		//scalingPanel.add(scalingMinus);
+		//scalingPanel.add(scalingPlus);
 		//scalingPanel.setLayout(new GridLayout(2, 3, 5, 5));
-		
 		scalingPanel.setBorder(new TitledBorder(new EtchedBorder(BevelBorder.RAISED, getBackground().darker(), getBackground().brighter()), "Scaling"));
-		
 		add(scalingPanel);
+	}
+	
+	private void addButtonsPanel(){
+		resetViewButton.addActionListener(this);
+
+		dispVerticesCB.addActionListener(this);
+		dispVerticesCB.setSelected(true);
+		Globals.dispVertex = true;
+
+		dispFilledFacedCB.addActionListener(this);
+		dispFilledFacedCB.setSelected(true);
+		Globals.dispFilledFaces = true;
 		
-		
-		//Buttons Panel and positioning
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(resetViewButton);
 		buttonsPanel.add(dispVerticesCB);
 		buttonsPanel.add(dispFilledFacedCB);
 		buttonsPanel.setLayout(new GridLayout(3, 1, 10, 2));
 		add(buttonsPanel);
-		
-		modeChanged();
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == selectionToolRB) {
@@ -315,7 +310,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			Globals.toolbarMode = Constants.ToolbarMode.FILL_TOOL;
 			modeChanged();
 		} else if (e.getSource() == scalingCustomButton) {
-			
 			double newScale = Double.parseDouble(scalingCustomTF.getText());
 			if (newScale < 1000 && newScale > 0) {
 				Globals.SCALE = newScale/100;
@@ -323,7 +317,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			} else {
 				scalingCustomTF.setValue(Globals.SCALE*100);
 			}
-			
+
 		} else if (e.getSource() == scaling100) {
 			Globals.SCALE = 1.0;
 			modeChanged();
@@ -334,13 +328,13 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			Globals.SCALE += 0.1;
 			modeChanged();
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
-				if (e.getSource() == lineInputTwoVerticesRB) {
-					Globals.lineEditMode = Constants.LineInputMode.INPUT_LINE;
-					modeChanged();
-				} else if (e.getSource() == lineInputIncenterRB) {
-					Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
-					modeChanged();
-				}
+			if (e.getSource() == lineInputTwoVerticesRB) {
+				Globals.lineEditMode = Constants.LineInputMode.INPUT_LINE;
+				modeChanged();
+			} else if (e.getSource() == lineInputIncenterRB) {
+				Globals.lineEditMode = Constants.LineInputMode.TRIANGLE_INSECTOR;
+				modeChanged();
+			}
 		} else if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX) {
 			if (e.getSource() == vertexInputAbsoluteRB) {
 				Globals.vertexInputMode = Constants.VertexInputMode.ABSOLUTE;
@@ -363,7 +357,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				} else {
 					System.out.println("measureLengthTextField is empty!");
 				}
-
 			}
 			if (e.getSource() == copyMeasuredAngle) {
 				if (measureAngleTF.getValue() != null) {
@@ -373,7 +366,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 				} else {
 					System.out.println("measureAngleTextField is empty!");
 				}
-
 			}
 		}
 		if (e.getSource() == resetViewButton) {
@@ -409,33 +401,33 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			screen.repaint();
 		}
 	}
-	
-	
+
+
 	public void modeChanged() {
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_LINE) {
-//			lineInputTwoVerticesRB.setEnabled(true);
-//			lineInputIncenterRB.setEnabled(true);
+			//			lineInputTwoVerticesRB.setEnabled(true);
+			//			lineInputIncenterRB.setEnabled(true);
 			lineInputPanel.setVisible(true);
 		} else {
-//			lineInputTwoVerticesRB.setEnabled(false);
-//			lineInputIncenterRB.setEnabled(false);
+			//			lineInputTwoVerticesRB.setEnabled(false);
+			//			lineInputIncenterRB.setEnabled(false);
 			lineInputPanel.setVisible(false);
 		}
-		
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.INPUT_VERTEX) {
 			vertexInputPanel.setVisible(true);
 		} else {
 			vertexInputPanel.setVisible(false);
 		}
-			
+
 		if (Globals.toolbarMode == Constants.ToolbarMode.MEASURE_TOOL) {
 			measureOptionsPanel.setVisible(true);		
 		} else {
 			measureOptionsPanel.setVisible(false);		
 		}
-		
+
 		scalingCustomTF.setValue(Globals.SCALE*100);
-		
+
 		uiTopPanel.modeChanged();
 		screen.modeChanged();
 		repaint();
@@ -457,5 +449,5 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {		
 	}
-	
+
 }
