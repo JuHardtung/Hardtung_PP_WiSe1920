@@ -573,7 +573,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			t.transcode(input, null);
 		}
 		catch (TranscoderException ex) {
-			// Requires Java 6
 			ex.printStackTrace();
 			throw new IOException("Couldn't convert " + svgFile);
 		}

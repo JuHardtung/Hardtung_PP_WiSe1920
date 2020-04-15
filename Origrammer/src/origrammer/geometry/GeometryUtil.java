@@ -287,14 +287,14 @@ public class GeometryUtil {
 		double b = Distance(v0, v2);
 		double c = Distance(v0, v1);
 		
-		double cosA = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2*b*c);
+		double cosA = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c);
 		angle = Math.toDegrees(Math.acos(cosA));
 		
 		return angle;
 	}
 	
 	/**
-	 * Calculate the angle by two OriLines
+	 * Calculate the angle between two OriLines
 	 * @param l0
 	 * @param l1
 	 * @return The angle between l0 and l1
@@ -308,16 +308,16 @@ public class GeometryUtil {
 		Vector2d angleVertex;
 		Vector2d v0;
 		Vector2d v1;
-
-		if (l0p0 == l1p0) {
+		
+		if (l0p0.x == l1p0.x && l0p0.y == l1p0.y) {
 			angleVertex = l0p0;
 			v0 = l0p1;
 			v1 = l1p1;
-		} else if (l0p0 == l1p1) {
+		} else if (l0p0.x == l1p1.x && l0p0.y == l1p1.y) {
 			angleVertex = l0p0;
 			v0 = l0p1;
 			v1 = l1p0;
-		} else if (l0p1 == l1p0) {
+		} else if (l0p1.x == l1p0.x && l0p1.y == l1p0.y) {
 			angleVertex = l0p1;
 			v0 = l0p0;
 			v1 = l1p1;
@@ -328,6 +328,37 @@ public class GeometryUtil {
 		}
 
 		return measureAngle(angleVertex, v0, v1);
+	}
+	
+	/**
+	 * Calculates the angle between a line(x,y) and the x-axis
+	 * @param x
+	 * @param y
+	 * @return The angle in Radians
+	 */
+	private static double calcAngleToXAxis(double x, double y) {
+		double alpha = 0;
+		System.out.println("x: " + x + " y: " + y);
+		if (x > 0) {
+			alpha = Math.atan(y / x);
+			System.out.println("1");
+		} else if (y >= 0 && x < 0) {
+			alpha = Math.atan(y / x) + Math.PI;
+			System.out.println("2");
+		} else if (y < 0 && x < 0) {
+			alpha = Math.atan(y / x) - Math.PI;
+			System.out.println("3");
+		} else if (y > 0 && x == 0) {
+			System.out.println("4");
+			alpha = Math.PI / 2;
+		} else if (y < 0 && x == 0) {
+			System.out.println("5");
+			alpha = - (Math.PI / 2);
+		} else if (y == 0 && x == 0) {
+			System.out.println("Angle2 is undefined");
+		}
+		System.out.println("alpha: " + alpha);
+		return alpha;
 	}
 	
 	/**

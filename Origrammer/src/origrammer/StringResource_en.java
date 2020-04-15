@@ -5,7 +5,8 @@ import java.util.ListResourceBundle;
 public class StringResource_en extends ListResourceBundle {
 
 	static final Object[][] strings = {
-			{"Title", "Origrammer: An Origami Diagramming Tool"},
+			{"Title_long", "Origrammer: An Origami Diagramming Tool"},
+			{"Title_short", "Origrammer"},
 			{"UI_selectionTool", "Selection Tool"},
 			{"UI_lineInputTool", "Line Input Tool"},
 			{"UI_vertexInputTool", "Vertex Input Tool"},

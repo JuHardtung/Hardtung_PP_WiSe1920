@@ -9,7 +9,9 @@ import origrammer.geometry.OriLine;
 
 public class Origrammer {
 
-	public static String TITLE;
+//	public static String TITLE_LONG;
+//	public static String TITLE_SHORT;
+	public static String VERSION;
 	public static Diagram diagram;
 	private static Step step;
 	public static MainFrame mainFrame;
@@ -21,13 +23,10 @@ public class Origrammer {
 	
 	public static void main(String[] args) {
 		
-		//int mainFrameWidth = 800;
-		//int mainFrameHeight = 800;
-		
 		res = ResourceBundle.getBundle("origrammer.StringResource", Locale.ENGLISH);
 		
-		TITLE = Origrammer.res.getString("Title") + "  v1.00";
-		
+		VERSION = "  v1.0.1";
+
 		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
 		//TODO: get the real faceUp and faceDown Colors
 		diagram = new Diagram(size, Color.WHITE, Globals.DEFAULT_PAPER_COLOR); 

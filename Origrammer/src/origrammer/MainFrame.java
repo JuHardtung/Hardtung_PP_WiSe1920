@@ -85,7 +85,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		pack();
 		setVisible(true);
-		setTitle("Origrammer v1.00");
+		setTitle(Origrammer.res.getString("Title_long") + Origrammer.VERSION);
 
 		//setSize(1010, 800);
 		setLocationRelativeTo(null);
@@ -305,7 +305,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 			File file = new File(Origrammer.diagram.dataFilePath);
 			fileName = file.getName();
 		}
-		setTitle(fileName + " - " + Origrammer.TITLE);
+		setTitle(fileName + " - " + Origrammer.res.getString("Title_short") + Origrammer.VERSION);
 	}
 	
 	
