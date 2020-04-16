@@ -1,0 +1,1288 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.3.31)  31 MAR 2020 20:38
+entering extended mode
+**./Hardtung_PP_WiSe1920.tex
+(Hardtung_PP_WiSe1920.tex
+LaTeX2e <2020-02-02> patch level 5
+L3 programming layer <2020-03-06>
+\@input{header.aux}
+\openout2 = `header.aux'.
+
+(header.tex
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\articl
+e.cls"
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size11
+.clo"
+File: size11.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\lmodern.
+sty"
+Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\inpute
+nc.sty"
+Package: inputenc 2018/08/11 v1.3c Input encoding file
+\inpenc@prehook=\toks15
+\inpenc@posthook=\toks16
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\utf8x.d
+ef"
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\ucs.sty
+"
+Package: ucs 2013/05/11 v2.2 UCS: Unicode input support
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\uni-glo
+bal.def"
+File: uni-global.def 2013/05/13 UCS: Unicode global data
+)
+\uc@secondtry=\count175
+\uc@combtoks=\toks17
+\uc@combtoksb=\toks18
+\uc@temptokena=\toks19
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fonten
+c.sty"
+Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
+2.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\t1lmr.fd
+"
+File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+))
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/import\impo
+rt.sty"
+Package: import 2020/01/22  v 6.0
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\gr
+aphicx.sty"
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\ke
+yval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\gr
+aphics.sty"
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\tr
+ig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cf
+g\graphics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-de
+f\pdftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen135
+\Gin@req@width=\dimen136
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\sub
+caption.sty"
+Package: subcaption 2020/01/22 v1.3d Sub-captions (AR)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\cap
+tion.sty"
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\cap
+tion3.sty"
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
+\captionmargin=\dimen137
+\captionmargin@=\dimen138
+\captionwidth=\dimen139
+\caption@tempdima=\dimen140
+\caption@indent=\dimen141
+\caption@parindent=\dimen142
+\caption@hangindent=\dimen143
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count176
+\c@continuedfloat=\count177
+)
+\c@subfigure=\count178
+\c@subtable=\count179
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fa
+ncyhdr.sty"
+Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
+s
+\f@nch@headwidth=\skip49
+\f@nch@O@elh=\skip50
+\f@nch@O@erh=\skip51
+\f@nch@O@olh=\skip52
+\f@nch@O@orh=\skip53
+\f@nch@O@elf=\skip54
+\f@nch@O@erf=\skip55
+\f@nch@O@olf=\skip56
+\f@nch@O@orf=\skip57
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/setspace\se
+tspace.sty"
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\hy
+perref.sty"
+Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ltxcmds\l
+txcmds.sty"
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ift
+ex.sty"
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdftexcmds\
+pdftexcmds.sty"
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/infwarerr
+\infwarerr.sty"
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/kvsetkeys
+\kvsetkeys.sty"
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/kvdefinek
+eys\kvdefinekeys.sty"
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pdfescape
+\pdfescape.sty"
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hycolor\hyc
+olor.sty"
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/letltxmacro
+\letltxmacro.sty"
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/auxhook\aux
+hook.sty"
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/kvoptions\k
+voptions.sty"
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
+)
+\@linkdim=\dimen144
+\Hy@linkcounter=\count180
+\Hy@pagecounter=\count181
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\pd
+1enc.def"
+File: pd1enc.def 2020/01/14 v7.00d Hyperref: PDFDocEncoding definition (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/intcalc\i
+ntcalc.sty"
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/etexcmds\
+etexcmds.sty"
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count182
+Package hyperref Info: Hyper figures OFF on input line 4547.
+Package hyperref Info: Link nesting OFF on input line 4552.
+Package hyperref Info: Hyper index ON on input line 4555.
+Package hyperref Info: Plain pages OFF on input line 4562.
+Package hyperref Info: Backreferencing OFF on input line 4567.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4800.
+\c@Hy@tempcnt=\count183
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/url\url.sty
+"
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5159.
+\XeTeXLinkMargin=\dimen145
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/bitset\bi
+tset.sty"
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/bigintcal
+c\bigintcalc.sty"
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count184
+\Field@Width=\dimen146
+\Fld@charsize=\dimen147
+Package hyperref Info: Hyper figures OFF on input line 6430.
+Package hyperref Info: Link nesting OFF on input line 6435.
+Package hyperref Info: Hyper index ON on input line 6438.
+Package hyperref Info: backreferencing OFF on input line 6445.
+Package hyperref Info: Link coloring OFF on input line 6450.
+Package hyperref Info: Link coloring with OCG OFF on input line 6455.
+Package hyperref Info: PDF/A mode OFF on input line 6460.
+LaTeX Info: Redefining \ref on input line 6500.
+LaTeX Info: Redefining \pageref on input line 6504.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/atbegshi\
+atbegshi.sty"
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+)
+\Hy@abspage=\count185
+\c@Item=\count186
+\c@Hfootnote=\count187
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\hp
+dftex.def"
+File: hpdftex.def 2020/01/14 v7.00d Hyperref driver for pdfTeX
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/atveryend\a
+tveryend.sty"
+Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+)
+\Fld@listcount=\count188
+\c@bookmark@seq@number=\count189
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/rerunfilech
+eck\rerunfilecheck.sty"
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/uniquecou
+nter\uniquecounter.sty"
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip58
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcol
+or.sty"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cf
+g\color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 48.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/chngcntr\ch
+ngcntr.sty"
+Package: chngcntr 2018/04/09 v1.1a change counter resetting
+Package chngcntr Info: \counterwithout already defined.
+(chngcntr)             Quitting chngcntr on input line 21.
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/enumitem\en
+umitem.sty"
+Package: enumitem 2019/06/20 v3.9 Customized lists
+\labelindent=\skip59
+\enit@outerparindent=\dimen148
+\enit@toks=\toks21
+\enit@inbox=\box45
+\enit@count@id=\count190
+\enitdp@description=\count191
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+base\glossaries.sty"
+Package: glossaries 2020/03/19 v4.46 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen
+.sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xkeyval\xke
+yval.sty"
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\x
+keyval.tex"
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xkeyval\x
+kvutils.tex"
+\XKV@toks=\toks22
+\XKV@tempa@toks=\toks23
+)
+\XKV@depth=\count192
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mfirstuc\mf
+irstuc.sty"
+Package: mfirstuc 2017/11/14 v2.06 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/etoolbox\et
+oolbox.sty"
+Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count193
+)
+\@glsmfirst=\toks24
+\@glsmrest=\toks25
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/textcase\te
+xtcase.sty"
+Package: textcase 2019/09/14 v1.00 Text only upper/lower case changing (DPC)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xfor\xfor.s
+ty"
+Package: xfor 2009/02/05 v1.05 (NLCT)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/datatool\da
+tatool-base.sty"
+Package: datatool-base 2019/09/27 v2.32 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\ams
+math.sty"
+Package: amsmath 2020/01/20 v2.17e AMS math features
+\@mathmargin=\skip60
+
+For additional information on amsmath, use the `?' option.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\ams
+text.sty"
+Package: amstext 2000/06/29 v2.01 AMS text
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\ams
+gen.sty"
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks26
+\ex@=\dimen149
+))
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\ams
+bsy.sty"
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen150
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\ams
+opn.sty"
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count194
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count195
+\leftroot@=\count196
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count197
+\DOTSCASE@=\count198
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box46
+\strutbox@=\box47
+\big@size=\dimen151
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count199
+\c@MaxMatrixCols=\count266
+\dotsspace@=\muskip17
+\c@parentequation=\count267
+\dspbrk@lvl=\count268
+\tag@help=\toks27
+\row@=\count269
+\column@=\count270
+\maxfields@=\count271
+\andhelp@=\toks28
+\eqnshift@=\dimen152
+\alignsep@=\dimen153
+\tagshift@=\dimen154
+\tagwidth@=\dimen155
+\totwidth@=\dimen156
+\lineht@=\dimen157
+\@envbody=\toks29
+\multlinegap=\skip61
+\multlinetaggap=\skip62
+\mathdisplay@stack=\toks30
+LaTeX Info: Redefining \[ on input line 2859.
+LaTeX Info: Redefining \] on input line 2860.
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/substr\subs
+tr.sty"
+Package: substr 2009/10/20 v1.2 Handle substrings
+\c@su@anzahl=\count272
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/datatool\da
+tatool-fp.sty"
+Package: datatool-fp 2019/09/27 v2.32 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp.sty"
+Package: fp 1995/04/02
+
+`Fixed Point Package', Version 0.8, April 2, 1995 (C) Michael Mehlich
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\defpatte
+rn.sty"
+Package: defpattern 1994/10/12
+\actioncount=\count273
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-basic
+.sty"
+Package: fp-basic 1996/05/13
+\FP@xs=\count274
+\FP@xia=\count275
+\FP@xib=\count276
+\FP@xfa=\count277
+\FP@xfb=\count278
+\FP@rega=\count279
+\FP@regb=\count280
+\FP@regs=\count281
+\FP@times=\count282
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-addon
+s.sty"
+Package: fp-addons 1995/03/15
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-snap.
+sty"
+Package: fp-snap 1995/04/05
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-exp.s
+ty"
+Package: fp-exp 1995/04/03
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-trigo
+.sty"
+Package: fp-trigo 1995/04/14
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-pas.s
+ty"
+Package: fp-pas 1994/08/29
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-rando
+m.sty"
+Package: fp-random 1995/02/23
+\FPseed=\count283
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-eqn.s
+ty"
+Package: fp-eqn 1995/04/03
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-upn.s
+ty"
+Package: fp-upn 1996/10/21
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fp\fp-eval.
+sty"
+Package: fp-eval 1995/04/03
+)))
+\@dtl@toks=\toks31
+\@dtl@tmpcount=\count284
+\dtl@tmplength=\skip63
+\dtl@sortresult=\count285
+\@dtl@numgrpsepcount=\count286
+\@dtl@datatype=\count287
+\dtl@codeA=\count288
+\dtl@codeB=\count289
+\@dtl@foreach@level=\count290
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+base\glossaries-compatible-307.sty"
+Package: glossaries-compatible-307 2020/03/19 v4.46 (NLCT)
+)
+\gls@level=\count291
+\@gls@tmpb=\toks32
+\gls@tmplen=\skip64
+\glskeylisttok=\toks33
+\glslabeltok=\toks34
+\glsshorttok=\toks35
+\glslongtok=\toks36
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+styles\glossary-hypernav.sty"
+Package: glossary-hypernav 2020/03/19 v4.46 (NLCT)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+styles\glossary-list.sty"
+Package: glossary-list 2020/03/19 v4.46 (NLCT)
+\glslistdottedwidth=\skip65
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+styles\glossary-long.sty"
+Package: glossary-long 2020/03/19 v4.46 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\longt
+able.sty"
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip66
+\LTright=\skip67
+\LTpre=\skip68
+\LTpost=\skip69
+\LTchunksize=\count292
+\LTcapwidth=\dimen158
+\LT@head=\box48
+\LT@firsthead=\box49
+\LT@foot=\box50
+\LT@lastfoot=\box51
+\LT@cols=\count293
+\LT@rows=\count294
+\c@LT@tables=\count295
+\c@LT@chunks=\count296
+\LT@p@ftn=\toks37
+)
+\glsdescwidth=\skip70
+\glspagelistwidth=\skip71
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+styles\glossary-super.sty"
+Package: glossary-super 2020/03/19 v4.46 (NLCT)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/supertabula
+r\supertabular.sty"
+Package: supertabular 2020/02/02 v4.1g the supertabular environment
+\c@tracingst=\count297
+\ST@wd=\dimen159
+\ST@rightskip=\skip72
+\ST@leftskip=\skip73
+\ST@parfillskip=\skip74
+\ST@pageleft=\dimen160
+\ST@headht=\dimen161
+\ST@tailht=\dimen162
+\ST@pagesofar=\dimen163
+\ST@pboxht=\dimen164
+\ST@lineht=\dimen165
+\ST@prevht=\dimen166
+\ST@toadd=\dimen167
+\ST@dimen=\dimen168
+\ST@pbox=\box52
+))
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/glossaries/
+styles\glossary-tree.sty"
+Package: glossary-tree 2020/03/19 v4.46 (NLCT)
+\glstreeindent=\skip75
+)) (glossary.tex)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\cs
+quotes.sty"
+Package: csquotes 2019-12-06 v5.2j context-sensitive quotations (JAW)
+\csq@reset=\count298
+\csq@gtype=\count299
+\csq@glevel=\count300
+\csq@qlevel=\count301
+\csq@maxlvl=\count302
+\csq@tshold=\count303
+\csq@ltx@everypar=\toks38
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\cs
+quotes.def"
+File: csquotes.def 2019-12-06 v5.2j csquotes generic definitions (JAW)
+)
+Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
+Package csquotes Info: ... configuration file loaded successfully.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/csquotes\cs
+quotes.cfg"
+File: csquotes.cfg 
+)
+Package csquotes Info: Redefining alias 'english' -> 'english/american'.
+Package csquotes Info: Enabling strict warnings.
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\li
+stings.sty"
+\lst@mode=\count304
+\lst@gtempboxa=\box53
+\lst@token=\toks39
+\lst@length=\count305
+\lst@currlwidth=\dimen169
+\lst@column=\count306
+\lst@pos=\count307
+\lst@lostspace=\dimen170
+\lst@width=\dimen171
+\lst@newlines=\count308
+\lst@lineno=\count309
+\lst@maxwidth=\dimen172
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\ls
+tmisc.sty"
+File: lstmisc.sty 2020/03/24 1.8d (Carsten Heinz)
+\c@lstnumber=\count310
+\lst@skipnumbers=\count311
+\lst@framebox=\box54
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\li
+stings.cfg"
+File: listings.cfg 2020/03/24 1.8d listings configuration
+))
+Package: listings 2020/03/24 1.8d (Carsten Heinz)
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\textco
+mp.sty"
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\ls
+tlang1.sty"
+File: lstlang1.sty 2020/03/24 1.8d listings language file
+))
+Package csquotes Info: Checking for multilingual support...
+Package csquotes Info: ... none found.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/l3backend\l
+3backend-pdfmode.def"
+File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count312
+\l__pdf_internal_box=\box55
+) (Hardtung_PP_WiSe1920.aux (chapter/titlepage.aux)
+(chapter/introduction.aux) (chapter/notation.aux) (chapter/requirements.aux)
+(chapter/program.aux) (chapter/problems.aux) (chapter/prospect.aux))
+\openout1 = `Hardtung_PP_WiSe1920.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 6.
+LaTeX Font Info:    ... okay on input line 6.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\ucsencs
+.def"
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii
+\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count313
+\scratchdimen=\dimen173
+\scratchbox=\box56
+\nofMPsegments=\count314
+\nofMParguments=\count315
+\everyMPshowfont=\toks40
+\MPscratchCnt=\count316
+\MPscratchDim=\dimen174
+\MPnumerator=\count317
+\makeMPintoPDFobject=\count318
+\everyMPtoPDFconversion=\toks41
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/epstopdf-pk
+g\epstopdf-base.sty"
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: longtable package is loaded.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\ltc
+aption.sty"
+Package: ltcaption 2018/08/26 v1.4a longtable captions (AR)
+)
+Package caption Info: supertabular package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\AtBeginShipoutBox=\box57
+Package hyperref Info: Link coloring ON on input line 6.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\na
+meref.sty"
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/refcount\re
+fcount.sty"
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/generic/gettitles
+tring\gettitlestring.sty"
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count319
+)
+LaTeX Info: Redefining \ref on input line 6.
+LaTeX Info: Redefining \pageref on input line 6.
+LaTeX Info: Redefining \nameref on input line 6.
+ (Hardtung_PP_WiSe1920.out)
+(Hardtung_PP_WiSe1920.out)
+\@outlinefile=\write3
+\openout3 = `Hardtung_PP_WiSe1920.out'.
+
+\c@lstlisting=\count320
+\openout2 = `chapter/titlepage.aux'.
+
+ (chapter/titlepage.tex
+<./images/THlogoheader.pdf, id=103, 115.43124pt x 62.2325pt>
+File: ./images/THlogoheader.pdf Graphic file (type pdf)
+<use ./images/THlogoheader.pdf>
+Package pdftex.def Info: ./images/THlogoheader.pdf  used on input line 8.
+(pdftex.def)             Requested size: 93.59802pt x 50.46121pt.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\uni-0.d
+ef"
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+)
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 6
+3.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\ot1lmr.f
+d"
+File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 6
+3.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omllmm.f
+d"
+File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
+63.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omslmsy.
+fd"
+File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
+63.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omxlmex.
+fd"
+File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10.95> on input line 63.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 63.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 63.
+ [1
+
+
+
+
+{C:/Users/Julian-Tower/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./im
+ages/THlogoheader.pdf>] [2]) (Hardtung_PP_WiSe1920.toc)
+\tf@toc=\write4
+\openout4 = `Hardtung_PP_WiSe1920.toc'.
+
+ [3
+
+]
+\openout2 = `chapter/introduction.aux'.
+
+
+(chapter/introduction.tex
+<./images/Crane.png, id=160, 1442.38875pt x 1022.82124pt>
+File: ./images/Crane.png Graphic file (type png)
+<use ./images/Crane.png>
+Package pdftex.def Info: ./images/Crane.png  used on input line 9.
+(pdftex.def)             Requested size: 216.0022pt x 153.16685pt.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 14.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 14.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
+4.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\t1lmtt.f
+d"
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [4
+
+ <./images/Crane.png>]) [5]
+\openout2 = `chapter/notation.aux'.
+
+ (chapter/notation.tex
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ucs\uni-32.
+def"
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+) [6
+
+
+]
+<./images/CreasesTouchEdge1.pdf, id=209, 307.34624pt x 295.78706pt>
+File: ./images/CreasesTouchEdge1.pdf Graphic file (type pdf)
+<use ./images/CreasesTouchEdge1.pdf>
+Package pdftex.def Info: ./images/CreasesTouchEdge1.pdf  used on input line 38.
+
+(pdftex.def)             Requested size: 108.0011pt x 103.93773pt.
+<./images/CreasesTouchEdge2.pdf, id=210, 307.34624pt x 295.78706pt>
+File: ./images/CreasesTouchEdge2.pdf Graphic file (type pdf)
+<use ./images/CreasesTouchEdge2.pdf>
+Package pdftex.def Info: ./images/CreasesTouchEdge2.pdf  used on input line 43.
+
+(pdftex.def)             Requested size: 108.0011pt x 103.93773pt.
+<./images/CreasesTouchEdge3.pdf, id=211, 307.34624pt x 295.78706pt>
+File: ./images/CreasesTouchEdge3.pdf Graphic file (type pdf)
+<use ./images/CreasesTouchEdge3.pdf>
+Package pdftex.def Info: ./images/CreasesTouchEdge3.pdf  used on input line 48.
+
+(pdftex.def)             Requested size: 108.0011pt x 103.93773pt.
+ [7] [8 <./images/CreasesTouchEdge1.pdf> <./images/CreasesTouchEdge2.pdf> <./im
+ages/CreasesTouchEdge3.pdf>] [9]
+<./images/ValleyFold.pdf, id=302, 284.52798pt x 284.52798pt>
+File: ./images/ValleyFold.pdf Graphic file (type pdf)
+<use ./images/ValleyFold.pdf>
+Package pdftex.def Info: ./images/ValleyFold.pdf  used on input line 77.
+(pdftex.def)             Requested size: 108.0011pt x 108.00018pt.
+<./images/MountainFold.pdf, id=303, 284.52798pt x 284.52798pt>
+File: ./images/MountainFold.pdf Graphic file (type pdf)
+<use ./images/MountainFold.pdf>
+Package pdftex.def Info: ./images/MountainFold.pdf  used on input line 82.
+(pdftex.def)             Requested size: 108.0011pt x 108.00018pt.
+<./images/X-RayLine.pdf, id=304, 284.52798pt x 284.52798pt>
+File: ./images/X-RayLine.pdf Graphic file (type pdf)
+<use ./images/X-RayLine.pdf>
+Package pdftex.def Info: ./images/X-RayLine.pdf  used on input line 87.
+(pdftex.def)             Requested size: 108.0011pt x 108.00018pt.
+<./images/AoMValleyFold_thick.pdf, id=307, 284.52798pt x 227.6225pt>
+File: ./images/AoMValleyFold_thick.pdf Graphic file (type pdf)
+<use ./images/AoMValleyFold_thick.pdf>
+Package pdftex.def Info: ./images/AoMValleyFold_thick.pdf  used on input line 1
+04.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+<./images/AoMMountainFold_thick.pdf, id=308, 284.52798pt x 227.6225pt>
+File: ./images/AoMMountainFold_thick.pdf Graphic file (type pdf)
+<use ./images/AoMMountainFold_thick.pdf>
+Package pdftex.def Info: ./images/AoMMountainFold_thick.pdf  used on input line
+ 109.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+<./images/AoMTurnPaperOver_thick.pdf, id=309, 284.52798pt x 227.6225pt>
+File: ./images/AoMTurnPaperOver_thick.pdf Graphic file (type pdf)
+<use ./images/AoMTurnPaperOver_thick.pdf>
+Package pdftex.def Info: ./images/AoMTurnPaperOver_thick.pdf  used on input lin
+e 114.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+ [10 <./images/ValleyFold.pdf> <./images/MountainFold.pdf> <./images/X-RayLine.
+pdf>]
+<./images/Unfold.pdf, id=377, 294.20514pt x 187.59485pt>
+File: ./images/Unfold.pdf Graphic file (type pdf)
+<use ./images/Unfold.pdf>
+Package pdftex.def Info: ./images/Unfold.pdf  used on input line 126.
+(pdftex.def)             Requested size: 143.9978pt x 91.81636pt.
+<./images/FoldAndUnfold.pdf, id=378, 291.47194pt x 291.13066pt>
+File: ./images/FoldAndUnfold.pdf Graphic file (type pdf)
+<use ./images/FoldAndUnfold.pdf>
+Package pdftex.def Info: ./images/FoldAndUnfold.pdf  used on input line 131.
+(pdftex.def)             Requested size: 108.0011pt x 107.87213pt.
+<./images/AoAPushHere_thick.pdf, id=379, 284.52798pt x 227.6225pt>
+File: ./images/AoAPushHere_thick.pdf Graphic file (type pdf)
+<use ./images/AoAPushHere_thick.pdf>
+Package pdftex.def Info: ./images/AoAPushHere_thick.pdf  used on input line 142
+.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+<./images/AoAPullPaperOut_thick.pdf, id=380, 284.52798pt x 227.6225pt>
+File: ./images/AoAPullPaperOut_thick.pdf Graphic file (type pdf)
+<use ./images/AoAPullPaperOut_thick.pdf>
+Package pdftex.def Info: ./images/AoAPullPaperOut_thick.pdf  used on input line
+ 147.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+<./images/AoAInflateHere_thick.pdf, id=381, 284.52798pt x 227.6225pt>
+File: ./images/AoAInflateHere_thick.pdf Graphic file (type pdf)
+<use ./images/AoAInflateHere_thick.pdf>
+Package pdftex.def Info: ./images/AoAInflateHere_thick.pdf  used on input line 
+152.
+(pdftex.def)             Requested size: 108.0011pt x 86.40019pt.
+ [11 <./images/AoMValleyFold_thick.pdf> <./images/AoMMountainFold_thick.pdf> <.
+/images/AoMTurnPaperOver_thick.pdf> <./images/Unfold.pdf> <./images/FoldAndUnfo
+ld.pdf> <./images/AoAPushHere_thick.pdf> <./images/AoAPullPaperOut_thick.pdf> <
+./images/AoAInflateHere_thick.pdf>] (images/Leader.pdf_tex
+<./images/Leader.pdf, id=473, page=1, 308.55646pt x 379.03632pt>
+File: ./images/Leader.pdf Graphic file (type pdf)
+<use ./images/Leader.pdf, page 1>
+Package pdftex.def Info: ./images/Leader.pdf , page1 used on input line 56.
+(pdftex.def)             Requested size: 108.0011pt x 132.67047pt.
+<./images/Leader.pdf, id=474, page=2, 308.55646pt x 379.03632pt>
+File: ./images/Leader.pdf Graphic file (type pdf)
+<use ./images/Leader.pdf, page 2>
+Package pdftex.def Info: ./images/Leader.pdf , page2 used on input line 58.
+(pdftex.def)             Requested size: 108.0011pt x 132.67047pt.
+)
+<./images/EqualDistances.pdf, id=475, 321.47403pt x 321.6567pt>
+File: ./images/EqualDistances.pdf Graphic file (type pdf)
+<use ./images/EqualDistances.pdf>
+Package pdftex.def Info: ./images/EqualDistances.pdf  used on input line 176.
+(pdftex.def)             Requested size: 108.0011pt x 108.06117pt.
+<./images/EqualAngles.pdf, id=476, 284.52798pt x 220.25186pt>
+File: ./images/EqualAngles.pdf Graphic file (type pdf)
+<use ./images/EqualAngles.pdf>
+Package pdftex.def Info: ./images/EqualAngles.pdf  used on input line 184.
+(pdftex.def)             Requested size: 108.0011pt x 83.60246pt.
+ (images/Rotation.pdf_tex
+<./images/Rotation.pdf, id=477, page=1, 172.22845pt x 195.34561pt>
+File: ./images/Rotation.pdf Graphic file (type pdf)
+<use ./images/Rotation.pdf, page 1>
+Package pdftex.def Info: ./images/Rotation.pdf , page1 used on input line 56.
+(pdftex.def)             Requested size: 71.9989pt x 81.66306pt.
+LaTeX Font Info:    Calculating math sizes for size <26> on input line 57.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <26> on input line 57.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <18.19992> on input line 57.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <13> on input line 57.
+<./images/Rotation.pdf, id=478, page=2, 172.22845pt x 195.34561pt>
+File: ./images/Rotation.pdf Graphic file (type pdf)
+<use ./images/Rotation.pdf, page 2>
+Package pdftex.def Info: ./images/Rotation.pdf , page2 used on input line 58.
+(pdftex.def)             Requested size: 71.9989pt x 81.66306pt.
+) [12 <./images/Leader.pdf> <./images/Leader.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/Leader.pdf): PDF inclusion: mu
+ltiple pdfs with page group included in a single page
+> <./images/EqualDistances.pdf> <./images/EqualAngles.pdf>]
+(images/X-RayView.pdf_tex
+<./images/X-RayView.pdf, id=537, page=1, 462.50676pt x 251.90483pt>
+File: ./images/X-RayView.pdf Graphic file (type pdf)
+<use ./images/X-RayView.pdf, page 1>
+Package pdftex.def Info: ./images/X-RayView.pdf , page1 used on input line 56.
+(pdftex.def)             Requested size: 251.9989pt x 137.25273pt.
+<./images/X-RayView.pdf, id=538, page=2, 462.50676pt x 251.90483pt>
+File: ./images/X-RayView.pdf Graphic file (type pdf)
+<use ./images/X-RayView.pdf, page 2>
+Package pdftex.def Info: ./images/X-RayView.pdf , page2 used on input line 58.
+(pdftex.def)             Requested size: 251.9989pt x 137.25273pt.
+)
+<./images/FoldOverAndOver.pdf, id=539, 284.52798pt x 113.8112pt>
+File: ./images/FoldOverAndOver.pdf Graphic file (type pdf)
+<use ./images/FoldOverAndOver.pdf>
+Package pdftex.def Info: ./images/FoldOverAndOver.pdf  used on input line 211.
+(pdftex.def)             Requested size: 216.0022pt x 86.40363pt.
+ [13 <./images/Rotation.pdf> <./images/Rotation.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/Rotation.pdf): PDF inclusion: 
+multiple pdfs with page group included in a single page
+> <./images/X-RayView.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/X-RayView.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+> <./images/X-RayView.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/X-RayView.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+> <./images/FoldOverAndOver.pdf>] (images/RepeatBox.pdf_tex
+<./images/RepeatBox.pdf, id=574, page=1, 174.62677pt x 142.09871pt>
+File: ./images/RepeatBox.pdf Graphic file (type pdf)
+<use ./images/RepeatBox.pdf, page 1>
+Package pdftex.def Info: ./images/RepeatBox.pdf , page1 used on input line 56.
+(pdftex.def)             Requested size: 108.0011pt x 87.88345pt.
+<./images/RepeatBox.pdf, id=575, page=2, 174.62677pt x 142.09871pt>
+File: ./images/RepeatBox.pdf Graphic file (type pdf)
+<use ./images/RepeatBox.pdf, page 2>
+Package pdftex.def Info: ./images/RepeatBox.pdf , page2 used on input line 58.
+(pdftex.def)             Requested size: 108.0011pt x 87.88345pt.
+)
+(images/NextViewHere.pdf_tex
+<./images/NextViewHere.pdf, id=577, page=1, 276.38005pt x 116.33965pt>
+File: ./images/NextViewHere.pdf Graphic file (type pdf)
+<use ./images/NextViewHere.pdf, page 1>
+Package pdftex.def Info: ./images/NextViewHere.pdf , page1 used on input line 5
+6.
+(pdftex.def)             Requested size: 216.0022pt x 90.92383pt.
+<./images/NextViewHere.pdf, id=578, page=2, 276.38005pt x 116.33965pt>
+File: ./images/NextViewHere.pdf Graphic file (type pdf)
+<use ./images/NextViewHere.pdf, page 2>
+Package pdftex.def Info: ./images/NextViewHere.pdf , page2 used on input line 6
+0.
+(pdftex.def)             Requested size: 216.0022pt x 90.92383pt.
+<./images/NextViewHere.pdf, id=579, page=3, 276.38005pt x 116.33965pt>
+File: ./images/NextViewHere.pdf Graphic file (type pdf)
+<use ./images/NextViewHere.pdf, page 3>
+Package pdftex.def Info: ./images/NextViewHere.pdf , page3 used on input line 6
+4.
+(pdftex.def)             Requested size: 216.0022pt x 90.92383pt.
+)
+<./images/HoldHere.pdf, id=580, 284.52798pt x 162.01227pt>
+File: ./images/HoldHere.pdf Graphic file (type pdf)
+<use ./images/HoldHere.pdf>
+Package pdftex.def Info: ./images/HoldHere.pdf  used on input line 238.
+(pdftex.def)             Requested size: 216.0022pt x 122.99709pt.
+ [14 <./images/RepeatBox.pdf> <./images/RepeatBox.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/RepeatBox.pdf): PDF inclusion:
+ multiple pdfs with page group included in a single page
+> <./images/NextViewHere.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/NextViewHere.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+> <./images/NextViewHere.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/NextViewHere.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+> <./images/NextViewHere.pdf
+
+pdfTeX warning: miktex-pdftex.exe (file ./images/NextViewHere.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+> <./images/HoldHere.pdf>]
+<./images/RabbitEarA.pdf, id=617, 293.69324pt x 296.53384pt>
+File: ./images/RabbitEarA.pdf Graphic file (type pdf)
+<use ./images/RabbitEarA.pdf>
+Package pdftex.def Info: ./images/RabbitEarA.pdf  used on input line 250.
+(pdftex.def)             Requested size: 97.20154pt x 98.14153pt.
+<./images/RabbitEarB.pdf, id=618, 382.36452pt x 297.17424pt>
+File: ./images/RabbitEarB.pdf Graphic file (type pdf)
+<use ./images/RabbitEarB.pdf>
+Package pdftex.def Info: ./images/RabbitEarB.pdf  used on input line 255.
+(pdftex.def)             Requested size: 126.0022pt x 97.92723pt.
+<./images/RabbitEarResult.pdf, id=619, 351.3386pt x 113.8112pt>
+File: ./images/RabbitEarResult.pdf Graphic file (type pdf)
+<use ./images/RabbitEarResult.pdf>
+Package pdftex.def Info: ./images/RabbitEarResult.pdf  used on input line 260.
+(pdftex.def)             Requested size: 118.80066pt x 38.48341pt.
+<./images/InsideReverseFold.pdf, id=620, 284.52798pt x 284.52798pt>
+File: ./images/InsideReverseFold.pdf Graphic file (type pdf)
+<use ./images/InsideReverseFold.pdf>
+Package pdftex.def Info: ./images/InsideReverseFold.pdf  used on input line 273
+.
+(pdftex.def)             Requested size: 108.0011pt x 108.00018pt.
+<./images/InsideReverseFoldResult.pdf, id=621, 284.52798pt x 284.52798pt>
+File: ./images/InsideReverseFoldResult.pdf Graphic file (type pdf)
+<use ./images/InsideReverseFoldResult.pdf>
+Package pdftex.def Info: ./images/InsideReverseFoldResult.pdf  used on input li
+ne 278.
+(pdftex.def)             Requested size: 108.0011pt x 108.00018pt.
+<./images/OutsideReverseFoldA.pdf, id=622, 286.38594pt x 288.31114pt>
+File: ./images/OutsideReverseFoldA.pdf Graphic file (type pdf)
+<use ./images/OutsideReverseFoldA.pdf>
+Package pdftex.def Info: ./images/OutsideReverseFoldA.pdf  used on input line 2
+87.
+(pdftex.def)             Requested size: 108.0011pt x 108.7279pt.
+<./images/OutsideReverseFoldB.pdf, id=623, 284.52798pt x 289.4855pt>
+File: ./images/OutsideReverseFoldB.pdf Graphic file (type pdf)
+<use ./images/OutsideReverseFoldB.pdf>
+Package pdftex.def Info: ./images/OutsideReverseFoldB.pdf  used on input line 2
+92.
+(pdftex.def)             Requested size: 108.0011pt x 109.88194pt.
+<./images/OutsideReverseFoldResult.pdf, id=624, 286.38594pt x 288.31114pt>
+File: ./images/OutsideReverseFoldResult.pdf Graphic file (type pdf)
+<use ./images/OutsideReverseFoldResult.pdf>
+Package pdftex.def Info: ./images/OutsideReverseFoldResult.pdf  used on input l
+ine 297.
+(pdftex.def)             Requested size: 108.0011pt x 108.7279pt.
+ [15 <./images/RabbitEarA.pdf> <./images/RabbitEarB.pdf> <./images/RabbitEarRes
+ult.pdf> <./images/InsideReverseFold.pdf> <./images/InsideReverseFoldResult.pdf
+>]
+<./images/Crimping.pdf, id=690, 545.10051pt x 154.98302pt>
+File: ./images/Crimping.pdf Graphic file (type pdf)
+<use ./images/Crimping.pdf>
+Package pdftex.def Info: ./images/Crimping.pdf  used on input line 311.
+(pdftex.def)             Requested size: 176.40198pt x 50.15367pt.
+<./images/Pleating.pdf, id=691, 535.5538pt x 151.90752pt>
+File: ./images/Pleating.pdf Graphic file (type pdf)
+<use ./images/Pleating.pdf>
+Package pdftex.def Info: ./images/Pleating.pdf  used on input line 316.
+(pdftex.def)             Requested size: 176.40198pt x 50.03459pt.
+<./images/OpenSink.pdf, id=692, 588.74857pt x 202.96729pt>
+File: ./images/OpenSink.pdf Graphic file (type pdf)
+<use ./images/OpenSink.pdf>
+Package pdftex.def Info: ./images/OpenSink.pdf  used on input line 326.
+(pdftex.def)             Requested size: 176.40198pt x 60.81322pt.
+<./images/MixedSink.pdf, id=693, 590.86647pt x 203.41896pt>
+File: ./images/MixedSink.pdf Graphic file (type pdf)
+<use ./images/MixedSink.pdf>
+Package pdftex.def Info: ./images/MixedSink.pdf  used on input line 331.
+(pdftex.def)             Requested size: 176.40198pt x 60.72818pt.
+<./images/ClosedSink.pdf, id=694, 588.28584pt x 200.9377pt>
+File: ./images/ClosedSink.pdf Graphic file (type pdf)
+<use ./images/ClosedSink.pdf>
+Package pdftex.def Info: ./images/ClosedSink.pdf  used on input line 336.
+(pdftex.def)             Requested size: 176.40198pt x 60.2511pt.
+) [16 <./images/OutsideReverseFoldA.pdf> <./images/OutsideReverseFoldB.pdf> <./
+images/OutsideReverseFoldResult.pdf> <./images/Crimping.pdf> <./images/Pleating
+.pdf> <./images/OpenSink.pdf> <./images/MixedSink.pdf> <./images/ClosedSink.pdf
+>]
+\openout2 = `chapter/requirements.aux'.
+
+ (chapter/requirements.tex
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 9
+.
+
+("C:\Users\Julian-Tower\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\ts1lmr.f
+d"
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [17
+
+
+]) [18]
+\openout2 = `chapter/program.aux'.
+
+ (chapter/program.tex
+<./images/newModel.pdf, id=844, 553.99973pt x 314.63547pt>
+File: ./images/newModel.pdf Graphic file (type pdf)
+<use ./images/newModel.pdf>
+Package pdftex.def Info: ./images/newModel.pdf  used on input line 9.
+(pdftex.def)             Requested size: 251.9989pt x 143.12094pt.
+<./images/modelPreferences.pdf, id=846, 516.36916pt x 314.63547pt>
+File: ./images/modelPreferences.pdf Graphic file (type pdf)
+<use ./images/modelPreferences.pdf>
+Package pdftex.def Info: ./images/modelPreferences.pdf  used on input line 16.
+(pdftex.def)             Requested size: 251.9989pt x 153.5486pt.
+ [19
+
+
+ <./images/newModel.pdf>]
+<./images/OrigrammerMainParts.pdf, id=859, 754.22777pt x 754.22777pt>
+File: ./images/OrigrammerMainParts.pdf Graphic file (type pdf)
+<use ./images/OrigrammerMainParts.pdf>
+Package pdftex.def Info: ./images/OrigrammerMainParts.pdf  used on input line 3
+4.
+(pdftex.def)             Requested size: 360.0pt x 359.99971pt.
+) [20 <./images/modelPreferences.pdf>] [21 <./images/OrigrammerMainParts.pdf>]
+\openout2 = `chapter/problems.aux'.
+
+
+(chapter/problems.tex [22
+
+
+] [23]
+<./images/equalAngle1.pdf, id=905, 344.26729pt x 334.28067pt>
+File: ./images/equalAngle1.pdf Graphic file (type pdf)
+<use ./images/equalAngle1.pdf>
+Package pdftex.def Info: ./images/equalAngle1.pdf  used on input line 42.
+(pdftex.def)             Requested size: 143.9978pt x 139.82054pt.
+<./images/equalAngle2.pdf, id=906, 332.00275pt x 325.87135pt>
+File: ./images/equalAngle2.pdf Graphic file (type pdf)
+<use ./images/equalAngle2.pdf>
+Package pdftex.def Info: ./images/equalAngle2.pdf  used on input line 47.
+(pdftex.def)             Requested size: 143.9978pt x 141.3352pt.
+ [24 <./images/equalAngle1.pdf> <./images/equalAngle2.pdf>]
+<./images/CrossingLines.pdf, id=918, 284.52798pt x 207.91978pt>
+File: ./images/CrossingLines.pdf Graphic file (type pdf)
+<use ./images/CrossingLines.pdf>
+Package pdftex.def Info: ./images/CrossingLines.pdf  used on input line 72.
+(pdftex.def)             Requested size: 216.0022pt x 157.84935pt.
+ [25 <./images/CrossingLines.pdf>]
+<./images/CrossingLinesExample.pdf, id=949, 442.75311pt x 250.16562pt>
+File: ./images/CrossingLinesExample.pdf Graphic file (type pdf)
+<use ./images/CrossingLinesExample.pdf>
+Package pdftex.def Info: ./images/CrossingLinesExample.pdf  used on input line 
+80.
+(pdftex.def)             Requested size: 323.9978pt x 183.06598pt.
+) [26 <./images/CrossingLinesExample.pdf>]
+\openout2 = `chapter/prospect.aux'.
+
+ (chapter/prospect.tex) [27
+
+
+] [28]
+Using TeX to sort glossary entries---this may take a while
+(Hardtung_PP_WiSe1920.lof [29
+
+])
+\tf@lof=\write5
+\openout5 = `Hardtung_PP_WiSe1920.lof'.
+
+ (Hardtung_PP_WiSe1920.lot)
+\tf@lot=\write6
+\openout6 = `Hardtung_PP_WiSe1920.lot'.
+
+
+(Hardtung_PP_WiSe1920.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 52.
+ [30]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 52.
+ (Hardtung_PP_WiSe1920.aux
+(chapter/titlepage.aux) (chapter/introduction.aux) (chapter/notation.aux)
+(chapter/requirements.aux) (chapter/program.aux) (chapter/problems.aux)
+(chapter/prospect.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 52.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 52.
+Package rerunfilecheck Info: File `Hardtung_PP_WiSe1920.out' has not changed.
+(rerunfilecheck)             Checksum: 7DECCEEA3B1B512BCC89E8BD20DABCA1;1658.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 52.
+ ) 
+Here is how much of TeX's memory you used:
+ 16119 strings out of 480897
+ 262153 string characters out of 2894818
+ 765676 words of memory out of 3000000
+ 31460 multiletter control sequences out of 15000+200000
+ 617573 words of font info for 71 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 68i,14n,81p,1367b,607s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/l
+m-ec.enc}{C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvi
+ps/lm/lm-ts1.enc}<C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts
+/type1/public/lm/lmbx10.pfb><C:/Users/Julian-Tower/AppData/Local/Programs/MiKTe
+X 2.9/fonts/type1/public/lm/lmbx12.pfb><C:/Users/Julian-Tower/AppData/Local/Pro
+grams/MiKTeX 2.9/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/Julian-Tower/AppDa
+ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Users/Julian-T
+ower/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr12.pfb><C:/User
+s/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr17.pf
+b><C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/l
+m/lmr6.pfb><C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
+/public/lm/lmr8.pfb><C:/Users/Julian-Tower/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/lm/lmri10.pfb><C:/Users/Julian-Tower/AppData/Local/Programs/Mi
+KTeX 2.9/fonts/type1/public/lm/lmro10.pfb><C:/Users/Julian-Tower/AppData/Local/
+Programs/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb><C:/Users/Julian-Tower/App
+Data/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmtt9.pfb>
+Output written on Hardtung_PP_WiSe1920.pdf (30 pages, 12870012 bytes).
+PDF statistics:
+ 1114 PDF objects out of 1200 (max. 8388607)
+ 133 named destinations out of 1000 (max. 500000)
+ 456 words of extra memory for PDF output out of 10000 (max. 10000000)
+
