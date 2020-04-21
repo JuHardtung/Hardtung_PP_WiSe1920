@@ -8,21 +8,25 @@
 			<attribute name="javadoc_location" value="jar:file:/F:/Bibliotheken/Dokumente/University/Origami%20Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/javadoc/commons-io-2.6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/test/batik-anim-1.12.jar">
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/batik-anim-1.12.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://xmlgraphics.apache.org/batik/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/test/batik-transcoder-1.12.jar">
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/batik-transcoder-1.12.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://xmlgraphics.apache.org/batik/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/test/batik-util-1.12.jar">
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/batik-util-1.12.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="https://xmlgraphics.apache.org/batik/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/test/batik-dom-1.12.jar"/>
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/batik-dom-1.12.jar"/>
+	<classpathentry kind="lib" path="libs/jars/batik-all-1.12.jar"/>
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/batik-svg-dom-1.12.jar"/>
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="F:/Bibliotheken/Dokumente/University/Origami Praxisprojekt/Hardtung_PP_WiSe1920/Origrammer/libs/jars/xmlgraphics-commons-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

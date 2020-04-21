@@ -12,11 +12,17 @@ public class OriGeomSymbol {
 	private int type = TYPE_NONE;
 	private Vector2d position;
 	private double radius;
-
 	private boolean isSelected;
 	
 	
 	public OriGeomSymbol() {
+	}
+	
+	public OriGeomSymbol(OriGeomSymbol gs) {
+		this.type = gs.type;
+		this.position = gs.position;
+		this.radius = gs.radius;
+		this.isSelected = gs.isSelected;
 	}
 	
 	public OriGeomSymbol(Vector2d position, double radius) {

@@ -3,6 +3,7 @@ package origrammer;
 import java.awt.Color;
 import java.util.ArrayList;
 
+
 public class Diagram {
 	public String title;
 	public String author;
@@ -33,7 +34,7 @@ public class Diagram {
 		steps.add(step);
 	}
 	
-
+	
 	public String getTitle() {
 		return title;
 	}

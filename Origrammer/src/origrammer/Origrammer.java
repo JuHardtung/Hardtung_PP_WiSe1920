@@ -9,8 +9,6 @@ import origrammer.geometry.OriLine;
 
 public class Origrammer {
 
-//	public static String TITLE_LONG;
-//	public static String TITLE_SHORT;
 	public static String VERSION;
 	public static Diagram diagram;
 	private static Step step;
@@ -25,7 +23,7 @@ public class Origrammer {
 		
 		res = ResourceBundle.getBundle("origrammer.StringResource", Locale.ENGLISH);
 		
-		VERSION = "  v1.0.1";
+		VERSION = "  v1.1.0";
 
 		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
 		//TODO: get the real faceUp and faceDown Colors

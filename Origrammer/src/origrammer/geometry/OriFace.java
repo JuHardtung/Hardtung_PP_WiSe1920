@@ -12,6 +12,12 @@ public class OriFace {
 	public OriFace() {
 	}
 	
+	public OriFace(OriFace f) {
+		this.path = f.path;
+		this.selected = f.selected;
+		this.isFaceUp = f.isFaceUp;
+	}
+	
 	public OriFace(GeneralPath path, boolean isFaceUp) {
 		this.path = path;
 		this.isFaceUp = isFaceUp;

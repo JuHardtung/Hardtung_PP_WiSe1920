@@ -25,6 +25,16 @@ public class OriPicSymbol {
 	public OriPicSymbol() {
 	}
 	
+	public OriPicSymbol(OriPicSymbol ps) {
+		this.label = ps.label;
+		this.type = ps.type;
+		this.position = ps.position;
+		this.width = ps.width;
+		this.height = ps.height;
+		this.scale = ps.scale;
+		this.degrees = ps.degrees;
+	}
+	
 	public OriPicSymbol(Vector2d position, int type) {
 		this.position = position;
 		this.type = type;

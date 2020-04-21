@@ -99,6 +99,8 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		menuItemSaveAs.addActionListener(this);
 
 		menuItemUndo.addActionListener(this);
+		menuItemUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_MASK));
+
 		menuItemRedo.addActionListener(this);
 		menuItemCut.addActionListener(this);
 		menuItemCopy.addActionListener(this);
@@ -343,6 +345,9 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 			openFile();
 			mainScreen.repaint();
 			updateTitleText();
+		} else if (e.getSource() == menuItemUndo) {
+			Origrammer.diagram.steps.get(Globals.currentStep).popUndoInfo();
+			mainScreen.repaint();
 		} else if (e.getSource() == menutItemModelPreferences) {
 			ModelPreferenceDialog mpd = new ModelPreferenceDialog(this, mainScreen);
 			Rectangle rec = getBounds();

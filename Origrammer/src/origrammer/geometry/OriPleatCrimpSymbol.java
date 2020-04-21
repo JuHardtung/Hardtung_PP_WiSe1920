@@ -22,6 +22,14 @@ public class OriPleatCrimpSymbol {
 	public OriPleatCrimpSymbol() {
 	}
 	
+	public OriPleatCrimpSymbol(OriPleatCrimpSymbol pcs) {
+		this.type = pcs.type;
+		this.position = pcs.position;
+		this.isSwitchedDir = pcs.isSwitchedDir;
+		this.layersCount = pcs.layersCount;
+		this.isSelected = pcs.isSelected;
+	}
+	
 	public OriPleatCrimpSymbol(Vector2d position, boolean isSwitchedDir, int layersCount) {
 		this.position = position;
 		this.isSwitchedDir = isSwitchedDir;

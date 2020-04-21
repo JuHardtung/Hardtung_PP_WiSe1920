@@ -18,6 +18,14 @@ public class OriEqualDistSymbol {
 	public OriEqualDistSymbol() {
 	}
 	
+	public OriEqualDistSymbol(OriEqualDistSymbol eds) {
+		this.p0 = eds.p0;
+		this.p1 = eds.p1;
+		this.translationDist = eds.translationDist;
+		this.dividerCount = eds.dividerCount;
+		this.isSelected = eds.isSelected;
+	}
+	
 	public OriEqualDistSymbol(Vector2d p0, Vector2d p1, int dividerCount) {
 		this.p0 = p0;
 		this.p1 = p1;

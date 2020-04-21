@@ -1029,6 +1029,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 						line.setEndOffset(false);
 					}
 				}
+				Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 				Origrammer.diagram.steps.get(Globals.currentStep).addLine(line);
 
 				firstSelectedV = null;
@@ -1043,6 +1044,9 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		double yPos = 0;
 		xPos += (double) (preMousePoint.getX() - 400) / Globals.SCALE;
 		yPos += (double) (preMousePoint.getY() - 400) / Globals.SCALE;
+		
+		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+		
 		Origrammer.diagram.steps.get(Globals.currentStep).addArrow(new OriArrow(new Vector2d(xPos, yPos), type));
 		//get last added OriArrow
 		OriArrow arrow = Origrammer.diagram.steps.get(Globals.currentStep).arrows.get(Origrammer.diagram.steps.get(Globals.currentStep).arrows.size() - 1);
@@ -1127,6 +1131,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		yPos += (double) (preMousePoint.getY() - 400) / Globals.SCALE;
 		Vector2d pos = new Vector2d(xPos, yPos);
 		
+		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 		Origrammer.diagram.steps.get(Globals.currentStep).addPicSymbol(new OriPicSymbol(pos, type));
 		//get last added OriSymbol
 		OriPicSymbol symbol = Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.get(Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.size() - 1);
@@ -1216,7 +1221,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		} else if (height > width) {
 			tmpGeomS = new OriGeomSymbol(new Vector2d(sp.x, sp.y), height);
 		}
-
+		
+		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 		Origrammer.diagram.steps.get(Globals.currentStep).addGeomSymbol(tmpGeomS);
 	}
 
@@ -1245,6 +1251,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 				} else {
 					newFace = new OriFace(pathForFilledFace, false, false);
 				}
+				Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 				Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
 				firstSelectedV = null;
 				secondSelectedV = null;
@@ -1279,6 +1286,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 				} else if (Globals.inputSymbolMode == Constants.InputSymbolMode.REPETITION_BOX) {
 					tmpLeader.setType(OriLeaderBox.TYPE_REPETITION);
 				}
+				Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 				Origrammer.diagram.steps.get(Globals.currentStep).addLeader(tmpLeader);
 			}
 
@@ -1302,6 +1310,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			tmpEquDistSymbol.setP0(firstSelectedV);
 			tmpEquDistSymbol.setP1(secondSelectedV);
 
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 			Origrammer.diagram.steps.get(Globals.currentStep).addEqualDistSymbol(tmpEquDistSymbol);
 
 			firstSelectedV = null;
@@ -1338,6 +1347,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			OriEqualAnglSymbol tmpEquAnglSymbol = new OriEqualAnglSymbol(firstSelectedV, secondSelectedV, thirdSelectedV);
 			tmpEquAnglSymbol.setDividerCount(Integer.parseInt(Origrammer.mainFrame.uiTopPanel.equalAnglDividerTF.getText()));
 
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 			Origrammer.diagram.steps.get(Globals.currentStep).addEqualAngleSymbol(tmpEquAnglSymbol);
 
 			firstSelectedV = null;
@@ -1360,6 +1370,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			} else {
 				tmpPCSymbol.setType(OriPleatCrimpSymbol.TYPE_CRIMP);
 			}
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 			Origrammer.diagram.steps.get(Globals.currentStep).addPleatSymbol(tmpPCSymbol);
 
 			firstSelectedV = null;
@@ -1374,6 +1385,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 
 			OriGeomSymbol tmpGeoSymbol = new OriGeomSymbol(firstSelectedV, 10);
 			tmpGeoSymbol.setType(OriGeomSymbol.TYPE_CLOSED_SINK);
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 			Origrammer.diagram.steps.get(Globals.currentStep).addGeomSymbol(tmpGeoSymbol);
 
 			firstSelectedV = null;
@@ -1389,6 +1401,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			} else if (secondSelectedV == null) {
 				secondSelectedV = v;
 			} else {
+				Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 				Origrammer.diagram.steps.get(Globals.currentStep).addTriangleInsectorLines(firstSelectedV, secondSelectedV, v);
 				firstSelectedV = null;
 				secondSelectedV = null;
@@ -1398,6 +1411,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 
 	private void createVertexAbsolutePos(Point2D.Double clickPoint) {
 		Vector2d p = new Vector2d(clickPoint.x, clickPoint.y);
+		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 		Origrammer.diagram.steps.get(Globals.currentStep).addVertex(p);
 	}
 
@@ -1418,6 +1432,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 
 			OriLine first = new OriLine(l.getP0(), newVertex, l.getType());
 			OriLine second = new OriLine(newVertex, l.getP1(), l.getType());
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 			Origrammer.diagram.steps.get(Globals.currentStep).addLine(first);
 			Origrammer.diagram.steps.get(Globals.currentStep).addLine(second);
 			Origrammer.diagram.steps.get(Globals.currentStep).lines.remove(l);

@@ -3,6 +3,7 @@ package origrammer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Stack;
 
 import javax.vecmath.Vector2d;
 
@@ -44,6 +45,19 @@ class PointComparatorY implements Comparator<Object> {
 	}
 }
 
+class UndoInfo {
+	public ArrayList<OriLine> lines = new ArrayList<OriLine>();
+	public ArrayList<OriVertex> vertices = new ArrayList<>();
+	public ArrayList<OriArrow> arrows = new ArrayList<OriArrow>();
+	public ArrayList<OriFace> filledFaces = new ArrayList<OriFace>();
+	public ArrayList<OriLeaderBox> leaderBoxSymbols = new ArrayList<>();
+	public ArrayList<OriPicSymbol> picSymbols = new ArrayList<>();
+	public ArrayList<OriGeomSymbol> geomSymbols = new ArrayList<>();
+	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
+	public ArrayList<OriEqualAnglSymbol> equalAnglSymbols = new ArrayList<>();
+	public ArrayList<OriPleatCrimpSymbol> pleatCrimpSymbols = new ArrayList<>();
+}
+
 
 public class Step {
 
@@ -57,6 +71,7 @@ public class Step {
 	public ArrayList<OriEqualDistSymbol> equalDistSymbols = new ArrayList<>();
 	public ArrayList<OriEqualAnglSymbol> equalAnglSymbols = new ArrayList<>();
 	public ArrayList<OriPleatCrimpSymbol> pleatCrimpSymbols = new ArrayList<>();
+	private Stack<UndoInfo> undoStack = new Stack<UndoInfo>();
 	public String stepDescription;
 	public int stepNumber;
 
@@ -75,6 +90,71 @@ public class Step {
 	public void initFirstStep() {
 		lines.addAll(getEdgeLines());
 	}
+	
+	
+	public void pushUndoInfo() {
+		UndoInfo ui = new UndoInfo();
+		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
+			ui.lines.add(new OriLine(l));
+		}
+		for (OriVertex v : Origrammer.diagram.steps.get(Globals.currentStep).vertices) {
+			ui.vertices.add(new OriVertex(v));
+		}
+		for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			ui.arrows.add(new OriArrow(a));
+		}
+		for (OriFace f : Origrammer.diagram.steps.get(Globals.currentStep).filledFaces) {
+			ui.filledFaces.add(new OriFace(f));
+		}
+		for (OriLeaderBox lb : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
+			ui.leaderBoxSymbols.add(new OriLeaderBox(lb));
+		}
+		for (OriPicSymbol ps : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
+			ui.picSymbols.add(new OriPicSymbol(ps));
+		}
+		for (OriGeomSymbol gs : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
+			ui.geomSymbols.add(new OriGeomSymbol(gs));
+		}
+		for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+			ui.equalDistSymbols.add(new OriEqualDistSymbol(eds));
+		}
+		for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+			ui.equalAnglSymbols.add(new OriEqualAnglSymbol(eas));
+		}
+		for (OriPleatCrimpSymbol pcs : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
+			ui.pleatCrimpSymbols.add(new OriPleatCrimpSymbol(pcs));
+		}
+		undoStack.push(ui);
+	}
+	
+	public void popUndoInfo() {
+		if (undoStack.isEmpty()) {
+			System.out.println("STACK EMPTY");
+			return;
+		}
+		UndoInfo ui = undoStack.pop();
+		Origrammer.diagram.steps.get(Globals.currentStep).lines.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).lines.addAll(ui.lines);
+		Origrammer.diagram.steps.get(Globals.currentStep).vertices.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).vertices.addAll(ui.vertices);
+		Origrammer.diagram.steps.get(Globals.currentStep).arrows.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).arrows.addAll(ui.arrows);
+		Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.addAll(ui.filledFaces);
+		Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols.addAll(ui.leaderBoxSymbols);
+		Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).picSymbols.addAll(ui.picSymbols);
+		Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols.addAll(ui.geomSymbols);
+		Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols.addAll(ui.equalDistSymbols);
+		Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols.addAll(ui.equalAnglSymbols);
+		Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols.clear();
+		Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols.addAll(ui.pleatCrimpSymbols);
+	}
+	
 
 	public ArrayList<OriLine> getEdgeLines() {
 		if (Globals.paperShape == Constants.PaperShape.SQUARE) {
@@ -279,7 +359,7 @@ public class Step {
 		if (incenter == null) {
 			System.out.println("Failed to calculate the incenter of the triangle");
 		}
-
+		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
 		addLine(new OriLine(incenter, v0, Globals.inputLineType));
 		addLine(new OriLine(incenter, v1, Globals.inputLineType));
 		addLine(new OriLine(incenter, v2, Globals.inputLineType));
@@ -521,8 +601,11 @@ public class Step {
 			}
 		}
 
-		for (OriLine line : selectedLines) {
-			lines.remove(line);
+		if (selectedLines.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriLine line : selectedLines) {
+				lines.remove(line);
+			}
 		}
 	}
 
@@ -538,8 +621,11 @@ public class Step {
 			}
 		}
 
-		for (OriVertex v : selectedVertices) {
-			vertices.remove(v);
+		if (selectedVertices.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriVertex v : selectedVertices) {
+				vertices.remove(v);
+			}
 		}
 	}
 
@@ -555,8 +641,11 @@ public class Step {
 			}
 		}
 
-		for (OriArrow arrow : selectedArrows) {
-			arrows.remove(arrow);
+		if (selectedArrows.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriArrow arrow : selectedArrows) {
+				arrows.remove(arrow);
+			}
 		}
 	}
 
@@ -571,8 +660,12 @@ public class Step {
 				selectedFaces.add(face);
 			}
 		}
-		for (OriFace face : selectedFaces)  {
-			filledFaces.remove(face);
+		
+		if (selectedFaces.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriFace face : selectedFaces)  {
+				filledFaces.remove(face);
+			}
 		}
 	}
 
@@ -587,8 +680,12 @@ public class Step {
 				selectedLeader.add(l);
 			}
 		}
-		for (OriLeaderBox l : selectedLeader) {
-			leaderBoxSymbols.remove(l);
+		
+		if (selectedLeader.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriLeaderBox l : selectedLeader) {
+				leaderBoxSymbols.remove(l);
+			}
 		}
 	}
 
@@ -603,8 +700,12 @@ public class Step {
 				selectedPicS.add(ps);
 			}
 		}
-		for (OriPicSymbol ps : selectedPicS) {
-			picSymbols.remove(ps);
+		
+		if (selectedPicS.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriPicSymbol ps : selectedPicS) {
+				picSymbols.remove(ps);
+			}
 		}
 	}
 
@@ -619,8 +720,12 @@ public class Step {
 				selectedGeomS.add(gs);
 			}
 		}
-		for (OriGeomSymbol gs : selectedGeomS) {
-			geomSymbols.remove(gs);
+		
+		if (selectedGeomS.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriGeomSymbol gs : selectedGeomS) {
+				geomSymbols.remove(gs);
+			}
 		}
 	}
 
@@ -635,8 +740,12 @@ public class Step {
 				selectedEqualDistS.add(eds);
 			}
 		}
-		for (OriEqualDistSymbol eds : selectedEqualDistS) {
-			equalDistSymbols.remove(eds);
+		
+		if (selectedEqualDistS.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriEqualDistSymbol eds : selectedEqualDistS) {
+				equalDistSymbols.remove(eds);
+			}
 		}
 	}
 
@@ -651,8 +760,12 @@ public class Step {
 				selectedEqualAnglS.add(eas);
 			}
 		}
-		for (OriEqualAnglSymbol eas : selectedEqualAnglS) {
-			equalAnglSymbols.remove(eas);
+		
+		if (selectedEqualAnglS.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriEqualAnglSymbol eas : selectedEqualAnglS) {
+				equalAnglSymbols.remove(eas);
+			}
 		}
 	}
 
@@ -667,8 +780,12 @@ public class Step {
 				selectedPleatS.add(pleat);
 			}
 		}
-		for (OriPleatCrimpSymbol pleat : selectedPleatS) {
-			pleatCrimpSymbols.remove(pleat);
+		
+		if (selectedPleatS.size() != 0) {
+			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
+			for (OriPleatCrimpSymbol pleat : selectedPleatS) {
+				pleatCrimpSymbols.remove(pleat);
+			}	
 		}
 	}
 

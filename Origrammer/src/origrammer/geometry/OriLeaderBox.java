@@ -22,6 +22,13 @@ public class OriLeaderBox {
 	public OriLeaderBox() {
 	}
 	
+	public OriLeaderBox(OriLeaderBox lb) {
+		this.line = lb.line;
+		this.label = lb.label;
+		this.type = lb.type;
+		this.isSelected = lb.isSelected;
+	}
+	
 	public OriLeaderBox(OriLine line, JLabel label) {
 		this.line = line;
 		this.label = label;

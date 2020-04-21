@@ -19,6 +19,14 @@ public class OriEqualAnglSymbol {
 	public OriEqualAnglSymbol() {
 	}
 	
+	public OriEqualAnglSymbol(OriEqualAnglSymbol eas) {
+		this.v = eas.v;
+		this.a = eas.a;
+		this.b = eas.b;
+		this.dividerCount = eas.dividerCount;
+		this.isSelected = eas.isSelected;
+	}
+	
 	public OriEqualAnglSymbol(Vector2d v, Vector2d a, Vector2d b) {
 		this.v = v;
 		this.a = a;

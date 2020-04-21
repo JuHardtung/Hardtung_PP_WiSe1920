@@ -11,6 +11,17 @@ public class OriVertex {
 	private ArrayList<OriEdge> edges = new ArrayList<>();
 	private boolean isSelected = false;
 
+	
+	public OriVertex() {
+	}
+	
+	public OriVertex(OriVertex v) {
+		this.p = v.p;
+		this.preP = v.preP;
+		this.edges = v.edges;
+		this.isSelected = v.isSelected;
+	}
+	
 	public OriVertex(Vector2d p) {
 		this.p.set(p);
 		preP.set(p);
