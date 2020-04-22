@@ -103,8 +103,13 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		menuItemRedo.addActionListener(this);
 		menuItemCut.addActionListener(this);
+	
 		menuItemCopy.addActionListener(this);
+		menuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
+		
 		menuItemPaste.addActionListener(this);
+		menuItemPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_MASK));
+
 		menuItemDeleteSelected.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -348,6 +353,19 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		} else if (e.getSource() == menuItemUndo) {
 			Origrammer.diagram.steps.get(Globals.currentStep).popUndoInfo();
 			mainScreen.repaint();
+		} else if (e.getSource() == menuItemCopy) {
+			if (Origrammer.diagram.steps.get(Globals.currentStep).getSelectedObjectsCount() == 0) {
+				System.out.println("No Objects selected");
+			} else {
+				Origrammer.diagram.steps.get(Globals.currentStep).copyObjects();
+			}
+		} else if (e.getSource() == menuItemPaste) {
+			if (Origrammer.diagram.steps.get(Globals.currentStep).copiedObjects.getCopiedObjectsCount() == 0) {
+				System.out.println("No Objects copied");
+			} else {
+				Origrammer.diagram.steps.get(Globals.currentStep).pasteCopiedObjects();
+			}
+			repaint();
 		} else if (e.getSource() == menutItemModelPreferences) {
 			ModelPreferenceDialog mpd = new ModelPreferenceDialog(this, mainScreen);
 			Rectangle rec = getBounds();

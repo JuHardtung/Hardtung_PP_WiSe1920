@@ -14,8 +14,8 @@ public class OriPicSymbol {
 	
 	public JLabel label = new JLabel();
 	private int type = TYPE_NONE;
-	private Vector2d position;
-	private int width;
+	private Vector2d position; //TODO: redundant because of label.getBounds()???
+	private int width;	//TODO: redundant because of scale
 	private int height;
 	private double scale = 0;
 	private boolean isSelected;
@@ -26,7 +26,9 @@ public class OriPicSymbol {
 	}
 	
 	public OriPicSymbol(OriPicSymbol ps) {
-		this.label = ps.label;
+		this.label = new JLabel();
+		this.label.setBounds(ps.label.getBounds());
+		this.label.setIcon(ps.label.getIcon());
 		this.type = ps.type;
 		this.position = ps.position;
 		this.width = ps.width;

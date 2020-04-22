@@ -1252,7 +1252,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 					newFace = new OriFace(pathForFilledFace, false, false);
 				}
 				Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
-				Origrammer.diagram.steps.get(Globals.currentStep).filledFaces.add(newFace);
+				Origrammer.diagram.steps.get(Globals.currentStep).addFilledFace(newFace);
 				firstSelectedV = null;
 				secondSelectedV = null;
 				thirdSelectedV = null;
@@ -1412,7 +1412,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 	private void createVertexAbsolutePos(Point2D.Double clickPoint) {
 		Vector2d p = new Vector2d(clickPoint.x, clickPoint.y);
 		Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
-		Origrammer.diagram.steps.get(Globals.currentStep).addVertex(p);
+		OriVertex v = new OriVertex(p);
+		Origrammer.diagram.steps.get(Globals.currentStep).addVertex(v);
 	}
 
 	private void createVertexFractionOfLine(Point2D.Double clickPoint) {
