@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -1705,6 +1706,14 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		Point2D.Double normMousePointLogic = currentMousePointLogic;
+		
+		try {
+			affineTransform.inverseTransform(e.getPoint(), normMousePointLogic);
+		} catch (Exception ex) {
+			return;
+		}
+		
 		if ((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0 &&
 				(e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
 			//scale diagram with CTRL + dragging mouse
@@ -1750,7 +1759,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickArrow(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedArrow != null) {
-
 					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
 					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
@@ -1771,9 +1779,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			OriLeaderBox pickedLeader = pickLeader(affineMouseDraggingPoint);
 			if (pickLeader(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
-
 				if (pickedLeader != null) {
-
 					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
 					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
@@ -1791,7 +1797,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickPicSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedSymbol != null) {
-
 					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
 					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
@@ -1830,11 +1835,62 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 				}
 			}
 
+			OriEqualDistSymbol pickedEds = pickEqualDistSymbol(affineMouseDraggingPoint);
+			if (pickEqualDistSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
+				isMovingSymbols = true;
+				if (pickedEds != null) {
+					double xTrans = 0;
+					double yTrans = 0;
+
+					Vector2d pickV = pickVertex(normMousePointLogic);
+
+					if (pickV != null) {
+						xTrans = pickV.x - pickedEds.getP0().x; 
+						yTrans = pickV.y - pickedEds.getP0().y;
+					} else {
+						xTrans = currentMousePointLogic.x - pickedEds.getP0().x;
+						yTrans = currentMousePointLogic.y - pickedEds.getP0().y;
+					}
+
+					preMousePoint = e.getPoint();
+					for (OriEqualDistSymbol eds : Origrammer.diagram.steps.get(Globals.currentStep).equalDistSymbols) {
+						if (eds.isSelected()) {
+							eds.moveBy(xTrans, yTrans);
+						}
+					}
+				}
+			}
+			
+			OriEqualAnglSymbol pickedEas = pickEqualAnglSymbol(affineMouseDraggingPoint);
+			if (pickEqualAnglSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
+				isMovingSymbols = true;
+				if (pickedEas != null) {
+					double xTrans = 0;
+					double yTrans = 0;
+
+					Vector2d pickV = pickVertex(normMousePointLogic);
+
+					if (pickV != null) {
+						xTrans = pickV.x - pickedEas.getV().x; 
+						yTrans = pickV.y - pickedEas.getV().y;
+					} else {
+						xTrans = currentMousePointLogic.x - pickedEas.getV().x;
+						yTrans = currentMousePointLogic.y - pickedEas.getV().y;
+					}
+
+					preMousePoint = e.getPoint();
+					for (OriEqualAnglSymbol eas : Origrammer.diagram.steps.get(Globals.currentStep).equalAnglSymbols) {
+						if (eas.isSelected()) {
+							eas.moveBy(xTrans, yTrans);
+						}
+					}
+				}
+			}
+
 			OriPleatCrimpSymbol pickedPleatSymbol = pickPleatSymbol(affineMouseDraggingPoint);
 			if (pickPleatSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedPleatSymbol != null) {
-
 					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
 					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
@@ -1893,7 +1949,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (preVertex != selectedCandidateV) {
 				repaint();
 			}
-
 
 			OriArrow preArrow = selectedCandidateA;
 			selectedCandidateA = pickArrow(currentMousePointLogic);
@@ -2001,6 +2056,20 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			OriGeomSymbol pickedGeomSymbol = pickGeomSymbol(currentMousePointLogic);
 			if (pickedGeomSymbol != null) {
 				pickedGeomSymbol.setSelected(true);
+				isPressedOverSymbol = true;
+				repaint();
+			}
+			
+			OriEqualDistSymbol pickedEDS = pickEqualDistSymbol(currentMousePointLogic);
+			if (pickedEDS != null) {
+				pickedEDS.setSelected(true);
+				isPressedOverSymbol = true;
+				repaint();
+			}
+			
+			OriEqualAnglSymbol pickedEAS = pickEqualAnglSymbol(currentMousePointLogic);
+			if (pickedEAS != null) {
+				pickedEAS.setSelected(true);
 				isPressedOverSymbol = true;
 				repaint();
 			}
@@ -2181,6 +2250,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 				}
 			}
 
+			isPressedOverSymbol = false;
 			Origrammer.mainFrame.uiTopPanel.modeChanged();
 		}
 		currentMouseDraggingPoint = null;

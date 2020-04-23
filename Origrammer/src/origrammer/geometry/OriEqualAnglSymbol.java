@@ -129,6 +129,15 @@ public class OriEqualAnglSymbol {
 		return shapes;
 	}
 	
+	public void moveBy(double xTrans, double yTrans) {
+		v.x += xTrans;
+		v.y += yTrans;
+		a.x += xTrans;
+		a.y += yTrans;
+		b.x += xTrans;
+		b.y += yTrans;
+	}
+	
 	/** Sets the positions of Vector2d a and Vector2d b,<br> 
 	 * so that the {@code Distance(v, a)} and {@code Distance(v, b) == lineLength}
 	 * @param lineLength

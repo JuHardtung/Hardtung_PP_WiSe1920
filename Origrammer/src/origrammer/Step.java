@@ -148,20 +148,20 @@ public class Step {
 			inGs.setPosition(new Vector2d(gs.getPosition().x + 20, gs.getPosition().y + 20));
 			addGeomSymbol(inGs);
 		}
-//		for (OriEqualDistSymbol eds : copiedObjects.equalDistSymbols) {
-//			OriEqualDistSymbol inEds = new OriEqualDistSymbol(eds);
-//			inEds.setP0(new Vector2d(eds.getP0().x + 20, eds.getP0().y + 20));
-//			inEds.setP1(new Vector2d(eds.getP1().x + 20, eds.getP1().y + 20));
-//			addEqualDistSymbol(inEds);
-//		}																				TODO: make OriEqualDistSymbol and OriEqualAnglSymbol movable with snapping to grid
-//		for (OriEqualAnglSymbol eas : copiedObjects.equalAnglSymbols) {
-//			OriEqualAnglSymbol inEas = new OriEqualAnglSymbol(eas);
-//			inEas.setV(new Vector2d(eas.getV().x + 20, eas.getV().y + 20));
-//			inEas.setA(new Vector2d(eas.getA().x + 20, eas.getA().y + 20));
-//			inEas.setB(new Vector2d(eas.getB().x + 20, eas.getB().y + 20));
-//
-//			addEqualAngleSymbol(inEas);
-//		}
+		for (OriEqualDistSymbol eds : copiedObjects.equalDistSymbols) {
+			OriEqualDistSymbol inEds = new OriEqualDistSymbol(eds);
+			inEds.setP0(new Vector2d(eds.getP0().x + 20, eds.getP0().y + 20));
+			inEds.setP1(new Vector2d(eds.getP1().x + 20, eds.getP1().y + 20));
+			addEqualDistSymbol(inEds);
+		}
+		for (OriEqualAnglSymbol eas : copiedObjects.equalAnglSymbols) {
+			OriEqualAnglSymbol inEas = new OriEqualAnglSymbol(eas);
+			inEas.setV(new Vector2d(eas.getV().x + 20, eas.getV().y + 20));
+			inEas.setA(new Vector2d(eas.getA().x + 20, eas.getA().y + 20));
+			inEas.setB(new Vector2d(eas.getB().x + 20, eas.getB().y + 20));
+
+			addEqualAngleSymbol(inEas);
+		}
 		for (OriPleatCrimpSymbol pcs : copiedObjects.pleatCrimpSymbols) {
 			OriPleatCrimpSymbol inPcs = new OriPleatCrimpSymbol(pcs);
 			inPcs.setPosition(new Vector2d(pcs.getPosition().x + 20, pcs.getPosition().y + 20));
@@ -169,7 +169,7 @@ public class Step {
 		}
 	}
 	
-	public void pushUndoInfo() {
+	public void pushUndoInfo() { //TODO: include OriObject changes in the undoInfo --> might have to rework the undo system
 		UndoInfo ui = new UndoInfo();
 		for (OriLine l : Origrammer.diagram.steps.get(Globals.currentStep).lines) {
 			ui.lines.add(new OriLine(l));

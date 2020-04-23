@@ -77,6 +77,13 @@ public class OriEqualDistSymbol {
 		return shapes;
 	}
 	
+	public void moveBy(double xTrans, double yTrans) {
+		p0.x += xTrans;
+		p0.y += yTrans;
+		p1.x += xTrans;
+		p1.y += yTrans;
+	}
+	
 	public Vector2d getP0Pos() {
 		Vector2d nv = GeometryUtil.getNormalVector(GeometryUtil.getUnitVector(p0, p1));
 		double p0x = p0.x + (-translationDist * nv.x);
