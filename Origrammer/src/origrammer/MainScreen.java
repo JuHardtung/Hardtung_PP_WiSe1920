@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
@@ -224,9 +223,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			BufferedImage bimg = getBufImgByTypeAndRot(arrow);
 			int newArrowLabelWidth = (int) Math.round(bimg.getWidth() / 2 * arrow.getAdjustedScale());
 			int newArrowLabelHeight = (int) Math.round(bimg.getHeight() / 2 * arrow.getAdjustedScale());
-			arrow.setWidth(newArrowLabelWidth);
-			arrow.setHeight(newArrowLabelHeight);
-			arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, arrow.getWidth(), arrow.getHeight());
+
+			arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, newArrowLabelWidth, newArrowLabelHeight);
 
 			Image dimg = bimg.getScaledInstance(arrow.getLabel().getWidth(), arrow.getLabel().getHeight(), Image.SCALE_SMOOTH);
 			ImageIcon arrowImageIcon = new ImageIcon(dimg);
@@ -256,9 +254,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			BufferedImage bimg = getBufImgByTypeAndRot(s);
 			int newSymbolLabelWidth = (int) Math.round(bimg.getWidth() / 2 * s.getAdjustedScale());
 			int newSymbolLabelHeight = (int) Math.round(bimg.getHeight() / 2 * s.getAdjustedScale());
-			s.setWidth(newSymbolLabelWidth);
-			s.setHeight(newSymbolLabelHeight);
-			s.getLabel().setBounds((int) s.getPosition().x, (int) s.getPosition().y, s.getWidth(), s.getHeight());
+			s.getLabel().setBounds((int) s.getPosition().x, (int) s.getPosition().y, newSymbolLabelWidth, newSymbolLabelHeight);
 
 			Image dimg = bimg.getScaledInstance(s.getLabel().getWidth(), s.getLabel().getHeight(), Image.SCALE_SMOOTH);
 			ImageIcon symbolImageIcon = new ImageIcon(dimg);
@@ -357,7 +353,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 
 		if (selectedCandidateV != null) {
 			g2d.setColor(Color.GREEN);
-			g2d.fill( new Rectangle2D.Double(selectedCandidateV.x - 5.0 / Globals.SCALE,
+			g2d.fill(new Rectangle2D.Double(selectedCandidateV.x - 5.0 / Globals.SCALE,
 					selectedCandidateV.y - 5.0 / Globals.SCALE, 10.0 / Globals.SCALE, 10.0 / Globals.SCALE));
 		}
 	}
@@ -1060,8 +1056,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		//set width & height of arrowLabel and OriArrow
 		JLabel arrowLabel = new JLabel();
 		arrowLabel.setSize(newArrowLabelWidth, newArrowLabelHeight);
-		arrow.setWidth(newArrowLabelWidth);
-		arrow.setHeight(newArrowLabelHeight);
 		//scale the Image and set it as ImageIcon of the arrowLabel
 		Image scaledImg = img.getScaledInstance(arrowLabel.getWidth(), arrowLabel.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon arrowImageIcon = new ImageIcon(scaledImg);
@@ -1070,8 +1064,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		arrow.setLabel(arrowLabel);
 		arrow.getLabel().setBounds((int)arrow.getPosition().x, 
 				(int)arrow.getPosition().y, 
-				(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
-				(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
+				(int) Math.round(arrow.getLabel().getWidth() * arrow.getAdjustedScale()), 
+				(int) Math.round(arrow.getLabel().getHeight() * arrow.getAdjustedScale()));
 		repaint();		
 	}
 
@@ -1091,14 +1085,12 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		BufferedImage img = getBufImgByTypeAndRot(tmpOriArrow);
 
 		//get updated label width & height
-		int newArrowLabelWidth = (int) Math.round(img.getWidth()/2*tmpOriArrow.getAdjustedScale());
-		int newArrowLabelHeight = (int) Math.round(img.getHeight()/2*tmpOriArrow.getAdjustedScale());
+		int newArrowLabelWidth = (int) Math.round(img.getWidth() / 2 * tmpOriArrow.getAdjustedScale());
+		int newArrowLabelHeight = (int) Math.round(img.getHeight() / 2 * tmpOriArrow.getAdjustedScale());
 
 		//set width & height of arrowLabel and OriArrow
 		tmpArrowLabel = new JLabel();
 		tmpArrowLabel.setSize(newArrowLabelWidth, newArrowLabelHeight);
-		tmpOriArrow.setWidth(newArrowLabelWidth);
-		tmpOriArrow.setHeight(newArrowLabelHeight);
 		//scale the Image and set it as ImageIcon of the arrowLabel
 		Image scaledImg = img.getScaledInstance(tmpArrowLabel.getWidth(), tmpArrowLabel.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon arrowImageIcon = new ImageIcon(scaledImg);
@@ -1107,8 +1099,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		tmpOriArrow.setLabel(tmpArrowLabel);
 		tmpOriArrow.getLabel().setBounds((int) tmpOriArrow.getPosition().x, 
 				(int) tmpOriArrow.getPosition().y, 
-				(int) tmpOriArrow.getWidth(),
-				(int) tmpOriArrow.getHeight());
+				(int) tmpOriArrow.getLabel().getWidth(),
+				(int) tmpOriArrow.getLabel().getHeight());
 		repaint();
 	}
 
@@ -1145,8 +1137,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		//set width & height of symbolLabel and OriSymbol
 		JLabel symbolLabel = new JLabel();
 		symbolLabel.setSize(newSymbolLabelWidth, newSymbolLabelHeight);
-		symbol.setWidth(newSymbolLabelWidth);
-		symbol.setHeight(newSymbolLabelHeight);
+
 		//scale the Image and set it as ImageIcon of the symbolLabel
 		Image scaledImg = img.getScaledInstance(symbolLabel.getWidth(), symbolLabel.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon symbolImageIcon = new ImageIcon(scaledImg);
@@ -1155,8 +1146,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		symbol.setLabel(symbolLabel);
 		symbol.getLabel().setBounds((int)symbol.getPosition().x, 
 				(int)symbol.getPosition().y, 
-				(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
-				(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
+				(int) Math.round(symbol.getLabel().getWidth() * symbol.getAdjustedScale()), 
+				(int) Math.round(symbol.getLabel().getHeight() * symbol.getAdjustedScale()));
 		repaint();
 	}
 
@@ -1189,8 +1180,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		//set width & height of symbolLabel and OriSymbol
 		tmpSymbolLabel = new JLabel();
 		tmpSymbolLabel.setSize(newSymbolLabelWidth, newSymbolLabelHeight);
-		tmpOriSymbol.setWidth(newSymbolLabelWidth);
-		tmpOriSymbol.setHeight(newSymbolLabelHeight);
+
 		//scale the Image and set it as ImageIcon of the symbolLabel
 		Image scaledImg = img.getScaledInstance(tmpSymbolLabel.getWidth(), tmpSymbolLabel.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon symbolImageIcon = new ImageIcon(scaledImg);
@@ -1199,8 +1189,8 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		tmpOriSymbol.setLabel(tmpSymbolLabel);
 		tmpOriSymbol.getLabel().setBounds((int) tmpOriSymbol.getPosition().x, 
 				(int) tmpOriSymbol.getPosition().y, 
-				(int) tmpOriSymbol.getWidth(),
-				(int) tmpOriSymbol.getHeight());
+				(int) tmpOriSymbol.getLabel().getWidth(),
+				(int) tmpOriSymbol.getLabel().getHeight());
 		repaint();
 	}
 	
@@ -1754,23 +1744,19 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			} catch (NoninvertibleTransformException e1) {
 				e1.printStackTrace();
 			}
+			
+			double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
+			double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 
 			OriArrow pickedArrow = pickArrow(affineMouseDraggingPoint);
 			if (pickArrow(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedArrow != null) {
-					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
-					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 						//if selected, move to new position
 						if (arrow.isSelected()) {
-							int newX = (int) Math.round(arrow.getPosition().x + xTrans);
-							int newY = (int) Math.round(arrow.getPosition().y + yTrans);
-							arrow.setPosition(new Vector2d(newX, newY));
-							arrow.getLabel().setBounds(newX, newY, 
-									(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
-									(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
+							arrow.moveBy(xTrans, yTrans);
 						}
 					}
 				}
@@ -1780,8 +1766,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickLeader(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedLeader != null) {
-					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
-					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
+
 					preMousePoint = e.getPoint();
 
 					for (OriLeaderBox leader : Origrammer.diagram.steps.get(Globals.currentStep).leaderBoxSymbols) {
@@ -1797,20 +1782,12 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickPicSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedSymbol != null) {
-					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
-					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
-					preMousePoint = e.getPoint();
-					for (OriPicSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
-						//if selected, move to new position
-						if (symbol.isSelected()) {
-							int newX = (int) Math.round(symbol.getPosition().x + xTrans);
-							int newY = (int) Math.round(symbol.getPosition().y + yTrans);
 
-							Vector2d newPos = new Vector2d(newX, newY);
-							symbol.setPosition(newPos);
-							symbol.getLabel().setBounds(newX, newY, 
-									(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
-									(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
+					preMousePoint = e.getPoint();
+					for (OriPicSymbol ps : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
+						//if selected, move to new position
+						if (ps.isSelected()) {
+							ps.moveBy(xTrans, yTrans);
 						}
 					}
 				}
@@ -1820,16 +1797,11 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickGeomSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedGeomSymbol != null) {
-
-					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
-					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriGeomSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).geomSymbols) {
 						//if selected, move to new position
 						if (s.isSelected()) {
-							int newX = (int) Math.round(s.getPosition().x + xTrans);
-							int newY = (int) Math.round(s.getPosition().y + yTrans);
-							s.setPosition(new Vector2d(newX, newY));
+							s.moveBy(xTrans, yTrans);
 						}
 					}
 				}
@@ -1839,8 +1811,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickEqualDistSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedEds != null) {
-					double xTrans = 0;
-					double yTrans = 0;
 
 					Vector2d pickV = pickVertex(normMousePointLogic);
 
@@ -1865,8 +1835,6 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickEqualAnglSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedEas != null) {
-					double xTrans = 0;
-					double yTrans = 0;
 
 					Vector2d pickV = pickVertex(normMousePointLogic);
 
@@ -1891,15 +1859,11 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			if (pickPleatSymbol(currentMousePointLogic) != null && isPressedOverSymbol || isMovingSymbols) {
 				isMovingSymbols = true;
 				if (pickedPleatSymbol != null) {
-					double xTrans = (e.getX() - preMousePoint.getX()) / Globals.SCALE;
-					double yTrans = (e.getY() - preMousePoint.getY()) / Globals.SCALE;
 					preMousePoint = e.getPoint();
 					for (OriPleatCrimpSymbol p : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
 						//if selected, move to new position
 						if (p.isSelected()) {
-							int newX = (int) Math.round(p.getPosition().x + xTrans);
-							int newY = (int) Math.round(p.getPosition().y + yTrans);
-							p.setPosition(new Vector2d(newX, newY));
+							p.moveBy(xTrans, yTrans);
 						}
 					}
 				}
@@ -2138,7 +2102,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			//Check if there is an arrow in the selection rectangle
 			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(a.getPosition().x), 
-						(int) Math.round(a.getPosition().y), a.getWidth(), a.getHeight());
+						(int) Math.round(a.getPosition().y), a.getLabel().getWidth(), a.getLabel().getHeight());
 				if (tmpR2.intersects(selectRect)) {
 					a.setSelected(true);
 				} else {
@@ -2160,7 +2124,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 			//Check if there is a symbol in the selection rectangle
 			for (OriPicSymbol s : Origrammer.diagram.steps.get(Globals.currentStep).picSymbols) {
 				Rectangle tmpR2 = new Rectangle((int) Math.round(s.getPosition().x), 
-						(int) Math.round(s.getPosition().y), s.getWidth(), s.getHeight());
+						(int) Math.round(s.getPosition().y), s.getLabel().getWidth(), s.getLabel().getHeight());
 				if (tmpR2.intersects(selectRect)) {
 					s.setSelected(true);
 				} else {

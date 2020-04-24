@@ -173,7 +173,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 
 		JPanel measureLengthPanel = new JPanel();
 		measureLengthTF = new JFormattedTextField(new DecimalFormat("###.##cm"));
-		measureLengthPanel.setMaximumSize(new Dimension(50,30));
 		measureLengthPanel.add(measureLengthRB);
 		measureLengthPanel.add(measureLengthTF);
 		measureLengthPanel.add(copyMeasuredLength);

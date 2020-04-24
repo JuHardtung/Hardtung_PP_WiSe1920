@@ -19,47 +19,45 @@ public class OriArrow {
 	final public static int VALLEY_ARROW_HEIGHT = 50;
 
 	private Vector2d position;
-	private int width;
-	private int height;
 	private double scale = 0.0;
 	private double degrees = 0;
 	private int type = TYPE_NONE;
 	private boolean isSelected;
 
-	private JLabel arrowLabel = new JLabel();
+	private JLabel label = new JLabel();
 	
 	
 	public OriArrow() {
 	}
 	
 	public OriArrow(OriArrow a) {
+		this.label = new JLabel();
+		this.label.setBounds(a.label.getBounds());
+		this.label.setIcon(a.label.getIcon());
+		this.scale = a.scale;
+		this.degrees = a.degrees;
 		this.position = a.position;
-		this.width = a.width;
-		this.height = a.height;
 		this.type = a.type;
 	}
 
 	public OriArrow(Vector2d position, int type) {
 		this.position = position;
-		this.width = VALLEY_ARROW_WIDTH;
-		this.height = VALLEY_ARROW_HEIGHT;
 		this.type = type;
 	}
 	
-	public OriArrow(Vector2d position, int width, int height, int type) {
-		this.position = position;
-		this.width = width;
-		this.height = height;
-		this.type = type;
-	}
 	
-	public OriArrow(Vector2d position, int width, int height, double scale, double degrees, int type) {
+	public OriArrow(Vector2d position, double scale, double degrees, int type) {
 		this.position = position;
-		this.width = width;
-		this.height = height;
 		this.scale = scale;
 		this.degrees = degrees;
 		this.type = type;
+	}
+	
+	public void moveBy(double xTrans, double yTrans) {
+		position.x += xTrans;
+		position.y += yTrans;
+		label.setBounds((int) Math.round(position.x), (int) Math.round(position.y),
+						label.getWidth(), label.getHeight());
 	}
 
 	public Vector2d getPosition() {
@@ -68,22 +66,6 @@ public class OriArrow {
 
 	public void setPosition(Vector2d position) {
 		this.position = position;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 	
 	/**
@@ -141,17 +123,16 @@ public class OriArrow {
 	}
 
 	public JLabel getLabel() {
-		return arrowLabel;
+		return label;
 	}
 
 	public void setLabel(JLabel arrowLabel) {
-		this.arrowLabel = arrowLabel;
+		this.label = arrowLabel;
 	}
 
 	@Override
 	public String toString() {
-		return "OriArrow [type=" + type + ", xPos=" + position.x + ", yPos=" + position.y + ", width=" + width + ", height="
-				+ height + ", scale=" + scale + ", selected=" + isSelected + ", degrees=" + degrees + "]";
+		return "OriArrow [type=" + type + ", xPos=" + position.x + ", yPos=" + position.y + ", scale=" + scale + ", selected=" + isSelected + ", degrees=" + degrees + "]";
 	}
 	
 }

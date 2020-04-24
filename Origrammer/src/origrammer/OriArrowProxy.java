@@ -7,8 +7,6 @@ import origrammer.geometry.OriArrow;
 public class OriArrowProxy {
 	
 	private Vector2d position;
-	private int width;
-	private int height;
 	private double scale;
 	private double degrees;
 	private int type;
@@ -19,15 +17,13 @@ public class OriArrowProxy {
 	
 	public OriArrowProxy(OriArrow a) {
 		position = a.getPosition();
-		width = a.getWidth();
-		height = a.getHeight();
 		scale = a.getScale();
 		degrees = a.getDegrees();
 		type = a.getType();
 	}
 	
 	public OriArrow getArrow() {
-		return new OriArrow(position, width, height, scale, degrees, type);
+		return new OriArrow(position, scale, degrees, type);
 	}
 
 	public Vector2d getPosition() {
@@ -36,22 +32,6 @@ public class OriArrowProxy {
 
 	public void setPosition(Vector2d position) {
 		this.position = position;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 
 	public double getScale() {
@@ -80,7 +60,7 @@ public class OriArrowProxy {
 
 	@Override
 	public String toString() {
-		return "OriArrowProxy [position=" + position + ", width=" + width + ", height=" + height + ", scale=" + scale
+		return "OriArrowProxy [position=" + position + ", scale=" + scale
 				+ ", degrees=" + degrees + ", type=" + type + "]";
 	}
 	

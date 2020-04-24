@@ -539,8 +539,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int)arrow.getPosition().y, 
-						(int) Math.round(arrow.getWidth() * arrow.getAdjustedScale()), 
-						(int) Math.round(arrow.getHeight() * arrow.getAdjustedScale()));
+						(int) Math.round(arrow.getLabel().getWidth() * arrow.getAdjustedScale()), 
+						(int) Math.round(arrow.getLabel().getHeight() * arrow.getAdjustedScale()));
 			}
 		}
 	}
@@ -557,8 +557,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 				//TODO: add preview pictures of arrow types
 				symbol.getLabel().setBounds((int) symbol.getPosition().x, (int) symbol.getPosition().y, 
-						(int) Math.round(symbol.getWidth() * symbol.getAdjustedScale()), 
-						(int) Math.round(symbol.getHeight() * symbol.getAdjustedScale()));
+						(int) Math.round(symbol.getLabel().getWidth() * symbol.getAdjustedScale()), 
+						(int) Math.round(symbol.getLabel().getHeight() * symbol.getAdjustedScale()));
 			}
 		}
 	}	
@@ -572,7 +572,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				arrow.setDegrees(arrowRotSlider.getValue()/10);
 				screen.repaint();
 
-				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getWidth(), arrow.getHeight(), arrow.getDegrees());
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getLabel().getWidth(), arrow.getLabel().getHeight(), arrow.getDegrees());
 
 				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, (int) rect.getWidth(), (int) rect.getHeight());
 			}
@@ -588,7 +588,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 				symbol.setDegrees(picSymbolRotSlider.getValue()/10);
 				screen.repaint();
 
-				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getPosition().x, symbol.getPosition().y, symbol.getWidth(), symbol.getHeight(), symbol.getDegrees());
+				Rectangle2D rect = GeometryUtil.calcRotatedBox(symbol.getPosition().x, symbol.getPosition().y, symbol.getLabel().getWidth(), symbol.getLabel().getHeight(), symbol.getDegrees());
 
 				symbol.getLabel().setBounds((int)symbol.getPosition().x, (int)symbol.getPosition().y, (int)rect.getWidth(), (int)rect.getHeight());
 			}

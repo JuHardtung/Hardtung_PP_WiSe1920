@@ -15,8 +15,6 @@ public class OriPicSymbol {
 	public JLabel label = new JLabel();
 	private int type = TYPE_NONE;
 	private Vector2d position; //TODO: redundant because of label.getBounds()???
-	private int width;	//TODO: redundant because of scale
-	private int height;
 	private double scale = 0;
 	private boolean isSelected;
 	private double degrees = 0;
@@ -31,8 +29,6 @@ public class OriPicSymbol {
 		this.label.setIcon(ps.label.getIcon());
 		this.type = ps.type;
 		this.position = ps.position;
-		this.width = ps.width;
-		this.height = ps.height;
 		this.scale = ps.scale;
 		this.degrees = ps.degrees;
 	}
@@ -42,13 +38,18 @@ public class OriPicSymbol {
 		this.type = type;
 	}
 	
-	public OriPicSymbol(Vector2d position, int width, int height, double scale, double degrees, int type) {
+	public OriPicSymbol(Vector2d position, double scale, double degrees, int type) {
 		this.position = position;
-		this.width = width;
-		this.height = height;
 		this.scale = scale;
 		this.degrees = degrees;
 		this.type = type;
+	}
+	
+	public void moveBy(double xTrans, double yTrans) {
+		position.x += xTrans;
+		position.y += yTrans;
+		label.setBounds((int) Math.round(position.x), (int) Math.round(position.y),
+						label.getWidth(), label.getHeight());
 	}
 
 	public JLabel getLabel() {
@@ -89,22 +90,6 @@ public class OriPicSymbol {
 
 	public void setPosition(Vector2d position) {
 		this.position = position;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 
 	/**

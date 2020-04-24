@@ -35,6 +35,11 @@ public class OriGeomSymbol {
 		this.radius = radius;
 		this.type = type;
 	}
+	
+	public void moveBy(double xTrans, double yTrans) {
+		position.x += xTrans;
+		position.y += yTrans;
+	}
 
 	public int getType() {
 		return type;

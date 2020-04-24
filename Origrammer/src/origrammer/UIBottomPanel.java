@@ -156,8 +156,8 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
 						OriArrow tmpArrow = new OriArrow();
 						tmpArrow.setPosition(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getPosition());
-						tmpArrow.setWidth(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getWidth());
-						tmpArrow.setHeight(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getHeight());
+//						tmpArrow.setWidth(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getWidth());
+//						tmpArrow.setHeight(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getHeight());
 						tmpArrow.setType(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getType());
 						tmpArrow.setScale(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getScale());
 						tmpArrow.setDegrees(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getDegrees());

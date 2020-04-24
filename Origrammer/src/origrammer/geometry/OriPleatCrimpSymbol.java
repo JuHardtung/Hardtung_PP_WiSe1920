@@ -146,6 +146,11 @@ public class OriPleatCrimpSymbol {
 		}
 		return shapes;
 	}
+	
+	public void moveBy(double xTrans, double yTrans) {
+		position.x += xTrans;
+		position.y += yTrans;
+	}
 
 	public Vector2d getPosition() {
 		return position;

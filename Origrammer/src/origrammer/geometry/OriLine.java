@@ -63,6 +63,13 @@ public class OriLine {
 		double newY = p1.y - uv.y * 25;
 		return new Vector2d(newX, newY);
 	}
+	
+	public void moveBy(double xTrans, double yTrans) {
+		p0.x += xTrans;
+		p0.y += yTrans;
+		p1.x += xTrans;
+		p1.y += yTrans;
+	}
 
 	public Vector2d getP0() {
 		return p0;
