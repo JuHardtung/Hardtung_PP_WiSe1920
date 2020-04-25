@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
-
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -246,7 +245,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		scalingCustomPanel.setLayout(new BoxLayout(scalingCustomPanel, BoxLayout.LINE_AXIS));
 
 		JPanel scalingButtonsPanel = new JPanel();
-		scalingButtonsPanel.add(scaling100);
+		//scalingButtonsPanel.add(scaling100);
 		scalingButtonsPanel.add(scalingMinus);
 		scalingButtonsPanel.add(scalingPlus);
 		scalingButtonsPanel.setLayout(new BoxLayout(scalingButtonsPanel, BoxLayout.LINE_AXIS));
@@ -316,7 +315,6 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 			} else {
 				scalingCustomTF.setValue(Globals.SCALE*100);
 			}
-
 		} else if (e.getSource() == scaling100) {
 			Globals.SCALE = 1.0;
 			modeChanged();
@@ -369,6 +367,7 @@ public class UISidePanel extends JPanel implements ActionListener, PropertyChang
 		}
 		if (e.getSource() == resetViewButton) {
 			screen.resetView();
+			modeChanged();
 		}
 		if (e.getSource() == dispGridCheckBox) {
 			screen.setDispGrid(dispGridCheckBox.isSelected());

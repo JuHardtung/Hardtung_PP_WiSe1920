@@ -103,6 +103,7 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 
 		menuItemRedo.addActionListener(this);
 		menuItemCut.addActionListener(this);
+		menuItemCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_MASK));
 	
 		menuItemCopy.addActionListener(this);
 		menuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_MASK));
@@ -353,7 +354,14 @@ public class MainFrame extends JFrame implements ActionListener, ComponentListen
 		} else if (e.getSource() == menuItemUndo) {
 			Origrammer.diagram.steps.get(Globals.currentStep).popUndoInfo();
 			mainScreen.repaint();
-		} else if (e.getSource() == menuItemCopy) {
+		} else if (e.getSource() == menuItemCut) {
+			if (Origrammer.diagram.steps.get(Globals.currentStep).getSelectedObjectsCount() == 0) {
+				System.out.println("No Objects selected");
+			} else {
+				Origrammer.diagram.steps.get(Globals.currentStep).cutObjects();
+			}
+		}
+		else if (e.getSource() == menuItemCopy) {
 			if (Origrammer.diagram.steps.get(Globals.currentStep).getSelectedObjectsCount() == 0) {
 				System.out.println("No Objects selected");
 			} else {

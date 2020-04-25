@@ -94,21 +94,36 @@ public class Step {
 	}
 	
 	
+	public void cutObjects() {
+		copyObjects();
+		deleteSelectedLines();
+		deleteSelectedVertices();
+		deleteSelectedArrows();
+		deleteSelectedFaces();
+		deleteSelectedLeaderBoxes();
+		deleteSelectedPicSymbols();
+		deleteSelectedGeomSymbols();
+		deleteSelectedEqualDistSymbols();
+		deleteSelectedEqualAnglSymbols();
+		deleteSelectedPleatSymbols();
+		Origrammer.mainFrame.mainScreen.repaint();
+	}
+	
 	public void copyObjects() {
 		copiedObjects.clear();
 		
-		copiedObjects.lines = getSelectedOriLines();
+		copiedObjects.lines = getSelectedLines();
 		copiedObjects.vertices = getSelectedVertices();
-		copiedObjects.arrows = getSelectedOriArrows();
-		copiedObjects.filledFaces = getSelectedFilledFaces();
+		copiedObjects.arrows = getSelectedArrows();
+		copiedObjects.filledFaces = getSelectedFaces();
 		copiedObjects.leaderBoxSymbols = getSelectedLeaderBoxes();
 		copiedObjects.picSymbols = getSelectedPicSymbols();
 		copiedObjects.geomSymbols = getSelectedGeomSymbols();
 		copiedObjects.equalDistSymbols = getSelectedEqualDistSymbols();
 		copiedObjects.equalAnglSymbols = getSelectedEqualAnglSymbols();
 		copiedObjects.pleatCrimpSymbols = getSelectedPleatSymbols();
-		
 	}
+	
 	
 	public void pasteCopiedObjects() {
 		for (OriLine l : copiedObjects.lines) {
@@ -728,7 +743,7 @@ public class Step {
 	 ********************************/
 
 	
-	public ArrayList<OriLine> getSelectedOriLines() {
+	public ArrayList<OriLine> getSelectedLines() {
 		ArrayList<OriLine> selectedLines = new ArrayList<>();
 
 		for (OriLine line : lines) {
@@ -750,7 +765,7 @@ public class Step {
 		return selectedVertices;
 	}
 	
-	public ArrayList<OriArrow> getSelectedOriArrows() {
+	public ArrayList<OriArrow> getSelectedArrows() {
 		ArrayList<OriArrow> selectedArrows = new ArrayList<>();
 
 		for (OriArrow arrow : arrows) {
@@ -761,7 +776,7 @@ public class Step {
 		return selectedArrows;
 	}
 	
-	public ArrayList<OriFace> getSelectedFilledFaces() {
+	public ArrayList<OriFace> getSelectedFaces() {
 		ArrayList<OriFace> selectedFaces = new ArrayList<>();
 
 		for (OriFace face : filledFaces) {
@@ -856,7 +871,7 @@ public class Step {
 	 * Deletes all selected lines of the current diagram step
 	 */
 	public void deleteSelectedLines() {
-		ArrayList<OriLine> selectedLines = getSelectedOriLines();
+		ArrayList<OriLine> selectedLines = getSelectedLines();
 
 		if (selectedLines.size() != 0) {
 			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
@@ -884,7 +899,7 @@ public class Step {
 	 * Deletes all selected arrows of the current diagram step
 	 */
 	public void deleteSelectedArrows() {
-		ArrayList<OriArrow> selectedArrows = getSelectedOriArrows();
+		ArrayList<OriArrow> selectedArrows = getSelectedArrows();
 
 		if (selectedArrows.size() != 0) {
 			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();
@@ -898,7 +913,7 @@ public class Step {
 	 * Deletes all selected faces of the current diagram step
 	 */
 	public void deleteSelectedFaces() {
-		ArrayList<OriFace> selectedFaces = getSelectedFilledFaces();
+		ArrayList<OriFace> selectedFaces = getSelectedFaces();
 		
 		if (selectedFaces.size() != 0) {
 			Origrammer.diagram.steps.get(Globals.currentStep).pushUndoInfo();

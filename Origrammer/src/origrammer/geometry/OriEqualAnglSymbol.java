@@ -92,6 +92,7 @@ public class OriEqualAnglSymbol {
 			//     ____________________
 			//	\/(x1-x0)² + (y1-y0)²
 			double r = Math.sqrt(Math.pow(arcEnd.x - v.x, 2) + Math.pow(arcEnd.y - v.y, 2));
+			r = r - 0.05*r;
 			double x = v.x - r;
 			double y = v.y - r;
 			double width = 2 * r;

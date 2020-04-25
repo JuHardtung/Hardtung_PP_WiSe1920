@@ -1,5 +1,6 @@
 package origrammer.geometry;
 
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -86,13 +87,16 @@ public class OriPleatCrimpSymbol {
 
 		//top part
 		for (int i = 0; i < layersCount; i++) {
-			p0.x += translatX;
 			p0.y += translatY;
+
+			if (i > 0) {
+				p0.x += translatX;
+			}
+
 			p1.x = p0.x + uvHori.x * 55;
 			p1.y = p0.y + uvHori.y * 55;
 
 			double p0TransX = uvHori.x * 20 * (layersCount - 1) - uvHori.x * 20 * (i + 1);
-			double p0TransY = uvHori.y * 20 * (layersCount - 1) - uvHori.y * 20 * (i + 1);
 
 			shapes.add(new Line2D.Double(p0.x - p0TransX, p0.y, p1.x, p1.y));
 
@@ -125,8 +129,11 @@ public class OriPleatCrimpSymbol {
 			
 			for (int j = 0; j < layersCount; j++) {
 				//starting line with length 55 = Distance(p4,p5)
-				p4.x += translatX;
 				p4.y += translatY;
+
+				if (j > 0) {
+					p4.x += translatX;
+				}
 				p5.x = p4.x + uvHori.x * 55;
 				p5.y = p4.y + uvHori.y * 55;
 				
@@ -144,7 +151,33 @@ public class OriPleatCrimpSymbol {
 				shapes.add(new Line2D.Double(p6.x, p6.y, p7.x, p7.y));
 			}
 		}
+
 		return shapes;
+	}
+	
+	public Rectangle getHitbox() {
+
+		Vector2d p0 = new Vector2d(position.x, position.y);
+		
+		int smallX = (int) Math.round(p0.x + 20 - 20 * (layersCount - 1));
+		int bigX = (int) Math.round(smallX + 55 - 25 + 35 + (20 * (layersCount - 2)));
+		int smallY = (int) Math.round(p0.y);
+		int bigY = (int) Math.round(p0.y-15.5 - 5.5 * layersCount);
+		
+		if (type == TYPE_CRIMP) {
+			smallY = (int) Math.round(p0.y + 15.5 + 5.5 * layersCount);
+		}
+		
+		int width = Math.abs(bigX - smallX);
+		int height = smallY - bigY;
+
+		if (isSwitchedDir) {
+			smallX = (int) Math.round(p0.x - 20 + 20 * (layersCount - 1) - width);
+		}
+
+		//System.out.println("smallX: " + smallX + " bigX: " + bigX + " smallY: " + smallY + " bigY: " + bigY + " width: " + width + " height: " + height);
+
+		return new Rectangle((int) Math.round(smallX), (int) Math.round(bigY), width, height);
 	}
 	
 	public void moveBy(double xTrans, double yTrans) {

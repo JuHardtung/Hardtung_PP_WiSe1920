@@ -981,7 +981,7 @@ implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListene
 		OriPleatCrimpSymbol bestSymbol = null;
 
 		for (OriPleatCrimpSymbol symbol : Origrammer.diagram.steps.get(Globals.currentStep).pleatCrimpSymbols) {
-			boolean pickedS = GeometryUtil.isMouseOverShapes(p, symbol.getShapesForDrawing());
+			boolean pickedS = GeometryUtil.isMouseOverRectangle(p, symbol.getHitbox());
 			if (pickedS) {
 				bestSymbol = symbol;
 			}
