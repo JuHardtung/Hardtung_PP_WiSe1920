@@ -23,7 +23,7 @@ public class Origrammer {
 		
 		res = ResourceBundle.getBundle("origrammer.StringResource", Locale.ENGLISH);
 		
-		VERSION = "  v1.2.3";
+		VERSION = "  v1.3.0";
 
 		Globals.newStepOptions = Constants.NewStepOptions.PASTE_DEFAULT_PAPER;
 		//TODO: get the real faceUp and faceDown Colors

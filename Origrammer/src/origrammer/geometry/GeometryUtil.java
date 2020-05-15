@@ -108,26 +108,6 @@ public class GeometryUtil {
 	}
 	
 	/**
-	 * Returns true if mouseCoordinates are within the bounds of the tested OriArrow
-	 * @param p Mouse position
-	 * @param a OriArrow that is tested for selection
-	 * @return true if mouse is over OriArrow and false if it isn't
-	 */
-	public static boolean isMouseOverArrow(Point2D.Double p, OriArrow a) {
-		double aX = a.getPosition().x;
-		double aY = a.getPosition().y;
-		double aXEnd = aX + (a.getLabel().getWidth());
-		double aYEnd = aY + (a.getLabel().getHeight());
-
-		if (p.x > aX && p.x < aXEnd) {
-			if (p.y > aY && p.y < aYEnd) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
 	 * 
 	 * @param p Mouse position
 	 * @param s OriSymbol that is tested for selection

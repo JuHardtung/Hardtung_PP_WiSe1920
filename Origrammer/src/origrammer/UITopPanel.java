@@ -130,6 +130,10 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private JPanel sliderPanel = new JPanel();
 	private JSlider arrowScaleSlider = new JSlider(0, 100);
 	private JSlider arrowRotSlider = new JSlider(0, 3600);
+	private JCheckBox arrowIsMirrored = new JCheckBox("Is Mirrored");
+	private JCheckBox arrowIsUnfolded = new JCheckBox("Is Unfolded");
+
+
 
 	//ROTATE/SCALE ORI_PIC_SYMBOLS
 	private JPanel picSymbolPanel = new JPanel();
@@ -332,6 +336,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 						getBackground().brighter()), "Rotate Arrow"));
 		sliderPanel.add(arrowScaleSlider);
 		sliderPanel.add(arrowRotSlider);
+		arrowIsMirrored.addActionListener(this);
+		sliderPanel.add(arrowIsMirrored);
+		arrowIsUnfolded.addActionListener(this);
+		sliderPanel.add(arrowIsUnfolded);
+
 	}
 
 	private void addSymbolInputPanel() {
@@ -524,23 +533,52 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	}
 
 
+	private void changeArrowType() {
+		for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			if (a.isSelected()) {
+				String arrowType = changeArrowTypeCB.getSelectedItem().toString();
+
+				if (arrowType == "Valley Fold") {
+					a.setType(OriArrow.TYPE_VALLEY);
+				} else if (arrowType == "Mountain Fold") {
+					a.setType(OriArrow.TYPE_MOUNTAIN);
+				} else if (arrowType == "Turn over") {
+					a.setType(OriArrow.TYPE_TURN_OVER);
+				} else if (arrowType == "Push here") {
+					a.setType(OriArrow.TYPE_PUSH_HERE);
+				} else if (arrowType == "Pull out") {
+					a.setType(OriArrow.TYPE_PULL_HERE);
+				} else if (arrowType == "Inflate here") {
+					a.setType(OriArrow.TYPE_INFLATE_HERE);
+				}
+			}
+		}
+		screen.repaint();
+	}
+	
 	/**
 	 * Sets the scale for all selected OriArrows
 	 */
 	private void sliderArrowScale() {
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				if (arrowScaleSlider.getValue() == 0) {
-					arrow.setScale(0.01);
-				} else {
-					arrow.setScale((double) arrowScaleSlider.getValue()/100);
-				}
-				screen.repaint();
 
-				//TODO: add preview pictures of arrow types
-				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int)arrow.getPosition().y, 
-						(int) Math.round(arrow.getLabel().getWidth() * arrow.getAdjustedScale()), 
-						(int) Math.round(arrow.getLabel().getHeight() * arrow.getAdjustedScale()));
+			}
+		}
+	}
+	
+	private void mirrorAllSelectedArrows() {
+		for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			if (a.isSelected()) {
+					a.setMirrored(arrowIsMirrored.isSelected());
+			}
+		}
+	}
+	
+	private void addUnfoldToAllSelectedArrows() {
+		for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
+			if (a.isSelected()) {
+					a.setUnfold(arrowIsUnfolded.isSelected());
 			}
 		}
 	}
@@ -569,12 +607,7 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	private void sliderArrowRotChanged() {
 		for (OriArrow arrow : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
 			if (arrow.isSelected()) {
-				arrow.setDegrees(arrowRotSlider.getValue()/10);
-				screen.repaint();
 
-				Rectangle2D rect = GeometryUtil.calcRotatedBox(arrow.getPosition().x, arrow.getPosition().y, arrow.getLabel().getWidth(), arrow.getLabel().getHeight(), arrow.getDegrees());
-
-				arrow.getLabel().setBounds((int) arrow.getPosition().x, (int) arrow.getPosition().y, (int) rect.getWidth(), (int) rect.getHeight());
 			}
 		}
 	}
@@ -666,27 +699,11 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 			screen.repaint();
 
 		} else if (e.getSource() == changeArrowButton) {
-			for (OriArrow a : Origrammer.diagram.steps.get(Globals.currentStep).arrows) {
-				if (a.isSelected()) {
-					String arrowType = changeArrowTypeCB.getSelectedItem().toString();
-
-					if (arrowType == "Valley Fold") {
-						a.setType(OriArrow.TYPE_VALLEY);
-					} else if (arrowType == "Mountain Fold") {
-						a.setType(OriArrow.TYPE_MOUNTAIN);
-					} else if (arrowType == "Turn over") {
-						a.setType(OriArrow.TYPE_TURN_OVER);
-					} else if (arrowType == "Push here") {
-						a.setType(OriArrow.TYPE_PUSH_HERE);
-					} else if (arrowType == "Pull out") {
-						a.setType(OriArrow.TYPE_PULL_HERE);
-					} else if (arrowType == "Inflate here") {
-						a.setType(OriArrow.TYPE_INFLATE_HERE);
-					}
-				}
-			}
-			screen.repaint();
-
+			changeArrowType();
+		} else if (e.getSource() == arrowIsMirrored) {
+			mirrorAllSelectedArrows();
+		} else if (e.getSource() == arrowIsUnfolded) {
+			addUnfoldToAllSelectedArrows();
 		} else if (e.getSource() == changeSymbolLeaderButton) {
 			changeOriLeaderBoxText();
 		} else if (e.getSource() == faceUpInput) {

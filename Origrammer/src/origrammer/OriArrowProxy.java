@@ -6,48 +6,53 @@ import origrammer.geometry.OriArrow;
 
 public class OriArrowProxy {
 	
-	private Vector2d position;
-	private double scale;
-	private double degrees;
+	private Vector2d p0;
+	private Vector2d p1;
 	private int type;
+	private boolean isMirrored;
+	private boolean isUnfold;
+	private int arrowRadius;
 
 	
 	public OriArrowProxy() {
 	}
 	
 	public OriArrowProxy(OriArrow a) {
-		position = a.getPosition();
-		scale = a.getScale();
-		degrees = a.getDegrees();
+		p0 = a.getP0();
+		p1 = a.getP1();
 		type = a.getType();
+		isMirrored = a.isMirrored();
+		isUnfold = a.isUnfold();
+		arrowRadius = a.getArrowRadius();
+                                                                                		
 	}
 	
 	public OriArrow getArrow() {
-		return new OriArrow(position, scale, degrees, type);
+		return new OriArrow(p0, p1, type, isMirrored, isUnfold, arrowRadius);
 	}
 
-	public Vector2d getPosition() {
-		return position;
+	public Vector2d getP0() {
+		return p0;
 	}
 
-	public void setPosition(Vector2d position) {
-		this.position = position;
+	public void setP0(Vector2d p0) {
+		this.p0 = p0;
 	}
 
-	public double getScale() {
-		return scale;
+	public Vector2d getP1() {
+		return p1;
 	}
 
-	public void setScale(double scale) {
-		this.scale = scale;
+	public void setP1(Vector2d p1) {
+		this.p1 = p1;
 	}
 
-	public double getDegrees() {
-		return degrees;
+	public boolean isMirrored() {
+		return isMirrored;
 	}
 
-	public void setDegrees(double degrees) {
-		this.degrees = degrees;
+	public void setMirrored(boolean isMirrored) {
+		this.isMirrored = isMirrored;
 	}
 
 	public int getType() {
@@ -58,10 +63,17 @@ public class OriArrowProxy {
 		this.type = type;
 	}
 
+	public int getArrowRadius() {
+		return arrowRadius;
+	}
+
+	public void setArrowRadius(int arrowRadius) {
+		this.arrowRadius = arrowRadius;
+	}
+
 	@Override
 	public String toString() {
-		return "OriArrowProxy [position=" + position + ", scale=" + scale
-				+ ", degrees=" + degrees + ", type=" + type + "]";
+		return "OriArrowProxy [p0=" + p0 + ", p1=" + p1 + ", type=" + type + ", isMirrored=" + isMirrored + "]";
 	}
 	
 }

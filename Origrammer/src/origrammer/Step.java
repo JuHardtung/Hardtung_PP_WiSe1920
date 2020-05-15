@@ -136,11 +136,11 @@ public class Step {
 //			OriVertex inV = new OriVertex(v);			//TODO: doesn't make sense as you can simply add more vertices  --> don't include them
 //			addVertex(inV);
 //		}
-		for (OriArrow a : copiedObjects.arrows) {
-			OriArrow inA = new OriArrow(a);
-			inA.setPosition(new Vector2d(a.getPosition().x + 20, a.getPosition().y + 20));
-			addArrow(inA);
-		}
+//		for (OriArrow a : copiedObjects.arrows) {
+//			OriArrow inA = new OriArrow(a);
+//			inA.setPosition(new Vector2d(a.getPosition().x + 20, a.getPosition().y + 20)); //TODO: make OriArrow copy/paste-able
+//			addArrow(inA);
+//		}
 //		for (OriFace f : copiedObjects.filledFaces) {
 //			OriFace inF = new OriFace(f);
 //															//TODO: doesn't make sense as FilledFaces are not movable?  --> don't include them

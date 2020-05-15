@@ -155,14 +155,11 @@ public class UIBottomPanel extends JPanel implements ActionListener, PropertyCha
 
 					for (int i = 0; i < Origrammer.diagram.steps.get(prevStep).arrows.size(); i++) {
 						OriArrow tmpArrow = new OriArrow();
-						tmpArrow.setPosition(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getPosition());
-//						tmpArrow.setWidth(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getWidth());
-//						tmpArrow.setHeight(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getHeight());
+						tmpArrow.setP0(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getP0());
+						tmpArrow.setP1(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getP1());
 						tmpArrow.setType(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getType());
-						tmpArrow.setScale(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getScale());
-						tmpArrow.setDegrees(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getDegrees());
+						tmpArrow.setMirrored(Origrammer.diagram.steps.get(prevStep).arrows.get(i).isMirrored());
 						tmpArrow.setSelected(Origrammer.diagram.steps.get(prevStep).arrows.get(i).isSelected());
-						tmpArrow.setLabel(Origrammer.diagram.steps.get(prevStep).arrows.get(i).getLabel());
 
 						newStep.arrows.add(tmpArrow);
 					}
