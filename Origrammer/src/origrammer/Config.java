@@ -26,7 +26,7 @@ public class Config {
 	final public static BasicStroke STROKE_CREASE = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 	final public static BasicStroke STROKE_SELECTED = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 	final public static BasicStroke STROKE_GRID = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
-	final public static BasicStroke STROKE_ARROWS = new BasicStroke(2.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
+	final public static BasicStroke STROKE_ARROWS = new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
 
 	final public static int DEFAULT_GRID_DIV_NUM = 4;

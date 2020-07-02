@@ -1,8 +1,8 @@
 package origrammer.geometry;
 
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
+import java.awt.geom.CubicCurve2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -78,9 +78,10 @@ public class OriArrow {
 		
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		Vector2d nv = GeometryUtil.getNormalVector(uv);
+		double fullArrowLength = GeometryUtil.Distance(p0, p1);
 		
-		Vector2d offsetP0 = new Vector2d(p0.x + uv.x * 10, p0.y + uv.y * 10);
-		Vector2d offsetP1 = new Vector2d(p1.x - uv.x * 10, p1.y - uv.y * 10);
+		Vector2d offsetP0 = new Vector2d(p0.x + uv.x * 4, p0.y + uv.y * 4);
+		Vector2d offsetP1 = new Vector2d(p1.x - uv.x * 4, p1.y - uv.y * 4);
 		double startAngle;
 		double angleExtend = 90;
 		double arrowLength = GeometryUtil.Distance(offsetP0, offsetP1);
@@ -118,8 +119,20 @@ public class OriArrow {
 		double rAngleY = uv.x * Math.sin(helperAngle) + uv.y * Math.cos(helperAngle);
 		double lAngleX = nv.x * Math.cos(-helperAngle) - nv.y * Math.sin(-helperAngle);
 		double lAngleY = nv.x * Math.sin(-helperAngle) + nv.y * Math.cos(-helperAngle);
-		Line2D.Double arrowHeadR = new Line2D.Double(offsetP1.x, offsetP1.y, offsetP1.x - rAngleX * 20, offsetP1.y - rAngleY * 20);
-		Line2D.Double arrowHeadL = new Line2D.Double(offsetP1.x, offsetP1.y, offsetP1.x - lAngleX * 20, offsetP1.y - lAngleY * 20);
+		double arrowHeadLength;
+		
+		//length of arrowHead depended on total arrow length 
+		//if total length < 150 --> arrowHead = 20
+		//else arrowHead = 20 + 4 for every 150 units length
+		if (fullArrowLength <= 150) {
+			arrowHeadLength = 20;
+		} else {
+			arrowHeadLength = 20 + (fullArrowLength - 150) / 150 * 4;
+		}
+		
+
+		Line2D.Double arrowHeadR = new Line2D.Double(offsetP1.x, offsetP1.y, offsetP1.x - rAngleX * arrowHeadLength, offsetP1.y - rAngleY * arrowHeadLength);
+		Line2D.Double arrowHeadL = new Line2D.Double(offsetP1.x, offsetP1.y, offsetP1.x - lAngleX * arrowHeadLength, offsetP1.y - lAngleY * arrowHeadLength);
 		
 		shapes.add(arrowHeadL);
 		shapes.add(arrowHeadR);
@@ -127,7 +140,7 @@ public class OriArrow {
 		
 		//UNFOLD Arrowhead
 		if (isUnfold) {
-			shapes.add(addUnfoldArrowHead(offsetP0, offsetP1));
+			shapes.add(addUnfoldArrowHead(offsetP0, new Vector2d(arcCenter.x - nv.x*1.35*r, arcCenter.y - nv.y*1.35*r), arrowHeadLength));
 		}
 		
 		return shapes;
@@ -136,6 +149,75 @@ public class OriArrow {
 	private ArrayList<Shape> getMountainFoldShapes(){
 		ArrayList<Shape> shapes = new ArrayList<>();
 		
+		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
+		Vector2d nv = GeometryUtil.getNormalVector(uv);
+		double fullArrowLength = GeometryUtil.Distance(p0, p1);
+
+		double angleMinus30 = Math.toRadians(-30);
+		Vector2d offsetP0 = new Vector2d(p0.x + uv.x * 4, p0.y + uv.y * 4);
+		Vector2d offsetP1 = new Vector2d(p1.x - uv.x * 4, p1.y - uv.y * 4);
+		double length = GeometryUtil.Distance(offsetP0, offsetP1);
+
+		
+		if (isMirrored) {
+			angleMinus30 = Math.toRadians(30);
+		    nv.x = -nv.x;
+		    nv.y = -nv.y;
+		} else {
+			angleMinus30 = Math.toRadians(-30);
+
+		}
+		
+		//ARROW CURVE
+		double curveOffset = 3.5;
+		Vector2d middle = new Vector2d(offsetP0.x + uv.x * length / curveOffset, offsetP0.y + uv.y * length / curveOffset);
+		Vector2d middle2 = new Vector2d(offsetP1.x - uv.x * length / curveOffset, offsetP1.y - uv.y * length / curveOffset);
+
+		double curveLength = 1.6;
+		Vector2d curvePoint = new Vector2d(middle.x + nv.x * length * curveLength, middle.y + nv.y * length * curveLength);
+		Vector2d curvePoint2 = new Vector2d(middle2.x + nv.x * length * curveLength, middle2.y + nv.y * length * curveLength);
+
+		CubicCurve2D curve = new CubicCurve2D.Double();
+		curve.setCurve(offsetP0.x, offsetP0.y, curvePoint.x, curvePoint.y, curvePoint2.x, curvePoint2.y, offsetP1.x, offsetP1.y);
+		
+		//ARROWHEAD
+		Vector2d uv2 = GeometryUtil.getUnitVector(curvePoint2, offsetP1);
+		//double angleMinus30 = Math.toRadians(-30);
+		double angleMinus45X = uv2.x * Math.cos(angleMinus30) - uv2.y * Math.sin(angleMinus30);
+		double angleMinus45Y = uv2.x * Math.sin(angleMinus30) + uv2.y * Math.cos(angleMinus30);
+		Vector2d uvMinus45 = new Vector2d(angleMinus45X, angleMinus45Y);
+		double arrowHeadLength;
+
+		
+		//length of arrowHead depended on total arrow length 
+		//if total length < 150 --> arrowHead = 20
+		//else arrowHead = 20 + 4 for every 150 units length
+		if (fullArrowLength <= 150) {
+			arrowHeadLength = 40;
+		} else {
+			arrowHeadLength = 40 + (fullArrowLength - 150) / 150 * 8;
+		}
+		
+		Vector2d arrowHead1 = new Vector2d(offsetP1.x - uvMinus45.x * (arrowHeadLength+20), offsetP1.y - uvMinus45.y * (arrowHeadLength+20));
+		Vector2d arrowHead2 = new Vector2d(offsetP1.x - uv2.x * arrowHeadLength, offsetP1.y - uv2.y * arrowHeadLength);
+
+		Vector2d uvArrowHead = GeometryUtil.getUnitVector(arrowHead1, arrowHead2);		
+		//offset arrowHead2 to compensate for the difference between the slight curve 
+		//and the straight line between p1 and arrowHead2
+		Vector2d adjArrowHead2 = new Vector2d(arrowHead2.x + uvArrowHead.x * 0.5, arrowHead2.y + uvArrowHead.y * 0.5);
+		
+		GeneralPath arrowHead = new GeneralPath();	
+		arrowHead.moveTo(offsetP1.x, offsetP1.y);
+		arrowHead.lineTo(arrowHead1.x, arrowHead1.y);
+		arrowHead.lineTo(adjArrowHead2.x, adjArrowHead2.y);
+		arrowHead.closePath();
+		
+		shapes.add(arrowHead);
+		shapes.add(curve);
+		//UNFOLD Arrowhead
+		if (isUnfold) {
+			shapes.add(addUnfoldArrowHead(offsetP0, curvePoint, arrowHeadLength-20));
+		}
 		return shapes;
 	}
 	
@@ -144,9 +226,10 @@ public class OriArrow {
 		
 		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
 		Vector2d nv = GeometryUtil.getNormalVector(uv);
-		
-		Vector2d offsetP0 = new Vector2d(p0.x + uv.x * 10, p0.y + uv.y * 10);
-		Vector2d offsetP1 = new Vector2d(p1.x - uv.x * 10, p1.y - uv.y * 10);
+		double fullArrowLength = GeometryUtil.Distance(p0, p1);
+
+		Vector2d offsetP0 = new Vector2d(p0.x + uv.x * 4, p0.y + uv.y * 4);
+		Vector2d offsetP1 = new Vector2d(p1.x - uv.x * 4, p1.y - uv.y * 4);
 		double startAngle;
 		double angleExtend = 90;
 		double arrowLength = GeometryUtil.Distance(offsetP0, offsetP1);
@@ -174,7 +257,7 @@ public class OriArrow {
 		double width = 2 * r;
 		double height = 2 * r;
 		Arc2D.Double arc = new Arc2D.Double(x, y, width, height, -startAngle, angleExtend, Arc2D.OPEN);
-		
+
 		//Small Circle	
 		Vector2d arcMiddle = new Vector2d(arcCenter.x - nv.x * r, arcCenter.y - nv.y * r);
 		Vector2d circleBot = new Vector2d(arcMiddle.x + nv.x * (r/2.8), arcMiddle.y + nv.y * (r/2.8));
@@ -182,28 +265,40 @@ public class OriArrow {
 		Vector2d smallCircleCenter = new Vector2d(circleBot.x - nv.x * smallCircleRadius, circleBot.y - nv.y * smallCircleRadius);
 		Vector2d smallCircleTopL = new Vector2d(smallCircleCenter.x - smallCircleRadius, smallCircleCenter.y - smallCircleRadius);
 		Arc2D.Double smallCircle = new Arc2D.Double(smallCircleTopL.x, smallCircleTopL.y, smallCircleRadius * 2, smallCircleRadius * 2, 0, 360, Arc2D.OPEN);
-			
+
 		//ValleyFold Arrowhead
 		double rAngleX = uv.x * Math.cos(angle15) - uv.y * Math.sin(angle15);
 		double rAngleY = uv.x * Math.sin(angle15) + uv.y * Math.cos(angle15);
 		double lAngleX = nv.x * Math.cos(-angle15) - nv.y * Math.sin(-angle15);
 		double lAngleY = nv.x * Math.sin(-angle15) + nv.y * Math.cos(-angle15);
-			
+		double arrowHeadLength;
+
+		//length of arrowHead depended on total arrow length 
+		//if total length < 150 --> arrowHead = 20
+		//else arrowHead = 20 + 4 for every 150 units length
+		if (fullArrowLength <= 150) {
+			arrowHeadLength = 20;
+		} else {
+			arrowHeadLength = 20 + (fullArrowLength - 150) / 150 * 4;
+		}
+		
 		GeneralPath path = new GeneralPath();
-		path.moveTo(offsetP1.x - rAngleX * 20, offsetP1.y - rAngleY * 20);
+		path.moveTo(offsetP1.x - rAngleX * arrowHeadLength, offsetP1.y - rAngleY * arrowHeadLength);
 		path.lineTo(offsetP1.x, offsetP1.y);
-		path.lineTo(offsetP1.x - lAngleX * 20, offsetP1.y - lAngleY * 20);
+		path.lineTo(offsetP1.x - lAngleX * arrowHeadLength, offsetP1.y - lAngleY * arrowHeadLength);
 		path.lineTo(offsetP1.x, offsetP1.y);
 		path.closePath();
 		
 		shapes.add(path);
 		shapes.add(smallCircle);
 		shapes.add(arc);
+		
 		//UNFOLD Arrowhead
 		if (isUnfold) {
-			shapes.add(addUnfoldArrowHead(offsetP0, offsetP1));
+			shapes.add(addUnfoldArrowHead(offsetP0, 
+									new Vector2d(arcCenter.x - nv.x * 1.35 * r, arcCenter.y - nv.y * 1.35 * r), 
+									arrowHeadLength));
 		}
-		
 		return shapes;		
 	}
 	
@@ -405,7 +500,7 @@ public class OriArrow {
 	 * @param offsetP1 slightly offset p1 of the OriArrow
 	 * @return GeneralPath in form of the UnfoldArrowHead
 	 */
-	private Shape addUnfoldArrowHead(Vector2d offsetP0, Vector2d offsetP1) {
+	private Shape addUnfoldArrowHead(Vector2d offsetP0, Vector2d offsetP1, double arrowHeadLength) {
 		//UNFOLD Arrowhead
 		/** 	 1			1 = offsetP0
 		 *      / \         2 = helpL
@@ -414,9 +509,9 @@ public class OriArrow {
 		 *   /_-   -_\		5 = unfoldLP0
 		 *  5-       -6     6 = unfoldRP0
 		 */	
-		Vector2d uv = GeometryUtil.getUnitVector(p0, p1);
+		Vector2d uv = GeometryUtil.getUnitVector(offsetP0, offsetP1);
 		Vector2d nv = GeometryUtil.getNormalVector(uv);
-		double angle15 = Math.toRadians(15);
+		double angle15 = Math.toRadians(30);
 		
 		if (isMirrored) {
 		    nv.x = -nv.x;
@@ -425,22 +520,22 @@ public class OriArrow {
 		}
 
 		//Unit vector for 1->2 and 1->5
-		double unfoldLeftX = -uv.x * Math.cos(-angle15) + uv.y * Math.sin(-angle15);
-		double unfoldLeftY = -uv.x * Math.sin(-angle15) - uv.y * Math.cos(-angle15);
+		double unfoldLeftX = -uv.x * Math.cos(angle15) + uv.y * Math.sin(angle15);
+		double unfoldLeftY = -uv.x * Math.sin(angle15) - uv.y * Math.cos(angle15);
 		//Unit vector for 1->3 and 1->6
-		double unfoldRightX = nv.x * Math.cos(angle15) - nv.y * Math.sin(angle15);
-		double unfoldRightY = nv.x * Math.sin(angle15) + nv.y * Math.cos(angle15);
+		double unfoldRightX = -uv.x * Math.cos(-angle15) + uv.y * Math.sin(-angle15);
+		double unfoldRightY = -uv.x * Math.sin(-angle15) - uv.y * Math.cos(-angle15);
 		
 		//helper vertices to calc dist between 2 and 3 and subsequently calc unfoldMiddle (4)
-		Vector2d helpL = new Vector2d(offsetP0.x - unfoldLeftX * 15, offsetP0.y - unfoldLeftY * 15);
-		Vector2d helpR = new Vector2d(offsetP0.x - unfoldRightX * 15, offsetP0.y - unfoldRightY * 15);
+		Vector2d helpL = new Vector2d(offsetP0.x - unfoldLeftX * (arrowHeadLength-arrowHeadLength*0.2), offsetP0.y - unfoldLeftY * (arrowHeadLength-arrowHeadLength*0.2));
+		Vector2d helpR = new Vector2d(offsetP0.x - unfoldRightX * (arrowHeadLength-arrowHeadLength*0.2), offsetP0.y - unfoldRightY * (arrowHeadLength-arrowHeadLength*0.2));
 		double unfoldDist = GeometryUtil.Distance(helpL, helpR);
 		
 		Vector2d unfoldUV = GeometryUtil.getUnitVector(helpL, helpR);
 		Vector2d unfoldMiddle = new Vector2d(helpL.x + unfoldUV.x * (unfoldDist/2), helpL.y + unfoldUV.y * (unfoldDist/2));
 
-		Vector2d unfoldLP0 = new Vector2d(offsetP0.x - unfoldLeftX * 20, offsetP0.y - unfoldLeftY * 20);
-		Vector2d unfoldRP0 = new Vector2d(offsetP0.x - unfoldRightX * 20, offsetP0.y - unfoldRightY * 20);
+		Vector2d unfoldLP0 = new Vector2d(offsetP0.x - unfoldLeftX * arrowHeadLength, offsetP0.y - unfoldLeftY * arrowHeadLength);
+		Vector2d unfoldRP0 = new Vector2d(offsetP0.x - unfoldRightX * arrowHeadLength, offsetP0.y - unfoldRightY * arrowHeadLength);
 	
 		ArrayList<Vector2d> pathList = new ArrayList<Vector2d>();
 		pathList.add(offsetP0);

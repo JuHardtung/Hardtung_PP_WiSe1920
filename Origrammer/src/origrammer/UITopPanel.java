@@ -11,7 +11,6 @@ import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Hashtable;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -128,8 +127,8 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 
 	//ARROWS SETTINGS
 	private JPanel sliderPanel = new JPanel();
-	private JSlider arrowScaleSlider = new JSlider(0, 100);
-	private JSlider arrowRotSlider = new JSlider(0, 3600);
+//	private JSlider arrowScaleSlider = new JSlider(0, 100);
+//	private JSlider arrowRotSlider = new JSlider(0, 3600);
 	private JCheckBox arrowIsMirrored = new JCheckBox("Is Mirrored");
 	private JCheckBox arrowIsUnfolded = new JCheckBox("Is Unfolded");
 
@@ -307,35 +306,35 @@ public class UITopPanel extends JPanel implements ActionListener, PropertyChange
 	}
 
 	private void addArrowSettingsPanel() {
-		arrowScaleSlider.setMajorTickSpacing(20);
-		arrowScaleSlider.setMinorTickSpacing(10);
-		arrowScaleSlider.setPaintTicks(true);
-		arrowScaleSlider.setPaintLabels(true);
-		arrowScaleSlider.addChangeListener(e -> sliderArrowScale());
-		arrowScaleSlider.setBorder(new TitledBorder(
-				new EtchedBorder(BevelBorder.RAISED, 
-						getBackground().darker(), 
-						getBackground().brighter()), "Scale Arrow"));
-
-		Hashtable<Integer, JLabel> labels = new Hashtable<>();
-		labels.put(0,  new JLabel("0"));
-		labels.put(900, new JLabel("90°"));
-		labels.put(1800, new JLabel("180°"));
-		labels.put(2700, new JLabel("270°"));
-		labels.put(3600, new JLabel("360°"));
-		arrowRotSlider.setLabelTable(labels);
-		arrowRotSlider.setMajorTickSpacing(900);
-		arrowRotSlider.setMinorTickSpacing(225);
-		arrowRotSlider.setPaintTicks(true);
-		arrowRotSlider.setPaintLabels(true);
-		arrowRotSlider.setSnapToTicks(true);
-		arrowRotSlider.addChangeListener(e -> sliderArrowRotChanged());
-		arrowRotSlider.setBorder(new TitledBorder(
-				new EtchedBorder(BevelBorder.RAISED, 
-						getBackground().darker(), 
-						getBackground().brighter()), "Rotate Arrow"));
-		sliderPanel.add(arrowScaleSlider);
-		sliderPanel.add(arrowRotSlider);
+//		arrowScaleSlider.setMajorTickSpacing(20);
+//		arrowScaleSlider.setMinorTickSpacing(10);
+//		arrowScaleSlider.setPaintTicks(true);
+//		arrowScaleSlider.setPaintLabels(true);
+//		arrowScaleSlider.addChangeListener(e -> sliderArrowScale());
+//		arrowScaleSlider.setBorder(new TitledBorder(
+//				new EtchedBorder(BevelBorder.RAISED, 
+//						getBackground().darker(), 
+//						getBackground().brighter()), "Scale Arrow"));
+//
+//		Hashtable<Integer, JLabel> labels = new Hashtable<>();
+//		labels.put(0,  new JLabel("0"));
+//		labels.put(900, new JLabel("90°"));
+//		labels.put(1800, new JLabel("180°"));
+//		labels.put(2700, new JLabel("270°"));
+//		labels.put(3600, new JLabel("360°"));
+//		arrowRotSlider.setLabelTable(labels);
+//		arrowRotSlider.setMajorTickSpacing(900);
+//		arrowRotSlider.setMinorTickSpacing(225);
+//		arrowRotSlider.setPaintTicks(true);
+//		arrowRotSlider.setPaintLabels(true);
+//		arrowRotSlider.setSnapToTicks(true);
+//		arrowRotSlider.addChangeListener(e -> sliderArrowRotChanged());
+//		arrowRotSlider.setBorder(new TitledBorder(
+//				new EtchedBorder(BevelBorder.RAISED, 
+//						getBackground().darker(), 
+//						getBackground().brighter()), "Rotate Arrow"));
+//		sliderPanel.add(arrowScaleSlider);
+//		sliderPanel.add(arrowRotSlider);
 		arrowIsMirrored.addActionListener(this);
 		sliderPanel.add(arrowIsMirrored);
 		arrowIsUnfolded.addActionListener(this);
